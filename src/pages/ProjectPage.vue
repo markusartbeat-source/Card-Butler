@@ -4,12 +4,16 @@
   <VueDraggable
     v-model="cards"
     :animation="200"
-    class="mx-auto mt-8 flex w-4/5 flex-wrap justify-center gap-6"
+    draggable=".cb-card"
+    :force-fallback="true"
+    ghost-class="cb-card-ghost"
+    drag-class="cb-card-dragged"
+    class="mx-auto mt-8 flex w-4/5 flex-wrap justify-center gap-6 select-none"
   >
     <CbCard v-for="card in cards" :key="card.number" :number="card.number" />
 
     <CbInteractive
-      class="flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
+      class="order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
       @click="addCard"
     >
       <CbIcon name="add_2" />

@@ -20,6 +20,25 @@ body {
   .cb-hover {
     @apply cursor-pointer hover:shadow-lg;
   }
+
+  .cb-card {
+    @apply cursor-grab active:cursor-grabbing;
+  }
+
+  .cb-card-face {
+    border-radius: inherit;
+    @apply transition-transform;
+  }
+
+  /* Placeholder that shows where the dragged card will land. */
+  .cb-card-ghost .cb-card-face {
+    @apply opacity-20;
+  }
+
+  /* The card that follows the cursor while dragging. */
+  .cb-card-dragged .cb-card-face {
+    @apply scale-105 rotate-3 opacity-100 shadow-2xl;
+  }
 }
 
 @keyframes cb-ripple {
