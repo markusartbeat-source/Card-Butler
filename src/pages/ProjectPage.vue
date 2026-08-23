@@ -1,16 +1,28 @@
 <template>
   <h1 class="text-3xl text-white">Mein erstes Projekt</h1>
 
+  <p class="mt-4 text-center text-white">
+    {{ selectedCardNumber ? `Karte ${selectedCardNumber} ausgewählt` : 'Keine Karte ausgewählt' }}
+  </p>
+
   <VueDraggable
     v-model="cards"
     :animation="200"
     draggable=".cb-card"
     :force-fallback="true"
+    :fallback-tolerance="8"
     ghost-class="cb-card-ghost"
     drag-class="cb-card-dragged"
     class="mx-auto mt-8 flex w-4/5 flex-wrap justify-center gap-6 select-none"
+    @start="isDragging = true"
+    @end="endDragging"
   >
-    <CbCard v-for="card in cards" :key="card.number" :number="card.number" />
+    <CbCard
+      v-for="card in cards"
+      :key="card.number"
+      :number="card.number"
+      @click="selectCard(card.number)"
+    />
 
     <CbInteractive
       class="order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
@@ -30,6 +42,22 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 
 const cards = ref([1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ number })))
+const selectedCardNumber = ref<number | null>(null)
+
+// A finished drag still fires a click on the card, so we keep the flag alive
+// until that click is over.
+const isDragging = ref(false)
+
+function endDragging() {
+  setTimeout(() => {
+    isDragging.value = false
+  }, 0)
+}
+
+function selectCard(number: number) {
+  if (isDragging.value) return
+  selectedCardNumber.value = number
+}
 
 function addCard() {
   const highestNumber = Math.max(...cards.value.map((card) => card.number))
