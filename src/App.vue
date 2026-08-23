@@ -2,7 +2,7 @@
   <div class="bg-background flex min-h-screen">
     <CbSidebar />
     <main>
-      <span class="material-symbols-outlined">add</span>
+      <span class="material-symbols-rounded">add</span>
     </main>
   </div>
 </template>
