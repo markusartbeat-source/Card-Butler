@@ -16,3 +16,26 @@ body {
 #app {
   min-height: 100vh;
 }
+
+@layer components {
+  .cb-hover {
+    @apply cursor-pointer hover:shadow-lg;
+  }
+}
+
+@keyframes cb-ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .animate-cb-ripple {
+    animation: cb-ripple 0.6s ease-out;
+  }
+}
