@@ -3,6 +3,7 @@
 
   <CbCardEditor
     v-if="selectedCardNumber && selectedCardRect"
+    :key="selectedCardNumber"
     :number="selectedCardNumber"
     :start-rect="selectedCardRect"
     @close="selectedCardNumber = null"
@@ -24,6 +25,7 @@
       v-for="card in cards"
       :key="card.number"
       :number="card.number"
+      :class="{ invisible: card.number === selectedCardNumber }"
       @click="selectCard(card.number, $event)"
     />
 
