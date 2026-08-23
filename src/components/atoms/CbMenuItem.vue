@@ -13,7 +13,8 @@
 <script setup lang="ts">
 import CbIcon from './CbIcon.vue'
 import CbInteractive from './CbInteractive.vue'
+import type { IconName } from './icons'
 
-defineProps<{ iconKey: string; label: string; active?: boolean }>()
+defineProps<{ iconKey: IconName; label: string; active?: boolean }>()
 defineEmits<{ click: [] }>()
 </script>

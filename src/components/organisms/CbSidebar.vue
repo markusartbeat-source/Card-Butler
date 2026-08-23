@@ -1,7 +1,11 @@
 <template>
   <div class="h-screen w-64 shrink-0 p-3">
     <div class="bg-surface flex h-full w-full flex-col items-center gap-3 rounded-3xl p-3 shadow-lg">
-      <img src="../../assets/logos/logo.png" alt="Logo" class="w-10 -rotate-1 drop-shadow-lg" />
+      <img
+        src="../../assets/logos/logo.png"
+        alt="Logo"
+        class="aspect-square w-10 -rotate-1 object-cover drop-shadow-lg"
+      />
       <div class="flex w-full flex-col gap-1">
         <CbMenu :model-value="activeMenuItem" :items="menuItems" @update:model-value="selectMenuItem" />
         <CbMenuItem icon-key="add_2" label="Neues Projekt" @click="createNewProject" />
@@ -37,8 +41,9 @@ import CbMenuItem from '../atoms/CbMenuItem.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
+import type { IconName } from '../atoms/icons'
 
-const menuItems = [
+const menuItems: { value: string; iconKey: IconName; label: string }[] = [
   { value: 'home', iconKey: 'home', label: 'Home' },
   { value: 'images', iconKey: 'filter', label: 'Bilder' },
   { value: 'project', iconKey: 'playing_cards', label: 'Mein erstes Projekt' },

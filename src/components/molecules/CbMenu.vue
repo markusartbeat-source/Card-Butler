@@ -15,9 +15,10 @@
 
 <script setup lang="ts">
 import CbMenuItem from '../atoms/CbMenuItem.vue'
+import type { IconName } from '../atoms/icons'
 
 defineProps<{
-  items: { value: string; iconKey: string; label: string }[]
+  items: { value: string; iconKey: IconName; label: string }[]
   modelValue: string
 }>()
 defineEmits<{ 'update:modelValue': [value: string] }>()
