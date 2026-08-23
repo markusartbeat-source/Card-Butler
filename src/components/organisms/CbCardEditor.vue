@@ -4,7 +4,10 @@
     class="bg-background/80 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md"
     @click.self="emit('close')"
   >
-    <CbCard :number="number" shape-classes="h-144 w-96 rounded-3xl" />
+    <!-- Perspective makes the spin look spatial instead of flat. -->
+    <div class="perspective-distant">
+      <CbCard :number="number" shape-classes="h-144 w-96 rounded-3xl" />
+    </div>
   </div>
 </template>
 
@@ -23,3 +26,24 @@ function closeOnEscape(event: KeyboardEvent) {
 onMounted(() => window.addEventListener('keydown', closeOnEscape))
 onUnmounted(() => window.removeEventListener('keydown', closeOnEscape))
 </script>
+
+<style scoped>
+/* The face is rotated, not the outer card, so the sort library's own
+   transform stays untouched. */
+:deep(.cb-card) {
+  transform-style: preserve-3d;
+}
+
+:deep(.cb-card-face) {
+  animation: card-open-spin 900ms ease-out;
+}
+
+@keyframes card-open-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+</style>
