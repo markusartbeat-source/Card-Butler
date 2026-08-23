@@ -1,7 +1,9 @@
 <template>
   <div class="bg-background flex min-h-screen">
     <CbSidebar />
-    <main></main>
+    <main>
+      <router-view />
+    </main>
   </div>
 </template>
 
