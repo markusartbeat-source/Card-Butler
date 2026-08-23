@@ -2,8 +2,9 @@
   <h1 class="text-3xl text-white">Mein erstes Projekt</h1>
 
   <CbCardEditor
-    v-if="selectedCardNumber"
+    v-if="selectedCardNumber && selectedCardRect"
     :number="selectedCardNumber"
+    :start-rect="selectedCardRect"
     @close="selectedCardNumber = null"
   />
 
@@ -23,7 +24,7 @@
       v-for="card in cards"
       :key="card.number"
       :number="card.number"
-      @click="selectCard(card.number)"
+      @click="selectCard(card.number, $event)"
     />
 
     <CbInteractive
@@ -47,6 +48,9 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 const cards = ref([1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ number })))
 const selectedCardNumber = ref<number | null>(null)
 
+// Where the clicked card sits in the grid — the editor starts its flight there.
+const selectedCardRect = ref<DOMRect | null>(null)
+
 // A finished drag still fires a click on the card, so we keep the flag alive
 // until that click is over.
 const isDragging = ref(false)
@@ -57,8 +61,9 @@ function endDragging() {
   }, 0)
 }
 
-function selectCard(number: number) {
+function selectCard(number: number, event: MouseEvent) {
   if (isDragging.value) return
+  selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
   selectedCardNumber.value = number
 }
 
