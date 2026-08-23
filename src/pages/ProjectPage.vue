@@ -1,9 +1,11 @@
 <template>
   <h1 class="text-3xl text-white">Mein erstes Projekt</h1>
 
-  <p class="mt-4 text-center text-white">
-    {{ selectedCardNumber ? `Karte ${selectedCardNumber} ausgewählt` : 'Keine Karte ausgewählt' }}
-  </p>
+  <CbCardEditor
+    v-if="selectedCardNumber"
+    :number="selectedCardNumber"
+    @close="selectedCardNumber = null"
+  />
 
   <VueDraggable
     v-model="cards"
@@ -40,6 +42,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
+import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 
 const cards = ref([1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ number })))
 const selectedCardNumber = ref<number | null>(null)
