@@ -1,11 +1,14 @@
 <template>
   <CbTopbar>
     <template #actions>
-      <CbButton variant="secondary">
+      <CbButton
+        variant="secondary"
+        @click="showSuccessToast('Link kopiert', 'Der Link liegt in der Zwischenablage.')"
+      >
         <CbIcon name="share" />
         Teilen
       </CbButton>
-      <CbButton variant="secondary">
+      <CbButton variant="secondary" @click="showDangerToast('Nicht verfügbar', 'Diese Funktion gibt es noch nicht.')">
         <CbIcon name="more_horiz" />
         Mehr
       </CbButton>
@@ -60,6 +63,7 @@ import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
+import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbTopbar from '../components/organisms/CbTopbar.vue'
 
 const cards = ref([1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ number })))

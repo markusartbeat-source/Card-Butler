@@ -30,6 +30,31 @@ body {
     @apply transition-transform;
   }
 
+  /* Ark UI only sets the toast variables (--x, --y, --scale, ...) — turning
+     them into the stacked look is our job. */
+  .cb-toast {
+    translate: var(--x) var(--y);
+    scale: var(--scale);
+    z-index: var(--z-index);
+    height: var(--height);
+    opacity: var(--opacity);
+    will-change: translate, scale, opacity;
+    transition:
+      translate 350ms,
+      scale 350ms,
+      opacity 350ms,
+      height 350ms;
+    transition-timing-function: cubic-bezier(0.21, 1.02, 0.73, 1);
+  }
+
+  .cb-toast[data-state='closed'] {
+    transition:
+      translate 350ms,
+      scale 350ms,
+      opacity 200ms;
+    transition-timing-function: cubic-bezier(0.06, 0.71, 0.55, 1);
+  }
+
   /* Placeholder that shows where the dragged card will land. */
   .cb-card-ghost .cb-card-face {
     @apply opacity-20;
