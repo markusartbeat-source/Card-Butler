@@ -13,11 +13,7 @@
     ></div>
 
     <div class="relative flex flex-col items-center gap-6">
-      <!-- Placeholder for the tool bar, no content yet. -->
-      <div
-        class="bg-surface h-14 w-96 rounded-xl transition-opacity"
-        :class="fadeInClasses"
-      ></div>
+      <CbCardToolbar class="transition-opacity" :class="fadeInClasses" />
 
       <div ref="cardWrapper">
         <CbCard :number="number" shape-classes="h-144 w-96 rounded-3xl" />
@@ -44,6 +40,7 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
+import CbCardToolbar from '../molecules/CbCardToolbar.vue'
 
 const props = defineProps<{ number: number; startRect: DOMRect }>()
 
