@@ -24,8 +24,8 @@
         @click="openUserPanel"
       >
         <div class="flex items-center gap-1.5">
-          <CbAvatar name="Maria Meyer" />
-          <span class="text-sm">Maria Meyer</span>
+          <CbAvatar :name="userLabel" :image-url="userPicture" />
+          <span class="text-sm">{{ userLabel }}</span>
         </div>
         <CbIcon name="settings" />
       </CbInteractive>
@@ -42,6 +42,13 @@ import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
+import { useCurrentUser } from '../../composables/useCurrentUser'
+import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
+
+const { displayName, avatarUrl } = useCurrentUser()
+
+const userLabel = computed(() => displayName.value ?? 'Gast')
+const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
 const menuItems: { value: string; iconKey: IconName; label: string }[] = [
   { value: 'home', iconKey: 'home', label: 'Home' },
