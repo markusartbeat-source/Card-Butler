@@ -1,5 +1,16 @@
 <template>
-  <CbTopbar />
+  <CbTopbar>
+    <template #actions>
+      <CbButton variant="secondary">
+        <CbIcon name="share" />
+        Teilen
+      </CbButton>
+      <CbButton variant="secondary">
+        <CbIcon name="more_horiz" />
+        Mehr
+      </CbButton>
+    </template>
+  </CbTopbar>
 
   <h1 class="text-3xl text-white">Mein erstes Projekt</h1>
 
@@ -45,6 +56,7 @@
 import { ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
+import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
