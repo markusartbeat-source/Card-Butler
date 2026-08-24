@@ -55,6 +55,19 @@ body {
     transition-timing-function: cubic-bezier(0.06, 0.71, 0.55, 1);
   }
 
+  /* Frame that is golden only at its left and right edges and stays dark
+     across the middle. Tailwind's gradient classes allow just one middle
+     colour, so the four stops are written out here. */
+  .cb-gold-edge-frame {
+    background-image: linear-gradient(
+      to right,
+      var(--color-gold-light) 0%,
+      var(--color-surface-light) 20%,
+      var(--color-surface-light) 80%,
+      var(--color-gold-light) 100%
+    );
+  }
+
   /* Placeholder that shows where the dragged card will land. */
   .cb-card-ghost .cb-card-face {
     @apply opacity-20;
