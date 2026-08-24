@@ -24,7 +24,7 @@
       </div>
 
       <CbButton
-        class="transition-opacity"
+        class="min-w-64 transition-opacity"
         :class="fadeInClasses"
         @click="startClosing"
       >
