@@ -2,7 +2,7 @@
   <div class="h-screen w-64 shrink-0 p-3">
     <div class="bg-surface flex h-full w-full flex-col items-center gap-3 rounded-3xl p-3 shadow-lg">
       <img
-        src="../../assets/logos/logo.svg"
+        src="../../assets/logos/logo.png"
         alt="Logo"
         class="aspect-square w-10 -rotate-1 object-cover drop-shadow-lg"
       />
