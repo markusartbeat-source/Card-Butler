@@ -16,7 +16,7 @@
       <CbCardToolbar class="transition-opacity" :class="fadeInClasses" />
 
       <div ref="cardWrapper">
-        <CbCard :number="number" shape-classes="h-144 w-96 rounded-3xl" />
+        <CbCard :id="id" :number="number" shape-classes="h-144 w-96 rounded-3xl" />
       </div>
 
       <CbButton
@@ -42,7 +42,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
 import CbCardToolbar from '../molecules/CbCardToolbar.vue'
 
-const props = defineProps<{ number: number; startRect: DOMRect }>()
+const props = defineProps<{ id: string; number: number; startRect: DOMRect }>()
 
 const emit = defineEmits<{ close: [] }>()
 

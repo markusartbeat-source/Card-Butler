@@ -16,11 +16,12 @@
   </CbTopbar>
 
   <CbCardEditor
-    v-if="selectedCardNumber && selectedCardRect"
-    :key="selectedCardNumber"
-    :number="selectedCardNumber"
+    v-if="selectedCard && selectedCardRect"
+    :key="selectedCard.id"
+    :id="selectedCard.id"
+    :number="selectedCard.number"
     :start-rect="selectedCardRect"
-    @close="selectedCardNumber = null"
+    @close="selectedCardId = null"
   />
 
   <VueDraggable
@@ -37,10 +38,11 @@
   >
     <CbCard
       v-for="card in cards"
-      :key="card.number"
+      :key="card.id"
+      :id="card.id"
       :number="card.number"
-      :class="{ invisible: card.number === selectedCardNumber }"
-      @click="selectCard(card.number, $event)"
+      :class="{ invisible: card.id === selectedCardId }"
+      @click="selectCard(card.id, $event)"
     />
 
     <CbInteractive
@@ -54,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbButton from '../components/atoms/CbButton.vue'
@@ -64,8 +66,12 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbTopbar from '../components/organisms/CbTopbar.vue'
 
-const cards = ref([1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ number })))
-const selectedCardNumber = ref<number | null>(null)
+// The id stays with a card forever — the number is only its place in the row.
+const cards = ref(
+  [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ id: crypto.randomUUID(), number })),
+)
+const selectedCardId = ref<string | null>(null)
+const selectedCard = computed(() => cards.value.find((card) => card.id === selectedCardId.value))
 
 // Where the clicked card sits in the grid — the editor starts its flight there.
 const selectedCardRect = ref<DOMRect | null>(null)
@@ -80,14 +86,14 @@ function endDragging() {
   }, 0)
 }
 
-function selectCard(number: number, event: MouseEvent) {
+function selectCard(id: string, event: MouseEvent) {
   if (isDragging.value) return
   selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
-  selectedCardNumber.value = number
+  selectedCardId.value = id
 }
 
 function addCard() {
   const highestNumber = Math.max(...cards.value.map((card) => card.number))
-  cards.value.push({ number: highestNumber + 1 })
+  cards.value.push({ id: crypto.randomUUID(), number: highestNumber + 1 })
 }
 </script>
