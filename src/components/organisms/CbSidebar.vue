@@ -7,7 +7,11 @@
         class="aspect-square w-10 -rotate-1 object-cover drop-shadow-lg"
       />
       <div class="flex w-full flex-col gap-1">
-        <CbMenu :model-value="activeMenuItem" :items="menuItems" @update:model-value="selectMenuItem" />
+        <CbMenu :model-value="activeMenuItem" :items="menuItems" @update:model-value="selectMenuItem">
+          <template #trailing="{ item }">
+            <CbAvatar v-if="item.value === 'project'" name="Gast" :image-url="guestPicture" size="small" />
+          </template>
+        </CbMenu>
         <CbMenuItem icon-key="add_2" label="Neues Projekt" @click="createNewProject" />
       </div>
       <div class="bg-gradient-to-br from-gold-dark to-gold-light mt-auto w-full rounded-xl p-0.5 shadow-lg">

@@ -7,7 +7,11 @@
           :label="item.label"
           :active="modelValue === item.value"
           @click="$emit('update:modelValue', item.value)"
-        />
+        >
+          <template #trailing>
+            <slot name="trailing" :item="item" />
+          </template>
+        </CbMenuItem>
       </li>
     </ul>
   </nav>

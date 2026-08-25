@@ -7,6 +7,9 @@
   >
     <CbIcon :name="iconKey" />
     <span class="text-sm">{{ label }}</span>
+    <div v-if="$slots.trailing" class="ml-auto flex items-center">
+      <slot name="trailing" />
+    </div>
   </CbInteractive>
 </template>
 
