@@ -60,6 +60,8 @@ const examplePeople = [
   { name: 'Gast', imageUrl: guestPicture },
   { name: 'Lena Meyer' },
   { name: 'Tom Berger' },
+  { name: 'Anna Roth' },
+  { name: 'Jan Vogel' },
 ]
 
 const menuItems: { value: string; iconKey: IconName; label: string }[] = [
