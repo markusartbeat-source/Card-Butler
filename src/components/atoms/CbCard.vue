@@ -1,5 +1,5 @@
 <template>
-  <div class="cb-card" :class="shapeClasses">
+  <div class="cb-card relative" :class="shapeClasses">
     <!-- The inner face carries the look, so dragging can transform it while
          the sort library controls the transform of the outer element. -->
     <div
@@ -9,6 +9,8 @@
       <!-- Temporary: shows that the id sticks to the card while sorting. -->
       <span class="text-xs text-background/50">{{ id.slice(0, 4) }}</span>
     </div>
+    <!-- Overlay on top of the card face, e.g. the cursors of other people. -->
+    <slot />
   </div>
 </template>
 

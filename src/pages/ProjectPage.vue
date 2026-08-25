@@ -43,7 +43,10 @@
       :number="card.number"
       :class="{ invisible: card.id === selectedCardId }"
       @click="selectCard(card.id, $event)"
-    />
+    >
+      <!-- Temporary: one example cursor to check the look and the anchoring. -->
+      <CbCursor v-if="card.id === cards[0].id" :x="40" :y="60" name="Beispiel" />
+    </CbCard>
 
     <CbInteractive
       class="order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
@@ -63,6 +66,7 @@ import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
+import CbCursor from '../livecursors/CbCursor.vue'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbTopbar from '../components/organisms/CbTopbar.vue'
 
