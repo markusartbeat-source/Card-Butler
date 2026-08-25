@@ -16,7 +16,10 @@
       <CbCardToolbar class="transition-opacity" :class="fadeInClasses" />
 
       <div ref="cardWrapper">
-        <CbCard :id="id" :number="number" shape-classes="h-144 w-96 rounded-3xl" />
+        <CbCard :id="id" :number="number" shape-classes="h-144 w-96 rounded-3xl">
+          <!-- The cursors of people standing on exactly this card. -->
+          <slot />
+        </CbCard>
       </div>
 
       <CbButton

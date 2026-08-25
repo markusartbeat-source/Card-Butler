@@ -22,7 +22,16 @@
     :number="selectedCard.number"
     :start-rect="selectedCardRect"
     @close="selectedCardId = null"
-  />
+  >
+    <CbCursor
+      v-for="cursor in cursorsOnCard(selectedCard.id)"
+      :key="cursor.senderId"
+      :x="cursor.x"
+      :y="cursor.y"
+      :name="cursor.name"
+      :color="cursor.color"
+    />
+  </CbCardEditor>
 
   <VueDraggable
     v-model="cards"
@@ -65,7 +74,7 @@
   </VueDraggable>
 
   <!-- Temporary: shows my own anchor and the ones arriving from other windows. -->
-  <div class="fixed bottom-2 left-2 rounded-md bg-surface px-2 py-1 text-xs text-gold-light">
+  <div class="fixed bottom-2 left-2 z-50 rounded-md bg-surface px-2 py-1 text-xs text-gold-light">
     <div>Ich: {{ anchorText(myAnchor) }}</div>
     <div v-for="cursor in foreignCursors" :key="cursor.senderId">
       {{ cursor.name }}: {{ anchorText(cursor.anchor) }}
