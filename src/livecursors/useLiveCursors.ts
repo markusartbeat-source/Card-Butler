@@ -1,6 +1,6 @@
 import { computed, onMounted, onUnmounted, ref, type Ref } from 'vue'
 import { listenOnProjectChannel, mySenderId, projectChannel } from '../realtime/projectChannel'
-import { usePresence, type Person } from '../presence/usePresence'
+import { usePeopleBroadcast, type Person } from '../presence/usePeopleBroadcast'
 import type { CursorAnchor } from './cursorAnchor'
 
 /** Where somebody is. Sent about 10 times per second via Broadcast. */
@@ -40,7 +40,7 @@ function sendAnchor(anchor: CursorAnchor | null) {
  * Returns the cursors of the other people, without my own.
  */
 export function useLiveCursors(myAnchor: Ref<CursorAnchor | null>) {
-  const { people } = usePresence()
+  const { people } = usePeopleBroadcast()
 
   // Somebody who has left, or whose name has not arrived yet, is not drawn.
   const foreignCursors = computed<ForeignCursor[]>(() =>

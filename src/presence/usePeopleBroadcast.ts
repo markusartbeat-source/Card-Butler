@@ -6,7 +6,9 @@ import {
   projectChannel,
 } from '../realtime/projectChannel'
 import { useMyIdentity } from '../livecursors/cursorIdentity'
-import type { Person } from './usePresence'
+
+/** Who somebody is and where in the app they are. Sent on change, not per mouse move. */
+export type Person = { name: string; color: string; area: string; pictureUrl?: string }
 
 /** A "who" message: everything the others need to show me, sent on change. */
 type WhoMessage = Person & { senderId: string }

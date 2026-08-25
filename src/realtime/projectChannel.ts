@@ -34,7 +34,7 @@ export function openProjectChannel(onJoined: () => void) {
   joinedCallbacks.push(onJoined)
   if (currentChannel) return
 
-  const channel = supabase.channel('projekt-1', { config: { presence: { key: mySenderId } } })
+  const channel = supabase.channel('projekt-1')
   currentChannel = channel
 
   for (const listener of listeners) listener(channel)

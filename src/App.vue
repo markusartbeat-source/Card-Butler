@@ -22,7 +22,6 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import CbSidebar from './components/organisms/CbSidebar.vue'
 import CbToaster from './components/atoms/CbToaster.vue'
-import { startPresence } from './presence/usePresence'
 import { startPeopleBroadcast, usePeopleBroadcast } from './presence/usePeopleBroadcast'
 
 const route = useRoute()
@@ -30,7 +29,6 @@ const route = useRoute()
 // The area is the page name without the slash, e.g. "/images" -> "images".
 const myArea = computed(() => route.path.slice(1))
 
-startPresence(myArea)
 startPeopleBroadcast(myArea)
 
 // Debug output while Broadcast replaces Presence — removed in step 7.
