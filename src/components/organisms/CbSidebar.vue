@@ -48,7 +48,7 @@ import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
 import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
-import { usePresence } from '../../presence/usePresence'
+import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
@@ -56,7 +56,7 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? 'Gast')
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-const { people } = usePresence()
+const { people } = usePeopleBroadcast()
 
 function peopleInArea(area: string) {
   return Object.entries(people.value)
