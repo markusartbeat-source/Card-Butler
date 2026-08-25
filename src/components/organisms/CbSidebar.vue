@@ -9,7 +9,7 @@
       <div class="flex w-full flex-col gap-1">
         <CbMenu :model-value="activeMenuItem" :items="menuItems" @update:model-value="selectMenuItem">
           <template #trailing="{ item }">
-            <CbAvatarGroup v-if="item.value === 'project'" :people="examplePeople" />
+            <span class="truncate text-xs text-white">{{ namesInArea(item.value) }}</span>
           </template>
         </CbMenu>
         <CbMenuItem icon-key="add_2" label="Neues Projekt" @click="createNewProject" />
@@ -44,10 +44,10 @@ import CbMenu from '../molecules/CbMenu.vue'
 import CbMenuItem from '../atoms/CbMenuItem.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
-import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
 import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
+import { usePresence } from '../../presence/usePresence'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
@@ -55,14 +55,14 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? 'Gast')
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-// Example data until presence is connected
-const examplePeople = [
-  { name: 'Gast', imageUrl: guestPicture },
-  { name: 'Lena Meyer' },
-  { name: 'Tom Berger' },
-  { name: 'Anna Roth' },
-  { name: 'Jan Vogel' },
-]
+const { people } = usePresence()
+
+function namesInArea(area: string) {
+  return Object.values(people.value)
+    .filter((person) => person.area === area)
+    .map((person) => person.name)
+    .join(', ')
+}
 
 const menuItems: { value: string; iconKey: IconName; label: string }[] = [
   { value: 'home', iconKey: 'home', label: 'Home' },

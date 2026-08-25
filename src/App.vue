@@ -15,8 +15,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import CbSidebar from './components/organisms/CbSidebar.vue'
 import CbToaster from './components/atoms/CbToaster.vue'
+import { startPresence } from './presence/usePresence'
+
+const route = useRoute()
+
+// The area is the page name without the slash, e.g. "/images" -> "images".
+const myArea = computed(() => route.path.slice(1))
+
+startPresence(myArea)
 </script>
 
 <style scoped>
