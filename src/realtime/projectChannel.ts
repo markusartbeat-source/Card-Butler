@@ -55,10 +55,7 @@ export function openProjectChannel(onJoined: () => void) {
 
   for (const listener of listeners) listener(channel)
 
-  channel.subscribe((status, error) => {
-    // Debug output while we hunt the dying channel — remove once it holds.
-    console.log('project channel:', status, error ?? '')
-
+  channel.subscribe((status) => {
     isProjectChannelJoined.value = status === 'SUBSCRIBED'
     if (status === 'SUBSCRIBED') for (const callback of joinedCallbacks) callback()
   })

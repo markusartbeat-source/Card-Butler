@@ -11,9 +11,6 @@
       </router-view>
     </main>
     <CbToaster />
-
-    <!-- Debug output while Broadcast replaces Presence — removed in step 7. -->
-    <p class="text-gold fixed right-2 bottom-2 text-xs">aus Broadcast: {{ broadcastLine }}</p>
   </div>
 </template>
 
@@ -22,7 +19,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import CbSidebar from './components/organisms/CbSidebar.vue'
 import CbToaster from './components/atoms/CbToaster.vue'
-import { startPeopleBroadcast, usePeopleBroadcast } from './presence/usePeopleBroadcast'
+import { startPeopleBroadcast } from './presence/usePeopleBroadcast'
 
 const route = useRoute()
 
@@ -30,14 +27,6 @@ const route = useRoute()
 const myArea = computed(() => route.path.slice(1))
 
 startPeopleBroadcast(myArea)
-
-// Debug output while Broadcast replaces Presence — removed in step 7.
-const { people } = usePeopleBroadcast()
-const broadcastLine = computed(() =>
-  Object.values(people.value)
-    .map((person) => `${person.name} in ${person.area || 'nirgends'}`)
-    .join(', '),
-)
 </script>
 
 <style scoped>
