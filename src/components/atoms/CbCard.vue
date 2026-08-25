@@ -8,7 +8,7 @@
     >
       <span class="text-5xl font-bold text-background">{{ number }}</span>
       <!-- Temporary: shows that the id sticks to the card while sorting. -->
-      <span class="text-xs text-background/50">{{ id.slice(0, 4) }}</span>
+      <span class="text-xs text-background/50">{{ id }}</span>
     </div>
     <!-- Overlay on top of the card face, e.g. the cursors of other people. -->
     <slot />

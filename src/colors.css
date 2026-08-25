@@ -8,4 +8,12 @@
   --color-gold-lighter: #f3f18f;
   --color-success: #16a34a;
   --color-danger: #dc2626;
+
+  /* One of these is picked for each person showing a live cursor. */
+  --color-cursor-red: #ef5350;
+  --color-cursor-orange: #f59e0b;
+  --color-cursor-green: #34d399;
+  --color-cursor-blue: #60a5fa;
+  --color-cursor-purple: #a78bfa;
+  --color-cursor-pink: #f472b6;
 }

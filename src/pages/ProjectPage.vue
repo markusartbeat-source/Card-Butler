@@ -44,8 +44,14 @@
       :class="{ invisible: card.id === selectedCardId }"
       @click="selectCard(card.id, $event)"
     >
-      <!-- Temporary: one example cursor to check the look and the anchoring. -->
-      <CbCursor v-if="card.id === cards[0].id" :x="40" :y="60" name="Beispiel" />
+      <CbCursor
+        v-for="cursor in cursorsOnCard(card.id)"
+        :key="cursor.senderId"
+        :x="cursor.x"
+        :y="cursor.y"
+        :name="cursor.name"
+        :color="cursor.color"
+      />
     </CbCard>
 
     <CbInteractive
@@ -61,7 +67,7 @@
   <div class="fixed bottom-2 left-2 rounded-md bg-surface px-2 py-1 text-xs text-gold-light">
     <div>Ich: {{ anchorText(myAnchor) }}</div>
     <div v-for="cursor in foreignCursors" :key="cursor.senderId">
-      {{ cursor.senderId.slice(0, 4) }}: {{ anchorText(cursor.anchor) }}
+      {{ cursor.name }}: {{ anchorText(cursor.anchor) }}
     </div>
   </div>
 </template>
@@ -81,8 +87,10 @@ import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbTopbar from '../components/organisms/CbTopbar.vue'
 
 // The id stays with a card forever — the number is only its place in the row.
+// The starter cards use fixed ids so every window means the same card. Real
+// shared card data comes later with live sync.
 const cards = ref(
-  [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ id: crypto.randomUUID(), number })),
+  [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ id: `starter-card-${number}`, number })),
 )
 const selectedCardId = ref<string | null>(null)
 const selectedCard = computed(() => cards.value.find((card) => card.id === selectedCardId.value))
@@ -110,9 +118,18 @@ function selectCard(id: string, event: MouseEvent) {
 const myAnchor = ref<CursorAnchor | null>(null)
 const { foreignCursors } = useLiveCursors(myAnchor)
 
+// The cursors of other people that are sitting on this card right now.
+function cursorsOnCard(cardId: string) {
+  return foreignCursors.value.flatMap((cursor) =>
+    cursor.anchor?.cardId === cardId
+      ? [{ ...cursor, x: cursor.anchor.x, y: cursor.anchor.y }]
+      : [],
+  )
+}
+
 function anchorText(anchor: CursorAnchor | null) {
   if (!anchor) return 'keine Karte'
-  return `Karte ${anchor.cardId.slice(0, 4)} · ${anchor.x}% / ${anchor.y}%`
+  return `${anchor.cardId} · ${anchor.x}% / ${anchor.y}%`
 }
 
 function updateMyAnchor(event: MouseEvent) {
