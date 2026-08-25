@@ -1,18 +1,39 @@
 import { computed, onMounted, onUnmounted, ref, type Ref } from 'vue'
-import type { RealtimeChannel } from '@supabase/supabase-js'
-import { supabase } from '../supabase'
-import { mySenderId, usePresence, type Person } from '../presence/usePresence'
+import { listenOnProjectChannel, mySenderId, projectChannel } from '../realtime/projectChannel'
+import { usePresence, type Person } from '../presence/usePresence'
 import type { CursorAnchor } from './cursorAnchor'
 
-/** Where somebody is. Sent about 20 times per second via Broadcast. */
+/** Where somebody is. Sent about 10 times per second via Broadcast. */
 type CursorPosition = { senderId: string; anchor: CursorAnchor | null }
 
 export type ForeignCursor = CursorPosition & Person
 
-// Only one project exists so far, so the channel name is still fixed.
-const channelName = 'projekt-1-cursors'
-// About 20 messages per second — the smoothing happens at the receiver.
-const sendIntervalMs = 50
+// The smoothing happens at the receiver, see the cb-cursor transition.
+const sendIntervalMs = 100
+
+const positions = ref<CursorPosition[]>([])
+
+function receivePosition(position: CursorPosition) {
+  const known = positions.value.find((other) => other.senderId === position.senderId)
+  if (known) known.anchor = position.anchor
+  else positions.value.push(position)
+}
+
+// Listening starts with the app, not with the project page: the shared channel
+// must not collect a new listener on every visit.
+listenOnProjectChannel((channel) =>
+  channel.on('broadcast', { event: 'cursor' }, ({ payload }) =>
+    receivePosition(payload as CursorPosition),
+  ),
+)
+
+function sendAnchor(anchor: CursorAnchor | null) {
+  projectChannel()?.send({
+    type: 'broadcast',
+    event: 'cursor',
+    payload: { senderId: mySenderId, anchor },
+  })
+}
 
 /**
  * Sends my own cursor to everybody else in the project and collects theirs.
@@ -20,8 +41,6 @@ const sendIntervalMs = 50
  */
 export function useLiveCursors(myAnchor: Ref<CursorAnchor | null>) {
   const { people } = usePresence()
-
-  const positions = ref<CursorPosition[]>([])
 
   // Somebody who has left, or whose name has not arrived yet, is not drawn.
   const foreignCursors = computed<ForeignCursor[]>(() =>
@@ -31,42 +50,27 @@ export function useLiveCursors(myAnchor: Ref<CursorAnchor | null>) {
     }),
   )
 
-  let channel: RealtimeChannel | null = null
   let sendTimer = 0
   let lastSentAnchor = ''
 
   function sendWhenChanged() {
+    if (!projectChannel()) return
+
     const anchorAsText = JSON.stringify(myAnchor.value)
     if (anchorAsText === lastSentAnchor) return
     lastSentAnchor = anchorAsText
 
-    channel?.send({
-      type: 'broadcast',
-      event: 'cursor',
-      payload: { senderId: mySenderId, anchor: myAnchor.value },
-    })
-  }
-
-  function receivePosition(position: CursorPosition) {
-    const known = positions.value.find((other) => other.senderId === position.senderId)
-    if (known) known.anchor = position.anchor
-    else positions.value.push(position)
+    sendAnchor(myAnchor.value)
   }
 
   onMounted(() => {
-    channel = supabase
-      .channel(channelName)
-      .on('broadcast', { event: 'cursor' }, ({ payload }) =>
-        receivePosition(payload as CursorPosition),
-      )
-      .subscribe()
-
     sendTimer = window.setInterval(sendWhenChanged, sendIntervalMs)
   })
 
   onUnmounted(() => {
     window.clearInterval(sendTimer)
-    if (channel) supabase.removeChannel(channel)
+    // Leaving the page takes my cursor away for the others as well.
+    sendAnchor(null)
   })
 
   return { foreignCursors }

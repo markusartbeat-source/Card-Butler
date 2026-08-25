@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { useCurrentUser } from '../composables/useCurrentUser'
+import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 
 // The values behind these names live in src/colors.css.
 const cursorColors = [
@@ -34,10 +35,13 @@ export function colorForId(id: string) {
 
 /** Who I am for the others: the Google name when signed in, otherwise a guest. */
 export function useMyIdentity() {
-  const { currentUser, displayName } = useCurrentUser()
+  const { currentUser, avatarUrl, displayName } = useCurrentUser()
 
   const name = computed(() => displayName.value ?? 'Gast')
   const color = computed(() => colorForId(currentUser.value?.id ?? guestId))
 
-  return { name, color }
+  // Signed in without a Google picture falls back to the initials, guests get the guest picture.
+  const pictureUrl = computed(() => avatarUrl.value ?? (currentUser.value ? undefined : guestPicture))
+
+  return { name, color, pictureUrl }
 }

@@ -9,7 +9,7 @@
       <div class="flex w-full flex-col gap-1">
         <CbMenu :model-value="activeMenuItem" :items="menuItems" @update:model-value="selectMenuItem">
           <template #trailing="{ item }">
-            <span class="truncate text-xs text-white">{{ namesInArea(item.value) }}</span>
+            <CbAvatarGroup :people="peopleInArea(item.value)" />
           </template>
         </CbMenu>
         <CbMenuItem icon-key="add_2" label="Neues Projekt" @click="createNewProject" />
@@ -44,6 +44,7 @@ import CbMenu from '../molecules/CbMenu.vue'
 import CbMenuItem from '../atoms/CbMenuItem.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
+import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
 import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
@@ -57,11 +58,15 @@ const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
 const { people } = usePresence()
 
-function namesInArea(area: string) {
-  return Object.values(people.value)
-    .filter((person) => person.area === area)
-    .map((person) => person.name)
-    .join(', ')
+function peopleInArea(area: string) {
+  return Object.entries(people.value)
+    .filter(([, person]) => person.area === area)
+    .map(([id, person]) => ({
+      id,
+      name: person.name,
+      imageUrl: person.pictureUrl,
+      color: person.color,
+    }))
 }
 
 const menuItems: { value: string; iconKey: IconName; label: string }[] = [

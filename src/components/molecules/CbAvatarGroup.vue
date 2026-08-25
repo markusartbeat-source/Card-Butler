@@ -2,9 +2,10 @@
   <div class="flex -space-x-2">
     <CbAvatar
       v-for="person in visiblePeople"
-      :key="person.name"
+      :key="person.id"
       :name="person.name"
       :image-url="person.imageUrl"
+      :color="person.color"
       size="small"
       class="ring-surface ring-2"
     />
@@ -23,7 +24,9 @@ import CbAvatar from '../atoms/CbAvatar.vue'
 
 const maxVisibleAvatars = 3
 
-const props = defineProps<{ people: { name: string; imageUrl?: string }[] }>()
+const props = defineProps<{
+  people: { id: string; name: string; imageUrl?: string; color?: string }[]
+}>()
 
 const visiblePeople = computed(() => props.people.slice(0, maxVisibleAvatars))
 const hiddenCount = computed(() => props.people.length - visiblePeople.value.length)
