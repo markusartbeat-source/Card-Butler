@@ -11,6 +11,7 @@ import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
 import Image from '~icons/material-symbols/image-outline-rounded'
+import Login from '~icons/material-symbols/login-rounded'
 import MoreHoriz from '~icons/material-symbols/more-horiz'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
 import Search from '~icons/material-symbols/search-rounded'
@@ -30,6 +31,7 @@ export const icons = {
   home: Home,
   horizontal_rule: HorizontalRule,
   image: Image,
+  login: Login,
   more_horiz: MoreHoriz,
   playing_cards: PlayingCards,
   search: Search,

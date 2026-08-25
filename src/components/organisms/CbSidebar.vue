@@ -13,10 +13,10 @@
       <div class="bg-gradient-to-br from-gold-dark to-gold-light mt-auto w-full rounded-xl p-0.5 shadow-lg">
         <CbInteractive
           class="bg-radial from-gold-light to-gold text-surface flex w-full items-center justify-center gap-2.5 rounded-lg p-2 text-sm"
-          @click="upgrade"
+          @click="currentUser ? upgrade() : signInWithGoogle()"
         >
-          <CbIcon name="arrow_circle_up" />
-          Upgrade
+          <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
+          {{ currentUser ? 'Upgrade' : 'Anmelden' }}
         </CbInteractive>
       </div>
       <CbInteractive
@@ -42,10 +42,10 @@ import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
-import { useCurrentUser } from '../../composables/useCurrentUser'
+import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 
-const { displayName, avatarUrl } = useCurrentUser()
+const { currentUser, displayName, avatarUrl } = useCurrentUser()
 
 const userLabel = computed(() => displayName.value ?? 'Gast')
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)

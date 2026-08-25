@@ -13,10 +13,6 @@ onMounted(async () => {
   reachable.value = await isSupabaseReachable()
 })
 
-function signInWithGoogle() {
-  supabase.auth.signInWithOAuth({ provider: 'google' })
-}
-
 function signOut() {
   supabase.auth.signOut()
 }
@@ -33,10 +29,7 @@ function signOut() {
     Angemeldet als: {{ userEmail ?? 'niemand' }}
   </p>
 
-  <CbButton v-if="!userEmail" class="mt-4 w-64" @click="signInWithGoogle">
-    Mit Google anmelden
-  </CbButton>
-  <CbButton v-else variant="secondary" class="mt-4 w-64 justify-center" @click="signOut">
+  <CbButton v-if="userEmail" variant="secondary" class="mt-4 w-64 justify-center" @click="signOut">
     Abmelden
   </CbButton>
 </template>
