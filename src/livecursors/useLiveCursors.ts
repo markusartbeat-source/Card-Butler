@@ -4,26 +4,25 @@ import { usePeopleBroadcast, type Person } from '../presence/usePeopleBroadcast'
 import type { CursorAnchor } from './cursorAnchor'
 
 /** Where somebody is. Sent about 10 times per second via Broadcast. */
-type CursorPosition = { senderId: string; anchor: CursorAnchor | null }
+type CursorMessage = { senderId: string; anchor: CursorAnchor | null }
 
-export type ForeignCursor = CursorPosition & Person
+export type ForeignCursor = CursorMessage & Person
 
 // The smoothing happens at the receiver, see the cb-cursor transition.
 const sendIntervalMs = 100
 
-const positions = ref<CursorPosition[]>([])
+// Only the position — who somebody is comes from the shared people list.
+const anchors = ref<Record<string, CursorAnchor | null>>({})
 
-function receivePosition(position: CursorPosition) {
-  const known = positions.value.find((other) => other.senderId === position.senderId)
-  if (known) known.anchor = position.anchor
-  else positions.value.push(position)
+function receivePosition({ senderId, anchor }: CursorMessage) {
+  anchors.value = { ...anchors.value, [senderId]: anchor }
 }
 
 // Listening starts with the app, not with the project page: the shared channel
 // must not collect a new listener on every visit.
 listenOnProjectChannel((channel) =>
   channel.on('broadcast', { event: 'cursor' }, ({ payload }) =>
-    receivePosition(payload as CursorPosition),
+    receivePosition(payload as CursorMessage),
   ),
 )
 
@@ -42,12 +41,14 @@ function sendAnchor(anchor: CursorAnchor | null) {
 export function useLiveCursors(myAnchor: Ref<CursorAnchor | null>) {
   const { people } = usePeopleBroadcast()
 
-  // Somebody who has left, or whose name has not arrived yet, is not drawn.
+  // The people list decides who exists, so somebody who left leaves no cursor
+  // behind, and a newcomer is drawn with the right name and color at once.
   const foreignCursors = computed<ForeignCursor[]>(() =>
-    positions.value.flatMap((position) => {
-      const person = people.value[position.senderId]
-      return person ? [{ ...position, ...person }] : []
-    }),
+    Object.entries(people.value).map(([senderId, person]) => ({
+      senderId,
+      anchor: anchors.value[senderId] ?? null,
+      ...person,
+    })),
   )
 
   let sendTimer = 0
