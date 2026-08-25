@@ -57,9 +57,12 @@
     </CbInteractive>
   </VueDraggable>
 
-  <!-- Temporary: shows where my own mouse is anchored. -->
+  <!-- Temporary: shows my own anchor and the ones arriving from other windows. -->
   <div class="fixed bottom-2 left-2 rounded-md bg-surface px-2 py-1 text-xs text-gold-light">
-    {{ myAnchorText }}
+    <div>Ich: {{ anchorText(myAnchor) }}</div>
+    <div v-for="cursor in foreignCursors" :key="cursor.senderId">
+      {{ cursor.senderId.slice(0, 4) }}: {{ anchorText(cursor.anchor) }}
+    </div>
   </div>
 </template>
 
@@ -73,6 +76,7 @@ import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
+import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbTopbar from '../components/organisms/CbTopbar.vue'
 
@@ -104,11 +108,12 @@ function selectCard(id: string, event: MouseEvent) {
 
 // Where my own mouse currently is, as { card, x%, y% } — null outside the cards.
 const myAnchor = ref<CursorAnchor | null>(null)
-const myAnchorText = computed(() =>
-  myAnchor.value
-    ? `Karte ${myAnchor.value.cardId.slice(0, 4)} · ${myAnchor.value.x}% / ${myAnchor.value.y}%`
-    : 'keine Karte',
-)
+const { foreignCursors } = useLiveCursors(myAnchor)
+
+function anchorText(anchor: CursorAnchor | null) {
+  if (!anchor) return 'keine Karte'
+  return `Karte ${anchor.cardId.slice(0, 4)} · ${anchor.x}% / ${anchor.y}%`
+}
 
 function updateMyAnchor(event: MouseEvent) {
   myAnchor.value = readAnchorFromMouse(event)
