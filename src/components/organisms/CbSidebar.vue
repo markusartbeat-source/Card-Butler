@@ -9,7 +9,7 @@
       <div class="flex w-full flex-col gap-1">
         <CbMenu :model-value="activeMenuItem" :items="menuItems" @update:model-value="selectMenuItem">
           <template #trailing="{ item }">
-            <CbAvatar v-if="item.value === 'project'" name="Gast" :image-url="guestPicture" size="small" />
+            <CbAvatarGroup v-if="item.value === 'project'" :people="examplePeople" />
           </template>
         </CbMenu>
         <CbMenuItem icon-key="add_2" label="Neues Projekt" @click="createNewProject" />
@@ -44,6 +44,7 @@ import CbMenu from '../molecules/CbMenu.vue'
 import CbMenuItem from '../atoms/CbMenuItem.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
+import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
 import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
@@ -53,6 +54,13 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 
 const userLabel = computed(() => displayName.value ?? 'Gast')
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
+
+// Example data until presence is connected
+const examplePeople = [
+  { name: 'Gast', imageUrl: guestPicture },
+  { name: 'Lena Meyer' },
+  { name: 'Tom Berger' },
+]
 
 const menuItems: { value: string; iconKey: IconName; label: string }[] = [
   { value: 'home', iconKey: 'home', label: 'Home' },

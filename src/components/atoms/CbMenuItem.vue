@@ -6,8 +6,8 @@
     @click="$emit('click')"
   >
     <CbIcon :name="iconKey" />
-    <span class="text-sm">{{ label }}</span>
-    <div v-if="$slots.trailing" class="ml-auto flex items-center">
+    <span class="truncate text-sm">{{ label }}</span>
+    <div v-if="$slots.trailing" class="ml-auto flex shrink-0 items-center">
       <slot name="trailing" />
     </div>
   </CbInteractive>
