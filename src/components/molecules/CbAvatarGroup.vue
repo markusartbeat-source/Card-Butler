@@ -1,5 +1,5 @@
 <template>
-  <div class="flex -space-x-2">
+  <div v-if="people.length" class="flex -space-x-4">
     <CbAvatar
       v-for="person in visiblePeople"
       :key="person.id"

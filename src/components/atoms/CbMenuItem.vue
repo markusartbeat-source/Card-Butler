@@ -1,6 +1,8 @@
 <template>
+  <!-- Fixed height: an avatar in the trailing slot is taller than the icon and
+       would otherwise make this one item jump. -->
   <CbInteractive
-    class="flex w-full items-center gap-1.5 rounded-xl p-2.5 text-white"
+    class="flex h-11 w-full items-center gap-1.5 rounded-xl px-2.5 text-white"
     :class="{ 'bg-surface-light': active }"
     :aria-current="active ? 'page' : undefined"
     @click="$emit('click')"
