@@ -77,6 +77,14 @@ body {
   .cb-card-dragged .cb-card-face {
     @apply scale-105 rotate-3 opacity-100 shadow-2xl;
   }
+
+  /* A live cursor arrives about 20 times per second. The short, even
+     transition fills the gaps between two messages without lagging behind. */
+  .cb-cursor {
+    transition:
+      left 50ms linear,
+      top 50ms linear;
+  }
 }
 
 @keyframes cb-ripple {
@@ -90,8 +98,26 @@ body {
   }
 }
 
+/* Moving to another card is a real jump — the way in between only exists on
+   the sender's screen. So the cursor lands softly instead of gliding over
+   cards the person never pointed at. */
+@keyframes cb-cursor-arrive {
+  from {
+    opacity: 0;
+    scale: 0.8;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
 @layer utilities {
   .animate-cb-ripple {
     animation: cb-ripple 0.6s ease-out;
+  }
+
+  .animate-cb-cursor-arrive {
+    animation: cb-cursor-arrive 200ms ease-out;
   }
 }
