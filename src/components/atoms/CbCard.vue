@@ -1,6 +1,11 @@
 <template>
   <!-- data-card-id lets the cursor logic find out which card the mouse is on. -->
-  <div class="cb-card relative" :class="shapeClasses" :data-card-id="id">
+  <div
+    class="cb-card relative"
+    :class="[shapeClasses, highlightColor ? 'outline-2 outline-offset-2' : '']"
+    :style="highlightColor ? { outlineColor: highlightColor } : undefined"
+    :data-card-id="id"
+  >
     <!-- The inner face carries the look, so dragging can transform it while
          the sort library controls the transform of the outer element. -->
     <div
@@ -17,7 +22,14 @@
 
 <script setup lang="ts">
 // Each card decides its own size and shape via shapeClasses.
-withDefaults(defineProps<{ id: string; number: number; shapeClasses?: string }>(), {
-  shapeClasses: 'h-72 w-48 rounded-2xl',
-})
+// highlightColor draws a thin frame in the colour of the person standing here.
+withDefaults(
+  defineProps<{
+    id: string
+    number: number
+    shapeClasses?: string
+    highlightColor?: string
+  }>(),
+  { shapeClasses: 'h-72 w-48 rounded-2xl' },
+)
 </script>

@@ -41,6 +41,7 @@
       :key="card.id"
       :id="card.id"
       :number="card.number"
+      :highlight-color="highlightColorForCard(card.id)"
       :class="{ invisible: card.id === selectedCardId }"
       @click="selectCard(card.id, $event)"
     >
@@ -125,6 +126,12 @@ function cursorsOnCard(cardId: string) {
       ? [{ ...cursor, x: cursor.anchor.x, y: cursor.anchor.y }]
       : [],
   )
+}
+
+// The card somebody stands on gets a frame in their colour. If several people
+// are on the same card, the first one wins — the frame can only show one.
+function highlightColorForCard(cardId: string) {
+  return foreignCursors.value.find((cursor) => cursor.anchor?.cardId === cardId)?.color
 }
 
 function anchorText(anchor: CursorAnchor | null) {
