@@ -4,6 +4,7 @@ import {
   mySenderId,
   openProjectChannel,
   projectChannel,
+  sendWhileClosing,
 } from '../realtime/projectChannel'
 import { useMyIdentity } from '../livecursors/cursorIdentity'
 
@@ -39,10 +40,20 @@ function forgetQuietPeople() {
   people.value = stillHere
 }
 
+function forgetPerson(senderId: string) {
+  const { [senderId]: gone, ...stillHere } = people.value
+  if (!gone) return
+
+  delete lastHeardAt[senderId]
+  people.value = stillHere
+}
+
 // Listening starts with the app, not with a page: the shared channel must not
 // collect a new listener on every visit.
 listenOnProjectChannel((channel) =>
-  channel.on('broadcast', { event: 'who' }, ({ payload }) => receiveWho(payload as WhoMessage)),
+  channel
+    .on('broadcast', { event: 'who' }, ({ payload }) => receiveWho(payload as WhoMessage))
+    .on('broadcast', { event: 'gone' }, ({ payload }) => forgetPerson(payload.senderId)),
 )
 
 /**
@@ -77,6 +88,12 @@ export function startPeopleBroadcast(myArea: Ref<string>) {
     sendMyself()
     forgetQuietPeople()
   }, signOfLifeIntervalMs)
+
+  // Closing the window: saying goodbye makes me disappear right away instead of
+  // after 15 quiet seconds. This is a message to the others, not a hint for me.
+  window.addEventListener('pagehide', () =>
+    sendWhileClosing('gone', { senderId: mySenderId }),
+  )
 }
 
 /** The other people in the project, without me. */

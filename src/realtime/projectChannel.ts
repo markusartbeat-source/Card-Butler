@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 import type { RealtimeChannel } from '@supabase/supabase-js'
-import { supabase } from '../supabase'
+import { supabase, supabaseAnonKey, supabaseUrl } from '../supabase'
+
+const channelName = 'projekt-1'
 
 // One id per browser tab: the same person may have two windows open.
 export const mySenderId = crypto.randomUUID()
@@ -15,6 +17,20 @@ let currentChannel: RealtimeChannel | null = null
 /** The channel to send on, or null while nothing can be sent. */
 export function projectChannel() {
   return isProjectChannelJoined.value ? currentChannel : null
+}
+
+/**
+ * Sends one last message while the window is closing. The WebSocket dies with
+ * the window, so this goes over Supabase's HTTP broadcast endpoint instead:
+ * a "keepalive" request is the only kind a browser finishes after unload.
+ */
+export function sendWhileClosing(event: string, payload: unknown) {
+  fetch(`${supabaseUrl}/realtime/v1/api/broadcast`, {
+    method: 'POST',
+    keepalive: true,
+    headers: { 'Content-Type': 'application/json', apikey: supabaseAnonKey },
+    body: JSON.stringify({ messages: [{ topic: channelName, event, payload }] }),
+  })
 }
 
 /**
@@ -34,7 +50,7 @@ export function openProjectChannel(onJoined: () => void) {
   joinedCallbacks.push(onJoined)
   if (currentChannel) return
 
-  const channel = supabase.channel('projekt-1')
+  const channel = supabase.channel(channelName)
   currentChannel = channel
 
   for (const listener of listeners) listener(channel)
