@@ -56,10 +56,15 @@
       <span>Neue Karte</span>
     </CbInteractive>
   </VueDraggable>
+
+  <!-- Temporary: shows where my own mouse is anchored. -->
+  <div class="fixed bottom-2 left-2 rounded-md bg-surface px-2 py-1 text-xs text-gold-light">
+    {{ myAnchorText }}
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbButton from '../components/atoms/CbButton.vue'
@@ -67,6 +72,7 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
+import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbTopbar from '../components/organisms/CbTopbar.vue'
 
@@ -95,6 +101,21 @@ function selectCard(id: string, event: MouseEvent) {
   selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
   selectedCardId.value = id
 }
+
+// Where my own mouse currently is, as { card, x%, y% } — null outside the cards.
+const myAnchor = ref<CursorAnchor | null>(null)
+const myAnchorText = computed(() =>
+  myAnchor.value
+    ? `Karte ${myAnchor.value.cardId.slice(0, 4)} · ${myAnchor.value.x}% / ${myAnchor.value.y}%`
+    : 'keine Karte',
+)
+
+function updateMyAnchor(event: MouseEvent) {
+  myAnchor.value = readAnchorFromMouse(event)
+}
+
+onMounted(() => window.addEventListener('mousemove', updateMyAnchor))
+onUnmounted(() => window.removeEventListener('mousemove', updateMyAnchor))
 
 function addCard() {
   const highestNumber = Math.max(...cards.value.map((card) => card.number))

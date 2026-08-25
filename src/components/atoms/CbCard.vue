@@ -1,5 +1,6 @@
 <template>
-  <div class="cb-card relative" :class="shapeClasses">
+  <!-- data-card-id lets the cursor logic find out which card the mouse is on. -->
+  <div class="cb-card relative" :class="shapeClasses" :data-card-id="id">
     <!-- The inner face carries the look, so dragging can transform it while
          the sort library controls the transform of the outer element. -->
     <div
