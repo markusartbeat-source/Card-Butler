@@ -72,14 +72,6 @@
       <span>Neue Karte</span>
     </CbInteractive>
   </VueDraggable>
-
-  <!-- Temporary: shows my own anchor and the ones arriving from other windows. -->
-  <div class="fixed bottom-2 left-2 z-50 rounded-md bg-surface px-2 py-1 text-xs text-gold-light">
-    <div>Ich: {{ anchorText(myAnchor) }}</div>
-    <div v-for="cursor in foreignCursors" :key="cursor.senderId">
-      {{ cursor.name }}: {{ anchorText(cursor.anchor) }}
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -141,11 +133,6 @@ function cursorsOnCard(cardId: string) {
 // are on the same card, the first one wins — the frame can only show one.
 function highlightColorForCard(cardId: string) {
   return foreignCursors.value.find((cursor) => cursor.anchor?.cardId === cardId)?.color
-}
-
-function anchorText(anchor: CursorAnchor | null) {
-  if (!anchor) return 'keine Karte'
-  return `${anchor.cardId} · ${anchor.x}% / ${anchor.y}%`
 }
 
 function updateMyAnchor(event: MouseEvent) {
