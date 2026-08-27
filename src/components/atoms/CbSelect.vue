@@ -18,8 +18,11 @@
     </Select.Control>
 
     <Select.Positioner>
+      <!-- The open menu has to stay above the rows that come after it. Ark
+           copies the z-index of this content onto the positioner, so the
+           class belongs here and not one level up. -->
       <Select.Content
-        class="flex w-52 flex-col rounded-lg bg-surface-light p-1 text-sm text-white shadow-lg"
+        class="z-50 flex w-52 flex-col rounded-lg bg-surface-light p-1 text-sm text-white shadow-lg"
       >
         <Select.Item
           v-for="item in items"

@@ -7,6 +7,7 @@ import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-round
 import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
+import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
 // Flags keep their own colours, they are not tinted like the symbols above.
@@ -17,6 +18,7 @@ import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
 import Image from '~icons/material-symbols/image-outline-rounded'
 import KeyboardArrowDown from '~icons/material-symbols/keyboard-arrow-down-rounded'
+import LightMode from '~icons/material-symbols/light-mode-outline-rounded'
 import Login from '~icons/material-symbols/login-rounded'
 import MoreHoriz from '~icons/material-symbols/more-horiz'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
@@ -33,6 +35,7 @@ export const icons = {
   check: Check,
   circle: Circle,
   close: Close,
+  dark_mode: DarkMode,
   door_open: DoorOpen,
   filter: Filter,
   flag_de: FlagDe,
@@ -42,6 +45,7 @@ export const icons = {
   horizontal_rule: HorizontalRule,
   image: Image,
   keyboard_arrow_down: KeyboardArrowDown,
+  light_mode: LightMode,
   login: Login,
   more_horiz: MoreHoriz,
   playing_cards: PlayingCards,

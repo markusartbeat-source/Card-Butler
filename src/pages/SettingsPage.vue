@@ -29,6 +29,12 @@
           <div class="grow"></div>
           <CbSelect v-model="language" :items="languages" />
         </div>
+
+        <div class="flex items-center p-6 text-sm text-white">
+          Design
+          <div class="grow"></div>
+          <CbSelect v-model="theme" :items="themes" />
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
@@ -57,4 +63,11 @@ const languages = [
   { value: 'en', label: 'English', icon: 'flag_gb' },
 ] satisfies { value: string; label: string; icon: IconName }[]
 const language = ref('de')
+
+// Picking a theme only changes the field for now, nothing switches yet.
+const themes = [
+  { value: 'dark', label: 'Dunkel', icon: 'dark_mode' },
+  { value: 'light', label: 'Hell', icon: 'light_mode' },
+] satisfies { value: string; label: string; icon: IconName }[]
+const theme = ref('dark')
 </script>
