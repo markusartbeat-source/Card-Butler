@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 @import './colors.css';
+@import '@fontsource/comfortaa/300.css';
+@import '@fontsource/comfortaa/400.css';
+@import '@fontsource/comfortaa/700.css';
+
+/* Comfortaa is the app's font, so every element uses it by default. */
+@theme {
+  --font-sans: 'Comfortaa', sans-serif;
+}
 
 :root {
   font-synthesis: none;
