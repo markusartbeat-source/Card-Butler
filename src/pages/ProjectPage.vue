@@ -1,19 +1,5 @@
 <template>
-  <CbTopbar>
-    <template #actions>
-      <CbButton
-        variant="secondary"
-        @click="showSuccessToast('Link kopiert', 'Der Link liegt in der Zwischenablage.')"
-      >
-        <CbIcon name="share" />
-        Teilen
-      </CbButton>
-      <CbButton variant="secondary" @click="showDangerToast('Nicht verfügbar', 'Diese Funktion gibt es noch nicht.')">
-        <CbIcon name="more_horiz" />
-        Mehr
-      </CbButton>
-    </template>
-  </CbTopbar>
+  <CbHeader :title="projectName" :buttons="headerButtons" @action="runHeaderAction" />
 
   <CbCardEditor
     v-if="selectedCard && selectedCardRect"
@@ -51,9 +37,12 @@
       :id="card.id"
       :number="card.number"
       :highlight-color="highlightColorForCard(card.id)"
-      class="animate-cb-rise"
       :style="riseDelay(cardIndex)"
-      :class="{ invisible: card.id === selectedCardId }"
+      :class="[
+        risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
+        { invisible: card.id === selectedCardId },
+      ]"
+      @animationend="markRisen(card.id, $event)"
       @click="selectCard(card.id, $event)"
     >
       <CbCursor
@@ -67,8 +56,10 @@
     </CbCard>
 
     <CbInteractive
-      class="animate-cb-rise order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
+      class="order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
+      :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
       :style="addCardDelay"
+      @animationend="markRisen(addCardId, $event)"
       @click="addCard"
     >
       <CbIcon name="add_2" />
@@ -81,7 +72,6 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
-import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
@@ -89,7 +79,19 @@ import CbCursor from '../livecursors/CbCursor.vue'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
-import CbTopbar from '../components/organisms/CbTopbar.vue'
+import CbHeader from '../components/organisms/CbHeader.vue'
+import type { HeaderButton } from '../components/organisms/headerButton'
+import { projectName } from '../project/project'
+
+const headerButtons: HeaderButton[] = [
+  { key: 'share', label: 'Teilen', icon: 'share', variant: 'secondary' },
+  { key: 'more', label: 'Mehr', icon: 'more_horiz', variant: 'secondary' },
+]
+
+function runHeaderAction(key: string) {
+  if (key === 'share') showSuccessToast('Link kopiert', 'Der Link liegt in der Zwischenablage.')
+  else showDangerToast('Nicht verfügbar', 'Diese Funktion gibt es noch nicht.')
+}
 
 // The id stays with a card forever — the number is only its place in the row.
 // The starter cards use fixed ids so every window means the same card. Real
@@ -109,6 +111,17 @@ function riseDelay(index: number) {
 
 // The button for a new card comes in behind the last card.
 const addCardDelay = { animationDelay: `${initialCardCount * 60}ms` }
+const addCardId = 'add-card-button'
+
+// Dropping a card on the spot it came from makes the drag library put every
+// element of the row back into the page one by one, which would start the
+// entrance animation all over again. So each element wears the animation only
+// until it has played once.
+const risenCardIds = ref(new Set<string>())
+
+function markRisen(id: string, event: AnimationEvent) {
+  if (event.animationName === 'cb-rise') risenCardIds.value.add(id)
+}
 const selectedCard = computed(() => cards.value.find((card) => card.id === selectedCardId.value))
 
 // Where the clicked card sits in the grid — the editor starts its flight there.

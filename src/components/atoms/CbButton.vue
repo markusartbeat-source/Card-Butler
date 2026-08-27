@@ -13,11 +13,12 @@
   </div>
 
   <!-- "light" is the same button one shade brighter, for use on a surface
-       coloured panel where the secondary button would disappear. -->
+       coloured panel where the secondary button would disappear. "ghost" is
+       round and carries no background of its own, only the hover. -->
   <CbInteractive
     v-else
-    class="flex items-center gap-2.5 rounded-xl p-3 text-sm text-white shadow-lg"
-    :class="variant === 'light' ? 'bg-surface-light' : 'bg-surface'"
+    class="flex items-center gap-2.5 p-3 text-sm text-white"
+    :class="variantClasses[variant]"
     @click="$emit('click')"
   >
     <slot />
@@ -27,7 +28,14 @@
 <script setup lang="ts">
 import CbInteractive from './CbInteractive.vue'
 
-withDefaults(defineProps<{ variant?: 'primary' | 'secondary' | 'light' }>(), {
+const variantClasses = {
+  primary: '',
+  secondary: 'bg-surface rounded-xl shadow-lg',
+  light: 'bg-surface-light rounded-xl shadow-lg',
+  ghost: 'rounded-full',
+}
+
+withDefaults(defineProps<{ variant?: 'primary' | 'secondary' | 'light' | 'ghost' }>(), {
   variant: 'primary',
 })
 defineEmits<{ click: [] }>()

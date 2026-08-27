@@ -28,6 +28,7 @@ import Settings from '~icons/material-symbols/settings-outline-rounded'
 import Share from '~icons/material-symbols/share-outline'
 import Square from '~icons/material-symbols/square-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
+import West from '~icons/material-symbols/west-rounded'
 
 export const icons = {
   add_2: Add2,
@@ -56,6 +57,7 @@ export const icons = {
   share: Share,
   square: Square,
   title: Title,
+  west: West,
 }
 
 export type IconName = keyof typeof icons

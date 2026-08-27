@@ -1,21 +1,14 @@
 <template>
-  <CbTopbar>
-    <template #actions>
-      <CbButton @click="showToast('Bilder hinzufügen', 'Diese Funktion gibt es noch nicht.')">
-        <CbIcon name="add_2" />
-        Bilder hinzufügen
-      </CbButton>
-      <CbButton variant="secondary" @click="showToast('Mehr', 'Diese Funktion gibt es noch nicht.')">
-        <CbIcon name="more_horiz" />
-        Mehr
-      </CbButton>
-    </template>
-  </CbTopbar>
+  <CbHeader title="Bilder" :buttons="headerButtons" @action="showToast($event, 'Diese Funktion gibt es noch nicht.')" />
 </template>
 
 <script setup lang="ts">
-import CbButton from '../components/atoms/CbButton.vue'
-import CbIcon from '../components/atoms/CbIcon.vue'
-import CbTopbar from '../components/organisms/CbTopbar.vue'
+import CbHeader from '../components/organisms/CbHeader.vue'
+import type { HeaderButton } from '../components/organisms/headerButton'
 import { showToast } from '../components/atoms/toaster'
+
+const headerButtons: HeaderButton[] = [
+  { key: 'Bilder hinzufügen', label: 'Bilder hinzufügen', icon: 'add_2', variant: 'primary' },
+  { key: 'Mehr', label: 'Mehr', icon: 'more_horiz', variant: 'secondary' },
+]
 </script>

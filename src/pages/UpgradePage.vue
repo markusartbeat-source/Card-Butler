@@ -6,7 +6,7 @@
   <div class="relative flex min-h-full flex-col overflow-hidden bg-background">
     <CbGoldGlow />
 
-    <h1 class="relative z-10 p-6 text-3xl text-white">Pläne, die mit dir wachsen</h1>
+    <CbHeader class="relative z-10" title="Pläne, die mit dir wachsen" :searchbar="false" />
 
     <!-- Two flexible spacers hold the cards in place: the space below them
          grows twice as fast, so the cards stay a bit above the middle on
@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import CbHeader from '../components/organisms/CbHeader.vue'
 import CbGoldGlow from '../upgrade/CbGoldGlow.vue'
 import CbPlanCard from '../upgrade/CbPlanCard.vue'
 import { plans } from '../upgrade/plans'

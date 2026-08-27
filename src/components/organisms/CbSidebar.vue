@@ -2,7 +2,7 @@
   <div class="h-screen w-64 shrink-0 p-3">
     <div class="bg-surface flex h-full w-full flex-col items-center gap-3 rounded-3xl p-3 shadow-lg">
       <img
-        src="../../assets/logos/logo.png"
+        src="../../assets/logos/logo.svg"
         alt="Logo"
         class="aspect-square w-10 -rotate-1 object-cover drop-shadow-lg"
       />
@@ -49,6 +49,7 @@ import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
 import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
 import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
+import { projectName } from '../../project/project'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
@@ -72,7 +73,7 @@ function peopleInArea(area: string) {
 const menuItems: { value: string; iconKey: IconName; label: string }[] = [
   { value: 'home', iconKey: 'home', label: 'Home' },
   { value: 'images', iconKey: 'filter', label: 'Bilder' },
-  { value: 'project', iconKey: 'playing_cards', label: 'Mein erstes Projekt' },
+  { value: 'project', iconKey: 'playing_cards', label: projectName },
 ]
 
 const route = useRoute()

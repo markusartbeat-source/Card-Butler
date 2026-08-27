@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-full flex-col">
-    <h1 class="p-6 text-3xl text-white">Einstellungen</h1>
+    <CbHeader title="Einstellungen" :searchbar="false" />
 
     <!-- The groups stay centred on every screen width. -->
     <div class="flex flex-col items-center gap-8 pb-6">
@@ -105,6 +105,7 @@ import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbStreetview from '../components/atoms/CbStreetview.vue'
 import CbSwitch from '../components/atoms/CbSwitch.vue'
+import CbHeader from '../components/organisms/CbHeader.vue'
 import { showToast } from '../components/atoms/toaster'
 import type { IconName } from '../components/atoms/icons'
 import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
