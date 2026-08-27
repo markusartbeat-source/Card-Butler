@@ -29,6 +29,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     addImages: 'Add images',
   },
   project: {
+    name: 'My first project',
     share: 'Share',
     newCard: 'New card',
     linkCopiedTitle: 'Link copied',
@@ -59,6 +60,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     storageUsed: 'used',
     freeProjects: 'Free projects',
     dataLocation: 'Location of your data',
+    dataCityName: 'Bielefeld',
     dataLocationSoonTitle: 'Coming soon',
     dataLocationSoonText: 'Here you will be able to choose where your data is stored.',
   },

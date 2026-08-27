@@ -127,13 +127,19 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-// Picking a language only changes the field for now. Every new language is
-// one more line here, with its flag registered in icons.ts.
+// Picking a language switches every text of the app at once. Every new
+// language is one more line here, with its flag registered in icons.ts.
 const languages = computed<{ value: string; label: string; icon: IconName }[]>(() => [
   { value: 'de', label: dictionary.settings.languageGerman, icon: 'flag_de' },
   { value: 'en', label: dictionary.settings.languageEnglish, icon: 'flag_gb' },
 ])
-const language = ref('de')
+
+// The field shows the language in use and hands a new pick straight to the
+// dictionary, so there is no second place that could fall out of step.
+const language = computed<string>({
+  get: () => currentLanguage.value,
+  set: (value) => setLanguage(value as LanguageCode),
+})
 
 // Picking a theme only changes the field for now, nothing switches yet.
 const themes = computed<{ value: string; label: string; icon: IconName }[]>(() => [

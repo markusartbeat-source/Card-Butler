@@ -77,7 +77,7 @@ function peopleInArea(area: string) {
 const menuItems = computed<{ value: string; iconKey: IconName; label: string }[]>(() => [
   { value: 'home', iconKey: 'home', label: dictionary.sidebar.home },
   { value: 'images', iconKey: 'filter', label: dictionary.sidebar.images },
-  { value: 'project', iconKey: 'playing_cards', label: projectName },
+  { value: 'project', iconKey: 'playing_cards', label: projectName.value },
 ])
 
 const route = useRoute()

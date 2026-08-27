@@ -14,4 +14,8 @@ export const dictionary = reactive({ ...dictionaryGerman })
 export function setLanguage(language: LanguageCode) {
   currentLanguage.value = language
   Object.assign(dictionary, language === 'en' ? dictionaryEnglish : dictionaryGerman)
+
+  // Tell the browser which language it is looking at, otherwise it offers to
+  // translate the page into the language it already is.
+  document.documentElement.lang = language
 }

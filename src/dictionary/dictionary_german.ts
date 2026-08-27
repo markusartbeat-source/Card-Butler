@@ -32,6 +32,7 @@ export const dictionaryGerman = {
   },
   // The page with the card grid.
   project: {
+    name: 'Mein erstes Projekt',
     share: 'Teilen',
     newCard: 'Neue Karte',
     linkCopiedTitle: 'Link kopiert',
@@ -64,6 +65,7 @@ export const dictionaryGerman = {
     storageUsed: 'belegt',
     freeProjects: 'Freie Projekte',
     dataLocation: 'Ort deiner Daten',
+    dataCityName: 'Bielefeld',
     dataLocationSoonTitle: 'Kommt bald',
     dataLocationSoonText: 'Hier kannst du später den Ort deiner Daten wählen.',
   },
