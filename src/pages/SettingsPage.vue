@@ -24,18 +24,24 @@
           </CbButton>
         </div>
 
-        <div class="p-6 text-sm text-white">Zweite Beispielzeile</div>
+        <div class="flex items-center p-6 text-sm text-white">
+          Sprache
+          <div class="grow"></div>
+          <CbSelect v-model="language" :items="languages" />
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import CbAvatar from '../components/atoms/CbAvatar.vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
+import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
+import type { IconName } from '../components/atoms/icons'
 import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
 import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 
@@ -43,4 +49,12 @@ import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? 'Gast')
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
+
+// Picking a language only changes the field for now. Every new language is
+// one more line here, with its flag registered in icons.ts.
+const languages = [
+  { value: 'de', label: 'Deutsch', icon: 'flag_de' },
+  { value: 'en', label: 'English', icon: 'flag_gb' },
+] satisfies { value: string; label: string; icon: IconName }[]
+const language = ref('de')
 </script>

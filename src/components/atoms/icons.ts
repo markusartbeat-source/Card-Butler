@@ -9,10 +9,14 @@ import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
+// Flags keep their own colours, they are not tinted like the symbols above.
+import FlagDe from '~icons/flag/de-4x3'
+import FlagGb from '~icons/flag/gb-4x3'
 import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
 import Image from '~icons/material-symbols/image-outline-rounded'
+import KeyboardArrowDown from '~icons/material-symbols/keyboard-arrow-down-rounded'
 import Login from '~icons/material-symbols/login-rounded'
 import MoreHoriz from '~icons/material-symbols/more-horiz'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
@@ -31,10 +35,13 @@ export const icons = {
   close: Close,
   door_open: DoorOpen,
   filter: Filter,
+  flag_de: FlagDe,
+  flag_gb: FlagGb,
   forum: Forum,
   home: Home,
   horizontal_rule: HorizontalRule,
   image: Image,
+  keyboard_arrow_down: KeyboardArrowDown,
   login: Login,
   more_horiz: MoreHoriz,
   playing_cards: PlayingCards,

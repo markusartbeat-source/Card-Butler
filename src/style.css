@@ -29,6 +29,18 @@ body {
     @apply cursor-pointer hover:shadow-lg;
   }
 
+  /* The lightening lies in a layer of its own instead of changing the
+     background, so it works on top of any colour or gradient. Like the ripple
+     it needs "relative overflow-hidden" on the element. */
+  .cb-hover::after {
+    content: '';
+    @apply pointer-events-none absolute inset-0;
+  }
+
+  .cb-hover:hover::after {
+    @apply bg-white/10;
+  }
+
   .cb-card {
     @apply cursor-grab active:cursor-grabbing;
   }

@@ -17,6 +17,7 @@
     "vue-router": "^5.2.0"
   },
   "devDependencies": {
+    "@iconify-json/flag": "^1.2.12",
     "@iconify-json/material-symbols": "^1.2.89",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.13.3",
