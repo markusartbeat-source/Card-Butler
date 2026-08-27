@@ -27,6 +27,7 @@
     "@vue/tsconfig": "^0.9.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
+    "unplugin-auto-import": "^21.1.0",
     "unplugin-icons": "^23.0.1",
     "vite": "^8.2.0",
     "vue-tsc": "^3.3.8"
