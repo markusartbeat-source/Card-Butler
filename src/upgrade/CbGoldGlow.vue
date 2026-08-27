@@ -5,6 +5,6 @@
     alt=""
     width="1425"
     height="497"
-    class="pointer-events-none absolute bottom-0 left-1/2 w-4/5 -translate-x-1/2"
+    class="animate-cb-sunrise pointer-events-none absolute bottom-0 left-1/2 w-4/5 -translate-x-1/2"
   />
 </template>

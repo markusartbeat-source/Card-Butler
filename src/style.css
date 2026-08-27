@@ -120,7 +120,41 @@ body {
   }
 }
 
+/* Elements appear out of nothing and settle into place from slightly below.
+   transform (not translate) keeps Tailwind's own translate classes working. */
+@keyframes cb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The golden light climbs into the page like a rising sun. */
+@keyframes cb-sunrise {
+  from {
+    opacity: 0;
+    transform: translateY(35%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer utilities {
+  /* backwards keeps a delayed element invisible until its turn comes. */
+  .animate-cb-rise {
+    animation: cb-rise 350ms ease-out backwards;
+  }
+
+  .animate-cb-sunrise {
+    animation: cb-sunrise 900ms ease-out backwards;
+  }
+
   .animate-cb-ripple {
     animation: cb-ripple 0.6s ease-out;
   }

@@ -3,7 +3,7 @@
        the page transition moves the pages around. The page also brings its own
        dark background: the transition fades the page as one group, so the
        glass would otherwise lose the background it blurs and look brighter. -->
-  <div class="relative flex min-h-full flex-col bg-background">
+  <div class="relative flex min-h-full flex-col overflow-hidden bg-background">
     <CbGoldGlow />
 
     <h1 class="relative z-10 p-6 text-3xl text-white">Pläne, die mit dir wachsen</h1>
@@ -15,8 +15,9 @@
 
     <div class="relative z-10 flex justify-center gap-6">
       <CbPlanCard
-        v-for="plan in plans"
+        v-for="(plan, planIndex) in plans"
         :key="plan.name"
+        :index="planIndex"
         :name="plan.name"
         :subtitle="plan.subtitle"
         :price="plan.price"
