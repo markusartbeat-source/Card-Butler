@@ -20,6 +20,35 @@ body {
   margin: 0;
 }
 
+/* Only the handle is visible, in the colour of the menu panel — no track and
+   no arrow buttons at the ends. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox knows no scrollbar parts, so it gets the standard properties. In
+   Chrome they would switch the rules above off, hence the @supports test. */
+@supports not selector(::-webkit-scrollbar) {
+  :root {
+    scrollbar-color: var(--color-surface) transparent;
+    scrollbar-width: thin;
+  }
+}
+
 #app {
   min-height: 100vh;
 }

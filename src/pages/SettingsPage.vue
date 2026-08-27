@@ -6,7 +6,7 @@
     <div class="flex flex-col items-center gap-8 pb-6">
       <CbSettingsGroup title="Account">
         <!-- The spacer pushes the button to the right edge of the row. -->
-        <div class="flex items-center gap-3.5 p-6">
+        <div class="animate-cb-rise flex items-center gap-3.5 p-6" :style="riseDelay(0)">
           <CbAvatar :name="userLabel" :image-url="userPicture" />
           <div>
             <p class="text-sm text-white">{{ userLabel }}</p>
@@ -24,19 +24,19 @@
           </CbButton>
         </div>
 
-        <div class="flex items-center p-6 text-sm text-white">
+        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(1)">
           Sprache
           <div class="grow"></div>
           <CbSelect v-model="language" :items="languages" />
         </div>
 
-        <div class="flex items-center p-6 text-sm text-white">
+        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(2)">
           Design
           <div class="grow"></div>
           <CbSelect v-model="theme" :items="themes" />
         </div>
 
-        <div class="flex items-center p-6 text-sm text-white">
+        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(3)">
           Barrierefreiheit
           <div class="grow"></div>
           <CbSwitch v-model="accessibility" />
@@ -44,7 +44,7 @@
       </CbSettingsGroup>
 
       <CbSettingsGroup title="Subscription">
-        <div class="flex items-center p-6 text-sm text-white">
+        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(4)">
           {{ subscription.planName }}, {{ subscription.pricePerMonth }}€ monatlich
           <div class="grow"></div>
 
@@ -54,7 +54,7 @@
           </CbButton>
         </div>
 
-        <div class="flex items-center p-6">
+        <div class="animate-cb-rise flex items-center p-6" :style="riseDelay(5)">
           <div>
             <p class="text-sm text-white">Speicherplatz</p>
             <p class="text-xs text-white/50">
@@ -65,7 +65,7 @@
           <CbProgress :value="subscription.storageUsedMb" :max="subscription.storageTotalMb" />
         </div>
 
-        <div class="flex items-center p-6">
+        <div class="animate-cb-rise flex items-center p-6" :style="riseDelay(6)">
           <div>
             <p class="text-sm text-white">Freie Projekte</p>
             <p class="text-xs text-white/50">
@@ -76,7 +76,10 @@
           <CbProgress :value="subscription.projectsUsed" :max="subscription.projectsTotal" />
         </div>
 
-        <div class="flex items-center px-6 py-3 text-sm text-white">
+        <div
+          class="animate-cb-rise flex items-center px-6 py-3 text-sm text-white"
+          :style="riseDelay(7)"
+        >
           Ort deiner Daten
           <div class="grow"></div>
           <CbStreetview
@@ -132,4 +135,10 @@ const theme = ref('dark')
 
 // The switch only flips for now, nothing changes on the page yet.
 const accessibility = ref(false)
+
+// Every row waits a moment longer than the one above it, so the page builds
+// itself up from top to bottom — the same feel as the plan cards.
+function riseDelay(step: number) {
+  return { animationDelay: `${step * 60}ms` }
+}
 </script>
