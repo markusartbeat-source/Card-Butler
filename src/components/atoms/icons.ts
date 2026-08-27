@@ -7,6 +7,7 @@ import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-round
 import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
+import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
 import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
@@ -28,6 +29,7 @@ export const icons = {
   check: Check,
   circle: Circle,
   close: Close,
+  door_open: DoorOpen,
   filter: Filter,
   forum: Forum,
   home: Home,

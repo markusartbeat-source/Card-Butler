@@ -20,6 +20,11 @@ export function signInWithGoogle() {
   supabase.auth.signInWithOAuth({ provider: 'google' })
 }
 
+/** Ends the current session. */
+export function signOut() {
+  supabase.auth.signOut()
+}
+
 /** The person currently signed in with Google, or null when nobody is. */
 export function useCurrentUser() {
   const displayName = computed(

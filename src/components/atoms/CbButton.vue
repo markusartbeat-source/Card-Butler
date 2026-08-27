@@ -12,9 +12,12 @@
     </CbInteractive>
   </div>
 
+  <!-- "light" is the same button one shade brighter, for use on a surface
+       coloured panel where the secondary button would disappear. -->
   <CbInteractive
     v-else
-    class="bg-surface flex items-center gap-2.5 rounded-xl p-3 text-sm text-white shadow-lg"
+    class="flex items-center gap-2.5 rounded-xl p-3 text-sm text-white shadow-lg"
+    :class="variant === 'light' ? 'bg-surface-light' : 'bg-surface'"
     @click="$emit('click')"
   >
     <slot />
@@ -24,6 +27,8 @@
 <script setup lang="ts">
 import CbInteractive from './CbInteractive.vue'
 
-withDefaults(defineProps<{ variant?: 'primary' | 'secondary' }>(), { variant: 'primary' })
+withDefaults(defineProps<{ variant?: 'primary' | 'secondary' | 'light' }>(), {
+  variant: 'primary',
+})
 defineEmits<{ click: [] }>()
 </script>
