@@ -42,21 +42,60 @@
           <CbSwitch v-model="accessibility" />
         </div>
       </CbSettingsGroup>
+
+      <CbSettingsGroup title="Subscription">
+        <div class="flex items-center p-6 text-sm text-white">
+          {{ subscription.planName }}, {{ subscription.pricePerMonth }}€ monatlich
+          <div class="grow"></div>
+
+          <CbButton class="w-52" @click="router.push('/upgrade')">
+            <CbIcon name="arrow_circle_up" />
+            Upgrade
+          </CbButton>
+        </div>
+
+        <div class="flex items-center p-6">
+          <div>
+            <p class="text-sm text-white">Speicherplatz</p>
+            <p class="text-xs text-white/50">
+              {{ subscription.storageUsedMb }} MB von {{ subscription.storageTotalMb }} MB belegt
+            </p>
+          </div>
+          <div class="grow"></div>
+          <CbProgress :value="subscription.storageUsedMb" :max="subscription.storageTotalMb" />
+        </div>
+
+        <div class="flex items-center p-6">
+          <div>
+            <p class="text-sm text-white">Freie Projekte</p>
+            <p class="text-xs text-white/50">
+              {{ subscription.projectsUsed }} von {{ subscription.projectsTotal }} belegt
+            </p>
+          </div>
+          <div class="grow"></div>
+          <CbProgress :value="subscription.projectsUsed" :max="subscription.projectsTotal" />
+        </div>
+      </CbSettingsGroup>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import CbAvatar from '../components/atoms/CbAvatar.vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
+import CbProgress from '../components/atoms/CbProgress.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSwitch from '../components/atoms/CbSwitch.vue'
 import type { IconName } from '../components/atoms/icons'
 import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
+import { subscription } from '../settings/subscription'
 import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
+
+const router = useRouter()
 
 // Signed in people see their own name and picture, everyone else a placeholder.
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
