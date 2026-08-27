@@ -11,7 +11,10 @@ import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
 // Flags keep their own colours, they are not tinted like the symbols above.
+import FlagBr from '~icons/flag/br-4x3'
 import FlagDe from '~icons/flag/de-4x3'
+import FlagEs from '~icons/flag/es-4x3'
+import FlagFr from '~icons/flag/fr-4x3'
 import FlagGb from '~icons/flag/gb-4x3'
 import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
@@ -40,7 +43,10 @@ export const icons = {
   dark_mode: DarkMode,
   door_open: DoorOpen,
   filter: Filter,
+  flag_br: FlagBr,
   flag_de: FlagDe,
+  flag_es: FlagEs,
+  flag_fr: FlagFr,
   flag_gb: FlagGb,
   forum: Forum,
   home: Home,

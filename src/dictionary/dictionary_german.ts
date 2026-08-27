@@ -52,8 +52,12 @@ export const dictionaryGerman = {
     title: 'Einstellungen',
     accountGroup: 'Account',
     language: 'Sprache',
+    // Every language is named in its own words, so it stays recognisable.
     languageGerman: 'Deutsch',
     languageEnglish: 'English',
+    languageSpanish: 'Español',
+    languageFrench: 'Français',
+    languagePortuguese: 'Português',
     theme: 'Design',
     themeDark: 'Dunkel',
     themeLight: 'Hell',

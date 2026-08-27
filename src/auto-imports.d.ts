@@ -11,7 +11,10 @@ declare global {
   const currentLanguage: typeof import('./dictionary/dictionary').currentLanguage
   const dictionary: typeof import('./dictionary/dictionary').dictionary
   const dictionaryEnglish: typeof import('./dictionary/dictionary_english').dictionaryEnglish
+  const dictionaryFrench: typeof import('./dictionary/dictionary_french').dictionaryFrench
   const dictionaryGerman: typeof import('./dictionary/dictionary_german').dictionaryGerman
+  const dictionaryPortuguese: typeof import('./dictionary/dictionary_portuguese').dictionaryPortuguese
+  const dictionarySpanish: typeof import('./dictionary/dictionary_spanish').dictionarySpanish
   const installDictionary: typeof import('./dictionary/dictionary').installDictionary
   const setLanguage: typeof import('./dictionary/dictionary').setLanguage
 }
@@ -30,7 +33,10 @@ declare module 'vue' {
     readonly currentLanguage: UnwrapRef<typeof import('./dictionary/dictionary')['currentLanguage']>
     readonly dictionary: UnwrapRef<typeof import('./dictionary/dictionary')['dictionary']>
     readonly dictionaryEnglish: UnwrapRef<typeof import('./dictionary/dictionary_english')['dictionaryEnglish']>
+    readonly dictionaryFrench: UnwrapRef<typeof import('./dictionary/dictionary_french')['dictionaryFrench']>
     readonly dictionaryGerman: UnwrapRef<typeof import('./dictionary/dictionary_german')['dictionaryGerman']>
+    readonly dictionaryPortuguese: UnwrapRef<typeof import('./dictionary/dictionary_portuguese')['dictionaryPortuguese']>
+    readonly dictionarySpanish: UnwrapRef<typeof import('./dictionary/dictionary_spanish')['dictionarySpanish']>
     readonly setLanguage: UnwrapRef<typeof import('./dictionary/dictionary')['setLanguage']>
   }
 }

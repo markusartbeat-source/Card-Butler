@@ -132,6 +132,9 @@ const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 const languages = computed<{ value: string; label: string; icon: IconName }[]>(() => [
   { value: 'de', label: dictionary.settings.languageGerman, icon: 'flag_de' },
   { value: 'en', label: dictionary.settings.languageEnglish, icon: 'flag_gb' },
+  { value: 'es', label: dictionary.settings.languageSpanish, icon: 'flag_es' },
+  { value: 'fr', label: dictionary.settings.languageFrench, icon: 'flag_fr' },
+  { value: 'pt', label: dictionary.settings.languagePortuguese, icon: 'flag_br' },
 ])
 
 // The field shows the language in use and hands a new pick straight to the
