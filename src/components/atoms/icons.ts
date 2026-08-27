@@ -4,6 +4,7 @@
 import Add2 from '~icons/material-symbols/add-2-rounded'
 import AddComment from '~icons/material-symbols/add-comment-outline-rounded'
 import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-rounded'
+import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
@@ -24,6 +25,7 @@ export const icons = {
   add_2: Add2,
   add_comment: AddComment,
   arrow_circle_up: ArrowCircleUp,
+  check: Check,
   circle: Circle,
   close: Close,
   filter: Filter,
