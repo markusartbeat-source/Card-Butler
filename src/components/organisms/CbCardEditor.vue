@@ -12,14 +12,22 @@
       @click="startClosing"
     ></div>
 
-    <div class="relative flex flex-col items-center gap-6">
+    <!-- Padding matches the settings panel, so the card sits in the middle of
+         the space left of it instead of the middle of the screen. -->
+    <div class="relative flex flex-col items-center gap-6 pr-88">
       <CbCardToolbar class="transition-opacity" :class="fadeInClasses" />
 
-      <div ref="cardWrapper">
-        <CbCard :id="id" :number="number" shape-classes="h-144 w-96 rounded-3xl">
-          <!-- The cursors of people standing on exactly this card. -->
-          <slot />
-        </CbCard>
+      <!-- The ring is placed next to the flying wrapper, so it stays put while
+           the card moves. -->
+      <div class="relative">
+        <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
+
+        <div ref="cardWrapper">
+          <CbCard :id="id" :number="number" shape-classes="h-144 w-96 rounded-3xl">
+            <!-- The cursors of people standing on exactly this card. -->
+            <slot />
+          </CbCard>
+        </div>
       </div>
 
       <CbButton
@@ -43,6 +51,7 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
+import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbCardToolbar from '../molecules/CbCardToolbar.vue'
 
 const props = defineProps<{ id: string; number: number; startRect: DOMRect }>()
