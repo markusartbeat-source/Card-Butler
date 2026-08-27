@@ -104,6 +104,33 @@ body {
     opacity: 1 !important;
   }
 
+  /* An opening list rolls out of nothing: the grid row grows from 0fr to the
+     height the content needs, so no fixed height has to be known. Keyframes
+     instead of a transition, because Ark UI waits for an animation to end
+     before it takes the closed list off the page. */
+  .cb-collapse {
+    display: grid;
+    grid-template-rows: 1fr;
+  }
+
+  /* Both directions need their own keyframe name: Ark UI notices a closing
+     animation only when the name changes, otherwise it removes the element
+     right away and nothing is seen. */
+  .cb-collapse[data-state='open'] {
+    animation: cb-collapse-in 250ms ease-out;
+  }
+
+  .cb-collapse[data-state='closed'] {
+    animation: cb-collapse-out 250ms ease-in;
+  }
+
+  /* A grid row can only shrink to 0 if its content may be cut off. This box
+     does the cutting, and the content inside it keeps its full height. */
+  .cb-collapse > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+
   /* A live cursor arrives about 10 times per second. The short, even
      transition fills the gaps between two messages without lagging behind. */
   .cb-cursor {
@@ -137,6 +164,28 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes cb-collapse-in {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@keyframes cb-collapse-out {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
   }
 }
 

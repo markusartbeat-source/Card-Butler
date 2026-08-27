@@ -21,19 +21,27 @@
       <!-- The open menu has to stay above the rows that come after it. Ark
            copies the z-index of this content onto the positioner, so the
            class belongs here and not one level up. -->
+      <!-- cb-collapse rolls the list open and shut. The padding sits on the
+           inner list, otherwise it would stay behind as a thin strip. -->
       <Select.Content
-        class="z-50 flex w-52 flex-col rounded-lg bg-surface-light p-1 text-sm text-white shadow-lg"
+        class="cb-collapse z-50 w-52 overflow-hidden rounded-lg bg-surface-light text-sm text-white shadow-lg"
       >
-        <Select.Item
-          v-for="item in items"
-          :key="item.value"
-          v-ripple
-          :item="item"
-          class="cb-hover relative flex items-center gap-2 overflow-hidden rounded-md px-2 py-1.5"
-        >
-          <CbIcon v-if="item.icon" :name="item.icon" />
-          <Select.ItemText>{{ item.label }}</Select.ItemText>
-        </Select.Item>
+        <!-- The outer box is the one that gets cut off; the list inside keeps
+             its full height, so the entries never squash together. -->
+        <div>
+          <div class="flex flex-col p-1">
+            <Select.Item
+              v-for="item in items"
+              :key="item.value"
+              v-ripple
+              :item="item"
+              class="cb-hover relative flex items-center gap-2 overflow-hidden rounded-md px-2 py-1.5"
+            >
+              <CbIcon v-if="item.icon" :name="item.icon" />
+              <Select.ItemText>{{ item.label }}</Select.ItemText>
+            </Select.Item>
+          </div>
+        </div>
       </Select.Content>
     </Select.Positioner>
   </Select.Root>
