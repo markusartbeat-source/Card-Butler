@@ -7,11 +7,13 @@
     <!-- The plan cards sit centered in the space below the heading. -->
     <div class="mt-16 flex justify-center gap-8">
       <CbPlanCard
-        name="Free"
-        subtitle="Einfach mal ausprobieren"
-        :price="0"
-        benefits-title="Deine Vorteile:"
-        :benefits="['10 MB Speicher', 'Exportieren als PNGs', '1 Projekt']"
+        v-for="plan in plans"
+        :key="plan.name"
+        :name="plan.name"
+        :subtitle="plan.subtitle"
+        :price="plan.price"
+        :benefits-title="plan.benefitsTitle"
+        :benefits="plan.benefits"
       />
     </div>
   </div>
@@ -20,4 +22,5 @@
 <script setup lang="ts">
 import CbGoldGlow from '../upgrade/CbGoldGlow.vue'
 import CbPlanCard from '../upgrade/CbPlanCard.vue'
+import { plans } from '../upgrade/plans'
 </script>
