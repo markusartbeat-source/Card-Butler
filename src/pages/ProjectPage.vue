@@ -46,11 +46,13 @@
     @end="endDragging"
   >
     <CbCard
-      v-for="card in cards"
+      v-for="(card, cardIndex) in cards"
       :key="card.id"
       :id="card.id"
       :number="card.number"
       :highlight-color="highlightColorForCard(card.id)"
+      class="animate-cb-rise"
+      :style="riseDelay(cardIndex)"
       :class="{ invisible: card.id === selectedCardId }"
       @click="selectCard(card.id, $event)"
     >
@@ -65,7 +67,8 @@
     </CbCard>
 
     <CbInteractive
-      class="order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
+      class="animate-cb-rise order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
+      :style="addCardDelay"
       @click="addCard"
     >
       <CbIcon name="add_2" />
@@ -95,6 +98,17 @@ const cards = ref(
   [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ id: `starter-card-${number}`, number })),
 )
 const selectedCardId = ref<string | null>(null)
+
+// The cards of the first render fan in one after the other. A card added later
+// should show up right away, so it gets no delay.
+const initialCardCount = cards.value.length
+
+function riseDelay(index: number) {
+  return index < initialCardCount ? { animationDelay: `${index * 60}ms` } : undefined
+}
+
+// The button for a new card comes in behind the last card.
+const addCardDelay = { animationDelay: `${initialCardCount * 60}ms` }
 const selectedCard = computed(() => cards.value.find((card) => card.id === selectedCardId.value))
 
 // Where the clicked card sits in the grid — the editor starts its flight there.
