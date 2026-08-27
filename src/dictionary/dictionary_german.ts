@@ -1,18 +1,52 @@
 // All German texts of the app, grouped by the area they appear in.
 // Every new text goes in here first, then into dictionary_english.ts.
 export const dictionaryGerman = {
+  // Texts that show up in more than one area.
   general: {
     guest: 'Gast',
     signIn: 'Anmelden',
     signInWithGoogle: 'Mit Google anmelden',
     signOut: 'Abmelden',
     upgrade: 'Upgrade',
+    more: 'Mehr',
+    save: 'Speichern',
+    notAvailableTitle: 'Nicht verfügbar',
+    notAvailableText: 'Diese Funktion gibt es noch nicht.',
   },
+  // The menu bar on the left edge of every page.
   sidebar: {
+    logoAlt: 'Logo',
     home: 'Home',
     images: 'Bilder',
     newProject: 'Neues Projekt',
   },
+  // The bar at the top of every page.
+  header: {
+    searchInCards: 'In den Karten finden',
+    askButler: 'Frag den Butler',
+  },
+  // The page with the picture library.
+  images: {
+    title: 'Bilder',
+    addImages: 'Bilder hinzufügen',
+  },
+  // The page with the card grid.
+  project: {
+    share: 'Teilen',
+    newCard: 'Neue Karte',
+    linkCopiedTitle: 'Link kopiert',
+    linkCopiedText: 'Der Link liegt in der Zwischenablage.',
+  },
+  // The overlay for editing a single card, including its tool bar.
+  cardEditor: {
+    square: 'Viereck',
+    circle: 'Kreis',
+    line: 'Linie',
+    text: 'Text',
+    image: 'Bild',
+    comment: 'Kommentar',
+  },
+  // The settings page.
   settings: {
     title: 'Einstellungen',
     accountGroup: 'Account',
@@ -26,10 +60,54 @@ export const dictionaryGerman = {
     subscriptionGroup: 'Subscription',
     perMonth: 'monatlich',
     storage: 'Speicherplatz',
+    storageOf: 'von',
     storageUsed: 'belegt',
     freeProjects: 'Freie Projekte',
     dataLocation: 'Ort deiner Daten',
     dataLocationSoonTitle: 'Kommt bald',
     dataLocationSoonText: 'Hier kannst du später den Ort deiner Daten wählen.',
+  },
+  // The upgrade page with the three plan cards.
+  upgrade: {
+    title: 'Pläne, die mit dir wachsen',
+    priceNote: 'EUR / Monat + MwSt.',
+    billingNote: 'monatlich abgerechnet',
+    noCommitment: 'Keine Verpflichtungen | Jederzeit kündbar',
+    currentPlan: 'Dein aktueller Plan',
+    paymentSoonTitle: 'Bezahlung kommt bald',
+    paymentSoonText: 'Das Upgrade lässt sich noch nicht kaufen.',
+    plans: {
+      free: {
+        name: 'Free',
+        subtitle: 'Einfach mal ausprobieren',
+        benefitsTitle: 'Deine Vorteile:',
+        benefits: ['10 MB Speicher', 'Exportieren als PNGs', '1 Projekt'],
+      },
+      pro: {
+        name: 'Pro',
+        subtitle: 'Mehr Speicher, Mehr Funktionen...',
+        benefitsTitle: 'Alle Vorteile aus "Free" und:',
+        benefits: [
+          '500 MB Speicher',
+          'Export in PDF',
+          'TableTop',
+          'Teilen',
+          'Integration von eigener AI',
+          '6 Projekte',
+        ],
+      },
+      professional: {
+        name: 'Professionell',
+        subtitle: 'Kommerzielle Nutzung der Inhalte',
+        benefitsTitle: 'Alle Vorteile aus "Pro" und:',
+        benefits: [
+          '2GB Speicher',
+          'Berechtigung, die Karten kommerziell zu nutzen',
+          'Volle Nutzerverwaltung',
+          'AI MVP Zugriff',
+          'Unbegrenzt viele Projekte',
+        ],
+      },
+    },
   },
 }

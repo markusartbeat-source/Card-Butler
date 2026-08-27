@@ -44,7 +44,7 @@ const tickInnerRadius = 364.5
 const tickCount = 192
 
 // Short marks pointing at the center, spread evenly around the ring.
-const ticks = Array.from({ length: tickCount }, (unused, index) => {
+const ticks = Array.from({ length: tickCount }, (_unused, index) => {
   const angle = (index / tickCount) * 2 * Math.PI
 
   return {

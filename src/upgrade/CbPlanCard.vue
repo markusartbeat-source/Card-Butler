@@ -15,8 +15,8 @@
         <p class="text-4xl font-bold">{{ price }}€</p>
         <!-- Paid plans explain what the price covers. -->
         <p v-if="price > 0" class="pb-1 text-xs text-white/50">
-          EUR / Monat + MwSt.<br />
-          monatlich abgerechnet
+          {{ dictionary.upgrade.priceNote }}<br />
+          {{ dictionary.upgrade.billingNote }}
         </p>
       </div>
 
@@ -24,10 +24,10 @@
       <template v-if="price > 0">
         <CbButton class="animate-cb-rise mt-6" :style="riseDelay(3)" @click="startUpgrade">
           <CbIcon name="arrow_circle_up" />
-          Upgrade
+          {{ dictionary.general.upgrade }}
         </CbButton>
         <p class="animate-cb-rise mt-2 text-center text-xs text-white/70" :style="riseDelay(4)">
-          Keine Verpflichtungen | Jederzeit kündbar
+          {{ dictionary.upgrade.noCommitment }}
         </p>
       </template>
 
@@ -40,7 +40,7 @@
              bottom margin replaces the note the paid plans show here, so the
              divider sits at the same height in every card. -->
         <CbAvatar :name="userLabel" :image-url="userPicture" size="small" />
-        Dein aktueller Plan
+        {{ dictionary.upgrade.currentPlan }}
       </div>
 
       <!-- The line runs from edge to edge, so it cancels the card padding. -->
@@ -75,12 +75,12 @@ import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 
 // Signed in people see their own avatar, everyone else the guest picture.
 const { displayName, avatarUrl } = useCurrentUser()
-const userLabel = computed(() => displayName.value ?? 'Gast')
+const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
 // There is no payment yet, so buying only shows a short message.
 function startUpgrade() {
-  showToast('Bezahlung kommt bald', 'Das Upgrade lässt sich noch nicht kaufen.')
+  showToast(dictionary.upgrade.paymentSoonTitle, dictionary.upgrade.paymentSoonText)
 }
 
 const props = defineProps<{

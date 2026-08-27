@@ -6,7 +6,7 @@
   <div class="relative flex min-h-full flex-col overflow-hidden bg-background">
     <CbGoldGlow />
 
-    <CbHeader class="relative z-10" title="Pläne, die mit dir wachsen" :searchbar="false" />
+    <CbHeader class="relative z-10" :title="dictionary.upgrade.title" :searchbar="false" />
 
     <!-- Two flexible spacers hold the cards in place: the space below them
          grows twice as fast, so the cards stay a bit above the middle on

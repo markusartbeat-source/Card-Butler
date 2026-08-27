@@ -35,7 +35,7 @@
         :class="fadeInClasses"
         @click="startClosing"
       >
-        Speichern
+        {{ dictionary.general.save }}
       </CbButton>
     </div>
 

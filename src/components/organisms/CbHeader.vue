@@ -15,9 +15,9 @@
       <!-- The text area opens the search later, the icons only switch the mode. -->
       <CbInteractive
         class="flex flex-1 items-center self-stretch rounded-l-full pl-6 text-left text-sm"
-        @click="showToast(searchModes[activeSearchMode], 'Diese Funktion gibt es noch nicht.')"
+        @click="showToast(searchModeLabel, dictionary.general.notAvailableText)"
       >
-        {{ searchModes[activeSearchMode] }}
+        {{ searchModeLabel }}
       </CbInteractive>
       <div class="flex gap-0.5 p-1.5">
         <CbInteractive
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import CbButton from '../atoms/CbButton.vue'
 import CbIcon from '../atoms/CbIcon.vue'
@@ -62,14 +62,15 @@ withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: Header
 defineEmits<{ action: [key: string] }>()
 
 // Each search mode has its own icon button and its own text in the pill.
-const searchModes = {
-  search: 'In den Karten finden',
-  forum: 'Frag den Butler',
-} as const
-
 const searchModeNames = ['search', 'forum'] as const
 
-const activeSearchMode = ref<keyof typeof searchModes>('search')
+const activeSearchMode = ref<(typeof searchModeNames)[number]>('search')
+
+const searchModeLabel = computed(() =>
+  activeSearchMode.value === 'search'
+    ? dictionary.header.searchInCards
+    : dictionary.header.askButler,
+)
 
 const router = useRouter()
 </script>

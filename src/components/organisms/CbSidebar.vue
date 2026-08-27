@@ -3,7 +3,7 @@
     <div class="bg-surface flex h-full w-full flex-col items-center gap-3 rounded-3xl p-3 shadow-lg">
       <img
         src="../../assets/logos/logo.svg"
-        alt="Logo"
+        :alt="dictionary.sidebar.logoAlt"
         class="aspect-square w-10 -rotate-1 object-cover drop-shadow-lg"
       />
       <div class="flex w-full flex-col gap-1">
@@ -12,7 +12,11 @@
             <CbAvatarGroup :people="peopleInArea(item.value)" />
           </template>
         </CbMenu>
-        <CbMenuItem icon-key="add_2" label="Neues Projekt" @click="createNewProject" />
+        <CbMenuItem
+          icon-key="add_2"
+          :label="dictionary.sidebar.newProject"
+          @click="createNewProject"
+        />
       </div>
       <div class="bg-gradient-to-br from-gold-dark to-gold-light mt-auto w-full rounded-xl p-0.5 shadow-lg">
         <CbInteractive
@@ -20,7 +24,7 @@
           @click="currentUser ? upgrade() : signInWithGoogle()"
         >
           <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
-          {{ currentUser ? 'Upgrade' : 'Anmelden' }}
+          {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
         </CbInteractive>
       </div>
       <CbInteractive
@@ -54,7 +58,7 @@ import guestPicture from '../../assets/profile_pictures/profile_picture_small.pn
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
 
-const userLabel = computed(() => displayName.value ?? 'Gast')
+const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
 const { people } = usePeopleBroadcast()
@@ -70,11 +74,11 @@ function peopleInArea(area: string) {
     }))
 }
 
-const menuItems: { value: string; iconKey: IconName; label: string }[] = [
-  { value: 'home', iconKey: 'home', label: 'Home' },
-  { value: 'images', iconKey: 'filter', label: 'Bilder' },
+const menuItems = computed<{ value: string; iconKey: IconName; label: string }[]>(() => [
+  { value: 'home', iconKey: 'home', label: dictionary.sidebar.home },
+  { value: 'images', iconKey: 'filter', label: dictionary.sidebar.images },
   { value: 'project', iconKey: 'playing_cards', label: projectName },
-]
+])
 
 const route = useRoute()
 const router = useRouter()
@@ -84,7 +88,7 @@ function pathForMenuValue(value: string) {
 }
 
 const activeMenuItem = computed(
-  () => menuItems.find((item) => pathForMenuValue(item.value) === route.path)?.value ?? '',
+  () => menuItems.value.find((item) => pathForMenuValue(item.value) === route.path)?.value ?? '',
 )
 
 function selectMenuItem(value: string) {

@@ -37,7 +37,7 @@ export function colorForId(id: string) {
 export function useMyIdentity() {
   const { currentUser, avatarUrl, displayName } = useCurrentUser()
 
-  const name = computed(() => displayName.value ?? 'Gast')
+  const name = computed(() => displayName.value ?? dictionary.general.guest)
   const color = computed(() => colorForId(currentUser.value?.id ?? guestId))
 
   // Signed in without a Google picture falls back to the initials, guests get the guest picture.

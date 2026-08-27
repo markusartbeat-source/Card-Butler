@@ -63,7 +63,7 @@
       @click="addCard"
     >
       <CbIcon name="add_2" />
-      <span>Neue Karte</span>
+      <span>{{ dictionary.project.newCard }}</span>
     </CbInteractive>
   </VueDraggable>
 </template>
@@ -83,14 +83,15 @@ import CbHeader from '../components/organisms/CbHeader.vue'
 import type { HeaderButton } from '../components/organisms/headerButton'
 import { projectName } from '../project/project'
 
-const headerButtons: HeaderButton[] = [
-  { key: 'share', label: 'Teilen', icon: 'share', variant: 'secondary' },
-  { key: 'more', label: 'Mehr', icon: 'more_horiz', variant: 'secondary' },
-]
+const headerButtons = computed<HeaderButton[]>(() => [
+  { key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' },
+  { key: 'more', label: dictionary.general.more, icon: 'more_horiz', variant: 'secondary' },
+])
 
 function runHeaderAction(key: string) {
-  if (key === 'share') showSuccessToast('Link kopiert', 'Der Link liegt in der Zwischenablage.')
-  else showDangerToast('Nicht verfügbar', 'Diese Funktion gibt es noch nicht.')
+  if (key === 'share')
+    showSuccessToast(dictionary.project.linkCopiedTitle, dictionary.project.linkCopiedText)
+  else showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText)
 }
 
 // The id stays with a card forever — the number is only its place in the row.
