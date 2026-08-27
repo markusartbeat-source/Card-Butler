@@ -6,4 +6,8 @@ export const subscription = {
   storageTotalMb: 50,
   projectsUsed: 1,
   projectsTotal: 1,
+  // Where the data is stored, shown as a small map.
+  dataCityName: 'Bielefeld',
+  dataLatitude: 52.0302,
+  dataLongitude: 8.5325,
 }

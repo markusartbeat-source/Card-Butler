@@ -75,6 +75,17 @@
           <div class="grow"></div>
           <CbProgress :value="subscription.projectsUsed" :max="subscription.projectsTotal" />
         </div>
+
+        <div class="flex items-center px-6 py-3 text-sm text-white">
+          Ort deiner Daten
+          <div class="grow"></div>
+          <CbStreetview
+            :city-name="subscription.dataCityName"
+            :latitude="subscription.dataLatitude"
+            :longitude="subscription.dataLongitude"
+            @click="showToast('Kommt bald', 'Hier kannst du später den Ort deiner Daten wählen.')"
+          />
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
@@ -89,7 +100,9 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbProgress from '../components/atoms/CbProgress.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
+import CbStreetview from '../components/atoms/CbStreetview.vue'
 import CbSwitch from '../components/atoms/CbSwitch.vue'
+import { showToast } from '../components/atoms/toaster'
 import type { IconName } from '../components/atoms/icons'
 import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
 import { subscription } from '../settings/subscription'

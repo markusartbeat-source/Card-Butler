@@ -1,9 +1,11 @@
 <template>
-  <div class="bg-background flex min-h-screen">
+  <!-- The window itself never scrolls: sidebar and page both end at the
+       bottom edge of the screen, only the page area scrolls on its own. -->
+  <div class="bg-background flex h-screen overflow-hidden">
     <CbSidebar />
     <!-- The grid gives every page the same single cell, so the old and the new
          page overlap during the transition without changing their layout. -->
-    <main class="relative grid flex-1 grid-cols-1 grid-rows-1 p-3">
+    <main class="relative grid flex-1 grid-cols-1 grid-rows-1 overflow-y-auto p-3">
       <router-view v-slot="{ Component, route }">
         <Transition name="page">
           <div :key="route.path" class="col-start-1 row-start-1 h-full">
@@ -32,6 +34,12 @@ startPeopleBroadcast(myArea)
 </script>
 
 <style scoped>
+/* The space for the scrollbar is always reserved, so a long page does not
+   push the content sideways when its scrollbar appears. */
+main {
+  scrollbar-gutter: stable;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition:

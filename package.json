@@ -12,6 +12,7 @@
     "@ark-ui/vue": "^5.39.0",
     "@fontsource/comfortaa": "^5.3.0",
     "@supabase/supabase-js": "^2.112.4",
+    "leaflet": "^1.9.4",
     "vue": "^3.5.40",
     "vue-draggable-plus": "^0.6.1",
     "vue-router": "^5.2.0"
@@ -20,6 +21,7 @@
     "@iconify-json/flag": "^1.2.12",
     "@iconify-json/material-symbols": "^1.2.89",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/leaflet": "^1.9.22",
     "@types/node": "^24.13.3",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vue/tsconfig": "^0.9.1",

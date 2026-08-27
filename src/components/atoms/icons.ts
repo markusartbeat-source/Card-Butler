@@ -19,6 +19,7 @@ import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
 import Image from '~icons/material-symbols/image-outline-rounded'
 import KeyboardArrowDown from '~icons/material-symbols/keyboard-arrow-down-rounded'
 import LightMode from '~icons/material-symbols/light-mode-outline-rounded'
+import LocationOn from '~icons/material-symbols/location-on-outline-rounded'
 import Login from '~icons/material-symbols/login-rounded'
 import MoreHoriz from '~icons/material-symbols/more-horiz'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
@@ -46,6 +47,7 @@ export const icons = {
   image: Image,
   keyboard_arrow_down: KeyboardArrowDown,
   light_mode: LightMode,
+  location_on: LocationOn,
   login: Login,
   more_horiz: MoreHoriz,
   playing_cards: PlayingCards,
