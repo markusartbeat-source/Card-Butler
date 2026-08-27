@@ -6,7 +6,13 @@
 
     <!-- The plan cards sit centered in the space below the heading. -->
     <div class="mt-16 flex justify-center gap-8">
-      <CbPlanCard name="Free" subtitle="Einfach mal ausprobieren" :price="0" />
+      <CbPlanCard
+        name="Free"
+        subtitle="Einfach mal ausprobieren"
+        :price="0"
+        benefits-title="Deine Vorteile:"
+        :benefits="['10 MB Speicher', 'Exportieren als PNGs', '1 Projekt']"
+      />
     </div>
   </div>
 </template>
