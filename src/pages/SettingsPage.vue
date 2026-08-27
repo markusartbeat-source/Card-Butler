@@ -35,6 +35,12 @@
           <div class="grow"></div>
           <CbSelect v-model="theme" :items="themes" />
         </div>
+
+        <div class="flex items-center p-6 text-sm text-white">
+          Barrierefreiheit
+          <div class="grow"></div>
+          <CbSwitch v-model="accessibility" />
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
@@ -47,6 +53,7 @@ import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
+import CbSwitch from '../components/atoms/CbSwitch.vue'
 import type { IconName } from '../components/atoms/icons'
 import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
 import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
@@ -70,4 +77,7 @@ const themes = [
   { value: 'light', label: 'Hell', icon: 'light_mode' },
 ] satisfies { value: string; label: string; icon: IconName }[]
 const theme = ref('dark')
+
+// The switch only flips for now, nothing changes on the page yet.
+const accessibility = ref(false)
 </script>
