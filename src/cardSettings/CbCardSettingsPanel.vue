@@ -65,6 +65,13 @@
             />
           </div>
         </div>
+
+        <CbDivider class="my-6" />
+
+        <div class="flex flex-col gap-3">
+          <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.colorGroup }}</h3>
+          <CbColorPicker v-model="color" :label="dictionary.cardEditor.pickColor" />
+        </div>
       </template>
     </CbTabs>
   </div>
@@ -72,6 +79,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import CbColorPicker from '../components/atoms/CbColorPicker.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
@@ -89,6 +97,7 @@ const unit = ref('cm')
 const cornerRadius = ref('20')
 const areCornersSeparate = ref(false)
 const corners = ref({ topLeft: '20', topRight: '20', bottomLeft: '20', bottomRight: '20' })
+const color = ref('#ffffff')
 
 // The single field can hold all four values separated by commas. A missing
 // value falls back to the first one, so "20" fills every corner.

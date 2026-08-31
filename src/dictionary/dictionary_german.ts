@@ -64,6 +64,8 @@ export const dictionaryGerman = {
     cornerTopRight: 'Ecke oben rechts',
     cornerBottomLeft: 'Ecke unten links',
     cornerBottomRight: 'Ecke unten rechts',
+    colorGroup: 'Farbe',
+    pickColor: 'Farbe auswählen',
   },
   // The settings page.
   settings: {

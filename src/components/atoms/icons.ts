@@ -7,6 +7,7 @@ import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-round
 import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
+import Colorize from '~icons/material-symbols/colorize-outline-rounded'
 import CropFree from '~icons/material-symbols/crop-free-rounded'
 import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
@@ -47,6 +48,7 @@ export const icons = {
   check: Check,
   circle: Circle,
   close: Close,
+  colorize: Colorize,
   crop_free: CropFree,
   dark_mode: DarkMode,
   door_open: DoorOpen,

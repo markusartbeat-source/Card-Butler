@@ -60,6 +60,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     cornerTopRight: 'Top right corner',
     cornerBottomLeft: 'Bottom left corner',
     cornerBottomRight: 'Bottom right corner',
+    colorGroup: 'Colour',
+    pickColor: 'Pick a colour',
   },
   settings: {
     title: 'Settings',
