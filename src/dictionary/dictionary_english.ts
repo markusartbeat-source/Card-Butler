@@ -42,6 +42,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     text: 'Text',
     image: 'Image',
     comment: 'Comment',
+    cardSettings: 'Card settings',
   },
   settings: {
     title: 'Settings',

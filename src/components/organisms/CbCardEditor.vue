@@ -39,11 +39,10 @@
       </CbButton>
     </div>
 
-    <!-- Placeholder for the card settings panel, no content yet. -->
-    <div
-      class="bg-surface absolute top-8 right-8 bottom-8 w-80 rounded-2xl transition-opacity"
+    <CbCardSettingsPanel
+      class="absolute top-8 right-8 bottom-8 w-80 transition-opacity"
       :class="fadeInClasses"
-    ></div>
+    />
   </div>
 </template>
 
@@ -53,6 +52,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbCardToolbar from '../molecules/CbCardToolbar.vue'
+import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 
 const props = defineProps<{ id: string; number: number; startRect: DOMRect }>()
 
