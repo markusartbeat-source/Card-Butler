@@ -20,6 +20,12 @@
             />
             <CbInput v-model="height" class="flex-1" :label="dictionary.cardEditor.height" />
           </div>
+          <CbSelect
+            v-model="unit"
+            variant="field"
+            :label="dictionary.cardEditor.unit"
+            :items="units"
+          />
         </div>
       </template>
     </CbTabs>
@@ -29,6 +35,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import CbInput from '../components/atoms/CbInput.vue'
+import CbSelect from '../components/atoms/CbSelect.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'
 import CbToggle from '../components/atoms/CbToggle.vue'
 
@@ -38,6 +45,13 @@ const activeTab = ref('settings')
 const width = ref('20')
 const height = ref('90')
 const areSizesLinked = ref(false)
+const unit = ref('cm')
+
+const units = computed(() => [
+  { value: 'cm', label: dictionary.cardEditor.unitCentimeters },
+  { value: 'mm', label: dictionary.cardEditor.unitMillimeters },
+  { value: 'in', label: dictionary.cardEditor.unitInches },
+])
 
 const tabs = computed(() => [
   { value: 'settings', label: dictionary.cardEditor.settingsTab },

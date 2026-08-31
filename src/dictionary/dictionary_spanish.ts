@@ -49,6 +49,10 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     width: 'Ancho',
     height: 'Alto',
     linkSizes: 'Cambiar ancho y alto juntos',
+    unit: 'Tipo',
+    unitCentimeters: 'cm',
+    unitMillimeters: 'mm',
+    unitInches: 'in',
   },
   settings: {
     title: 'Ajustes',

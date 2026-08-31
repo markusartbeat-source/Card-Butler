@@ -53,6 +53,10 @@ export const dictionaryGerman = {
     width: 'Breite',
     height: 'Höhe',
     linkSizes: 'Breite und Höhe zusammen ändern',
+    unit: 'Typ',
+    unitCentimeters: 'cm',
+    unitMillimeters: 'mm',
+    unitInches: 'in',
   },
   // The settings page.
   settings: {

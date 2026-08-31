@@ -49,6 +49,10 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     width: 'Width',
     height: 'Height',
     linkSizes: 'Change width and height together',
+    unit: 'Type',
+    unitCentimeters: 'cm',
+    unitMillimeters: 'mm',
+    unitInches: 'in',
   },
   settings: {
     title: 'Settings',
