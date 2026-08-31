@@ -52,6 +52,7 @@ export const dictionaryGerman = {
     sizesGroup: 'Größen',
     width: 'Breite',
     height: 'Höhe',
+    linkSizes: 'Breite und Höhe zusammen ändern',
   },
   // The settings page.
   settings: {

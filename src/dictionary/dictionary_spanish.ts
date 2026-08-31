@@ -48,6 +48,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     sizesGroup: 'Tamaños',
     width: 'Ancho',
     height: 'Alto',
+    linkSizes: 'Cambiar ancho y alto juntos',
   },
   settings: {
     title: 'Ajustes',

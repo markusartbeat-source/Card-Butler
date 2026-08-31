@@ -48,6 +48,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     sizesGroup: 'Sizes',
     width: 'Width',
     height: 'Height',
+    linkSizes: 'Change width and height together',
   },
   settings: {
     title: 'Settings',
