@@ -42,6 +42,7 @@
     <CbCardSettingsPanel
       class="absolute top-8 right-8 bottom-8 w-80 transition-opacity"
       :class="fadeInClasses"
+      :is-visible="areControlsVisible"
     />
   </div>
 </template>

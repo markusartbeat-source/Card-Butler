@@ -3,9 +3,9 @@
        The closed field looks like the other panel fields: a small square in
        the picked colour on the left, its hex value next to it. -->
   <ColorPicker.Root
-    :model-value="parseColor(modelValue)"
+    :model-value="pickedColor"
     :positioning="{ sameWidth: true }"
-    @value-change="(details) => $emit('update:modelValue', toHex(details.value))"
+    @value-change="(details) => pickColor(details.value)"
   >
     <ColorPicker.Control>
       <ColorPicker.Trigger
@@ -27,13 +27,12 @@
       >
         <div>
           <div class="flex flex-col gap-3 p-3">
-            <!-- Ark places every thumb by percent, so each one has to be
-                 pulled back by half its own size to sit on the picked spot. -->
+            <!-- The area thumb already gets centred by Ark itself, the slider
+                 thumbs below do not and have to be pulled back by half their
+                 own size to sit on the picked spot. -->
             <ColorPicker.Area class="h-40 rounded-md">
               <ColorPicker.AreaBackground class="size-full rounded-md" />
-              <ColorPicker.AreaThumb
-                class="size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white"
-              />
+              <ColorPicker.AreaThumb class="size-3 rounded-full border-2 border-white" />
             </ColorPicker.Area>
 
             <div class="flex items-center gap-3">
@@ -81,6 +80,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { ColorPicker, parseColor, type Color } from '@ark-ui/vue'
 import CbIcon from './CbIcon.vue'
 
@@ -90,6 +90,24 @@ function toHex(color: Color) {
   return color.getChannelValue('alpha') < 1 ? color.toString('hexa') : color.toString('hex')
 }
 
-defineProps<{ modelValue: string; label: string }>()
-defineEmits<{ 'update:modelValue': [value: string] }>()
+const props = defineProps<{ modelValue: string; label: string }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+
+// Black and grey have no hue and no saturation in hex, so reading the colour
+// back from the string would drop them and make the thumbs jump into a corner.
+// The picked colour therefore stays a colour object, the prop is only taken
+// over when it really differs from what was picked here.
+const pickedColor = ref<Color>(parseColor(props.modelValue))
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (value !== toHex(pickedColor.value)) pickedColor.value = parseColor(value)
+  },
+)
+
+function pickColor(color: Color) {
+  pickedColor.value = color
+  emit('update:modelValue', toHex(color))
+}
 </script>
