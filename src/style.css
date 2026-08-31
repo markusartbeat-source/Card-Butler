@@ -153,6 +153,20 @@ body {
     animation: cb-collapse-out 250ms ease-in;
   }
 
+  /* Two blocks sit above each other in one cut-off box. The strip slides by
+     the height of the upper block while the box grows to the height of the
+     block that is coming — one even movement in both directions. Grid units
+     cannot do this: they blow both rows up halfway through, so the two
+     heights come from the component. */
+  .cb-swap {
+    overflow: hidden;
+    transition: height 350ms ease-out;
+  }
+
+  .cb-swap-strip {
+    transition: transform 350ms ease-out;
+  }
+
   /* A grid row can only shrink to 0 if its content may be cut off. This box
      does the cutting, and the content inside it keeps its full height. */
   .cb-collapse > * {

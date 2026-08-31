@@ -57,6 +57,13 @@ export const dictionaryGerman = {
     unitCentimeters: 'cm',
     unitMillimeters: 'mm',
     unitInches: 'in',
+    cornersGroup: 'Abrundungen',
+    cornerRadius: 'Abrundung',
+    separateCorners: 'Jede Ecke einzeln einstellen',
+    cornerTopLeft: 'Ecke oben links',
+    cornerTopRight: 'Ecke oben rechts',
+    cornerBottomLeft: 'Ecke unten links',
+    cornerBottomRight: 'Ecke unten rechts',
   },
   // The settings page.
   settings: {

@@ -53,6 +53,13 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     unitCentimeters: 'cm',
     unitMillimeters: 'mm',
     unitInches: 'in',
+    cornersGroup: 'Corners',
+    cornerRadius: 'Corner radius',
+    separateCorners: 'Set each corner on its own',
+    cornerTopLeft: 'Top left corner',
+    cornerTopRight: 'Top right corner',
+    cornerBottomLeft: 'Bottom left corner',
+    cornerBottomRight: 'Bottom right corner',
   },
   settings: {
     title: 'Settings',

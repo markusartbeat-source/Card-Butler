@@ -4,7 +4,7 @@
   <Toggle.Root
     v-ripple
     :pressed="modelValue"
-    class="cb-hover relative overflow-hidden rounded-full p-1"
+    class="cb-hover relative shrink-0 overflow-hidden rounded-full p-1"
     :class="modelValue ? 'bg-radial from-gold-light to-gold text-surface' : 'text-white'"
     @update:pressed="(pressed) => $emit('update:modelValue', pressed)"
   >

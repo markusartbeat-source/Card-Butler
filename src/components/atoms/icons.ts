@@ -7,6 +7,7 @@ import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-round
 import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
+import CropFree from '~icons/material-symbols/crop-free-rounded'
 import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
@@ -26,8 +27,13 @@ import Link from '~icons/material-symbols/link-rounded'
 import LocationOn from '~icons/material-symbols/location-on-outline-rounded'
 import Login from '~icons/material-symbols/login-rounded'
 import MoreHoriz from '~icons/material-symbols/more-horiz'
+// One arrow per card corner, used by the single corner radius fields.
+import NorthEast from '~icons/material-symbols/north-east-rounded'
+import NorthWest from '~icons/material-symbols/north-west-rounded'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
 import Search from '~icons/material-symbols/search-rounded'
+import SouthEast from '~icons/material-symbols/south-east-rounded'
+import SouthWest from '~icons/material-symbols/south-west-rounded'
 import Settings from '~icons/material-symbols/settings-outline-rounded'
 import Share from '~icons/material-symbols/share-outline'
 import Square from '~icons/material-symbols/square-outline-rounded'
@@ -41,6 +47,7 @@ export const icons = {
   check: Check,
   circle: Circle,
   close: Close,
+  crop_free: CropFree,
   dark_mode: DarkMode,
   door_open: DoorOpen,
   filter: Filter,
@@ -59,10 +66,14 @@ export const icons = {
   location_on: LocationOn,
   login: Login,
   more_horiz: MoreHoriz,
+  north_east: NorthEast,
+  north_west: NorthWest,
   playing_cards: PlayingCards,
   search: Search,
   settings: Settings,
   share: Share,
+  south_east: SouthEast,
+  south_west: SouthWest,
   square: Square,
   title: Title,
   west: West,

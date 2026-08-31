@@ -53,6 +53,13 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     unitCentimeters: 'cm',
     unitMillimeters: 'mm',
     unitInches: 'in',
+    cornersGroup: 'Esquinas',
+    cornerRadius: 'Redondeo',
+    separateCorners: 'Ajustar cada esquina por separado',
+    cornerTopLeft: 'Esquina superior izquierda',
+    cornerTopRight: 'Esquina superior derecha',
+    cornerBottomLeft: 'Esquina inferior izquierda',
+    cornerBottomRight: 'Esquina inferior derecha',
   },
   settings: {
     title: 'Ajustes',
