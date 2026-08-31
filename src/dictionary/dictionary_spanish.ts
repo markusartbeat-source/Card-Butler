@@ -62,6 +62,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     cornerBottomRight: 'Esquina inferior derecha',
     colorGroup: 'Color',
     pickColor: 'Elegir un color',
+    bleedGroup: 'Sangrado',
+    bleedInfo: 'Borde adicional alrededor de la carta que se recorta al imprimir.',
   },
   settings: {
     title: 'Ajustes',

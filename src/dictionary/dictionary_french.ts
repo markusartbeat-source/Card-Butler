@@ -62,6 +62,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     cornerBottomRight: 'Coin en bas à droite',
     colorGroup: 'Couleur',
     pickColor: 'Choisir une couleur',
+    bleedGroup: 'Fond perdu',
+    bleedInfo: "Bordure supplémentaire autour de la carte, coupée à l'impression.",
   },
   settings: {
     title: 'Paramètres',

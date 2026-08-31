@@ -66,6 +66,8 @@ export const dictionaryGerman = {
     cornerBottomRight: 'Ecke unten rechts',
     colorGroup: 'Farbe',
     pickColor: 'Farbe auswählen',
+    bleedGroup: 'Anschnitt',
+    bleedInfo: 'Zusätzlicher Rand rund um die Karte, der beim Drucken abgeschnitten wird.',
   },
   // The settings page.
   settings: {

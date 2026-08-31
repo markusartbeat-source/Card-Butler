@@ -72,6 +72,30 @@
           <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.colorGroup }}</h3>
           <CbColorPicker v-model="color" :label="dictionary.cardEditor.pickColor" />
         </div>
+
+        <CbDivider class="my-6" />
+
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-1.5">
+            <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.bleedGroup }}</h3>
+            <CbTooltip :text="dictionary.cardEditor.bleedInfo">
+              <CbButton variant="ghost" size="small" :aria-label="dictionary.cardEditor.bleedInfo">
+                <CbIcon name="info" size="small" />
+              </CbButton>
+            </CbTooltip>
+          </div>
+          <div class="flex items-center gap-3">
+            <CbInput v-model="bleedWidth" class="flex-1" :label="dictionary.cardEditor.width" />
+            <CbToggle
+              v-model="isBleedLinked"
+              icon="link"
+              :aria-label="dictionary.cardEditor.linkSizes"
+            />
+            <CbInput v-model="bleedHeight" class="flex-1" :label="dictionary.cardEditor.height" />
+          </div>
+        </div>
+
+        <CbDivider class="mt-6" />
       </template>
     </CbTabs>
   </div>
@@ -79,13 +103,16 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import CbButton from '../components/atoms/CbButton.vue'
 import CbColorPicker from '../components/atoms/CbColorPicker.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
+import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSlideSwap from '../components/atoms/CbSlideSwap.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'
 import CbToggle from '../components/atoms/CbToggle.vue'
+import CbTooltip from '../components/atoms/CbTooltip.vue'
 
 const activeTab = ref('settings')
 
@@ -98,6 +125,9 @@ const cornerRadius = ref('20')
 const areCornersSeparate = ref(false)
 const corners = ref({ topLeft: '20', topRight: '20', bottomLeft: '20', bottomRight: '20' })
 const color = ref('#ffffff')
+const bleedWidth = ref('3')
+const bleedHeight = ref('3')
+const isBleedLinked = ref(false)
 
 // The single field can hold all four values separated by commas. A missing
 // value falls back to the first one, so "20" fills every corner.

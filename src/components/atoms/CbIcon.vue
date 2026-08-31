@@ -1,9 +1,14 @@
 <template>
-  <component :is="icons[name]" class="h-6 w-6 shrink-0" aria-hidden="true" />
+  <component
+    :is="icons[name]"
+    class="shrink-0"
+    :class="size === 'small' ? 'h-3 w-3' : 'h-6 w-6'"
+    aria-hidden="true"
+  />
 </template>
 
 <script setup lang="ts">
 import { icons, type IconName } from './icons'
 
-defineProps<{ name: IconName }>()
+defineProps<{ name: IconName; size?: 'default' | 'small' }>()
 </script>

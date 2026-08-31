@@ -3,6 +3,7 @@
        bottom edge of the screen, only the page area scrolls on its own. -->
   <div class="bg-background flex h-screen overflow-hidden">
     <CbSidebar />
+    
     <!-- The grid gives every page the same single cell, so the old and the new
          page overlap during the transition without changing their layout. -->
     <main class="relative grid flex-1 grid-cols-1 grid-rows-1 overflow-y-auto">

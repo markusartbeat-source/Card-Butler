@@ -22,6 +22,7 @@ import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
 import Image from '~icons/material-symbols/image-outline-rounded'
+import Info from '~icons/material-symbols/info-outline-rounded'
 import KeyboardArrowDown from '~icons/material-symbols/keyboard-arrow-down-rounded'
 import LightMode from '~icons/material-symbols/light-mode-outline-rounded'
 import Link from '~icons/material-symbols/link-rounded'
@@ -62,6 +63,7 @@ export const icons = {
   home: Home,
   horizontal_rule: HorizontalRule,
   image: Image,
+  info: Info,
   keyboard_arrow_down: KeyboardArrowDown,
   light_mode: LightMode,
   link: Link,
