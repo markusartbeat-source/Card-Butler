@@ -6,12 +6,15 @@
   >
     <!-- The indicator is placed against this list, so it needs to be the
          positioned parent. -->
-    <Tabs.List class="relative flex gap-6">
+    <!-- The tabs share the full width, so their hover areas touch each other
+         and fill the whole row. -->
+    <Tabs.List class="relative flex">
       <Tabs.Trigger
         v-for="item in items"
         :key="item.value"
+        v-ripple
         :value="item.value"
-        class="pb-2 text-base font-bold text-white"
+        class="cb-hover relative flex-1 overflow-hidden px-3 py-2 text-center text-base font-bold text-white"
       >
         {{ item.label }}
       </Tabs.Trigger>

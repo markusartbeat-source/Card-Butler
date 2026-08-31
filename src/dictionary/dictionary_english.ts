@@ -45,6 +45,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     cardSettings: 'Card settings',
     settingsTab: 'Settings',
     layersTab: 'Layers',
+    sizesGroup: 'Sizes',
+    width: 'Width',
+    height: 'Height',
   },
   settings: {
     title: 'Settings',

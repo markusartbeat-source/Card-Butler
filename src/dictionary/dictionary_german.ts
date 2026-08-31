@@ -49,6 +49,9 @@ export const dictionaryGerman = {
     cardSettings: 'Karteneinstellungen',
     settingsTab: 'Einstellungen',
     layersTab: 'Ebenen',
+    sizesGroup: 'Größen',
+    width: 'Breite',
+    height: 'Höhe',
   },
   // The settings page.
   settings: {

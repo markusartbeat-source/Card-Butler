@@ -45,6 +45,9 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     cardSettings: 'Ajustes de la carta',
     settingsTab: 'Ajustes',
     layersTab: 'Capas',
+    sizesGroup: 'Tamaños',
+    width: 'Ancho',
+    height: 'Alto',
   },
   settings: {
     title: 'Ajustes',

@@ -45,6 +45,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     cardSettings: 'Réglages de la carte',
     settingsTab: 'Réglages',
     layersTab: 'Calques',
+    sizesGroup: 'Tailles',
+    width: 'Largeur',
+    height: 'Hauteur',
   },
   settings: {
     title: 'Paramètres',
