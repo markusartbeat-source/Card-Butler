@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full items-center gap-2.5 py-6">
+  <div class="flex w-full items-center gap-2.5 py-4">
     <!-- Left side is as wide as the right side, so the search stays centered. -->
     <div class="flex flex-1 items-center gap-2.5">
       <!-- The back button belongs to the heading, so it only shows with one. -->
@@ -7,7 +7,7 @@
         <CbButton variant="ghost" @click="router.back()">
           <CbIcon name="west" />
         </CbButton>
-        <h1 class="text-3xl text-white">{{ title }}</h1>
+        <h1 class="text-2xl text-white">{{ title }}</h1>
       </template>
     </div>
 
