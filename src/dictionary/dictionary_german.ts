@@ -47,6 +47,8 @@ export const dictionaryGerman = {
     image: 'Bild',
     comment: 'Kommentar',
     cardSettings: 'Karteneinstellungen',
+    settingsTab: 'Einstellungen',
+    layersTab: 'Ebenen',
   },
   // The settings page.
   settings: {

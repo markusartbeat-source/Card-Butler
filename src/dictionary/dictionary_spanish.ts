@@ -43,6 +43,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     image: 'Imagen',
     comment: 'Comentario',
     cardSettings: 'Ajustes de la carta',
+    settingsTab: 'Ajustes',
+    layersTab: 'Capas',
   },
   settings: {
     title: 'Ajustes',

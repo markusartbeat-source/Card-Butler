@@ -6,5 +6,19 @@
       <h2 class="text-xl text-white">{{ dictionary.cardEditor.cardSettings }}</h2>
       <span class="bg-gold h-px w-4.5"></span>
     </div>
+
+    <CbTabs v-model="activeTab" class="mt-6" :items="tabs" />
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import CbTabs from '../components/atoms/CbTabs.vue'
+
+const activeTab = ref('settings')
+
+const tabs = computed(() => [
+  { value: 'settings', label: dictionary.cardEditor.settingsTab },
+  { value: 'layers', label: dictionary.cardEditor.layersTab },
+])
+</script>
