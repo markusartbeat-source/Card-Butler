@@ -21,5 +21,17 @@ export const cardElements = ref<CardElement[]>([
   { id: 'effect-text', name: 'Effekt', type: 'text', placement: { x: 8, y: 55 } },
 ])
 
+// Dragging an element moves it on every card of the deck — the build-up belongs
+// to the deck, only the contents differ from card to card.
+export function moveElementBy(id: string, moveXInMillimeters: number, moveYInMillimeters: number) {
+  const element = cardElements.value.find((element) => element.id === id)
+  if (!element) return
+
+  element.placement = {
+    x: element.placement.x + moveXInMillimeters,
+    y: element.placement.y + moveYInMillimeters,
+  }
+}
+
 // What one card fills into the deck's elements, keyed by element id.
 export type CardElementValues = Record<string, string>
