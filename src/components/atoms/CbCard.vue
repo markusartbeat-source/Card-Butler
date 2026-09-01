@@ -1,8 +1,12 @@
 <template>
   <!-- data-card-id lets the cursor logic find out which card the mouse is on. -->
   <div
-    class="cb-card relative"
-    :class="[shapeClasses, highlightColor ? 'outline-2 outline-offset-2' : '']"
+    class="relative"
+    :class="[
+      isDraggable ? 'cb-card' : '',
+      shapeClasses,
+      highlightColor ? 'outline-2 outline-offset-2' : '',
+    ]"
     :style="highlightColor ? { outlineColor: highlightColor } : undefined"
     :data-card-id="id"
   >
@@ -29,6 +33,8 @@ import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 // Each card decides its own size and shape via shapeClasses.
 // highlightColor draws a thin frame in the colour of the person standing here.
 // The elements come from the deck, elementValues are this card's own contents.
+// isDraggable adds the "cb-card" class: it is both the grab cursor and the
+// selector the sort library drags by, so the editor's card leaves it out.
 withDefaults(
   defineProps<{
     id: string
@@ -36,6 +42,7 @@ withDefaults(
     shapeClasses?: string
     highlightColor?: string
     elementValues?: CardElementValues
+    isDraggable?: boolean
   }>(),
   { shapeClasses: 'h-72 w-48 rounded-2xl', elementValues: () => ({}) },
 )

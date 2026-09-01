@@ -39,6 +39,7 @@
       :number="card.number"
       :element-values="card.elementValues"
       :highlight-color="highlightColorForCard(card.id)"
+      is-draggable
       :style="riseDelay(cardIndex)"
       :class="[
         risenCardIds.has(card.id) ? '' : 'animate-cb-rise',

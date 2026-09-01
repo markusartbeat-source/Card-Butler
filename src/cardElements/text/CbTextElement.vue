@@ -1,5 +1,7 @@
 <template>
-  <span class="text-background">{{ content }}</span>
+  <span v-ripple class="cb-hover text-background relative overflow-hidden rounded px-1">
+    {{ content }}
+  </span>
 </template>
 
 <script setup lang="ts">
