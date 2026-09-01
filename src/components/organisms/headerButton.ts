@@ -7,4 +7,7 @@ export type HeaderButton = {
   label: string
   icon?: IconName
   variant?: 'primary' | 'secondary' | 'light' | 'ghost'
+  // With entries the button opens a dropdown instead of acting on its own —
+  // then the key of the clicked entry comes back with the click.
+  menuItems?: { value: string; label: string; icon?: IconName }[]
 }

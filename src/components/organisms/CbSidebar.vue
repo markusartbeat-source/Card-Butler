@@ -18,15 +18,10 @@
           @click="createNewProject"
         />
       </div>
-      <div class="bg-gradient-to-br from-gold-dark to-gold-light mt-auto w-full rounded-xl p-0.5 shadow-lg">
-        <CbInteractive
-          class="bg-radial from-gold-light to-gold text-surface flex w-full items-center justify-center gap-2.5 rounded-lg p-2 text-sm"
-          @click="currentUser ? upgrade() : signInWithGoogle()"
-        >
-          <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
-          {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
-        </CbInteractive>
-      </div>
+      <CbButton class="mt-auto w-full" @click="currentUser ? upgrade() : signInWithGoogle()">
+        <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
+        {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
+      </CbButton>
       <CbInteractive
         class="bg-surface-light flex w-full items-center justify-between gap-1.5 rounded-xl p-2.5 text-white shadow-lg"
         @click="openUserPanel"
@@ -46,6 +41,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CbMenu from '../molecules/CbMenu.vue'
 import CbMenuItem from '../atoms/CbMenuItem.vue'
+import CbButton from '../atoms/CbButton.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbAvatar from '../atoms/CbAvatar.vue'
 import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'

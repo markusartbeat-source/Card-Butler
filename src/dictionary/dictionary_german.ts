@@ -34,6 +34,12 @@ export const dictionaryGerman = {
   project: {
     name: 'Mein erstes Projekt',
     share: 'Teilen',
+    export: 'Exportieren',
+    // Placeholders in the more menu until it is decided what goes in there.
+    // Lorem ipsum stays the same in every language.
+    placeholderOne: 'Lorem ipsum',
+    placeholderTwo: 'Dolor sit amet',
+    placeholderThree: 'Consetetur sadipscing',
     newCard: 'Neue Karte',
     linkCopiedTitle: 'Link kopiert',
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',

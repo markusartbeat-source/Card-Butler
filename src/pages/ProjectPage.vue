@@ -90,7 +90,18 @@ import type { CardElementValues } from '../cardElements/cardElements'
 
 const headerButtons = computed<HeaderButton[]>(() => [
   { key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' },
-  { key: 'more', label: dictionary.general.more, icon: 'more_horiz', variant: 'secondary' },
+  {
+    key: 'more',
+    label: dictionary.general.more,
+    icon: 'more_horiz',
+    variant: 'secondary',
+    menuItems: [
+      { value: 'export', label: dictionary.project.export, icon: 'download' },
+      { value: 'placeholder-one', label: dictionary.project.placeholderOne, icon: 'circle' },
+      { value: 'placeholder-two', label: dictionary.project.placeholderTwo, icon: 'circle' },
+      { value: 'placeholder-three', label: dictionary.project.placeholderThree, icon: 'circle' },
+    ],
+  },
 ])
 
 function runHeaderAction(key: string) {

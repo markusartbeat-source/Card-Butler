@@ -33,15 +33,23 @@
     </div>
 
     <div class="flex flex-1 justify-end gap-2.5">
-      <CbButton
-        v-for="button in buttons"
-        :key="button.key"
-        :variant="button.variant"
-        @click="$emit('action', button.key)"
-      >
-        <CbIcon v-if="button.icon" :name="button.icon" />
-        {{ button.label }}
-      </CbButton>
+      <template v-for="button in buttons" :key="button.key">
+        <CbDropdown
+          v-if="button.menuItems"
+          :items="button.menuItems"
+          @select="$emit('action', $event)"
+        >
+          <CbButton :variant="button.variant">
+            <CbIcon v-if="button.icon" :name="button.icon" />
+            {{ button.label }}
+          </CbButton>
+        </CbDropdown>
+
+        <CbButton v-else :variant="button.variant" @click="$emit('action', button.key)">
+          <CbIcon v-if="button.icon" :name="button.icon" />
+          {{ button.label }}
+        </CbButton>
+      </template>
     </div>
   </div>
 </template>
@@ -50,6 +58,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import CbButton from '../atoms/CbButton.vue'
+import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import { showToast } from '../atoms/toaster'

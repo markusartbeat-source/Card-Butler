@@ -1,11 +1,12 @@
 <template>
-  <!-- Thin gradient frame around the button, like the sidebar's upgrade button. -->
+  <!-- Thin gradient frame around the golden button. -->
   <div
     v-if="variant === 'primary'"
-    class="bg-gradient-to-br from-gold-dark to-gold-light rounded-xl p-0.5 shadow-lg"
+    class="bg-gradient-to-br from-gold-dark to-gold-light rounded-lg p-0.5 shadow-lg"
   >
     <CbInteractive
-      class="bg-radial from-gold-light to-gold text-surface flex w-full items-center justify-center gap-2.5 rounded-lg p-2 text-sm"
+      class="bg-radial from-gold-light to-gold text-surface flex w-full items-center justify-center rounded-md text-sm"
+      :class="framedSizeClasses[size]"
       @click="$emit('click', $event)"
     >
       <slot />
@@ -14,14 +15,13 @@
 
   <!-- "light" is the same button one shade brighter, for use on a surface
        coloured panel where the secondary button would disappear. "ghost" is
-       round and carries no background of its own, only the hover. The extra
-       padding makes up for the missing gradient frame, so every variant ends
-       up as high as the sidebar's upgrade button. "small" tightens that
-       padding for a button that sits next to text instead of on its own. -->
+       round and carries no background of its own, only the hover. "small"
+       tightens the padding for a button that sits next to text instead of on
+       its own. -->
   <CbInteractive
     v-else
-    class="flex items-center gap-2.5 text-sm text-white"
-    :class="[variantClasses[variant], size === 'small' ? 'p-1' : 'p-2.5']"
+    class="flex items-center text-sm text-white"
+    :class="[variantClasses[variant], sizeClasses[size]]"
     @click="$emit('click', $event)"
   >
     <slot />
@@ -31,11 +31,26 @@
 <script setup lang="ts">
 import CbInteractive from './CbInteractive.vue'
 
+// Every variant but the round ghost wears the corner of CbSelect.
 const variantClasses = {
   primary: '',
-  secondary: 'bg-surface rounded-xl shadow-lg',
-  light: 'bg-surface-light rounded-xl shadow-lg',
+  secondary: 'bg-surface rounded-lg shadow-lg',
+  light: 'bg-surface-light rounded-lg shadow-lg',
   ghost: 'rounded-full',
+}
+
+// The default is the click area of one entry in CbDropdown, so a button that
+// opens a dropdown is exactly as big as the entries inside it.
+const sizeClasses = {
+  default: 'gap-2 px-2 py-1.5',
+  small: 'gap-2.5 p-1',
+}
+
+// The primary button wears a 2px gradient frame around it. Its own padding is
+// that much smaller, so it ends up exactly as big as every other button.
+const framedSizeClasses = {
+  default: 'gap-2 px-1.5 py-1',
+  small: 'gap-2.5 p-0.5',
 }
 
 withDefaults(
