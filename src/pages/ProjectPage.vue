@@ -59,9 +59,9 @@
     </CbCard>
 
     <CbInteractive
-      class="order-last flex h-72 w-48 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gold text-gold"
+      class="cb-card-face order-last flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
       :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
-      :style="addCardDelay"
+      :style="{ ...addCardDelay, ...cardFormatStyle(cardFormat), zoom: gridZoom }"
       @animationend="markRisen(addCardId, $event)"
       @click="addCard"
     >
@@ -85,6 +85,7 @@ import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbHeader from '../components/organisms/CbHeader.vue'
 import type { HeaderButton } from '../components/organisms/headerButton'
 import { projectName } from '../project/project'
+import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
 import type { CardElementValues } from '../cardElements/cardElements'
 
 const headerButtons = computed<HeaderButton[]>(() => [

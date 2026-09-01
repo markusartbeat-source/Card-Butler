@@ -15,7 +15,8 @@
     "leaflet": "^1.9.4",
     "vue": "^3.5.40",
     "vue-draggable-plus": "^0.6.1",
-    "vue-router": "^5.2.0"
+    "vue-router": "^5.2.0",
+    "vue3-moveable": "^0.28.0"
   },
   "devDependencies": {
     "@iconify-json/flag": "^1.2.12",

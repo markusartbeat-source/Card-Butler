@@ -13,8 +13,12 @@
     ></div>
 
     <!-- Padding matches the settings panel, so the card sits in the middle of
-         the space left of it instead of the middle of the screen. -->
-    <div class="relative flex flex-col items-center gap-6 pr-88">
+         the space left of it instead of the middle of the screen.
+         A click that misses an element drops the selection again. -->
+    <div
+      class="relative flex flex-col items-center gap-6 pr-88"
+      @click="clearSelectionOnMiss"
+    >
       <CbCardToolbar class="transition-opacity" :class="fadeInClasses" />
 
       <!-- The ring is placed next to the flying wrapper, so it stays put while
@@ -27,12 +31,16 @@
             :id="id"
             :number="number"
             :element-values="elementValues"
-            shape-classes="h-144 w-96 rounded-3xl"
+            :zoom="editorZoom"
           >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
           </CbCard>
         </div>
+
+        <!-- Next to the flying wrapper, not inside it: the wrapper is scaled
+             while the card flies, which would squeeze the handles with it. -->
+        <CbElementTransform :card="cardWrapper" />
       </div>
 
       <CbButton
@@ -59,6 +67,12 @@ import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbCardToolbar from '../molecules/CbCardToolbar.vue'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
+import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
+import { editorZoom } from '../../card/cardFormat'
+import {
+  clearElementSelection,
+  clearSelectionOnMiss,
+} from '../../elementTransform/elementSelection'
 import type { CardElementValues } from '../../cardElements/cardElements'
 
 const props = defineProps<{
@@ -141,6 +155,9 @@ function closeOnEscape(event: KeyboardEvent) {
 }
 
 onMounted(() => {
+  // A click in the grid also runs through an element, so we start clean.
+  clearElementSelection()
+
   playBackdropFade('in')
 
   const animation = playFlight('in')

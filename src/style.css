@@ -74,9 +74,21 @@ body {
     @apply cursor-grab active:cursor-grabbing;
   }
 
+  /* The card, always written in its real millimetres. The view only says how
+     big to draw it, through the "zoom" property — and zoom, unlike
+     transform: scale(), also shrinks the space the card takes up in the page.
+     That is what keeps the card and its place in the layout the same size, in
+     the grid as well as in the editor. Everything on the card is measured in
+     the same millimetres and follows along by itself. */
   .cb-card-face {
-    border-radius: inherit;
-    @apply transition-transform;
+    width: var(--card-width-mm);
+    height: var(--card-height-mm);
+    border-radius: var(--card-corner-radius-mm);
+    /* Only the tilt of a dragged card eases in. "transform" must stay out of
+       it: the drag library writes the card's position there on every mouse
+       move, and a transition would make the card lag behind the cursor. */
+    transition-property: scale, rotate;
+    @apply duration-150;
   }
 
   /* Ark UI only sets the toast variables (--x, --y, --scale, ...) — turning
@@ -118,19 +130,20 @@ body {
   }
 
   /* Placeholder that shows where the dragged card will land. */
-  .cb-card-ghost .cb-card-face {
+  .cb-card-ghost {
     @apply opacity-20;
   }
 
-  /* The card that follows the cursor while dragging. */
-  .cb-card-dragged .cb-card-face {
-    @apply scale-105 rotate-3 opacity-100 shadow-2xl;
-  }
-
-  /* The drag library writes opacity 0.8 straight into the copy's style
-     attribute, and only !important beats an inline style. */
+  /* The card that follows the cursor while dragging. "scale" and "rotate" are
+     properties of their own, so they do not clash with the translate the drag
+     library writes into the copy's style attribute.
+     The library also writes opacity 0.8 there, and only !important beats an
+     inline style. */
   .cb-card-dragged {
+    scale: 1.05;
+    rotate: 3deg;
     opacity: 1 !important;
+    @apply shadow-2xl;
   }
 
   /* An opening list rolls out of nothing: the grid row grows from 0fr to the
