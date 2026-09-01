@@ -142,6 +142,9 @@ function startClosing() {
   if (isClosing.value) return
   isClosing.value = true
   areControlsVisible.value = false
+  // The handles vanish at once, like the other controls, instead of flying
+  // back to the grid along with the card.
+  clearElementSelection()
 
   playBackdropFade('out')
 
