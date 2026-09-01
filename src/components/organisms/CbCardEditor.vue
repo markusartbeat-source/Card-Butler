@@ -23,7 +23,12 @@
         <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
 
         <div ref="cardWrapper">
-          <CbCard :id="id" :number="number" shape-classes="h-144 w-96 rounded-3xl">
+          <CbCard
+            :id="id"
+            :number="number"
+            :element-values="elementValues"
+            shape-classes="h-144 w-96 rounded-3xl"
+          >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
           </CbCard>
@@ -54,8 +59,14 @@ import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbCardToolbar from '../molecules/CbCardToolbar.vue'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
+import type { CardElementValues } from '../../cardElements/cardElements'
 
-const props = defineProps<{ id: string; number: number; startRect: DOMRect }>()
+const props = defineProps<{
+  id: string
+  number: number
+  startRect: DOMRect
+  elementValues?: CardElementValues
+}>()
 
 const emit = defineEmits<{ close: [] }>()
 

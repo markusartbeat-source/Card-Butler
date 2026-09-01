@@ -6,6 +6,7 @@
     :key="selectedCard.id"
     :id="selectedCard.id"
     :number="selectedCard.number"
+    :element-values="selectedCard.elementValues"
     :start-rect="selectedCardRect"
     @close="selectedCardId = null"
   >
@@ -36,6 +37,7 @@
       :key="card.id"
       :id="card.id"
       :number="card.number"
+      :element-values="card.elementValues"
       :highlight-color="highlightColorForCard(card.id)"
       :style="riseDelay(cardIndex)"
       :class="[
@@ -82,6 +84,7 @@ import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
 import CbHeader from '../components/organisms/CbHeader.vue'
 import type { HeaderButton } from '../components/organisms/headerButton'
 import { projectName } from '../project/project'
+import type { CardElementValues } from '../cardElements/cardElements'
 
 const headerButtons = computed<HeaderButton[]>(() => [
   { key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' },
@@ -98,7 +101,12 @@ function runHeaderAction(key: string) {
 // The starter cards use fixed ids so every window means the same card. Real
 // shared card data comes later with live sync.
 const cards = ref(
-  [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({ id: `starter-card-${number}`, number })),
+  [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({
+    id: `starter-card-${number}`,
+    number,
+    // What this card fills into the deck's elements. Placeholder for now.
+    elementValues: (number === 3 ? { 'effect-text': 'Test' } : {}) as CardElementValues,
+  })),
 )
 const selectedCardId = ref<string | null>(null)
 
@@ -172,6 +180,6 @@ onUnmounted(() => window.removeEventListener('mousemove', updateMyAnchor))
 
 function addCard() {
   const highestNumber = Math.max(...cards.value.map((card) => card.number))
-  cards.value.push({ id: crypto.randomUUID(), number: highestNumber + 1 })
+  cards.value.push({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
 }
 </script>
