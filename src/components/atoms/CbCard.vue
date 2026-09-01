@@ -12,9 +12,10 @@
       class="cb-card-face flex h-full w-full flex-col items-center justify-center bg-white shadow-lg"
     >
       <span class="text-5xl font-bold text-background">{{ number }}</span>
-      <span v-for="element in cardElements" :key="element.id" class="text-background">
-        {{ elementValues[element.id] }}
-      </span>
+      <!-- Every element type brings its own component from its folder. -->
+      <template v-for="element in cardElements" :key="element.id">
+        <CbTextElement v-if="element.type === 'text'" :content="elementValues[element.id]" />
+      </template>
     </div>
     <!-- Overlay on top of the card face, e.g. the cursors of other people. -->
     <slot />
@@ -23,6 +24,7 @@
 
 <script setup lang="ts">
 import { cardElements, type CardElementValues } from '../../cardElements/cardElements'
+import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 
 // Each card decides its own size and shape via shapeClasses.
 // highlightColor draws a thin frame in the colour of the person standing here.
