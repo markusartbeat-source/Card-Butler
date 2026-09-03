@@ -1,5 +1,6 @@
 <template>
-  <div class="flex w-full items-center gap-2.5 py-4">
+  <!-- Height and side spacing come from the design: 100px tall, 24px inset. -->
+  <div class="flex h-25 w-full shrink-0 items-center gap-2.5 px-6">
     <!-- Left side is as wide as the right side, so the search stays centered. -->
     <div class="flex flex-1 items-center gap-2.5">
       <!-- The back button belongs to the heading, so it only shows with one. -->
@@ -32,7 +33,7 @@
       </div>
     </div>
 
-    <div class="flex flex-1 justify-end gap-2.5">
+    <div class="flex flex-1 items-center justify-end gap-3">
       <template v-for="button in buttons" :key="button.key">
         <CbDropdown
           v-if="button.menuItems"
@@ -50,6 +51,8 @@
           {{ button.label }}
         </CbButton>
       </template>
+
+      <CbHeaderUser />
     </div>
   </div>
 </template>
@@ -61,6 +64,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
+import CbHeaderUser from './CbHeaderUser.vue'
 import { showToast } from '../atoms/toaster'
 import type { HeaderButton } from './headerButton'
 

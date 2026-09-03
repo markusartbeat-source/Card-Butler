@@ -39,7 +39,7 @@
         <!-- Free is always the plan the visitor is currently on. The extra
              bottom margin replaces the note the paid plans show here, so the
              divider sits at the same height in every card. -->
-        <CbAvatar :name="userLabel" :image-url="userPicture" size="small" />
+        <CbAvatar :name="userLabel" :image-url="userPicture" />
         {{ dictionary.upgrade.currentPlan }}
       </div>
 

@@ -18,20 +18,6 @@
           @click="createNewProject"
         />
       </div>
-      <CbButton class="mt-auto w-full" @click="currentUser ? upgrade() : signInWithGoogle()">
-        <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
-        {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
-      </CbButton>
-      <CbInteractive
-        class="bg-surface-light flex w-full items-center justify-between gap-1.5 rounded-xl p-2.5 text-white shadow-lg"
-        @click="openUserPanel"
-      >
-        <div class="flex items-center gap-1.5">
-          <CbAvatar :name="userLabel" :image-url="userPicture" />
-          <span class="text-sm">{{ userLabel }}</span>
-        </div>
-        <CbIcon name="settings" />
-      </CbInteractive>
     </div>
   </div>
 </template>
@@ -41,21 +27,10 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CbMenu from '../molecules/CbMenu.vue'
 import CbMenuItem from '../atoms/CbMenuItem.vue'
-import CbButton from '../atoms/CbButton.vue'
-import CbIcon from '../atoms/CbIcon.vue'
-import CbAvatar from '../atoms/CbAvatar.vue'
 import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
-import CbInteractive from '../atoms/CbInteractive.vue'
 import type { IconName } from '../atoms/icons'
-import { signInWithGoogle, useCurrentUser } from '../../composables/useCurrentUser'
 import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
 import { projectName } from '../../project/project'
-import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
-
-const { currentUser, displayName, avatarUrl } = useCurrentUser()
-
-const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
-const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
 const { people } = usePeopleBroadcast()
 
@@ -92,12 +67,4 @@ function selectMenuItem(value: string) {
 }
 
 function createNewProject() {}
-
-function upgrade() {
-  router.push('/upgrade')
-}
-
-function openUserPanel() {
-  router.push('/settings')
-}
 </script>

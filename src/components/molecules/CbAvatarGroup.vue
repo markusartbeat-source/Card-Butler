@@ -6,12 +6,11 @@
       :name="person.name"
       :image-url="person.imageUrl"
       :color="person.color"
-      size="small"
       class="ring-surface ring-2"
     />
     <div
       v-if="hiddenCount > 0"
-      class="bg-surface-light ring-surface flex size-7 shrink-0 items-center justify-center rounded-full text-xs text-white ring-2"
+      class="bg-surface-light ring-surface flex size-10 shrink-0 items-center justify-center rounded-full text-xs text-white ring-2"
     >
       +{{ hiddenCount }}
     </div>
