@@ -12,7 +12,6 @@ import CropFree from '~icons/material-symbols/crop-free-rounded'
 import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import East from '~icons/material-symbols/east-rounded'
-import Download from '~icons/material-symbols/download-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
 // Flags keep their own colours, they are not tinted like the symbols above.
 import FlagBr from '~icons/flag/br-4x3'
@@ -35,6 +34,7 @@ import MoreHoriz from '~icons/material-symbols/more-horiz'
 import NorthEast from '~icons/material-symbols/north-east-rounded'
 import NorthWest from '~icons/material-symbols/north-west-rounded'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
+import Print from '~icons/material-symbols/print-outline-rounded'
 import Search from '~icons/material-symbols/search-rounded'
 import SouthEast from '~icons/material-symbols/south-east-rounded'
 import SouthWest from '~icons/material-symbols/south-west-rounded'
@@ -56,7 +56,6 @@ export const icons = {
   dark_mode: DarkMode,
   door_open: DoorOpen,
   east: East,
-  download: Download,
   filter: Filter,
   flag_br: FlagBr,
   flag_de: FlagDe,
@@ -77,6 +76,7 @@ export const icons = {
   north_east: NorthEast,
   north_west: NorthWest,
   playing_cards: PlayingCards,
+  print: Print,
   search: Search,
   settings: Settings,
   share: Share,

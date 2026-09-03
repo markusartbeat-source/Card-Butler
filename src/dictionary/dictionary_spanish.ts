@@ -34,6 +34,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     name: 'Mi primer proyecto',
     share: 'Compartir',
     export: 'Exportar',
+    printExport: 'Impresión / exportación',
     newCard: 'Nueva carta',
     linkCopiedTitle: 'Enlace copiado',
     linkCopiedText: 'El enlace está en el portapapeles.',

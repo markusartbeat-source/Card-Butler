@@ -38,6 +38,7 @@ export const dictionaryGerman = {
     name: 'Mein erstes Projekt',
     share: 'Teilen',
     export: 'Exportieren',
+    printExport: 'Druck / Export',
     newCard: 'Neue Karte',
     linkCopiedTitle: 'Link kopiert',
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',

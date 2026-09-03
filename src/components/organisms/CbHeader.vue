@@ -84,7 +84,7 @@ defineEmits<{ action: [key: string] }>()
 
 // The three menus of the design. They belong to the header itself, so they
 // stand in every page. Their entries are placeholders until it is decided what
-// goes in them — only "export" already does something.
+// goes in them.
 const navigationMenus = computed(() => {
   const description = dictionary.general.placeholderDescription
 
@@ -123,20 +123,7 @@ const navigationMenus = computed(() => {
     {
       value: 'more',
       label: dictionary.general.more,
-      groups: [
-        {
-          label: dictionary.general.more,
-          links: [
-            {
-              value: 'export',
-              title: dictionary.project.export,
-              description,
-              icon: 'download' as const,
-            },
-            ...placeholderLinks,
-          ],
-        },
-      ],
+      groups: [{ label: dictionary.general.more, links: placeholderLinks }],
     },
   ]
 })
