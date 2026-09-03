@@ -11,6 +11,7 @@ export const dictionaryGerman = {
     more: 'Mehr',
     save: 'Speichern',
     close: 'Schließen',
+    cancel: 'Abbrechen',
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
   },

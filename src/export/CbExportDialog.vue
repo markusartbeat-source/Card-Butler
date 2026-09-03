@@ -1,6 +1,5 @@
 <template>
-  <!-- The window for choosing an export format. The buttons come in the next
-       steps. -->
+  <!-- The window for choosing an export format. -->
   <CbDialog
     :open="open"
     :title="dictionary.project.export"
@@ -45,10 +44,21 @@
         </CbSettingsRow>
       </CbSettingsGroup>
     </div>
+
+    <!-- The export button does nothing yet, it gets its disabled look in the
+         next step. -->
+    <template #footer>
+      <CbButton variant="secondary" @click="$emit('update:open', false)">
+        {{ dictionary.general.cancel }}
+      </CbButton>
+
+      <CbButton>{{ dictionary.project.export }}</CbButton>
+    </template>
   </CbDialog>
 </template>
 
 <script setup lang="ts">
+import CbButton from '../components/atoms/CbButton.vue'
 import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'

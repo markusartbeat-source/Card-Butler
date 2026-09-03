@@ -12,6 +12,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     more: 'More',
     save: 'Save',
     close: 'Close',
+    cancel: 'Cancel',
     notAvailableTitle: 'Not available',
     notAvailableText: 'This feature does not exist yet.',
   },

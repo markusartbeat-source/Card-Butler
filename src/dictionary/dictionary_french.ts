@@ -12,6 +12,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     more: 'Plus',
     save: 'Enregistrer',
     close: 'Fermer',
+    cancel: 'Annuler',
     notAvailableTitle: 'Non disponible',
     notAvailableText: "Cette fonction n'existe pas encore.",
   },

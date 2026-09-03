@@ -39,11 +39,11 @@
 
             <slot />
 
-            <!-- The row only exists when the dialog really brings buttons,
+            <!-- The footer only exists when the dialog really brings one,
                  otherwise it would leave an empty gap at the bottom. -->
-            <div v-if="$slots.buttons" class="flex justify-end gap-4">
-              <slot name="buttons" />
-            </div>
+            <footer v-if="$slots.footer" class="flex justify-end gap-4">
+              <slot name="footer" />
+            </footer>
           </div>
         </Dialog.Content>
       </Dialog.Positioner>
