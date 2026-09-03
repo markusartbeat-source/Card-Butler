@@ -21,7 +21,7 @@
   <CbInteractive
     v-else
     class="flex items-center text-sm text-white"
-    :class="[variantClasses[variant], sizeClasses[size]]"
+    :class="[variantClasses[variant], variant === 'ghost' ? ghostSizeClasses[size] : sizeClasses[size]]"
     @click="$emit('click', $event)"
   >
     <slot />
@@ -43,6 +43,13 @@ const variantClasses = {
 // opens a dropdown is exactly as big as the entries inside it.
 const sizeClasses = {
   default: 'gap-2 px-2 py-1.5',
+  small: 'gap-2.5 p-1',
+}
+
+// The round ghost button needs the same padding on every side, otherwise its
+// hover circle comes out as an oval instead.
+const ghostSizeClasses = {
+  default: 'gap-2 p-2',
   small: 'gap-2.5 p-1',
 }
 
