@@ -1,6 +1,4 @@
 <template>
-  <CbHeader :title="projectName" :buttons="headerButtons" @action="runHeaderAction" />
-
   <CbExportDialog v-model:open="isExportDialogOpen" :cards="cards" />
 
   <CbCardEditor
@@ -95,29 +93,32 @@ import CbExportDialog from '../export/CbExportDialog.vue'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
-import CbHeader from '../components/organisms/CbHeader.vue'
-import type { HeaderButton } from '../components/organisms/headerButton'
+import { useHeader } from '../components/organisms/headerState'
 import { projectName } from '../project/project'
 import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
 import type { CardElementValues } from '../cardElements/cardElements'
 
-const headerButtons = computed<HeaderButton[]>(() => [
-  { key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' },
-  {
-    key: 'more',
-    label: dictionary.general.more,
-    icon: 'more_horiz',
-    variant: 'secondary',
-    menuItems: [
-      { value: 'export', label: dictionary.project.export, icon: 'download' },
-      { value: 'placeholder-one', label: dictionary.project.placeholderOne, icon: 'circle' },
-      { value: 'placeholder-two', label: dictionary.project.placeholderTwo, icon: 'circle' },
-      { value: 'placeholder-three', label: dictionary.project.placeholderThree, icon: 'circle' },
-    ],
-  },
-])
-
 const isExportDialogOpen = ref(false)
+
+useHeader(() => ({
+  title: projectName.value,
+  buttons: [
+    { key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' },
+    {
+      key: 'more',
+      label: dictionary.general.more,
+      icon: 'more_horiz',
+      variant: 'secondary',
+      menuItems: [
+        { value: 'export', label: dictionary.project.export, icon: 'download' },
+        { value: 'placeholder-one', label: dictionary.project.placeholderOne, icon: 'circle' },
+        { value: 'placeholder-two', label: dictionary.project.placeholderTwo, icon: 'circle' },
+        { value: 'placeholder-three', label: dictionary.project.placeholderThree, icon: 'circle' },
+      ],
+    },
+  ],
+  onAction: runHeaderAction,
+}))
 
 function runHeaderAction(key: string) {
   if (key === 'share')

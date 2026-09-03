@@ -1,7 +1,9 @@
 <template>
-  <CbHeader />
+  <div></div>
 </template>
 
 <script setup lang="ts">
-import CbHeader from '../components/organisms/CbHeader.vue'
+import { useHeader } from '../components/organisms/headerState'
+
+useHeader(() => ({}))
 </script>

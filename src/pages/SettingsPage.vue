@@ -1,7 +1,5 @@
 <template>
   <div class="flex min-h-full flex-col">
-    <CbHeader :title="dictionary.settings.title" :searchbar="false" />
-
     <!-- The groups stay centred on every screen width. -->
     <div class="flex flex-col items-center gap-8 pb-6">
       <CbSettingsGroup :title="dictionary.settings.accountGroup">
@@ -113,7 +111,7 @@ import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbStreetview from '../components/atoms/CbStreetview.vue'
 import CbSwitch from '../components/atoms/CbSwitch.vue'
-import CbHeader from '../components/organisms/CbHeader.vue'
+import { useHeader } from '../components/organisms/headerState'
 import { showToast } from '../components/atoms/toaster'
 import type { IconName } from '../components/atoms/icons'
 import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
@@ -121,6 +119,8 @@ import { subscription } from '../settings/subscription'
 import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 
 const router = useRouter()
+
+useHeader(() => ({ title: dictionary.settings.title, searchbar: false }))
 
 // Signed in people see their own name and picture, everyone else a placeholder.
 const { currentUser, displayName, avatarUrl } = useCurrentUser()

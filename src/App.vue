@@ -3,18 +3,29 @@
        bottom edge of the screen, only the page area scrolls on its own. -->
   <div class="bg-background flex h-screen overflow-hidden">
     <CbSidebar />
-    
-    <!-- The grid gives every page the same single cell, so the old and the new
-         page overlap during the transition without changing their layout. -->
-    <main class="relative grid flex-1 grid-cols-1 grid-rows-1 overflow-y-auto">
-      <router-view v-slot="{ Component, route }">
-        <Transition name="page">
-          <div :key="route.path" class="col-start-1 row-start-1 h-full">
-            <component :is="Component" />
-          </div>
-        </Transition>
-      </router-view>
-    </main>
+
+    <!-- The header sits above the animated area, so a page change only moves
+         the content below it. Each page says what it should show. -->
+    <div class="flex flex-1 flex-col overflow-hidden">
+      <CbHeader
+        :title="headerSettings.title"
+        :searchbar="headerSettings.searchbar"
+        :buttons="headerSettings.buttons"
+        @action="headerSettings.onAction?.($event)"
+      />
+
+      <!-- The grid gives every page the same single cell, so the old and the new
+           page overlap during the transition without changing their layout. -->
+      <main class="relative grid flex-1 grid-cols-1 grid-rows-1 overflow-y-auto">
+        <router-view v-slot="{ Component, route }">
+          <Transition name="page">
+            <div :key="route.path" class="col-start-1 row-start-1 h-full">
+              <component :is="Component" />
+            </div>
+          </Transition>
+        </router-view>
+      </main>
+    </div>
     <CbToaster />
   </div>
 </template>
@@ -23,6 +34,8 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import CbSidebar from './components/organisms/CbSidebar.vue'
+import CbHeader from './components/organisms/CbHeader.vue'
+import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
 import { startPeopleBroadcast } from './presence/usePeopleBroadcast'
 

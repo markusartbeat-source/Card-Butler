@@ -6,8 +6,6 @@
   <div class="relative flex min-h-full flex-col overflow-hidden bg-background">
     <CbGoldGlow />
 
-    <CbHeader class="relative z-10" :title="dictionary.upgrade.title" :searchbar="false" />
-
     <!-- Two flexible spacers hold the cards in place: the space below them
          grows twice as fast, so the cards stay a bit above the middle on
          every screen height. -->
@@ -31,8 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import CbHeader from '../components/organisms/CbHeader.vue'
+import { useHeader } from '../components/organisms/headerState'
 import CbGoldGlow from '../upgrade/CbGoldGlow.vue'
 import CbPlanCard from '../upgrade/CbPlanCard.vue'
 import { plans } from '../upgrade/plans'
+
+useHeader(() => ({ title: dictionary.upgrade.title, searchbar: false }))
 </script>
