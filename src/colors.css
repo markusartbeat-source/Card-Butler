@@ -1,4 +1,7 @@
-@theme {
+/* "static" writes every colour into the page, not only the ones a Tailwind
+   class happens to use. Otherwise a colour read from script — like the confetti
+   does — would arrive empty. */
+@theme static {
   --color-background: #202036;
   --color-surface: #2c2f45;
   --color-surface-light: #3a3d5c;

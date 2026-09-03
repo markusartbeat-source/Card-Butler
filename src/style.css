@@ -137,6 +137,12 @@ body {
     transition-timing-function: cubic-bezier(0.06, 0.71, 0.55, 1);
   }
 
+  /* The little drawing surface the export confetti pops on. It covers the toast
+     corner only, never the whole screen, and nothing on it can be clicked. */
+  .cb-confetti-stage {
+    @apply pointer-events-none fixed right-0 bottom-0 z-50 h-72 w-96;
+  }
+
   /* Frame that is golden only at its left and right edges and stays dark
      across the middle. Tailwind's gradient classes allow just one middle
      colour, so the four stops are written out here. */

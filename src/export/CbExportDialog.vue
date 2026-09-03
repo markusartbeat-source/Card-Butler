@@ -134,10 +134,10 @@ import CbExportCardGrid from './CbExportCardGrid.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import CbExportRenderStage from './png/CbExportRenderStage.vue'
 import { cardToPngBlob, defaultExportDpi } from './png/exportPng'
-import { downloadCardsZip } from './png/exportZip'
+import { packCardsIntoZip, saveZipFile } from './png/exportZip'
 import {
-  closeExportProgressToast,
   reportExportedCard,
+  showExportDoneToast,
   startExportProgressToast,
   waitForFullBar,
 } from './exportToast'
@@ -217,13 +217,14 @@ async function exportCards() {
 
   progressToastId.value = startExportProgressToast(props.cards.length)
 
-  await downloadCardsZip(
-    cardZipEntries(Array.from(stageElement.children)),
-    dictionary.exportDialog.pngZipFileName,
-  )
+  const zipFile = await packCardsIntoZip(cardZipEntries(Array.from(stageElement.children)))
 
+  // The file is only handed to the browser once the bar has really arrived at
+  // the end, so the download window never turns up ahead of it.
   await waitForFullBar()
-  closeExportProgressToast(progressToastId.value)
+  saveZipFile(zipFile, dictionary.exportDialog.pngZipFileName)
+
+  showExportDoneToast(progressToastId.value)
   exportingCardNumber.value = 0
   emit('update:open', false)
 }

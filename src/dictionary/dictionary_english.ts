@@ -56,6 +56,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     pngTitle: 'Export as PNG',
     pngExportProgress: (current: number, total: number) => `Card ${current} of ${total}`,
     pngExportToastTitle: 'Your PNG export is being prepared',
+    pngExportDoneTitle: 'Done!',
+    pngExportDoneInfo: 'Your export is downloading 😊',
     pngZipFileName: 'cards.zip',
     pngCardFileName: (number: string) => `card-${number}.png`,
     pngExportButton: (cardCount: number, megabytes: number) =>

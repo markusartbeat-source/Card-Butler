@@ -1,6 +1,7 @@
 // The toast that shows how far the PNG export has come. It carries its numbers
 // in meta, which is what CbToaster.vue reads to draw CbExportProgressToast.
 import { toaster } from '../components/atoms/toaster'
+import { popConfettiOverToast } from './exportConfetti'
 
 // The bar always takes at least this long, so a quick export does not just
 // blink from empty to full.
@@ -61,7 +62,23 @@ export function waitForFullBar() {
   return new Promise((done) => window.setTimeout(done, Math.max(timeLeft, 0)))
 }
 
-export function closeExportProgressToast(id: string) {
+// How long the finished message stays before it goes away on its own.
+const doneToastTime = 6000
+
+// The same toast goes on living, only with another face: green, a headline, a
+// line underneath and a close button. Empty meta takes the bar away, so the
+// toaster draws its usual look again.
+export function showExportDoneToast(id: string) {
   window.clearInterval(barTicker)
-  toaster.dismiss(id)
+
+  toaster.update(id, {
+    type: 'success',
+    title: dictionary.exportDialog.pngExportDoneTitle,
+    description: dictionary.exportDialog.pngExportDoneInfo,
+    duration: doneToastTime,
+    closable: true,
+    meta: {},
+  })
+
+  popConfettiOverToast()
 }
