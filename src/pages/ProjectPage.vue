@@ -34,6 +34,20 @@
     @start="isDragging = true"
     @end="endDragging"
   >
+    <!-- The button stands in front of the row. It is not a ".cb-card", so the
+         drag library skips it: a card is only ever put before or after another
+         card, which keeps the button the first thing in the row. -->
+    <CbInteractive
+      class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
+      :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
+      :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
+      @animationend="markRisen(addCardId, $event)"
+      @click="addCard"
+    >
+      <CbIcon name="add_2" />
+      <span>{{ dictionary.project.newCard }}</span>
+    </CbInteractive>
+
     <!-- The box the drag library picks up. It must be plain page pixels: the
          library writes the position of the dragged copy into "transform", and
          the "zoom" that draws the card would shrink that movement, so the card
@@ -42,7 +56,7 @@
       v-for="(card, cardIndex) in cards"
       :key="card.id"
       class="cb-card"
-      :style="riseDelay(cardIndex)"
+      :style="riseDelay(card.id, cardIndex)"
       :class="[
         risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
         { invisible: card.id === selectedCardId },
@@ -66,17 +80,6 @@
         />
       </CbCard>
     </div>
-
-    <CbInteractive
-      class="cb-card-face order-last flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
-      :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
-      :style="{ ...addCardDelay, ...cardFormatStyle(cardFormat), zoom: gridZoom }"
-      @animationend="markRisen(addCardId, $event)"
-      @click="addCard"
-    >
-      <CbIcon name="add_2" />
-      <span>{{ dictionary.project.newCard }}</span>
-    </CbInteractive>
   </VueDraggable>
 </template>
 
@@ -123,7 +126,7 @@ function runHeaderAction(key: string) {
   else showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText)
 }
 
-// The id stays with a card forever — the number is only its place in the row.
+// The id stays with a card forever — the number is only what the card is called.
 // The starter cards use fixed ids so every window means the same card. Real
 // shared card data comes later with live sync.
 const cards = ref(
@@ -136,16 +139,16 @@ const cards = ref(
 )
 const selectedCardId = ref<string | null>(null)
 
-// The cards of the first render fan in one after the other. A card added later
-// should show up right away, so it gets no delay.
-const initialCardCount = cards.value.length
+// The cards of the first render fan in one after the other, behind the button
+// that stands in front of them. A card added later should show up right away,
+// so it gets no delay — and since it is put in front, only its id tells the two
+// apart, no longer its place in the row.
+const initialCardIds = new Set(cards.value.map((card) => card.id))
 
-function riseDelay(index: number) {
-  return index < initialCardCount ? { animationDelay: `${index * 60}ms` } : undefined
+function riseDelay(id: string, index: number) {
+  return initialCardIds.has(id) ? { animationDelay: `${(index + 1) * 60}ms` } : undefined
 }
 
-// The button for a new card comes in behind the last card.
-const addCardDelay = { animationDelay: `${initialCardCount * 60}ms` }
 const addCardId = 'add-card-button'
 
 // Dropping a card on the spot it came from makes the drag library put every
@@ -204,8 +207,10 @@ function updateMyAnchor(event: MouseEvent) {
 onMounted(() => window.addEventListener('mousemove', updateMyAnchor))
 onUnmounted(() => window.removeEventListener('mousemove', updateMyAnchor))
 
+// A new card appears right where the button is, so it goes to the front of the
+// row. Its number keeps counting up — it is a name, not the place in the row.
 function addCard() {
   const highestNumber = Math.max(...cards.value.map((card) => card.number))
-  cards.value.push({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
+  cards.value.unshift({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
 }
 </script>
