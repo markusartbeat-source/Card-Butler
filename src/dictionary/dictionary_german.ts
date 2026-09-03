@@ -15,11 +15,18 @@ export const dictionaryGerman = {
     back: 'Zurück',
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
+    // Placeholders in the header menus until it is decided what goes in there.
+    // Lorem ipsum stays the same in every language.
+    placeholderOne: 'Lorem ipsum',
+    placeholderTwo: 'Dolor sit amet',
+    placeholderThree: 'Consetetur sadipscing',
+    placeholderDescription: 'Sed diam nonumy eirmod',
   },
   // The bar at the top of every page.
   header: {
     searchInCards: 'In den Karten finden',
     askButler: 'Frag den Butler',
+    collaboration: 'Zusammenarbeit',
   },
   // The page with the picture library.
   images: {
@@ -31,11 +38,6 @@ export const dictionaryGerman = {
     name: 'Mein erstes Projekt',
     share: 'Teilen',
     export: 'Exportieren',
-    // Placeholders in the more menu until it is decided what goes in there.
-    // Lorem ipsum stays the same in every language.
-    placeholderOne: 'Lorem ipsum',
-    placeholderTwo: 'Dolor sit amet',
-    placeholderThree: 'Consetetur sadipscing',
     newCard: 'Neue Karte',
     linkCopiedTitle: 'Link kopiert',
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',

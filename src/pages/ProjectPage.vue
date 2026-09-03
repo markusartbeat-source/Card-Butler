@@ -102,21 +102,8 @@ const isExportDialogOpen = ref(false)
 
 useHeader(() => ({
   title: projectName.value,
-  buttons: [
-    { key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' },
-    {
-      key: 'more',
-      label: dictionary.general.more,
-      icon: 'more_horiz',
-      variant: 'secondary',
-      menuItems: [
-        { value: 'export', label: dictionary.project.export, icon: 'download' },
-        { value: 'placeholder-one', label: dictionary.project.placeholderOne, icon: 'circle' },
-        { value: 'placeholder-two', label: dictionary.project.placeholderTwo, icon: 'circle' },
-        { value: 'placeholder-three', label: dictionary.project.placeholderThree, icon: 'circle' },
-      ],
-    },
-  ],
+  // "More" now lives in the header itself, its "export" entry lands here.
+  buttons: [{ key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' }],
   onAction: runHeaderAction,
 }))
 

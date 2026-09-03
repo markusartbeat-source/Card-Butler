@@ -16,10 +16,9 @@
   </div>
 
   <!-- "light" is the same button one shade brighter, for use on a surface
-       coloured panel where the secondary button would disappear. "ghost" is
-       round and carries no background of its own, only the hover. "small"
-       tightens the padding for a button that sits next to text instead of on
-       its own. -->
+       coloured panel where the secondary button would disappear. "ghost"
+       carries no background of its own, only the hover. "small" tightens the
+       padding for a button that sits next to text instead of on its own. -->
   <CbInteractive
     v-else
     class="flex items-center text-sm text-white"
@@ -38,12 +37,13 @@
 <script setup lang="ts">
 import CbInteractive from './CbInteractive.vue'
 
-// Every variant but the round ghost wears the corner of CbSelect.
+// Every variant but the ghost wears the corner of CbSelect. The ghost has a
+// corner of its own: its hover is only a small square, not a pill.
 const variantClasses = {
   primary: '',
   secondary: 'bg-surface rounded-lg shadow-lg',
   light: 'bg-surface-light rounded-lg shadow-lg',
-  ghost: 'rounded-full',
+  ghost: 'rounded-sm',
 }
 
 // The default is the click area of one entry in CbDropdown, so a button that
@@ -53,8 +53,8 @@ const sizeClasses = {
   small: 'gap-2.5 p-1',
 }
 
-// The round ghost button needs the same padding on every side, otherwise its
-// hover circle comes out as an oval instead.
+// An icon-only ghost button needs the same padding on every side, so its hover
+// stays a square around the icon.
 const ghostSizeClasses = {
   default: 'gap-2 p-2',
   small: 'gap-2.5 p-1',
