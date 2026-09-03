@@ -1,4 +1,4 @@
-import { ref, watch, type Ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   listenOnProjectChannel,
   mySenderId,
@@ -8,8 +8,8 @@ import {
 } from '../realtime/projectChannel'
 import { useMyIdentity } from '../livecursors/cursorIdentity'
 
-/** Who somebody is and where in the app they are. Sent on change, not per mouse move. */
-export type Person = { name: string; color: string; area: string; pictureUrl?: string }
+/** Who somebody is. Sent on change, not per mouse move. */
+export type Person = { name: string; color: string; pictureUrl?: string }
 
 /** A "who" message: everything the others need to show me, sent on change. */
 type WhoMessage = Person & { senderId: string }
@@ -22,10 +22,10 @@ const forgetAfterMs = 15000
 const people = ref<Record<string, Person>>({})
 const lastHeardAt: Record<string, number> = {}
 
-function receiveWho({ senderId, name, color, area, pictureUrl }: WhoMessage) {
+function receiveWho({ senderId, name, color, pictureUrl }: WhoMessage) {
   if (senderId === mySenderId) return
   lastHeardAt[senderId] = Date.now()
-  people.value = { ...people.value, [senderId]: { name, color, area, pictureUrl } }
+  people.value = { ...people.value, [senderId]: { name, color, pictureUrl } }
 }
 
 function forgetQuietPeople() {
@@ -57,10 +57,10 @@ listenOnProjectChannel((channel) =>
 )
 
 /**
- * Tells the others who I am and which area I am looking at — over Broadcast,
- * which has no rate limit, unlike Presence.
+ * Tells the others who I am — over Broadcast, which has no rate limit, unlike
+ * Presence.
  */
-export function startPeopleBroadcast(myArea: Ref<string>) {
+export function startPeopleBroadcast() {
   const myIdentity = useMyIdentity()
 
   function sendMyself() {
@@ -71,7 +71,6 @@ export function startPeopleBroadcast(myArea: Ref<string>) {
         senderId: mySenderId,
         name: myIdentity.name.value,
         color: myIdentity.color.value,
-        area: myArea.value,
         pictureUrl: myIdentity.pictureUrl.value,
       },
     })
@@ -80,8 +79,8 @@ export function startPeopleBroadcast(myArea: Ref<string>) {
   // Every fresh channel starts empty, so I say who I am right after joining.
   openProjectChannel(sendMyself)
 
-  // Signing in or changing the page — the others have to hear about it.
-  watch([myIdentity.name, myIdentity.color, myArea], sendMyself)
+  // Signing in — the others have to hear about it.
+  watch([myIdentity.name, myIdentity.color], sendMyself)
 
   // Repeating myself also tells a window that opened later that I am here.
   window.setInterval(() => {

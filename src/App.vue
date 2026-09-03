@@ -29,19 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
 import { startPeopleBroadcast } from './presence/usePeopleBroadcast'
 
-const route = useRoute()
-
-// The area is the page name without the slash, e.g. "/images" -> "images".
-const myArea = computed(() => route.path.slice(1))
-
-startPeopleBroadcast(myArea)
+startPeopleBroadcast()
 </script>
 
 <style scoped>
