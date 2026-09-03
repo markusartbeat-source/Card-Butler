@@ -17,12 +17,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     notAvailableTitle: 'Non disponible',
     notAvailableText: "Cette fonction n'existe pas encore.",
   },
-  sidebar: {
-    logoAlt: 'Logo',
-    home: 'Accueil',
-    images: 'Images',
-    newProject: 'Nouveau projet',
-  },
   header: {
     searchInCards: 'Rechercher dans les cartes',
     askButler: 'Demande au majordome',

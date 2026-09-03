@@ -1,9 +1,7 @@
 <template>
-  <!-- The window itself never scrolls: sidebar and page both end at the
-       bottom edge of the screen, only the page area scrolls on its own. -->
+  <!-- The window itself never scrolls: the page ends at the bottom edge of the
+       screen, only the page area scrolls on its own. -->
   <div class="bg-background flex h-screen overflow-hidden">
-    <CbSidebar />
-
     <!-- The header sits above the animated area, so a page change only moves
          the content below it. Each page says what it should show. -->
     <div class="flex flex-1 flex-col overflow-hidden">
@@ -33,7 +31,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import CbSidebar from './components/organisms/CbSidebar.vue'
 import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'

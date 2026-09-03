@@ -16,13 +16,6 @@ export const dictionaryGerman = {
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
   },
-  // The menu bar on the left edge of every page.
-  sidebar: {
-    logoAlt: 'Logo',
-    home: 'Home',
-    images: 'Bilder',
-    newProject: 'Neues Projekt',
-  },
   // The bar at the top of every page.
   header: {
     searchInCards: 'In den Karten finden',

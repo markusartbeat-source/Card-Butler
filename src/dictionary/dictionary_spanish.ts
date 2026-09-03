@@ -17,12 +17,6 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     notAvailableTitle: 'No disponible',
     notAvailableText: 'Esta función todavía no existe.',
   },
-  sidebar: {
-    logoAlt: 'Logo',
-    home: 'Inicio',
-    images: 'Imágenes',
-    newProject: 'Nuevo proyecto',
-  },
   header: {
     searchInCards: 'Buscar en las cartas',
     askButler: 'Pregunta al mayordomo',
