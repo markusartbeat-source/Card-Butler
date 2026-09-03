@@ -38,13 +38,29 @@
         />
       </div>
     </div>
+
+    <CbDivider class="my-6" />
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.imageQualityGroup }}</h3>
+      <p class="text-2xs text-label">{{ dictionary.exportDialog.imageQualityInfo(exportSize) }}</p>
+      <CbSlider
+        v-model="imageQuality"
+        :label="dictionary.exportDialog.imageQualityGroup"
+        :low-label="dictionary.exportDialog.imageQualityLow"
+        :high-label="dictionary.exportDialog.imageQualityHigh"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import CbCheckbox from '../components/atoms/CbCheckbox.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
+import CbSlider from '../components/atoms/CbSlider.vue'
+
+const emit = defineEmits<{ 'update:exportSize': [megabytes: number] }>()
 
 // Invented card sets — the export does not look at the real project yet, and
 // ticking a box changes nothing.
@@ -62,4 +78,12 @@ const cardSides = computed(() => [
 ])
 
 const chosenCardSides = ref({ fronts: true, backs: true })
+
+// Invented sizes: the middle of the slider is the 50MB the export button also
+// names, the ends are 10MB and 90MB.
+const imageQuality = ref(50)
+const exportSize = computed(() => Math.round(10 + imageQuality.value * 0.8))
+
+// The button in the footer names the same size, so it hears about every change.
+watchEffect(() => emit('update:exportSize', exportSize.value))
 </script>

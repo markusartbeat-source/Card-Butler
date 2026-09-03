@@ -54,7 +54,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'All cards as a print template with cut marks.',
     pngTitle: 'Export as PNG',
-    pngExportButton: '48 PNGs · 50MB · export',
+    pngExportButton: (megabytes: number) => `48 PNGs · ${megabytes}MB · export`,
     settingsTitle: 'Export settings',
     whichCardsGroup: 'Which cards would you like to export?',
     cardSetOne: 'Card set 1',
@@ -63,6 +63,11 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     cardSidesGroup: 'Card sides',
     cardFronts: 'Fronts',
     cardBacks: 'Backs',
+    imageQualityGroup: 'Image quality:',
+    imageQualityInfo: (megabytes: number) =>
+      `The image quality changes how big the export gets. Right now the export is ${megabytes}MB.`,
+    imageQualityLow: 'Low',
+    imageQualityHigh: 'High',
   },
   cardEditor: {
     square: 'Square',

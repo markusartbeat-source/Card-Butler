@@ -75,19 +75,27 @@
          lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="flex min-h-0 grow gap-6">
       <CbExportCardGrid class="animate-cb-rise" :style="riseDelay(0)" :cards="cards" />
-      <CbExportSettingsPanel class="animate-cb-rise" :style="riseDelay(1)" />
+      <CbExportSettingsPanel
+        class="animate-cb-rise"
+        :style="riseDelay(1)"
+        @update:export-size="exportSize = $event"
+      />
     </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
-         stays disabled. In the PNG step it shows the size of the export and
-         does nothing yet. -->
+         stays disabled. In the PNG step it shows the size the settings panel
+         reports and does nothing yet. -->
     <template #footer>
       <CbButton variant="secondary" @click="leaveDialogOrStep">
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
       </CbButton>
 
       <CbButton :disabled="step === 'formats'">
-        {{ step === 'formats' ? dictionary.project.export : dictionary.exportDialog.pngExportButton }}
+        {{
+          step === 'formats'
+            ? dictionary.project.export
+            : dictionary.exportDialog.pngExportButton(exportSize)
+        }}
       </CbButton>
     </template>
   </CbDialog>
@@ -108,6 +116,10 @@ const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
 const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 
 const step = ref<'formats' | 'png'>('formats')
+
+// The size of the export in MB. The settings panel says the real number as soon
+// as the PNG step is there.
+const exportSize = ref(50)
 
 // How long the parts of a step wait before they come in. On a step change the
 // dialog first grows into its new size — 350 ms, the same time as everywhere

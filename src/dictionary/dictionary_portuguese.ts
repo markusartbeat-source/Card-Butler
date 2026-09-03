@@ -54,7 +54,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Todas as cartas como modelo de impressão com marcas de corte.',
     pngTitle: 'Exportar como PNG',
-    pngExportButton: '48 PNG · 50MB · exportar',
+    pngExportButton: (megabytes: number) => `48 PNG · ${megabytes}MB · exportar`,
     settingsTitle: 'Configurações de exportação',
     whichCardsGroup: 'Que cartas queres exportar?',
     cardSetOne: 'Conjunto de cartas 1',
@@ -63,6 +63,11 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     cardSidesGroup: 'Faces das cartas',
     cardFronts: 'Frentes',
     cardBacks: 'Versos',
+    imageQualityGroup: 'Qualidade de imagem:',
+    imageQualityInfo: (megabytes: number) =>
+      `A qualidade de imagem influencia o tamanho da exportação. Neste momento a exportação tem ${megabytes}MB.`,
+    imageQualityLow: 'Baixa',
+    imageQualityHigh: 'Alta',
   },
   cardEditor: {
     square: 'Quadrado',

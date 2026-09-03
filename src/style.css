@@ -7,6 +7,9 @@
 /* Comfortaa is the app's font, so every element uses it by default. */
 @theme {
   --font-sans: 'Comfortaa', sans-serif;
+
+  /* The smallest text in the design is 10 px, Tailwind stops at 12 px. */
+  --text-2xs: 0.625rem;
 }
 
 :root {

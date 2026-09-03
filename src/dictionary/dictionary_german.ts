@@ -60,8 +60,9 @@ export const dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
     pngTitle: 'Exportieren als PNG',
-    // The numbers are invented until the export really counts the cards.
-    pngExportButton: '48 PNGs · 50MB · exportieren',
+    // The number of cards is invented until the export really counts them, the
+    // size comes from the quality slider.
+    pngExportButton: (megabytes: number) => `48 PNGs · ${megabytes}MB · exportieren`,
     settingsTitle: 'Exporteinstellungen',
     whichCardsGroup: 'Welche Karten möchtest du exportieren?',
     // Invented card sets until the project really has some.
@@ -71,6 +72,12 @@ export const dictionaryGerman = {
     cardSidesGroup: 'Kartenseiten',
     cardFronts: 'Vorderseiten',
     cardBacks: 'Rückseiten',
+    imageQualityGroup: 'Bildqualität:',
+    // The size is invented until the export really renders the cards.
+    imageQualityInfo: (megabytes: number) =>
+      `Die Bildqualität beeinflusst, wie groß der Export wird. Aktuell ist der Export ${megabytes}MB groß.`,
+    imageQualityLow: 'Niedrig',
+    imageQualityHigh: 'Hoch',
   },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {
