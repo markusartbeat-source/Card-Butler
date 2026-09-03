@@ -61,6 +61,7 @@ export const dictionaryGerman = {
     pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
     pngTitle: 'Exportieren als PNG',
     pngPreviewAlt: 'Vorschau der exportierten Karte',
+    pngExportProgress: (current: number, total: number) => `Karte ${current} von ${total}`,
     // The number of cards is invented until the export really counts them, the
     // size comes from the quality slider.
     pngExportButton: (megabytes: number) => `48 PNGs · ${megabytes}MB · exportieren`,

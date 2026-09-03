@@ -78,8 +78,13 @@
            place of the grid, laid out like it. Below them stands the pixel size
            as a temporary check — it goes away again at the end of the export
            work. -->
-      <div v-if="previewUrls.length" class="flex min-h-0 min-w-0 grow flex-col items-center gap-2">
-        <div class="flex min-h-0 flex-wrap content-start justify-center gap-3 overflow-y-auto">
+      <div
+        v-if="exportingCardNumber || previewUrls.length"
+        class="flex min-h-0 min-w-0 grow flex-col items-center gap-2"
+      >
+        <!-- grow holds the pictures in the whole free space, so the bar below
+             stays put while more and more of them come in. -->
+        <div class="flex min-h-0 grow flex-wrap content-start justify-center gap-3 overflow-y-auto">
           <img
             v-for="(url, position) in previewUrls"
             :key="position"
@@ -88,7 +93,16 @@
             :style="previewWidthStyle"
           />
         </div>
-        <span class="text-2xs text-label">{{ previewPixelSize }}</span>
+
+        <!-- While the export runs, the bar and its count take the place of the
+             pixel size. -->
+        <template v-if="exportingCardNumber">
+          <CbProgress :value="previewUrls.length" :max="cards.length" />
+          <span class="text-2xs text-label">
+            {{ dictionary.exportDialog.pngExportProgress(exportingCardNumber, cards.length) }}
+          </span>
+        </template>
+        <span v-else class="text-2xs text-label">{{ previewPixelSize }}</span>
       </div>
       <CbExportCardGrid
         v-else
@@ -131,6 +145,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
+import CbProgress from '../components/atoms/CbProgress.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
 import { cardFormat, exportZoom } from '../card/cardFormat'
@@ -158,6 +173,10 @@ const exportSize = ref(50)
 const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
 const previewUrls = ref<string[]>([])
 
+// Which card is being photographed right now, counted from 1. 0 means the
+// export is not running.
+const exportingCardNumber = ref(0)
+
 // A picture is shown as wide as a card in the grid next to it.
 const previewWidthStyle = computed(() => ({
   width: `${cardFormat.value.width * exportZoom}mm`,
@@ -178,14 +197,23 @@ const previewPixelSize = computed(() => {
 // page.
 async function exportCards() {
   previewUrls.value = []
+  exportingCardNumber.value = 0
   await nextTick()
 
   const stageElement = renderStage.value?.stageElement
   if (!stageElement) return
 
-  for (const stageCard of Array.from(stageElement.children)) {
+  const stageCards = Array.from(stageElement.children)
+  for (const [position, stageCard] of stageCards.entries()) {
+    exportingCardNumber.value = position + 1
     previewUrls.value.push(await cardToPngUrl(stageCard, exportDpi.value))
+
+    // Hand the screen over to drawing once, otherwise the bar would only jump
+    // from empty to full at the very end.
+    await new Promise((paint) => requestAnimationFrame(paint))
   }
+
+  exportingCardNumber.value = 0
 }
 
 // How long the parts of a step wait before they come in. On a step change the
@@ -211,6 +239,7 @@ watch(
     step.value = 'formats'
     contentDelay.value = 0
     previewUrls.value = []
+    exportingCardNumber.value = 0
   },
 )
 
