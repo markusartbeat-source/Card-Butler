@@ -54,6 +54,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Toutes les cartes comme modèle d’impression avec traits de coupe.',
     pngTitle: 'Exporter en PNG',
+    pngPreviewAlt: 'Aperçu de la carte exportée',
     pngExportButton: (megabytes: number) => `48 PNG · ${megabytes} Mo · exporter`,
     settingsTitle: 'Paramètres d’export',
     whichCardsGroup: 'Quelles cartes veux-tu exporter ?',

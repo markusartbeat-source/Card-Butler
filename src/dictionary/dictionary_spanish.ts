@@ -54,6 +54,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Todas las cartas como plantilla de impresión con marcas de corte.',
     pngTitle: 'Exportar como PNG',
+    pngPreviewAlt: 'Vista previa de la carta exportada',
     pngExportButton: (megabytes: number) => `48 PNG · ${megabytes}MB · exportar`,
     settingsTitle: 'Ajustes de exportación',
     whichCardsGroup: '¿Qué cartas quieres exportar?',

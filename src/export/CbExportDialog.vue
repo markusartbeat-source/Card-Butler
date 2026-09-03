@@ -74,7 +74,21 @@
          of the taller dialog, so the footer stays at the bottom edge; min-h-0
          lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="flex min-h-0 grow gap-6">
-      <CbExportCardGrid class="animate-cb-rise" :style="riseDelay(0)" :cards="cards" />
+      <!-- Once a card has been photographed, the finished picture takes the
+           place of the grid. -->
+      <img
+        v-if="previewUrl"
+        :src="previewUrl"
+        :alt="dictionary.exportDialog.pngPreviewAlt"
+        class="min-w-0 grow object-contain"
+      />
+      <CbExportCardGrid
+        v-else
+        ref="cardGrid"
+        class="animate-cb-rise"
+        :style="riseDelay(0)"
+        :cards="cards"
+      />
       <CbExportSettingsPanel
         class="animate-cb-rise"
         :style="riseDelay(1)"
@@ -84,13 +98,13 @@
 
     <!-- In the format list the export button has nothing to export yet, so it
          stays disabled. In the PNG step it shows the size the settings panel
-         reports and does nothing yet. -->
+         reports and starts the export. -->
     <template #footer>
       <CbButton variant="secondary" @click="leaveDialogOrStep">
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
       </CbButton>
 
-      <CbButton :disabled="step === 'formats'">
+      <CbButton :disabled="step === 'formats'" @click="exportCards">
         {{
           step === 'formats'
             ? dictionary.project.export
@@ -102,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
@@ -110,6 +124,7 @@ import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
 import CbExportCardGrid from './CbExportCardGrid.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
+import { cardToPngUrl } from './png/exportPng'
 import type { ExportCard } from './exportCard'
 
 const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
@@ -120,6 +135,22 @@ const step = ref<'formats' | 'png'>('formats')
 // The size of the export in MB. The settings panel says the real number as soon
 // as the PNG step is there.
 const exportSize = ref(50)
+
+// The picture of the first card, as long as the export is only a first try.
+const cardGrid = ref<InstanceType<typeof CbExportCardGrid>>()
+const previewUrl = ref('')
+
+// Photographs the first card of the grid. Clearing the old picture first brings
+// the grid back into the page, and nextTick waits until it is really there.
+async function exportCards() {
+  previewUrl.value = ''
+  await nextTick()
+
+  const firstCard = cardGrid.value?.gridElement?.firstElementChild
+  if (!firstCard) return
+
+  previewUrl.value = await cardToPngUrl(firstCard)
+}
 
 // How long the parts of a step wait before they come in. On a step change the
 // dialog first grows into its new size — 350 ms, the same time as everywhere
@@ -143,6 +174,7 @@ watch(
     if (!open) return
     step.value = 'formats'
     contentDelay.value = 0
+    previewUrl.value = ''
   },
 )
 
