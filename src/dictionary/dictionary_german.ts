@@ -42,6 +42,13 @@ export const dictionaryGerman = {
     linkCopiedTitle: 'Link kopiert',
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',
   },
+  // The list of card sets at the right edge of the project page.
+  cardSets: {
+    title: 'Kartensets',
+    // Placeholder sets until the card sets are real data.
+    playerCards: 'Spielerkarten',
+    villainCards: 'Bösewichtkarten',
+  },
   // The dialog for picking an export format.
   exportDialog: {
     digitalGroup: 'Digital & Vorschau',

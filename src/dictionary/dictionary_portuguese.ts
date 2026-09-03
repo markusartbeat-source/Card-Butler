@@ -38,6 +38,11 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     linkCopiedTitle: 'Link copiado',
     linkCopiedText: 'O link está na área de transferência.',
   },
+  cardSets: {
+    title: 'Conjuntos de cartas',
+    playerCards: 'Cartas de jogador',
+    villainCards: 'Cartas de vilão',
+  },
   exportDialog: {
     digitalGroup: 'Digital e pré-visualização',
     png: 'PNG',
