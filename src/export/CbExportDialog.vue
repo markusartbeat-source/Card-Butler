@@ -58,10 +58,13 @@
       </CbSettingsGroup>
     </div>
 
-    <!-- The settings of the PNG export still have to move in here. grow fills
-         the whole space of the taller dialog, so the footer stays at the
-         bottom edge. -->
-    <div v-else class="animate-cb-rise grow"></div>
+    <!-- Left the cards, right the export settings that still have to move in
+         here. grow fills the whole space of the taller dialog, so the footer
+         stays at the bottom edge; min-h-0 lets the card grid scroll inside it
+         instead of pushing the dialog open. -->
+    <div v-else class="animate-cb-rise flex min-h-0 grow gap-6">
+      <CbExportCardGrid :cards="cards" />
+    </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
          stays disabled. In the PNG step it shows the size of the export and
@@ -85,8 +88,10 @@ import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
+import CbExportCardGrid from './CbExportCardGrid.vue'
+import type { ExportCard } from './exportCard'
 
-const props = defineProps<{ open: boolean }>()
+const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
 const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 
 const step = ref<'formats' | 'png'>('formats')

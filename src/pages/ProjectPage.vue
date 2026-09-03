@@ -1,7 +1,7 @@
 <template>
   <CbHeader :title="projectName" :buttons="headerButtons" @action="runHeaderAction" />
 
-  <CbExportDialog v-model:open="isExportDialogOpen" />
+  <CbExportDialog v-model:open="isExportDialogOpen" :cards="cards" />
 
   <CbCardEditor
     v-if="selectedCard && selectedCardRect"
