@@ -12,20 +12,28 @@
     @update:open="$emit('update:open', $event)"
   >
     <template v-if="step === 'png'" #titleStart>
-      <CbButton variant="ghost" :aria-label="dictionary.general.back" @click="step = 'formats'">
+      <CbButton
+        variant="ghost"
+        :aria-label="dictionary.general.back"
+        @click="goToStep('formats')"
+      >
         <CbIcon name="west" />
       </CbButton>
     </template>
 
     <!-- gap-8 between the groups, the same distance the settings page keeps
          between its groups. -->
-    <div v-if="step === 'formats'" class="animate-cb-rise flex flex-col gap-8">
-      <CbSettingsGroup :title="dictionary.exportDialog.digitalGroup">
+    <div v-if="step === 'formats'" class="flex flex-col gap-8">
+      <CbSettingsGroup
+        class="animate-cb-rise"
+        :style="riseDelay(0)"
+        :title="dictionary.exportDialog.digitalGroup"
+      >
         <CbSettingsRow
           interactive
           :title="dictionary.exportDialog.png"
           :info="dictionary.exportDialog.pngInfo"
-          @click="step = 'png'"
+          @click="goToStep('png')"
         >
           <CbIcon name="east" />
         </CbSettingsRow>
@@ -47,7 +55,11 @@
         </CbSettingsRow>
       </CbSettingsGroup>
 
-      <CbSettingsGroup :title="dictionary.exportDialog.printGroup">
+      <CbSettingsGroup
+        class="animate-cb-rise"
+        :style="riseDelay(1)"
+        :title="dictionary.exportDialog.printGroup"
+      >
         <CbSettingsRow
           interactive
           :title="dictionary.exportDialog.pdf"
@@ -61,16 +73,16 @@
     <!-- Left the cards, right the export settings. grow fills the whole space
          of the taller dialog, so the footer stays at the bottom edge; min-h-0
          lets both sides scroll inside it instead of pushing the dialog open. -->
-    <div v-else class="animate-cb-rise flex min-h-0 grow gap-6">
-      <CbExportCardGrid :cards="cards" />
-      <CbExportSettingsPanel />
+    <div v-else class="flex min-h-0 grow gap-6">
+      <CbExportCardGrid class="animate-cb-rise" :style="riseDelay(0)" :cards="cards" />
+      <CbExportSettingsPanel class="animate-cb-rise" :style="riseDelay(1)" />
     </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
          stays disabled. In the PNG step it shows the size of the export and
          does nothing yet. -->
     <template #footer>
-      <CbButton variant="secondary" @click="leaveStep">
+      <CbButton variant="secondary" @click="leaveDialogOrStep">
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
       </CbButton>
 
@@ -97,20 +109,40 @@ const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 
 const step = ref<'formats' | 'png'>('formats')
 
+// How long the parts of a step wait before they come in. On a step change the
+// dialog first grows into its new size — 350 ms, the same time as everywhere
+// else — and the new content would otherwise fade in inside the box of the old
+// step. A freshly opened dialog grows nowhere, so there its parts start at once.
+const dialogResizeDuration = 350
+const contentDelay = ref(0)
+
+// Every part waits a moment longer than the one before it, so a step builds
+// itself up instead of appearing all at once.
+function riseDelay(position: number) {
+  return { animationDelay: `${contentDelay.value + position * 60}ms` }
+}
+
 // The dialog always opens on the format list. Resetting on the way in, not on
 // the way out, keeps the closing dialog from jumping back a step while it
 // fades away.
 watch(
   () => props.open,
   (open) => {
-    if (open) step.value = 'formats'
+    if (!open) return
+    step.value = 'formats'
+    contentDelay.value = 0
   },
 )
 
+function goToStep(next: 'formats' | 'png') {
+  contentDelay.value = dialogResizeDuration
+  step.value = next
+}
+
 // The left button is the way out of the current step: back to the format list,
 // or out of the dialog if that list is already showing.
-function leaveStep() {
+function leaveDialogOrStep() {
   if (step.value === 'formats') emit('update:open', false)
-  else step.value = 'formats'
+  else goToStep('formats')
 }
 </script>
