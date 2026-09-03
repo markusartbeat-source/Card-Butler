@@ -10,6 +10,9 @@
         </CbButton>
         <h1 class="text-2xl text-white">{{ title }}</h1>
       </template>
+
+      <!-- Everybody who is in the project right now, next to the project name. -->
+      <CbAvatarGroup :people="peopleHere" size="small" />
     </div>
 
     <div v-if="searchbar" class="bg-surface flex w-96 items-center rounded-full text-white shadow-lg">
@@ -64,8 +67,10 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
+import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { showToast } from '../atoms/toaster'
+import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
 import type { HeaderButton } from './headerButton'
 
 withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: HeaderButton[] }>(), {
@@ -86,4 +91,15 @@ const searchModeLabel = computed(() =>
 )
 
 const router = useRouter()
+
+const { people } = usePeopleBroadcast()
+
+const peopleHere = computed(() =>
+  Object.entries(people.value).map(([id, person]) => ({
+    id,
+    name: person.name,
+    imageUrl: person.pictureUrl,
+    color: person.color,
+  })),
+)
 </script>
