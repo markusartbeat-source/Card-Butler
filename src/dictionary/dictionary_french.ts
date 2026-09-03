@@ -13,6 +13,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     save: 'Enregistrer',
     close: 'Fermer',
     cancel: 'Annuler',
+    back: 'Retour',
     notAvailableTitle: 'Non disponible',
     notAvailableText: "Cette fonction n'existe pas encore.",
   },
@@ -52,6 +53,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     printGroup: 'Impression',
     pdf: 'PDF',
     pdfInfo: 'Toutes les cartes comme modèle d’impression avec traits de coupe.',
+    pngTitle: 'Exporter en PNG',
+    pngExportButton: '48 PNG · 50 Mo · exporter',
   },
   cardEditor: {
     square: 'Carré',

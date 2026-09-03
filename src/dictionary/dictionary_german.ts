@@ -12,6 +12,7 @@ export const dictionaryGerman = {
     save: 'Speichern',
     close: 'Schließen',
     cancel: 'Abbrechen',
+    back: 'Zurück',
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
   },
@@ -58,6 +59,9 @@ export const dictionaryGerman = {
     printGroup: 'Druck',
     pdf: 'PDF',
     pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
+    pngTitle: 'Exportieren als PNG',
+    // The numbers are invented until the export really counts the cards.
+    pngExportButton: '48 PNGs · 50MB · exportieren',
   },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {

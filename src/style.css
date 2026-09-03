@@ -216,6 +216,18 @@ body {
     animation: cb-fade-out 350ms ease-in;
   }
 
+  /* A dialog with several steps changes its size on the way. It grows into the
+     new one instead of jumping there. The small step has no height of its own,
+     it is as tall as its content — and a height of "auto" can only be animated
+     when the browser is allowed to turn it into a number first. The starting
+     size comes from CbDialog.vue, which holds it while the content changes. */
+  .cb-dialog {
+    interpolate-size: allow-keywords;
+    transition:
+      width 350ms ease-out,
+      height 350ms ease-out;
+  }
+
   .cb-dialog[data-state='open'] {
     animation: cb-dialog-in 350ms ease-out;
   }

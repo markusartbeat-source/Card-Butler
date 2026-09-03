@@ -13,6 +13,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     save: 'Save',
     close: 'Close',
     cancel: 'Cancel',
+    back: 'Back',
     notAvailableTitle: 'Not available',
     notAvailableText: 'This feature does not exist yet.',
   },
@@ -52,6 +53,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     printGroup: 'Print',
     pdf: 'PDF',
     pdfInfo: 'All cards as a print template with cut marks.',
+    pngTitle: 'Export as PNG',
+    pngExportButton: '48 PNGs · 50MB · export',
   },
   cardEditor: {
     square: 'Square',

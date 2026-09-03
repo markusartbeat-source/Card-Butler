@@ -13,6 +13,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     save: 'Salvar',
     close: 'Fechar',
     cancel: 'Cancelar',
+    back: 'Voltar',
     notAvailableTitle: 'Não disponível',
     notAvailableText: 'Esta função ainda não existe.',
   },
@@ -52,6 +53,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     printGroup: 'Impressão',
     pdf: 'PDF',
     pdfInfo: 'Todas as cartas como modelo de impressão com marcas de corte.',
+    pngTitle: 'Exportar como PNG',
+    pngExportButton: '48 PNG · 50MB · exportar',
   },
   cardEditor: {
     square: 'Quadrado',
