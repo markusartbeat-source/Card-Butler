@@ -68,6 +68,9 @@ export const dictionaryGerman = {
     cardSetOne: 'Kartenset 1',
     cardSetTwo: 'Kartenset 2',
     cardSetThree: 'Kartenset 3',
+    cardSidesGroup: 'Kartenseiten',
+    cardFronts: 'Vorderseiten',
+    cardBacks: 'Rückseiten',
   },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {

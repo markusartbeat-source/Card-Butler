@@ -60,6 +60,9 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     cardSetOne: 'Conjunto de cartas 1',
     cardSetTwo: 'Conjunto de cartas 2',
     cardSetThree: 'Conjunto de cartas 3',
+    cardSidesGroup: 'Faces das cartas',
+    cardFronts: 'Frentes',
+    cardBacks: 'Versos',
   },
   cardEditor: {
     square: 'Quadrado',

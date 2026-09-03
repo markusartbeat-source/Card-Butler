@@ -23,12 +23,28 @@
         />
       </div>
     </div>
+
+    <CbDivider class="my-6" />
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.cardSidesGroup }}</h3>
+
+      <div class="flex flex-col">
+        <CbCheckbox
+          v-for="cardSide in cardSides"
+          :key="cardSide.key"
+          v-model="chosenCardSides[cardSide.key]"
+          :label="cardSide.label"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import CbCheckbox from '../components/atoms/CbCheckbox.vue'
+import CbDivider from '../components/atoms/CbDivider.vue'
 
 // Invented card sets — the export does not look at the real project yet, and
 // ticking a box changes nothing.
@@ -39,4 +55,11 @@ const cardSets = computed(() => [
 ])
 
 const chosenCardSets = ref({ one: true, two: true, three: false })
+
+const cardSides = computed(() => [
+  { key: 'fronts' as const, label: dictionary.exportDialog.cardFronts },
+  { key: 'backs' as const, label: dictionary.exportDialog.cardBacks },
+])
+
+const chosenCardSides = ref({ fronts: true, backs: true })
 </script>
