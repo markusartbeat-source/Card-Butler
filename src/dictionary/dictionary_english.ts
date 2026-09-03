@@ -48,6 +48,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     tableTopSimulatorInfo: 'All cards as one sheet for Table Top Simulator.',
     boardGameArena: 'Board Game Arena',
     boardGameArenaInfo: 'Cards in the Board Game Arena format.',
+    printGroup: 'Print',
+    pdf: 'PDF',
+    pdfInfo: 'All cards as a print template with cut marks.',
   },
   cardEditor: {
     square: 'Square',

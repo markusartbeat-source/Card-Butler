@@ -54,6 +54,9 @@ export const dictionaryGerman = {
     tableTopSimulatorInfo: 'Alle Karten als Blatt für den Table Top Simulator.',
     boardGameArena: 'Board Game Arena',
     boardGameArenaInfo: 'Karten im Format von Board Game Arena.',
+    printGroup: 'Druck',
+    pdf: 'PDF',
+    pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
   },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {
