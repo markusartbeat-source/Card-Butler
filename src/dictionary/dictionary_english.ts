@@ -55,6 +55,11 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     pdfInfo: 'All cards as a print template with cut marks.',
     pngTitle: 'Export as PNG',
     pngExportButton: '48 PNGs · 50MB · export',
+    settingsTitle: 'Export settings',
+    whichCardsGroup: 'Which cards would you like to export?',
+    cardSetOne: 'Card set 1',
+    cardSetTwo: 'Card set 2',
+    cardSetThree: 'Card set 3',
   },
   cardEditor: {
     square: 'Square',

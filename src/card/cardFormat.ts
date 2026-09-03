@@ -13,9 +13,10 @@ export const cardFormat = ref<CardFormat>({ width: 63, height: 88, cornerRadius:
 // editor's card to the viewport comes later.
 export const gridZoom = 0.8
 export const editorZoom = 1.6
-// The export dialog shows its cards at the 145 px of the Figma design, and a
-// 63 mm card is 238 px wide at zoom 1 — 145 / 238 is this number.
-export const exportZoom = 0.61
+// The export dialog shows its cards at about the 145 px of the Figma design: a
+// 63 mm card is 238 px wide at zoom 1, so 145 / 238 is roughly this number.
+// Rounded down, so six cards plus a scroll bar still fit into one row there.
+export const exportZoom = 0.6
 
 // Hands the format over to CSS, in millimetres just as it is stored.
 export function cardFormatStyle({ width, height, cornerRadius }: CardFormat) {

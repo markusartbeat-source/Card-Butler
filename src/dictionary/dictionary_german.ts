@@ -62,6 +62,12 @@ export const dictionaryGerman = {
     pngTitle: 'Exportieren als PNG',
     // The numbers are invented until the export really counts the cards.
     pngExportButton: '48 PNGs · 50MB · exportieren',
+    settingsTitle: 'Exporteinstellungen',
+    whichCardsGroup: 'Welche Karten möchtest du exportieren?',
+    // Invented card sets until the project really has some.
+    cardSetOne: 'Kartenset 1',
+    cardSetTwo: 'Kartenset 2',
+    cardSetThree: 'Kartenset 3',
   },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {

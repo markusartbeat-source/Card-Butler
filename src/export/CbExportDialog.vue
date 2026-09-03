@@ -58,12 +58,12 @@
       </CbSettingsGroup>
     </div>
 
-    <!-- Left the cards, right the export settings that still have to move in
-         here. grow fills the whole space of the taller dialog, so the footer
-         stays at the bottom edge; min-h-0 lets the card grid scroll inside it
-         instead of pushing the dialog open. -->
+    <!-- Left the cards, right the export settings. grow fills the whole space
+         of the taller dialog, so the footer stays at the bottom edge; min-h-0
+         lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="animate-cb-rise flex min-h-0 grow gap-6">
       <CbExportCardGrid :cards="cards" />
+      <CbExportSettingsPanel />
     </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
@@ -89,6 +89,7 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
 import CbExportCardGrid from './CbExportCardGrid.vue'
+import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import type { ExportCard } from './exportCard'
 
 const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
