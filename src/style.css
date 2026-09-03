@@ -105,9 +105,8 @@ body {
     width: var(--card-width-mm);
     height: var(--card-height-mm);
     border-radius: var(--card-corner-radius-mm);
-    /* Only the tilt of a dragged card eases in. "transform" must stay out of
-       it: the drag library writes the card's position there on every mouse
-       move, and a transition would make the card lag behind the cursor. */
+    /* Only the tilt of a dragged card eases in — "transform" stays out of it,
+       so a moved card can never lag behind a transition. */
     transition-property: scale, rotate;
     @apply duration-150;
   }
@@ -161,15 +160,19 @@ body {
     @apply opacity-20;
   }
 
-  /* The card that follows the cursor while dragging. "scale" and "rotate" are
-     properties of their own, so they do not clash with the translate the drag
-     library writes into the copy's style attribute.
-     The library also writes opacity 0.8 there, and only !important beats an
-     inline style. */
+  /* The box that follows the cursor while dragging. The library writes opacity
+     0.8 into its style attribute, and only !important beats an inline style. */
   .cb-card-dragged {
+    opacity: 1 !important;
+  }
+
+  /* The tilt belongs on the card inside the box, not on the box itself: the
+     library moves the box with "transform", and a "scale" or "rotate" on the
+     same element would stretch and turn that movement — the card would drift
+     away from the cursor. */
+  .cb-card-dragged .cb-card-face {
     scale: 1.05;
     rotate: 3deg;
-    opacity: 1 !important;
     @apply shadow-2xl;
   }
 

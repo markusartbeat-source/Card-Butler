@@ -34,14 +34,14 @@
     @start="isDragging = true"
     @end="endDragging"
   >
-    <CbCard
+    <!-- The box the drag library picks up. It must be plain page pixels: the
+         library writes the position of the dragged copy into "transform", and
+         the "zoom" that draws the card would shrink that movement, so the card
+         would fall behind the cursor. The zoom sits on the card inside. -->
+    <div
       v-for="(card, cardIndex) in cards"
       :key="card.id"
-      :id="card.id"
-      :number="card.number"
-      :element-values="card.elementValues"
-      :highlight-color="highlightColorForCard(card.id)"
-      is-draggable
+      class="cb-card"
       :style="riseDelay(cardIndex)"
       :class="[
         risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
@@ -50,15 +50,22 @@
       @animationend="markRisen(card.id, $event)"
       @click="selectCard(card.id, $event)"
     >
-      <CbCursor
-        v-for="cursor in cursorsOnCard(card.id)"
-        :key="cursor.senderId"
-        :x="cursor.x"
-        :y="cursor.y"
-        :name="cursor.name"
-        :color="cursor.color"
-      />
-    </CbCard>
+      <CbCard
+        :id="card.id"
+        :number="card.number"
+        :element-values="card.elementValues"
+        :highlight-color="highlightColorForCard(card.id)"
+      >
+        <CbCursor
+          v-for="cursor in cursorsOnCard(card.id)"
+          :key="cursor.senderId"
+          :x="cursor.x"
+          :y="cursor.y"
+          :name="cursor.name"
+          :color="cursor.color"
+        />
+      </CbCard>
+    </div>
 
     <CbInteractive
       class="cb-card-face order-last flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"

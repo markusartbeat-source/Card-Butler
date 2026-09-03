@@ -3,7 +3,7 @@
        which card the mouse is on. -->
   <div
     class="cb-card-face relative bg-white shadow-lg"
-    :class="[isDraggable ? 'cb-card' : '', highlightColor ? 'outline-2 outline-offset-2' : '']"
+    :class="highlightColor ? 'outline-2 outline-offset-2' : ''"
     :style="{ ...cardFormatStyle(cardFormat), zoom, outlineColor: highlightColor }"
     :data-card-id="id"
   >
@@ -33,8 +33,6 @@ import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 // The card is always its real size — zoom is the only thing a view decides.
 // highlightColor draws a thin frame in the colour of the person standing here.
 // The elements come from the deck, elementValues are this card's own contents.
-// isDraggable adds the "cb-card" class: it is both the grab cursor and the
-// selector the sort library drags by, so the editor's card leaves it out.
 withDefaults(
   defineProps<{
     id: string
@@ -42,7 +40,6 @@ withDefaults(
     zoom?: number
     highlightColor?: string
     elementValues?: CardElementValues
-    isDraggable?: boolean
   }>(),
   { zoom: gridZoom, elementValues: () => ({}) },
 )
