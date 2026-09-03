@@ -3,8 +3,17 @@ import { cardFormat } from '../../card/cardFormat'
 
 const millimetresPerInch = 25.4
 
-// The resolution the export uses until the quality slider sets it.
-export const defaultExportDpi = 300
+// What the quality slider means behind the scenes: its 0 to 100 stand for a
+// resolution between these two. Nothing of this is written on screen.
+const minExportDpi = 20
+const maxExportDpi = 600
+
+// Where the quality slider starts.
+export const defaultImageQuality = 50
+
+export function dpiForImageQuality(quality: number) {
+  return Math.round(minExportDpi + (quality / 100) * (maxExportDpi - minExportDpi))
+}
 
 // How many pixels a card becomes at the given resolution. Both sides come from
 // the same dpi number, otherwise the picture ends up stretched.

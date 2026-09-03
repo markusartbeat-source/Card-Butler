@@ -59,8 +59,12 @@ import { computed, ref, watchEffect } from 'vue'
 import CbCheckbox from '../components/atoms/CbCheckbox.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbSlider from '../components/atoms/CbSlider.vue'
+import { defaultImageQuality, dpiForImageQuality } from './png/exportPng'
 
-const emit = defineEmits<{ 'update:exportSize': [megabytes: number] }>()
+const emit = defineEmits<{
+  'update:exportSize': [megabytes: number]
+  'update:dpi': [dpi: number]
+}>()
 
 // Invented card sets — the export does not look at the real project yet, and
 // ticking a box changes nothing.
@@ -81,9 +85,12 @@ const chosenCardSides = ref({ fronts: true, backs: true })
 
 // Invented sizes: the middle of the slider is the 50MB the export button also
 // names, the ends are 10MB and 90MB.
-const imageQuality = ref(50)
+const imageQuality = ref(defaultImageQuality)
 const exportSize = computed(() => Math.round(10 + imageQuality.value * 0.8))
 
 // The button in the footer names the same size, so it hears about every change.
 watchEffect(() => emit('update:exportSize', exportSize.value))
+
+// The same slider decides how fine the exported pictures become.
+watchEffect(() => emit('update:dpi', dpiForImageQuality(imageQuality.value)))
 </script>

@@ -95,6 +95,7 @@
         class="animate-cb-rise"
         :style="riseDelay(1)"
         @update:export-size="exportSize = $event"
+        @update:dpi="exportDpi = $event"
       />
 
       <!-- Out of sight, in real size: this is what gets photographed. -->
@@ -130,7 +131,12 @@ import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
 import CbExportCardGrid from './CbExportCardGrid.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import CbExportRenderStage from './png/CbExportRenderStage.vue'
-import { cardPixelSize, cardToPngUrl, defaultExportDpi } from './png/exportPng'
+import {
+  cardPixelSize,
+  cardToPngUrl,
+  defaultImageQuality,
+  dpiForImageQuality,
+} from './png/exportPng'
 import type { ExportCard } from './exportCard'
 
 const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
@@ -146,9 +152,13 @@ const exportSize = ref(50)
 const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
 const previewUrl = ref('')
 
+// The resolution the quality slider stands for. The settings panel says its own
+// number as soon as the PNG step is there.
+const exportDpi = ref(dpiForImageQuality(defaultImageQuality))
+
 // The size of the finished picture, e.g. "744 × 1039 px".
 const previewPixelSize = computed(() => {
-  const { width, height } = cardPixelSize(defaultExportDpi)
+  const { width, height } = cardPixelSize(exportDpi.value)
   return `${width} × ${height} px`
 })
 
@@ -161,7 +171,7 @@ async function exportCards() {
   const firstCard = renderStage.value?.stageElement?.firstElementChild
   if (!firstCard) return
 
-  previewUrl.value = await cardToPngUrl(firstCard, defaultExportDpi)
+  previewUrl.value = await cardToPngUrl(firstCard, exportDpi.value)
 }
 
 // How long the parts of a step wait before they come in. On a step change the
