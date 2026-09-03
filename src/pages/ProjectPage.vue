@@ -1,6 +1,8 @@
 <template>
   <CbHeader :title="projectName" :buttons="headerButtons" @action="runHeaderAction" />
 
+  <CbExportDialog v-model:open="isExportDialogOpen" />
+
   <CbCardEditor
     v-if="selectedCard && selectedCardRect"
     :key="selectedCard.id"
@@ -79,6 +81,7 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
+import CbExportDialog from '../export/CbExportDialog.vue'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
@@ -104,9 +107,12 @@ const headerButtons = computed<HeaderButton[]>(() => [
   },
 ])
 
+const isExportDialogOpen = ref(false)
+
 function runHeaderAction(key: string) {
   if (key === 'share')
     showSuccessToast(dictionary.project.linkCopiedTitle, dictionary.project.linkCopiedText)
+  else if (key === 'export') isExportDialogOpen.value = true
   else showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText)
 }
 

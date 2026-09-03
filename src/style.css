@@ -20,6 +20,20 @@ body {
   margin: 0;
 }
 
+/* The browser's own focus ring stays as it is: it only shows up for
+   :focus-visible, which is the keyboard. This line only spells that out.
+   A menu or dialog moves the focus into its own box with script when it opens,
+   and the browser counts that as keyboard use. Those boxes are no Tab stops,
+   so hiding their ring costs a keyboard user nothing. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+[data-scope='menu'][data-part='content']:focus-visible,
+[data-scope='dialog'][data-part='content']:focus-visible {
+  outline: none;
+}
+
 /* Only the handle is visible, in the colour of the menu panel — no track and
    no arrow buttons at the ends. */
 ::-webkit-scrollbar {
@@ -66,7 +80,11 @@ body {
     @apply pointer-events-none absolute inset-0;
   }
 
-  .cb-hover:hover::after {
+  /* Ark UI keeps the focus on the list itself and marks the entry the arrow
+     keys are standing on with data-highlighted. So the keyboard lights an
+     entry up exactly like the mouse does. */
+  .cb-hover:hover::after,
+  .cb-hover[data-highlighted]::after {
     @apply bg-white/10;
   }
 
@@ -187,6 +205,25 @@ body {
     overflow: hidden;
   }
 
+  /* A dialog and its darkened backdrop come and go together. Like the list
+     above, both directions need their own keyframe name, otherwise Ark UI
+     takes the closed dialog off the page right away. */
+  .cb-fade[data-state='open'] {
+    animation: cb-fade-in 350ms ease-out;
+  }
+
+  .cb-fade[data-state='closed'] {
+    animation: cb-fade-out 350ms ease-in;
+  }
+
+  .cb-dialog[data-state='open'] {
+    animation: cb-dialog-in 350ms ease-out;
+  }
+
+  .cb-dialog[data-state='closed'] {
+    animation: cb-dialog-out 350ms ease-in;
+  }
+
   /* A live cursor arrives about 10 times per second. The short, even
      transition fills the gaps between two messages without lagging behind. */
   .cb-cursor {
@@ -242,6 +279,47 @@ body {
   to {
     grid-template-rows: 0fr;
     opacity: 0;
+  }
+}
+
+@keyframes cb-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cb-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* The dialog grows the last bit into place instead of just appearing. */
+@keyframes cb-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cb-dialog-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
   }
 }
 

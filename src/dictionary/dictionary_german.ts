@@ -10,6 +10,7 @@ export const dictionaryGerman = {
     upgrade: 'Upgrade',
     more: 'Mehr',
     save: 'Speichern',
+    close: 'Schließen',
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
   },
