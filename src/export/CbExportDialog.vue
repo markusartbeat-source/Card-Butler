@@ -74,15 +74,20 @@
          of the taller dialog, so the footer stays at the bottom edge; min-h-0
          lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="flex min-h-0 grow gap-6">
-      <!-- Once a card has been photographed, the finished picture takes the
-           place of the grid. Below it stands the pixel size as a temporary
-           check — it goes away again at the end of the export work. -->
-      <div v-if="previewUrl" class="flex min-w-0 grow flex-col items-center gap-2">
-        <img
-          :src="previewUrl"
-          :alt="dictionary.exportDialog.pngPreviewAlt"
-          class="min-h-0 grow object-contain"
-        />
+      <!-- Once the cards have been photographed, the finished pictures take the
+           place of the grid, laid out like it. Below them stands the pixel size
+           as a temporary check — it goes away again at the end of the export
+           work. -->
+      <div v-if="previewUrls.length" class="flex min-h-0 min-w-0 grow flex-col items-center gap-2">
+        <div class="flex min-h-0 flex-wrap content-start justify-center gap-3 overflow-y-auto">
+          <img
+            v-for="(url, position) in previewUrls"
+            :key="position"
+            :src="url"
+            :alt="dictionary.exportDialog.pngPreviewAlt"
+            :style="previewWidthStyle"
+          />
+        </div>
         <span class="text-2xs text-label">{{ previewPixelSize }}</span>
       </div>
       <CbExportCardGrid
@@ -128,6 +133,7 @@ import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
+import { cardFormat, exportZoom } from '../card/cardFormat'
 import CbExportCardGrid from './CbExportCardGrid.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import CbExportRenderStage from './png/CbExportRenderStage.vue'
@@ -148,9 +154,14 @@ const step = ref<'formats' | 'png'>('formats')
 // as the PNG step is there.
 const exportSize = ref(50)
 
-// The picture of the first card, as long as the export is only a first try.
+// The finished pictures, shown until the export really writes a file.
 const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
-const previewUrl = ref('')
+const previewUrls = ref<string[]>([])
+
+// A picture is shown as wide as a card in the grid next to it.
+const previewWidthStyle = computed(() => ({
+  width: `${cardFormat.value.width * exportZoom}mm`,
+}))
 
 // The resolution the quality slider stands for. The settings panel says its own
 // number as soon as the PNG step is there.
@@ -162,16 +173,19 @@ const previewPixelSize = computed(() => {
   return `${width} × ${height} px`
 })
 
-// Photographs the first card of the hidden stage, never the small one from the
-// visible grid. nextTick waits until the stage is really in the page.
+// Photographs the cards of the hidden stage one after another, never the small
+// ones from the visible grid. nextTick waits until the stage is really in the
+// page.
 async function exportCards() {
-  previewUrl.value = ''
+  previewUrls.value = []
   await nextTick()
 
-  const firstCard = renderStage.value?.stageElement?.firstElementChild
-  if (!firstCard) return
+  const stageElement = renderStage.value?.stageElement
+  if (!stageElement) return
 
-  previewUrl.value = await cardToPngUrl(firstCard, exportDpi.value)
+  for (const stageCard of Array.from(stageElement.children)) {
+    previewUrls.value.push(await cardToPngUrl(stageCard, exportDpi.value))
+  }
 }
 
 // How long the parts of a step wait before they come in. On a step change the
@@ -196,7 +210,7 @@ watch(
     if (!open) return
     step.value = 'formats'
     contentDelay.value = 0
-    previewUrl.value = ''
+    previewUrls.value = []
   },
 )
 
