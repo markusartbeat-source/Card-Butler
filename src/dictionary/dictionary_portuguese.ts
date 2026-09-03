@@ -40,6 +40,15 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     linkCopiedTitle: 'Link copiado',
     linkCopiedText: 'O link está na área de transferência.',
   },
+  exportDialog: {
+    digitalGroup: 'Digital e pré-visualização',
+    png: 'PNG',
+    pngInfo: 'Cada carta como uma imagem separada.',
+    tableTopSimulator: 'Table Top Simulator',
+    tableTopSimulatorInfo: 'Todas as cartas numa folha para o Table Top Simulator.',
+    boardGameArena: 'Board Game Arena',
+    boardGameArenaInfo: 'Cartas no formato do Board Game Arena.',
+  },
   cardEditor: {
     square: 'Quadrado',
     circle: 'Círculo',

@@ -11,6 +11,7 @@ import Colorize from '~icons/material-symbols/colorize-outline-rounded'
 import CropFree from '~icons/material-symbols/crop-free-rounded'
 import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
+import East from '~icons/material-symbols/east-rounded'
 import Download from '~icons/material-symbols/download-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
 // Flags keep their own colours, they are not tinted like the symbols above.
@@ -54,6 +55,7 @@ export const icons = {
   crop_free: CropFree,
   dark_mode: DarkMode,
   door_open: DoorOpen,
+  east: East,
   download: Download,
   filter: Filter,
   flag_br: FlagBr,

@@ -45,6 +45,16 @@ export const dictionaryGerman = {
     linkCopiedTitle: 'Link kopiert',
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',
   },
+  // The dialog for picking an export format.
+  exportDialog: {
+    digitalGroup: 'Digital & Vorschau',
+    png: 'PNG',
+    pngInfo: 'Jede Karte als einzelnes Bild.',
+    tableTopSimulator: 'Table Top Simulator',
+    tableTopSimulatorInfo: 'Alle Karten als Blatt für den Table Top Simulator.',
+    boardGameArena: 'Board Game Arena',
+    boardGameArenaInfo: 'Karten im Format von Board Game Arena.',
+  },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {
     square: 'Viereck',
