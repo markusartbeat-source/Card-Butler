@@ -75,16 +75,18 @@
          lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="flex min-h-0 grow gap-6">
       <!-- Once a card has been photographed, the finished picture takes the
-           place of the grid. -->
-      <img
-        v-if="previewUrl"
-        :src="previewUrl"
-        :alt="dictionary.exportDialog.pngPreviewAlt"
-        class="min-w-0 grow object-contain"
-      />
+           place of the grid. Below it stands the pixel size as a temporary
+           check — it goes away again at the end of the export work. -->
+      <div v-if="previewUrl" class="flex min-w-0 grow flex-col items-center gap-2">
+        <img
+          :src="previewUrl"
+          :alt="dictionary.exportDialog.pngPreviewAlt"
+          class="min-h-0 grow object-contain"
+        />
+        <span class="text-2xs text-label">{{ previewPixelSize }}</span>
+      </div>
       <CbExportCardGrid
         v-else
-        ref="cardGrid"
         class="animate-cb-rise"
         :style="riseDelay(0)"
         :cards="cards"
@@ -94,6 +96,9 @@
         :style="riseDelay(1)"
         @update:export-size="exportSize = $event"
       />
+
+      <!-- Out of sight, in real size: this is what gets photographed. -->
+      <CbExportRenderStage ref="renderStage" :cards="cards" />
     </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
@@ -116,7 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
@@ -124,7 +129,8 @@ import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
 import CbExportCardGrid from './CbExportCardGrid.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
-import { cardToPngUrl } from './png/exportPng'
+import CbExportRenderStage from './png/CbExportRenderStage.vue'
+import { cardPixelSize, cardToPngUrl, defaultExportDpi } from './png/exportPng'
 import type { ExportCard } from './exportCard'
 
 const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
@@ -137,19 +143,25 @@ const step = ref<'formats' | 'png'>('formats')
 const exportSize = ref(50)
 
 // The picture of the first card, as long as the export is only a first try.
-const cardGrid = ref<InstanceType<typeof CbExportCardGrid>>()
+const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
 const previewUrl = ref('')
 
-// Photographs the first card of the grid. Clearing the old picture first brings
-// the grid back into the page, and nextTick waits until it is really there.
+// The size of the finished picture, e.g. "744 × 1039 px".
+const previewPixelSize = computed(() => {
+  const { width, height } = cardPixelSize(defaultExportDpi)
+  return `${width} × ${height} px`
+})
+
+// Photographs the first card of the hidden stage, never the small one from the
+// visible grid. nextTick waits until the stage is really in the page.
 async function exportCards() {
   previewUrl.value = ''
   await nextTick()
 
-  const firstCard = cardGrid.value?.gridElement?.firstElementChild
+  const firstCard = renderStage.value?.stageElement?.firstElementChild
   if (!firstCard) return
 
-  previewUrl.value = await cardToPngUrl(firstCard)
+  previewUrl.value = await cardToPngUrl(firstCard, defaultExportDpi)
 }
 
 // How long the parts of a step wait before they come in. On a step change the
