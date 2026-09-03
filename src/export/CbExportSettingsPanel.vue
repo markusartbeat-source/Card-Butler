@@ -44,12 +44,7 @@
     <div class="flex flex-col gap-3">
       <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.imageQualityGroup }}</h3>
       <p class="text-2xs text-label">{{ dictionary.exportDialog.imageQualityInfo(exportSize) }}</p>
-      <CbSlider
-        v-model="imageQuality"
-        :label="dictionary.exportDialog.imageQualityGroup"
-        :low-label="dictionary.exportDialog.imageQualityLow"
-        :high-label="dictionary.exportDialog.imageQualityHigh"
-      />
+      <CbSelect v-model="chosenResolution" variant="field" :items="resolutionOptions" />
     </div>
   </div>
 </template>
@@ -58,8 +53,8 @@
 import { computed, ref, watchEffect } from 'vue'
 import CbCheckbox from '../components/atoms/CbCheckbox.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
-import CbSlider from '../components/atoms/CbSlider.vue'
-import { defaultImageQuality, dpiForImageQuality } from './png/exportPng'
+import CbSelect from '../components/atoms/CbSelect.vue'
+import { defaultExportDpi } from './png/exportPng'
 
 const emit = defineEmits<{
   'update:exportSize': [megabytes: number]
@@ -83,14 +78,33 @@ const cardSides = computed(() => [
 
 const chosenCardSides = ref({ fronts: true, backs: true })
 
-// Invented sizes: the middle of the slider is the 50MB the export button also
-// names, the ends are 10MB and 90MB.
-const imageQuality = ref(defaultImageQuality)
-const exportSize = computed(() => Math.round(10 + imageQuality.value * 0.8))
+// What each resolution is for, in the words of the person exporting. The number
+// decides how many pixels a card becomes, so it stands in the entry as well.
+const resolutions = computed(() => [
+  { dpi: 96, purpose: dictionary.exportDialog.imageQualityScreen },
+  { dpi: 150, purpose: dictionary.exportDialog.imageQualityTabletop },
+  { dpi: defaultExportDpi, purpose: dictionary.exportDialog.imageQualityPrint },
+  { dpi: 600, purpose: dictionary.exportDialog.imageQualityFinePrint },
+])
+
+const resolutionOptions = computed(() =>
+  resolutions.value.map(({ dpi, purpose }) => ({
+    value: String(dpi),
+    label: dictionary.exportDialog.imageQualityOption(purpose, dpi),
+  })),
+)
+
+// The select works with text, the export with a number.
+const chosenResolution = ref(String(defaultExportDpi))
+const chosenDpi = computed(() => Number(chosenResolution.value))
+
+// Still an invented size: 50MB at the resolution the dialog starts with, and it
+// grows and shrinks with the choice.
+const exportSize = computed(() => Math.round(10 + (chosenDpi.value / defaultExportDpi) * 40))
 
 // The button in the footer names the same size, so it hears about every change.
 watchEffect(() => emit('update:exportSize', exportSize.value))
 
-// The same slider decides how fine the exported pictures become.
-watchEffect(() => emit('update:dpi', dpiForImageQuality(imageQuality.value)))
+// The chosen resolution decides how fine the exported pictures become.
+watchEffect(() => emit('update:dpi', chosenDpi.value))
 </script>

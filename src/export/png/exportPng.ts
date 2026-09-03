@@ -1,19 +1,11 @@
 import { snapdom } from '@zumer/snapdom'
 import { cardFormat } from '../../card/cardFormat'
+import { withPngResolution } from './pngResolution'
 
 const millimetresPerInch = 25.4
 
-// What the quality slider means behind the scenes: its 0 to 100 stand for a
-// resolution between these two. Nothing of this is written on screen.
-const minExportDpi = 20
-const maxExportDpi = 600
-
-// Where the quality slider starts.
-export const defaultImageQuality = 50
-
-export function dpiForImageQuality(quality: number) {
-  return Math.round(minExportDpi + (quality / 100) * (maxExportDpi - minExportDpi))
-}
+// The resolution the export starts with: what a print shop asks for.
+export const defaultExportDpi = 300
 
 // How many pixels a card becomes at the given resolution. Both sides come from
 // the same dpi number, otherwise the picture ends up stretched.
@@ -25,19 +17,22 @@ export function cardPixelSize(dpi: number) {
   }
 }
 
-// Turns one card in the page into a PNG and gives back its data URL. width and
-// height are the target pixels, so the picture is always the same size no matter
-// how the card is drawn on screen; dpr: 1 keeps a retina display from silently
-// doubling them. embedFonts puts the used fonts into the picture, so the text
-// looks the same as on screen.
-export async function cardToPngUrl(cardElement: Element, dpi: number) {
+// Turns one card in the page into a PNG file. width and height are the target
+// pixels, so the picture is always the same size no matter how the card is drawn
+// on screen; dpr: 1 keeps a retina display from silently doubling them.
+// embedFonts puts the used fonts into the picture, so the text looks the same as
+// on screen.
+export async function cardToPngBlob(cardElement: Element, dpi: number) {
   const { width, height } = cardPixelSize(dpi)
-  const image = await snapdom.toPng(cardElement, {
+  const pngFile = await snapdom.toBlob(cardElement, {
+    type: 'png',
     width,
     height,
     dpr: 1,
     embedFonts: true,
     cache: 'full',
   })
-  return image.src
+
+  // snapdom writes pixels only, so the millimetres are added afterwards.
+  return await withPngResolution(pngFile, dpi)
 }

@@ -74,42 +74,22 @@
          of the taller dialog, so the footer stays at the bottom edge; min-h-0
          lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="flex min-h-0 grow gap-6">
-      <!-- Once the cards have been photographed, the finished pictures take the
-           place of the grid, laid out like it. Below them stands the pixel size
-           as a temporary check — it goes away again at the end of the export
-           work. -->
-      <div
-        v-if="exportingCardNumber || previewUrls.length"
-        class="flex min-h-0 min-w-0 grow flex-col items-center gap-2"
-      >
-        <!-- grow holds the pictures in the whole free space, so the bar below
-             stays put while more and more of them come in. -->
-        <div class="flex min-h-0 grow flex-wrap content-start justify-center gap-3 overflow-y-auto">
-          <img
-            v-for="(url, position) in previewUrls"
-            :key="position"
-            :src="url"
-            :alt="dictionary.exportDialog.pngPreviewAlt"
-            :style="previewWidthStyle"
-          />
-        </div>
+      <!-- The cards stay in view the whole time; while the export runs, the bar
+           and its count come up underneath them. -->
+      <div class="flex min-h-0 min-w-0 grow flex-col items-center gap-2">
+        <CbExportCardGrid
+          class="animate-cb-rise min-h-0"
+          :style="riseDelay(0)"
+          :cards="cards"
+        />
 
-        <!-- While the export runs, the bar and its count take the place of the
-             pixel size. -->
         <template v-if="exportingCardNumber">
-          <CbProgress :value="previewUrls.length" :max="cards.length" />
+          <CbProgress :value="finishedCardCount" :max="cards.length" />
           <span class="text-2xs text-label">
             {{ dictionary.exportDialog.pngExportProgress(exportingCardNumber, cards.length) }}
           </span>
         </template>
-        <span v-else class="text-2xs text-label">{{ previewPixelSize }}</span>
       </div>
-      <CbExportCardGrid
-        v-else
-        class="animate-cb-rise"
-        :style="riseDelay(0)"
-        :cards="cards"
-      />
       <CbExportSettingsPanel
         class="animate-cb-rise"
         :style="riseDelay(1)"
@@ -129,7 +109,10 @@
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
       </CbButton>
 
-      <CbButton :disabled="step === 'formats'" @click="exportCards">
+      <CbButton
+        :disabled="step === 'formats' || exportingCardNumber > 0"
+        @click="exportCards"
+      >
         {{
           step === 'formats'
             ? dictionary.project.export
@@ -141,23 +124,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbProgress from '../components/atoms/CbProgress.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
-import { cardFormat, exportZoom } from '../card/cardFormat'
 import CbExportCardGrid from './CbExportCardGrid.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import CbExportRenderStage from './png/CbExportRenderStage.vue'
-import {
-  cardPixelSize,
-  cardToPngUrl,
-  defaultImageQuality,
-  dpiForImageQuality,
-} from './png/exportPng'
+import { cardToPngBlob, defaultExportDpi } from './png/exportPng'
+import { downloadCardsZip } from './png/exportZip'
 import type { ExportCard } from './exportCard'
 
 const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
@@ -169,51 +147,58 @@ const step = ref<'formats' | 'png'>('formats')
 // as the PNG step is there.
 const exportSize = ref(50)
 
-// The finished pictures, shown until the export really writes a file.
+// The hidden cards in real size, the ones that get photographed.
 const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
-const previewUrls = ref<string[]>([])
 
 // Which card is being photographed right now, counted from 1. 0 means the
-// export is not running.
+// export is not running. The finished ones fill the progress bar.
 const exportingCardNumber = ref(0)
+const finishedCardCount = ref(0)
 
-// A picture is shown as wide as a card in the grid next to it.
-const previewWidthStyle = computed(() => ({
-  width: `${cardFormat.value.width * exportZoom}mm`,
-}))
+// The chosen resolution. The settings panel says its own number as soon as the
+// PNG step is there.
+const exportDpi = ref(defaultExportDpi)
 
-// The resolution the quality slider stands for. The settings panel says its own
-// number as soon as the PNG step is there.
-const exportDpi = ref(dpiForImageQuality(defaultImageQuality))
-
-// The size of the finished picture, e.g. "744 × 1039 px".
-const previewPixelSize = computed(() => {
-  const { width, height } = cardPixelSize(exportDpi.value)
-  return `${width} × ${height} px`
-})
-
-// Photographs the cards of the hidden stage one after another, never the small
-// ones from the visible grid. nextTick waits until the stage is really in the
-// page.
+// Packs every card into a zip and lets the browser download it. nextTick waits
+// until the hidden stage is really in the page. Once the file is on its way,
+// the dialog has nothing left to show and closes.
 async function exportCards() {
-  previewUrls.value = []
+  finishedCardCount.value = 0
   exportingCardNumber.value = 0
   await nextTick()
 
   const stageElement = renderStage.value?.stageElement
   if (!stageElement) return
 
-  const stageCards = Array.from(stageElement.children)
+  await downloadCardsZip(
+    cardZipEntries(Array.from(stageElement.children)),
+    dictionary.exportDialog.pngZipFileName,
+  )
+
+  exportingCardNumber.value = 0
+  emit('update:open', false)
+}
+
+// Photographs the cards of the hidden stage one after another, never the small
+// ones from the visible grid, and hands each finished picture straight to the
+// zip. Inside the zip they lie in a folder named after the card set.
+async function* cardZipEntries(stageCards: Element[]) {
   for (const [position, stageCard] of stageCards.entries()) {
     exportingCardNumber.value = position + 1
-    previewUrls.value.push(await cardToPngUrl(stageCard, exportDpi.value))
+
+    const cardImage = await cardToPngBlob(stageCard, exportDpi.value)
+    finishedCardCount.value = position + 1
 
     // Hand the screen over to drawing once, otherwise the bar would only jump
     // from empty to full at the very end.
     await new Promise((paint) => requestAnimationFrame(paint))
-  }
 
-  exportingCardNumber.value = 0
+    const cardNumber = String(position + 1).padStart(2, '0')
+    yield {
+      name: `${dictionary.exportDialog.cardSetOne}/${dictionary.exportDialog.pngCardFileName(cardNumber)}`,
+      input: cardImage,
+    }
+  }
 }
 
 // How long the parts of a step wait before they come in. On a step change the
@@ -238,7 +223,7 @@ watch(
     if (!open) return
     step.value = 'formats'
     contentDelay.value = 0
-    previewUrls.value = []
+    finishedCardCount.value = 0
     exportingCardNumber.value = 0
   },
 )

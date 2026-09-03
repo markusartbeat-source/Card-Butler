@@ -60,8 +60,11 @@ export const dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
     pngTitle: 'Exportieren als PNG',
-    pngPreviewAlt: 'Vorschau der exportierten Karte',
     pngExportProgress: (current: number, total: number) => `Karte ${current} von ${total}`,
+    // The names the downloaded files carry. The number already has its leading
+    // zero, so the cards stay in order in every folder window.
+    pngZipFileName: 'karten.zip',
+    pngCardFileName: (number: string) => `karte-${number}.png`,
     // The number of cards is invented until the export really counts them, the
     // size comes from the quality slider.
     pngExportButton: (megabytes: number) => `48 PNGs · ${megabytes}MB · exportieren`,
@@ -78,8 +81,14 @@ export const dictionaryGerman = {
     // The size is invented until the export really renders the cards.
     imageQualityInfo: (megabytes: number) =>
       `Die Bildqualität beeinflusst, wie groß der Export wird. Aktuell ist der Export ${megabytes}MB groß.`,
-    imageQualityLow: 'Niedrig',
-    imageQualityHigh: 'Hoch',
+    // What each resolution is good for. The dpi number stands in the entry
+    // itself, so a print shop's "300 dpi please" can be picked without knowing
+    // what the words mean.
+    imageQualityOption: (purpose: string, dpi: number) => `${purpose} · ${dpi} dpi`,
+    imageQualityScreen: 'Bildschirm',
+    imageQualityTabletop: 'Tabletop',
+    imageQualityPrint: 'Druckoptimiert',
+    imageQualityFinePrint: 'Feiner Druck',
   },
   // The overlay for editing a single card, including its tool bar.
   cardEditor: {
