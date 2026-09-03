@@ -60,7 +60,6 @@ export const dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
     pngTitle: 'Exportieren als PNG',
-    pngExportProgress: (current: number, total: number) => `Karte ${current} von ${total}`,
     pngExportToastTitle: 'Dein PNG Export wird vorbereitet',
     pngExportDoneTitle: 'Fertig!',
     pngExportDoneInfo: 'Dein Export wird heruntergeladen 😊',

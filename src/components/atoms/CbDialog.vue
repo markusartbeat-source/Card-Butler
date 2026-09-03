@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import { Dialog } from '@ark-ui/vue'
 import CbButton from './CbButton.vue'
 import CbIcon from './CbIcon.vue'
@@ -79,6 +79,11 @@ const props = defineProps<{
   panelClass?: string
 }>()
 defineEmits<{ 'update:open': [open: boolean] }>()
+
+// The box around the panel is the one that carries the size and the corners.
+// Whoever opens the dialog can measure it, for example to fly it somewhere.
+const boxElement = computed(() => panel.value?.closest<HTMLElement>('.cb-dialog') ?? null)
+defineExpose({ boxElement })
 
 // A dialog without a height of its own is exactly as tall as its content, and
 // that content is swapped in the very same moment the size changes. The

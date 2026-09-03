@@ -5,6 +5,8 @@
        PNG step is 1320 × 784 px, the 1318 × 785 px of the Figma design on the
        nearest Tailwind step, and holds its parts 24 px apart instead of 48. -->
   <CbDialog
+    v-if="!isExporting"
+    ref="dialog"
     :open="open"
     :title="step === 'formats' ? dictionary.project.export : dictionary.exportDialog.pngTitle"
     :size-class="step === 'formats' ? 'w-172' : 'h-196 w-330'"
@@ -74,30 +76,17 @@
          of the taller dialog, so the footer stays at the bottom edge; min-h-0
          lets both sides scroll inside it instead of pushing the dialog open. -->
     <div v-else class="flex min-h-0 grow gap-6">
-      <!-- The cards stay in view the whole time; while the export runs, the bar
-           and its count come up underneath them. -->
-      <div class="flex min-h-0 min-w-0 grow flex-col items-center gap-2">
-        <CbExportCardGrid
-          class="animate-cb-rise min-h-0"
-          :style="riseDelay(0)"
-          :cards="cards"
-        />
+      <CbExportCardGrid
+        class="animate-cb-rise min-h-0"
+        :style="riseDelay(0)"
+        :cards="cards"
+      />
 
-        <template v-if="exportingCardNumber">
-          <CbProgress class="w-52" :value="finishedCardCount" :max="cards.length" />
-          <span class="text-2xs text-label">
-            {{ dictionary.exportDialog.pngExportProgress(exportingCardNumber, cards.length) }}
-          </span>
-        </template>
-      </div>
       <CbExportSettingsPanel
         class="animate-cb-rise"
         :style="riseDelay(1)"
         @update:dpi="exportDpi = $event"
       />
-
-      <!-- Out of sight, in real size: this is what gets photographed. -->
-      <CbExportRenderStage ref="renderStage" :cards="cards" />
     </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
@@ -108,10 +97,7 @@
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
       </CbButton>
 
-      <CbButton
-        :disabled="step === 'formats' || exportingCardNumber > 0"
-        @click="exportCards"
-      >
+      <CbButton :disabled="step === 'formats'" @click="exportCards">
         {{
           step === 'formats'
             ? dictionary.project.export
@@ -120,6 +106,18 @@
       </CbButton>
     </template>
   </CbDialog>
+
+  <!-- Out of sight, in real size: this is what gets photographed. It has to
+       stay in the page until the last card is done, long after the dialog
+       itself has flown away. -->
+  <CbExportRenderStage v-if="open || isExporting" ref="renderStage" :cards="cards" />
+
+  <!-- The empty dialog box on its way into the toast corner. -->
+  <CbExportDialogFlight
+    v-if="flightStartRect"
+    :start-rect="flightStartRect"
+    @arrived="finishFlight"
+  />
 </template>
 
 <script setup lang="ts">
@@ -127,10 +125,10 @@ import { nextTick, ref, watch } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbDialog from '../components/atoms/CbDialog.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
-import CbProgress from '../components/atoms/CbProgress.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbSettingsRow from '../components/atoms/CbSettingsRow.vue'
 import CbExportCardGrid from './CbExportCardGrid.vue'
+import CbExportDialogFlight from './CbExportDialogFlight.vue'
 import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import CbExportRenderStage from './png/CbExportRenderStage.vue'
 import { cardToPngBlob, defaultExportDpi } from './png/exportPng'
@@ -154,12 +152,18 @@ const exportSize = ref(0)
 // The hidden cards in real size, the ones that get photographed.
 const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
 
-// Which card is being photographed right now, counted from 1. 0 means the
-// export is not running. The finished ones fill the progress bar.
-const exportingCardNumber = ref(0)
-const finishedCardCount = ref(0)
+// The dialog itself, so its box can be measured for the flight.
+const dialog = ref<InstanceType<typeof CbDialog>>()
 
-// The toast in the corner that shows the same progress.
+// True from the click on the export button until the file is saved. The dialog
+// is off the page for that whole time, the toast in the corner tells the story.
+const isExporting = ref(false)
+
+// Where the flying box starts. Only set while it is on its way.
+const flightStartRect = ref<DOMRect | null>(null)
+let reportFlightArrived: (() => void) | undefined
+
+// The toast in the corner that shows the progress.
 const progressToastId = ref('')
 
 // The chosen resolution. The settings panel says its own number as soon as the
@@ -204,17 +208,37 @@ watch([step, exportDpi], ([currentStep, dpi]) => {
   if (currentStep === 'png') measureExportSize(dpi)
 })
 
+// Sends the empty dialog box into the toast corner and tells the dialog it is
+// closed while it is on its way. Answers as soon as the box has arrived.
+function flyIntoToastCorner() {
+  const box = dialog.value?.boxElement
+  isExporting.value = true
+  emit('update:open', false)
+
+  if (!box) return Promise.resolve()
+
+  flightStartRect.value = box.getBoundingClientRect()
+  return new Promise<void>((arrived) => {
+    reportFlightArrived = arrived
+  })
+}
+
+function finishFlight() {
+  flightStartRect.value = null
+  reportFlightArrived?.()
+}
+
 // Packs every card into a zip and lets the browser download it. nextTick waits
-// until the hidden stage is really in the page. Once the file is on its way,
-// the dialog has nothing left to show and closes.
+// until the hidden stage is really in the page. The dialog leaves first: it
+// flies into the corner, and the toast that takes its place there tells how far
+// the export has come.
 async function exportCards() {
-  finishedCardCount.value = 0
-  exportingCardNumber.value = 0
   await nextTick()
 
   const stageElement = renderStage.value?.stageElement
   if (!stageElement) return
 
+  await flyIntoToastCorner()
   progressToastId.value = startExportProgressToast(props.cards.length)
 
   const zipFile = await packCardsIntoZip(cardZipEntries(Array.from(stageElement.children)))
@@ -225,8 +249,7 @@ async function exportCards() {
   saveZipFile(zipFile, dictionary.exportDialog.pngZipFileName)
 
   showExportDoneToast(progressToastId.value)
-  exportingCardNumber.value = 0
-  emit('update:open', false)
+  isExporting.value = false
 }
 
 // Photographs the cards of the hidden stage one after another, never the small
@@ -234,10 +257,7 @@ async function exportCards() {
 // zip. Inside the zip they lie in a folder named after the card set.
 async function* cardZipEntries(stageCards: Element[]) {
   for (const [position, stageCard] of stageCards.entries()) {
-    exportingCardNumber.value = position + 1
-
     const cardImage = await cardToPngBlob(stageCard, exportDpi.value)
-    finishedCardCount.value = position + 1
     reportExportedCard(position + 1)
 
     // Hand the screen over to drawing once, otherwise the bar would only jump
@@ -274,8 +294,6 @@ watch(
     if (!open) return
     step.value = 'formats'
     contentDelay.value = 0
-    finishedCardCount.value = 0
-    exportingCardNumber.value = 0
 
     // The cards may have been edited since the last time, so the remembered
     // sizes are worth nothing.

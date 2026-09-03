@@ -54,7 +54,6 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'All cards as a print template with cut marks.',
     pngTitle: 'Export as PNG',
-    pngExportProgress: (current: number, total: number) => `Card ${current} of ${total}`,
     pngExportToastTitle: 'Your PNG export is being prepared',
     pngExportDoneTitle: 'Done!',
     pngExportDoneInfo: 'Your export is downloading 😊',

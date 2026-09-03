@@ -54,7 +54,6 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     pdf: 'PDF',
     pdfInfo: 'Todas las cartas como plantilla de impresión con marcas de corte.',
     pngTitle: 'Exportar como PNG',
-    pngExportProgress: (current: number, total: number) => `Carta ${current} de ${total}`,
     pngExportToastTitle: 'Tu exportación PNG se está preparando',
     pngExportDoneTitle: '¡Listo!',
     pngExportDoneInfo: 'Tu exportación se está descargando 😊',
