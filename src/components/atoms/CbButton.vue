@@ -3,10 +3,12 @@
   <div
     v-if="variant === 'primary'"
     class="bg-gradient-to-br from-gold-dark to-gold-light rounded-lg p-0.5 shadow-lg"
+    :class="{ 'opacity-40': disabled }"
   >
     <CbInteractive
       class="bg-radial from-gold-light to-gold text-surface flex w-full items-center justify-center rounded-md text-sm"
       :class="framedSizeClasses[size]"
+      :disabled="disabled"
       @click="$emit('click', $event)"
     >
       <slot />
@@ -21,7 +23,12 @@
   <CbInteractive
     v-else
     class="flex items-center text-sm text-white"
-    :class="[variantClasses[variant], variant === 'ghost' ? ghostSizeClasses[size] : sizeClasses[size]]"
+    :class="[
+      variantClasses[variant],
+      variant === 'ghost' ? ghostSizeClasses[size] : sizeClasses[size],
+      { 'opacity-40': disabled },
+    ]"
+    :disabled="disabled"
     @click="$emit('click', $event)"
   >
     <slot />
@@ -64,6 +71,7 @@ withDefaults(
   defineProps<{
     variant?: 'primary' | 'secondary' | 'light' | 'ghost'
     size?: 'default' | 'small'
+    disabled?: boolean
   }>(),
   { variant: 'primary', size: 'default' },
 )

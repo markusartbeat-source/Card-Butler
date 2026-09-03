@@ -45,14 +45,13 @@
       </CbSettingsGroup>
     </div>
 
-    <!-- The export button does nothing yet, it gets its disabled look in the
-         next step. -->
+    <!-- The export button stays disabled until picking a format is built. -->
     <template #footer>
       <CbButton variant="secondary" @click="$emit('update:open', false)">
         {{ dictionary.general.cancel }}
       </CbButton>
 
-      <CbButton>{{ dictionary.project.export }}</CbButton>
+      <CbButton disabled>{{ dictionary.project.export }}</CbButton>
     </template>
   </CbDialog>
 </template>
