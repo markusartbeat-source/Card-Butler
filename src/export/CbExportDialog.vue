@@ -93,7 +93,6 @@
       <CbExportSettingsPanel
         class="animate-cb-rise"
         :style="riseDelay(1)"
-        @update:export-size="exportSize = $event"
         @update:dpi="exportDpi = $event"
       />
 
@@ -102,8 +101,8 @@
     </div>
 
     <!-- In the format list the export button has nothing to export yet, so it
-         stays disabled. In the PNG step it shows the size the settings panel
-         reports and starts the export. -->
+         stays disabled. In the PNG step it names how many cards go into the
+         export and how large they become, and starts it. -->
     <template #footer>
       <CbButton variant="secondary" @click="leaveDialogOrStep">
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
@@ -116,7 +115,7 @@
         {{
           step === 'formats'
             ? dictionary.project.export
-            : dictionary.exportDialog.pngExportButton(exportSize)
+            : dictionary.exportDialog.pngExportButton(cards.length, exportSize)
         }}
       </CbButton>
     </template>
@@ -143,9 +142,8 @@ const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 
 const step = ref<'formats' | 'png'>('formats')
 
-// The size of the export in MB. The settings panel says the real number as soon
-// as the PNG step is there.
-const exportSize = ref(50)
+// The size of the export in MB. Measured on real cards, see measureExportSize.
+const exportSize = ref(0)
 
 // The hidden cards in real size, the ones that get photographed.
 const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
@@ -158,6 +156,44 @@ const finishedCardCount = ref(0)
 // The chosen resolution. The settings panel says its own number as soon as the
 // PNG step is there.
 const exportDpi = ref(defaultExportDpi)
+
+const bytesPerMegabyte = 1024 * 1024
+
+// What a resolution turned out to weigh, so picking it again answers at once.
+const measuredSizes = new Map<number, number>()
+
+// How large the export becomes. Nobody can know that beforehand: PNG squeezes
+// the picture, and how well depends on what is on the card. So one card is
+// really exported and counts for all of them. Later, with several card sets,
+// it will be one card per set.
+async function measureExportSize(dpi: number) {
+  const remembered = measuredSizes.get(dpi)
+  if (remembered !== undefined) {
+    exportSize.value = remembered
+    return
+  }
+
+  await nextTick()
+  const stageCards = Array.from(renderStage.value?.stageElement?.children ?? [])
+  if (!stageCards.length) return
+
+  const sampleImage = await cardToPngBlob(stageCards[0], dpi)
+
+  // Clicking through the resolutions starts a measurement each time; only the
+  // one that is still chosen may write its number.
+  if (dpi !== exportDpi.value) return
+
+  const megabytes = (sampleImage.size / bytesPerMegabyte) * stageCards.length
+  const rounded = Math.round(megabytes * 10) / 10
+  measuredSizes.set(dpi, rounded)
+  exportSize.value = rounded
+}
+
+// The size is measured on the hidden stage, which stands in the page only in
+// the PNG step, and again for every resolution that is picked there.
+watch([step, exportDpi], ([currentStep, dpi]) => {
+  if (currentStep === 'png') measureExportSize(dpi)
+})
 
 // Packs every card into a zip and lets the browser download it. nextTick waits
 // until the hidden stage is really in the page. Once the file is on its way,
@@ -225,6 +261,11 @@ watch(
     contentDelay.value = 0
     finishedCardCount.value = 0
     exportingCardNumber.value = 0
+
+    // The cards may have been edited since the last time, so the remembered
+    // sizes are worth nothing.
+    measuredSizes.clear()
+    exportSize.value = 0
   },
 )
 

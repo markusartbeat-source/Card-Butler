@@ -65,9 +65,9 @@ export const dictionaryGerman = {
     // zero, so the cards stay in order in every folder window.
     pngZipFileName: 'karten.zip',
     pngCardFileName: (number: string) => `karte-${number}.png`,
-    // The number of cards is invented until the export really counts them, the
-    // size comes from the quality slider.
-    pngExportButton: (megabytes: number) => `48 PNGs · ${megabytes}MB · exportieren`,
+    // One PNG per card, so the number of cards is the number of files.
+    pngExportButton: (cardCount: number, megabytes: number) =>
+      `${cardCount} PNGs · ${megabytes}MB · exportieren`,
     settingsTitle: 'Exporteinstellungen',
     whichCardsGroup: 'Welche Karten möchtest du exportieren?',
     // Invented card sets until the project really has some.
@@ -78,9 +78,6 @@ export const dictionaryGerman = {
     cardFronts: 'Vorderseiten',
     cardBacks: 'Rückseiten',
     imageQualityGroup: 'Bildqualität:',
-    // The size is invented until the export really renders the cards.
-    imageQualityInfo: (megabytes: number) =>
-      `Die Bildqualität beeinflusst, wie groß der Export wird. Aktuell ist der Export ${megabytes}MB groß.`,
     // What each resolution is good for. The dpi number stands in the entry
     // itself, so a print shop's "300 dpi please" can be picked without knowing
     // what the words mean.

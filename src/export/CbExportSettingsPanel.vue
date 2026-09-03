@@ -43,7 +43,6 @@
 
     <div class="flex flex-col gap-3">
       <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.imageQualityGroup }}</h3>
-      <p class="text-2xs text-label">{{ dictionary.exportDialog.imageQualityInfo(exportSize) }}</p>
       <CbSelect v-model="chosenResolution" variant="field" :items="resolutionOptions" />
     </div>
   </div>
@@ -56,10 +55,7 @@ import CbDivider from '../components/atoms/CbDivider.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import { defaultExportDpi } from './png/exportPng'
 
-const emit = defineEmits<{
-  'update:exportSize': [megabytes: number]
-  'update:dpi': [dpi: number]
-}>()
+const emit = defineEmits<{ 'update:dpi': [dpi: number] }>()
 
 // Invented card sets — the export does not look at the real project yet, and
 // ticking a box changes nothing.
@@ -97,13 +93,6 @@ const resolutionOptions = computed(() =>
 // The select works with text, the export with a number.
 const chosenResolution = ref(String(defaultExportDpi))
 const chosenDpi = computed(() => Number(chosenResolution.value))
-
-// Still an invented size: 50MB at the resolution the dialog starts with, and it
-// grows and shrinks with the choice.
-const exportSize = computed(() => Math.round(10 + (chosenDpi.value / defaultExportDpi) * 40))
-
-// The button in the footer names the same size, so it hears about every change.
-watchEffect(() => emit('update:exportSize', exportSize.value))
 
 // The chosen resolution decides how fine the exported pictures become.
 watchEffect(() => emit('update:dpi', chosenDpi.value))

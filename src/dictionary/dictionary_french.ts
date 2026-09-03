@@ -57,7 +57,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     pngExportProgress: (current: number, total: number) => `Carte ${current} sur ${total}`,
     pngZipFileName: 'cartes.zip',
     pngCardFileName: (number: string) => `carte-${number}.png`,
-    pngExportButton: (megabytes: number) => `48 PNG · ${megabytes} Mo · exporter`,
+    pngExportButton: (cardCount: number, megabytes: number) =>
+      `${cardCount} PNG · ${megabytes} Mo · exporter`,
     settingsTitle: 'Paramètres d’export',
     whichCardsGroup: 'Quelles cartes veux-tu exporter ?',
     cardSetOne: 'Jeu de cartes 1',
@@ -67,8 +68,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     cardFronts: 'Rectos',
     cardBacks: 'Versos',
     imageQualityGroup: 'Qualité d’image :',
-    imageQualityInfo: (megabytes: number) =>
-      `La qualité d’image influence la taille de l’export. Actuellement l’export fait ${megabytes} Mo.`,
     imageQualityOption: (purpose: string, dpi: number) => `${purpose} · ${dpi} dpi`,
     imageQualityScreen: 'Écran',
     imageQualityTabletop: 'Jeu sur table',
