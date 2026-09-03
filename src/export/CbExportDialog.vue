@@ -84,7 +84,7 @@
         />
 
         <template v-if="exportingCardNumber">
-          <CbProgress :value="finishedCardCount" :max="cards.length" />
+          <CbProgress class="w-52" :value="finishedCardCount" :max="cards.length" />
           <span class="text-2xs text-label">
             {{ dictionary.exportDialog.pngExportProgress(exportingCardNumber, cards.length) }}
           </span>
@@ -135,6 +135,12 @@ import CbExportSettingsPanel from './CbExportSettingsPanel.vue'
 import CbExportRenderStage from './png/CbExportRenderStage.vue'
 import { cardToPngBlob, defaultExportDpi } from './png/exportPng'
 import { downloadCardsZip } from './png/exportZip'
+import {
+  closeExportProgressToast,
+  reportExportedCard,
+  startExportProgressToast,
+  waitForFullBar,
+} from './exportToast'
 import type { ExportCard } from './exportCard'
 
 const props = defineProps<{ open: boolean; cards: ExportCard[] }>()
@@ -152,6 +158,9 @@ const renderStage = ref<InstanceType<typeof CbExportRenderStage>>()
 // export is not running. The finished ones fill the progress bar.
 const exportingCardNumber = ref(0)
 const finishedCardCount = ref(0)
+
+// The toast in the corner that shows the same progress.
+const progressToastId = ref('')
 
 // The chosen resolution. The settings panel says its own number as soon as the
 // PNG step is there.
@@ -206,11 +215,15 @@ async function exportCards() {
   const stageElement = renderStage.value?.stageElement
   if (!stageElement) return
 
+  progressToastId.value = startExportProgressToast(props.cards.length)
+
   await downloadCardsZip(
     cardZipEntries(Array.from(stageElement.children)),
     dictionary.exportDialog.pngZipFileName,
   )
 
+  await waitForFullBar()
+  closeExportProgressToast(progressToastId.value)
   exportingCardNumber.value = 0
   emit('update:open', false)
 }
@@ -224,6 +237,7 @@ async function* cardZipEntries(stageCards: Element[]) {
 
     const cardImage = await cardToPngBlob(stageCard, exportDpi.value)
     finishedCardCount.value = position + 1
+    reportExportedCard(position + 1)
 
     // Hand the screen over to drawing once, otherwise the bar would only jump
     // from empty to full at the very end.

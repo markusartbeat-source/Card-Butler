@@ -55,6 +55,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     pdfInfo: 'Toutes les cartes comme modèle d’impression avec traits de coupe.',
     pngTitle: 'Exporter en PNG',
     pngExportProgress: (current: number, total: number) => `Carte ${current} sur ${total}`,
+    pngExportToastTitle: 'Ton export PNG est en préparation',
     pngZipFileName: 'cartes.zip',
     pngCardFileName: (number: string) => `carte-${number}.png`,
     pngExportButton: (cardCount: number, megabytes: number) =>

@@ -61,6 +61,7 @@ export const dictionaryGerman = {
     pdfInfo: 'Alle Karten als Druckvorlage mit Schnittmarken.',
     pngTitle: 'Exportieren als PNG',
     pngExportProgress: (current: number, total: number) => `Karte ${current} von ${total}`,
+    pngExportToastTitle: 'Dein PNG Export wird vorbereitet',
     // The names the downloaded files carry. The number already has its leading
     // zero, so the cards stay in order in every folder window.
     pngZipFileName: 'karten.zip',
