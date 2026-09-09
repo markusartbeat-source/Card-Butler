@@ -10,6 +10,9 @@
   --color-gold: #cfa23f;
   --color-gold-light: #e0c151;
   --color-gold-lighter: #f3f18f;
+  /* The thin decorative strokes around the print button use their own gold —
+     read out of the design file, where it is a raw colour, not a variable. */
+  --color-gold-line: #e6cd68;
   --color-success: #16a34a;
   --color-danger: #dc2626;
 

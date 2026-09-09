@@ -20,76 +20,79 @@
     />
   </CbCardEditor>
 
-  <!-- The print bar stands under the cards, so it ends up at the bottom edge of
-       a short page and stays there while a long page scrolls. -->
-  <div class="flex min-h-full flex-col">
-    <!-- The cards take the room that is left, the card sets stand at the right
-         edge and their divider line runs the whole height. -->
-    <div class="flex flex-1">
-      <VueDraggable
-        v-model="cards"
-        :animation="200"
-        draggable=".cb-card"
-        :force-fallback="true"
-        :fallback-tolerance="8"
-        ghost-class="cb-card-ghost"
-        drag-class="cb-card-dragged"
-        class="mt-8 flex h-max min-w-0 flex-1 flex-wrap justify-center gap-6 px-16 select-none"
-        @start="isDragging = true"
-        @end="endDragging"
-      >
-        <!-- The button stands in front of the row. It is not a ".cb-card", so the
-             drag library skips it: a card is only ever put before or after another
-             card, which keeps the button the first thing in the row. -->
-        <CbInteractive
-          class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
-          :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
-          :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
-          @animationend="markRisen(addCardId, $event)"
-          @click="addCard"
+  <!-- The card sets stand at the right edge and their divider line runs the
+       whole height. Everything else belongs to the cards, so the print bar
+       ends up centred under them and not under the whole page. -->
+  <div class="flex min-h-full">
+    <!-- The print bar stands under the cards, so it ends up at the bottom edge
+         of a short page and stays there while a long page scrolls. -->
+    <div class="flex min-w-0 flex-1 flex-col">
+      <div class="flex flex-1">
+        <VueDraggable
+          v-model="cards"
+          :animation="200"
+          draggable=".cb-card"
+          :force-fallback="true"
+          :fallback-tolerance="8"
+          ghost-class="cb-card-ghost"
+          drag-class="cb-card-dragged"
+          class="mt-8 flex h-max min-w-0 flex-1 flex-wrap justify-center gap-6 px-16 select-none"
+          @start="isDragging = true"
+          @end="endDragging"
         >
-          <CbIcon name="add_2" />
-          <span>{{ dictionary.project.newCard }}</span>
-        </CbInteractive>
-
-        <!-- The box the drag library picks up. It must be plain page pixels: the
-             library writes the position of the dragged copy into "transform", and
-             the "zoom" that draws the card would shrink that movement, so the card
-             would fall behind the cursor. The zoom sits on the card inside. -->
-        <div
-          v-for="(card, cardIndex) in cards"
-          :key="card.id"
-          class="cb-card"
-          :style="riseDelay(card.id, cardIndex)"
-          :class="[
-            risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
-            { invisible: card.id === selectedCardId },
-          ]"
-          @animationend="markRisen(card.id, $event)"
-          @click="selectCard(card.id, $event)"
-        >
-          <CbCard
-            :id="card.id"
-            :number="card.number"
-            :element-values="card.elementValues"
-            :highlight-color="highlightColorForCard(card.id)"
+          <!-- The button stands in front of the row. It is not a ".cb-card", so the
+               drag library skips it: a card is only ever put before or after another
+               card, which keeps the button the first thing in the row. -->
+          <CbInteractive
+            class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
+            :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
+            :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
+            @animationend="markRisen(addCardId, $event)"
+            @click="addCard"
           >
-            <CbCursor
-              v-for="cursor in cursorsOnCard(card.id)"
-              :key="cursor.senderId"
-              :x="cursor.x"
-              :y="cursor.y"
-              :name="cursor.name"
-              :color="cursor.color"
-            />
-          </CbCard>
-        </div>
-      </VueDraggable>
+            <CbIcon name="add_2" />
+            <span>{{ dictionary.project.newCard }}</span>
+          </CbInteractive>
 
-      <CbCardSetsPanel />
+          <!-- The box the drag library picks up. It must be plain page pixels: the
+               library writes the position of the dragged copy into "transform", and
+               the "zoom" that draws the card would shrink that movement, so the card
+               would fall behind the cursor. The zoom sits on the card inside. -->
+          <div
+            v-for="(card, cardIndex) in cards"
+            :key="card.id"
+            class="cb-card"
+            :style="riseDelay(card.id, cardIndex)"
+            :class="[
+              risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
+              { invisible: card.id === selectedCardId },
+            ]"
+            @animationend="markRisen(card.id, $event)"
+            @click="selectCard(card.id, $event)"
+          >
+            <CbCard
+              :id="card.id"
+              :number="card.number"
+              :element-values="card.elementValues"
+              :highlight-color="highlightColorForCard(card.id)"
+            >
+              <CbCursor
+                v-for="cursor in cursorsOnCard(card.id)"
+                :key="cursor.senderId"
+                :x="cursor.x"
+                :y="cursor.y"
+                :name="cursor.name"
+                :color="cursor.color"
+              />
+            </CbCard>
+          </div>
+        </VueDraggable>
+      </div>
+
+      <CbPrintExportBar @open="isExportDialogOpen = true" />
     </div>
 
-    <CbPrintExportBar @open="isExportDialogOpen = true" />
+    <CbCardSetsPanel />
   </div>
 </template>
 
@@ -106,7 +109,7 @@ import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
-import { showDangerToast, showSuccessToast } from '../components/atoms/toaster'
+import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
 import { projectName } from '../project/project'
 import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
@@ -116,15 +119,10 @@ const isExportDialogOpen = ref(false)
 
 useHeader(() => ({
   title: projectName.value,
-  buttons: [{ key: 'share', label: dictionary.project.share, icon: 'share', variant: 'secondary' }],
-  onAction: runHeaderAction,
+  // Every entry of the header menus is still a placeholder.
+  onAction: () =>
+    showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
 }))
-
-function runHeaderAction(key: string) {
-  if (key === 'share')
-    showSuccessToast(dictionary.project.linkCopiedTitle, dictionary.project.linkCopiedText)
-  else showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText)
-}
 
 // The id stays with a card forever — the number is only what the card is called.
 // The starter cards use fixed ids so every window means the same card. Real
