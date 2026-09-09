@@ -31,6 +31,7 @@
         <VueDraggable
           v-model="cards"
           :animation="200"
+          :disabled="isSearching"
           draggable=".cb-card"
           :force-fallback="true"
           :fallback-tolerance="8"
@@ -59,7 +60,7 @@
                the "zoom" that draws the card would shrink that movement, so the card
                would fall behind the cursor. The zoom sits on the card inside. -->
           <div
-            v-for="(card, cardIndex) in cards"
+            v-for="(card, cardIndex) in visibleCards"
             :key="card.id"
             class="cb-card"
             :style="riseDelay(card.id, cardIndex)"
@@ -113,6 +114,8 @@ import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
 import { projectName } from '../project/project'
 import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
+import { cardMatchesSearch } from '../search/cardMatchesSearch'
+import { searchWord } from '../search/searchWord'
 import type { CardElementValues } from '../cardElements/cardElements'
 
 const isExportDialogOpen = ref(false)
@@ -136,6 +139,14 @@ const cards = ref(
   })),
 )
 const selectedCardId = ref<string | null>(null)
+
+// While searching, only the cards with a hit stand in the row. Reordering is off
+// then: the drag library writes the new order of the shown cards back into
+// "cards", which would shuffle the hidden ones.
+const visibleCards = computed(() =>
+  cards.value.filter((card) => cardMatchesSearch(card.elementValues)),
+)
+const isSearching = computed(() => searchWord.value.trim() !== '')
 
 // The cards of the first render fan in one after the other, behind the button
 // that stands in front of them. A card added later should show up right away,
