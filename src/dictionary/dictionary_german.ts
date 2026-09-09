@@ -20,7 +20,6 @@ export const dictionaryGerman = {
     placeholderOne: 'Lorem ipsum',
     placeholderTwo: 'Dolor sit amet',
     placeholderThree: 'Consetetur sadipscing',
-    placeholderDescription: 'Sed diam nonumy eirmod',
   },
   // The bar at the top of every page.
   header: {

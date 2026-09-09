@@ -37,7 +37,19 @@
     </div>
 
     <div class="flex flex-1 items-center justify-end gap-3">
-      <CbNavigationMenu :menus="navigationMenus" @select="$emit('action', $event)" />
+      <!-- The three menus of the design. They open the same list as every other
+           menu in the header, the one of the profile included. -->
+      <CbDropdown
+        v-for="menu in navigationMenus"
+        :key="menu.value"
+        :items="menu.items"
+        @select="$emit('action', $event)"
+      >
+        <CbButton variant="ghost" class="cb-header-menu">
+          {{ menu.label }}
+          <CbIcon name="keyboard_arrow_down" class="cb-header-menu-arrow" />
+        </CbButton>
+      </CbDropdown>
 
       <template v-for="button in buttons" :key="button.key">
         <CbDropdown
@@ -69,7 +81,6 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
-import CbNavigationMenu from '../atoms/CbNavigationMenu.vue'
 import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { showToast } from '../atoms/toaster'
@@ -86,45 +97,20 @@ defineEmits<{ action: [key: string] }>()
 // stand in every page. Their entries are placeholders until it is decided what
 // goes in them.
 const navigationMenus = computed(() => {
-  const description = dictionary.general.placeholderDescription
-
-  const placeholderLinks = [
-    {
-      value: 'placeholder-one',
-      title: dictionary.general.placeholderOne,
-      description,
-      icon: 'circle' as const,
-    },
-    {
-      value: 'placeholder-two',
-      title: dictionary.general.placeholderTwo,
-      description,
-      icon: 'circle' as const,
-    },
+  const placeholderItems = [
+    { value: 'placeholder-one', label: dictionary.general.placeholderOne, icon: 'circle' as const },
+    { value: 'placeholder-two', label: dictionary.general.placeholderTwo, icon: 'circle' as const },
     {
       value: 'placeholder-three',
-      title: dictionary.general.placeholderThree,
-      description,
+      label: dictionary.general.placeholderThree,
       icon: 'circle' as const,
     },
   ]
 
   return [
-    {
-      value: 'images',
-      label: dictionary.images.title,
-      groups: [{ label: dictionary.images.title, links: placeholderLinks }],
-    },
-    {
-      value: 'collaboration',
-      label: dictionary.header.collaboration,
-      groups: [{ label: dictionary.header.collaboration, links: placeholderLinks }],
-    },
-    {
-      value: 'more',
-      label: dictionary.general.more,
-      groups: [{ label: dictionary.general.more, links: placeholderLinks }],
-    },
+    { value: 'images', label: dictionary.images.title, items: placeholderItems },
+    { value: 'collaboration', label: dictionary.header.collaboration, items: placeholderItems },
+    { value: 'more', label: dictionary.general.more, items: placeholderItems },
   ]
 })
 
@@ -152,3 +138,19 @@ const peopleHere = computed(() =>
   })),
 )
 </script>
+
+<style scoped>
+/* Ark UI marks the open menu on its trigger. The button stays lit as long as
+   its list is open, and its arrow points at the list below. */
+.cb-header-menu[data-state='open'] {
+  background-color: var(--color-surface);
+}
+
+.cb-header-menu[data-state='open'] .cb-header-menu-arrow {
+  rotate: 180deg;
+}
+
+.cb-header-menu-arrow {
+  transition: rotate 250ms ease;
+}
+</style>

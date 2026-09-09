@@ -19,7 +19,6 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     placeholderOne: 'Lorem ipsum',
     placeholderTwo: 'Dolor sit amet',
     placeholderThree: 'Consetetur sadipscing',
-    placeholderDescription: 'Sed diam nonumy eirmod',
   },
   header: {
     searchInCards: 'Buscar nas cartas',
