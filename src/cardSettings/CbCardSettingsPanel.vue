@@ -84,7 +84,7 @@
               <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.bleedGroup }}</h3>
               <CbTooltip :text="dictionary.cardEditor.bleedInfo">
                 <CbButton
-                  variant="ghost"
+                  variant="icon"
                   size="small"
                   :aria-label="dictionary.cardEditor.bleedInfo"
                 >

@@ -16,15 +16,15 @@
   </div>
 
   <!-- "light" is the same button one shade brighter, for use on a surface
-       coloured panel where the secondary button would disappear. "ghost"
-       carries no background of its own, only the hover. "small" tightens the
-       padding for a button that sits next to text instead of on its own. -->
+       coloured panel where the secondary button would disappear. "ghost" and
+       "icon" carry no background of their own, only the hover. "small" tightens
+       the padding for a button that sits next to text instead of on its own. -->
   <CbInteractive
     v-else
     class="flex items-center text-sm text-white"
     :class="[
       variantClasses[variant],
-      variant === 'ghost' ? ghostSizeClasses[size] : sizeClasses[size],
+      backgroundlessVariants.includes(variant) ? evenSizeClasses[size] : sizeClasses[size],
       { 'opacity-40': disabled },
     ]"
     :disabled="disabled"
@@ -37,14 +37,20 @@
 <script setup lang="ts">
 import CbInteractive from './CbInteractive.vue'
 
-// Every variant but the ghost wears the corner of CbSelect. The ghost has a
-// corner of its own: its hover is only a small square, not a pill.
+// Every variant but the icon wears the corner of CbSelect, which is also the
+// corner of the list a button opens — button and list line up. "icon" is the
+// ghost of a button that holds nothing but an icon: it is round, so its hover
+// reads as one thing with the icon and not as a box around it.
 const variantClasses = {
   primary: '',
   secondary: 'bg-surface rounded-lg shadow-lg',
   light: 'bg-surface-light rounded-lg shadow-lg',
-  ghost: 'rounded-sm',
+  ghost: 'rounded-lg',
+  icon: 'rounded-full',
 }
+
+// The two that bring no background of their own.
+const backgroundlessVariants = ['ghost', 'icon']
 
 // The default is the click area of one entry in CbDropdown, so a button that
 // opens a dropdown is exactly as big as the entries inside it.
@@ -53,9 +59,9 @@ const sizeClasses = {
   small: 'gap-2.5 p-1',
 }
 
-// An icon-only ghost button needs the same padding on every side, so its hover
-// stays a square around the icon.
-const ghostSizeClasses = {
+// A button without a background needs the same padding on every side, so the
+// hover of an icon on its own stays a circle instead of an oval.
+const evenSizeClasses = {
   default: 'gap-2 p-2',
   small: 'gap-2.5 p-1',
 }
@@ -69,7 +75,7 @@ const framedSizeClasses = {
 
 withDefaults(
   defineProps<{
-    variant?: 'primary' | 'secondary' | 'light' | 'ghost'
+    variant?: 'primary' | 'secondary' | 'light' | 'ghost' | 'icon'
     size?: 'default' | 'small'
     disabled?: boolean
   }>(),

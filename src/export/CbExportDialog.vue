@@ -15,7 +15,7 @@
   >
     <template v-if="step === 'png'" #titleStart>
       <CbButton
-        variant="ghost"
+        variant="icon"
         :aria-label="dictionary.general.back"
         @click="goToStep('formats')"
       >

@@ -41,7 +41,7 @@
               </div>
 
               <Dialog.CloseTrigger as-child>
-                <CbButton variant="ghost" :aria-label="dictionary.general.close">
+                <CbButton variant="icon" :aria-label="dictionary.general.close">
                   <CbIcon name="close" />
                 </CbButton>
               </Dialog.CloseTrigger>

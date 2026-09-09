@@ -5,7 +5,7 @@
     <div class="flex flex-1 items-center gap-2.5">
       <!-- The back button belongs to the heading, so it only shows with one. -->
       <template v-if="title">
-        <CbButton variant="ghost" @click="router.back()">
+        <CbButton variant="icon" @click="router.back()">
           <CbIcon name="west" />
         </CbButton>
         <h1 class="text-2xl text-white">{{ title }}</h1>
