@@ -4,6 +4,7 @@
 import Add2 from '~icons/material-symbols/add-2-rounded'
 import AddComment from '~icons/material-symbols/add-comment-outline-rounded'
 import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-rounded'
+import ArtTrack from '~icons/material-symbols/art-track-outline-rounded'
 import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
@@ -29,10 +30,12 @@ import LightMode from '~icons/material-symbols/light-mode-outline-rounded'
 import Link from '~icons/material-symbols/link-rounded'
 import LocationOn from '~icons/material-symbols/location-on-outline-rounded'
 import Login from '~icons/material-symbols/login-rounded'
+import ManageAccounts from '~icons/material-symbols/manage-accounts-outline-rounded'
 import MoreHoriz from '~icons/material-symbols/more-horiz'
 // One arrow per card corner, used by the single corner radius fields.
 import NorthEast from '~icons/material-symbols/north-east-rounded'
 import NorthWest from '~icons/material-symbols/north-west-rounded'
+import PhotoLibrary from '~icons/material-symbols/photo-library-outline-rounded'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
 import Print from '~icons/material-symbols/print-outline-rounded'
 import Search from '~icons/material-symbols/search-rounded'
@@ -41,6 +44,7 @@ import SouthWest from '~icons/material-symbols/south-west-rounded'
 import Settings from '~icons/material-symbols/settings-outline-rounded'
 import Share from '~icons/material-symbols/share-outline'
 import Square from '~icons/material-symbols/square-outline-rounded'
+import SupportAgent from '~icons/material-symbols/support-agent-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
 import West from '~icons/material-symbols/west-rounded'
 
@@ -48,6 +52,7 @@ export const icons = {
   add_2: Add2,
   add_comment: AddComment,
   arrow_circle_up: ArrowCircleUp,
+  art_track: ArtTrack,
   check: Check,
   circle: Circle,
   close: Close,
@@ -72,9 +77,11 @@ export const icons = {
   link: Link,
   location_on: LocationOn,
   login: Login,
+  manage_accounts: ManageAccounts,
   more_horiz: MoreHoriz,
   north_east: NorthEast,
   north_west: NorthWest,
+  photo_library: PhotoLibrary,
   playing_cards: PlayingCards,
   print: Print,
   search: Search,
@@ -83,6 +90,7 @@ export const icons = {
   south_east: SouthEast,
   south_west: SouthWest,
   square: Square,
+  support_agent: SupportAgent,
   title: Title,
   west: West,
 }

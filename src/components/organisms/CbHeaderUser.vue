@@ -20,6 +20,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
+import { showToast } from '../atoms/toaster'
 import { signInWithGoogle, signOut, useCurrentUser } from '../../composables/useCurrentUser'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 
@@ -31,6 +32,7 @@ const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 // Only somebody who is signed in can sign out.
 const profileMenuItems = computed(() => [
   { value: 'settings', label: dictionary.settings.title, icon: 'settings' as const },
+  { value: 'support', label: dictionary.general.support, icon: 'support_agent' as const },
   ...(currentUser.value
     ? [{ value: 'signOut', label: dictionary.general.signOut, icon: 'door_open' as const }]
     : []),
@@ -44,6 +46,9 @@ function goToUpgrade() {
 
 function runProfileAction(value: string) {
   if (value === 'settings') router.push('/settings')
+  // Support has no page yet, so it only says so.
+  else if (value === 'support')
+    showToast(dictionary.general.support, dictionary.general.notAvailableText)
   else signOut()
 }
 </script>

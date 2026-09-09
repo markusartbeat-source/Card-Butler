@@ -16,14 +16,28 @@
     </div>
 
     <div v-if="searchbar" class="bg-surface flex w-96 items-center rounded-full text-white shadow-lg">
-      <!-- The text area opens the search later, the icons only switch the mode. -->
-      <CbInteractive
-        class="flex flex-1 items-center self-stretch rounded-l-full pl-6 text-left text-sm"
-        @click="showToast(searchModeLabel, dictionary.general.notAvailableText)"
+      <!-- The typing happens here, the icons next to it only switch the mode.
+           The label carries hover and ripple, because those need a child
+           element and an input cannot have one. -->
+      <label
+        v-ripple
+        class="cb-hover relative flex min-w-0 flex-1 items-center self-stretch overflow-hidden rounded-l-full pl-6"
       >
-        {{ searchModeLabel }}
-      </CbInteractive>
+        <input
+          v-model="searchWord"
+          class="w-full min-w-0 cursor-text bg-transparent text-sm text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
+          :placeholder="searchModeLabel"
+        />
+      </label>
       <div class="flex gap-0.5 p-1.5">
+        <!-- The X only appears once there is something to clear. -->
+        <CbInteractive
+          v-if="searchWord"
+          class="rounded-full p-2 text-white"
+          @click="clearSearchWord()"
+        >
+          <CbIcon name="close" />
+        </CbInteractive>
         <CbInteractive
           v-for="mode in searchModeNames"
           :key="mode"
@@ -83,8 +97,8 @@ import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
-import { showToast } from '../atoms/toaster'
 import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
+import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 
 withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: HeaderButton[] }>(), {
@@ -93,26 +107,34 @@ withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: Header
 })
 defineEmits<{ action: [key: string] }>()
 
-// The three menus of the design. They belong to the header itself, so they
-// stand in every page. Their entries are placeholders until it is decided what
-// goes in them.
-const navigationMenus = computed(() => {
-  const placeholderItems = [
-    { value: 'placeholder-one', label: dictionary.general.placeholderOne, icon: 'circle' as const },
-    { value: 'placeholder-two', label: dictionary.general.placeholderTwo, icon: 'circle' as const },
-    {
-      value: 'placeholder-three',
-      label: dictionary.general.placeholderThree,
-      icon: 'circle' as const,
-    },
-  ]
-
-  return [
-    { value: 'images', label: dictionary.images.title, items: placeholderItems },
-    { value: 'collaboration', label: dictionary.header.collaboration, items: placeholderItems },
-    { value: 'more', label: dictionary.general.more, items: placeholderItems },
-  ]
-})
+// The menus of the design. They belong to the header itself, so they stand in
+// every page.
+const navigationMenus = computed(() => [
+  {
+    value: 'images',
+    label: dictionary.images.title,
+    items: [
+      { value: 'all-images', label: dictionary.header.allImages, icon: 'photo_library' as const },
+      {
+        value: 'icons-in-text',
+        label: dictionary.header.iconsInText,
+        icon: 'art_track' as const,
+      },
+    ],
+  },
+  {
+    value: 'collaboration',
+    label: dictionary.header.collaboration,
+    items: [
+      { value: 'share-project', label: dictionary.header.shareProject, icon: 'share' as const },
+      {
+        value: 'user-management',
+        label: dictionary.header.userManagement,
+        icon: 'manage_accounts' as const,
+      },
+    ],
+  },
+])
 
 // Each search mode has its own icon button and its own text in the pill.
 const searchModeNames = ['search', 'forum'] as const

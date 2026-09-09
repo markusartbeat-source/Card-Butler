@@ -15,17 +15,19 @@ export const dictionaryGerman = {
     back: 'Zurück',
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
-    // Placeholders in the header menus until it is decided what goes in there.
-    // Lorem ipsum stays the same in every language.
-    placeholderOne: 'Lorem ipsum',
-    placeholderTwo: 'Dolor sit amet',
-    placeholderThree: 'Consetetur sadipscing',
+    support: 'Support',
   },
   // The bar at the top of every page.
   header: {
     searchInCards: 'In den Karten finden',
     askButler: 'Frag den Butler',
+    // The entries of the images menu.
+    allImages: 'Alle Bilder',
+    iconsInText: 'Icons im Text',
+    // The entries of the collaboration menu.
     collaboration: 'Zusammenarbeit',
+    shareProject: 'Dieses Projekt teilen',
+    userManagement: 'Benutzerverwaltung',
   },
   // The page with the picture library.
   images: {
