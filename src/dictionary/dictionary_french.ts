@@ -30,6 +30,10 @@ export const dictionaryFrench: typeof dictionaryGerman = {
   search: {
     noResults: 'Aucune carte trouvée',
   },
+  cardDrag: {
+    deleteCard: 'Supprimer la carte',
+    flipAllCards: 'Retourner toutes les cartes',
+  },
   images: {
     title: 'Images',
     addImages: 'Ajouter des images',

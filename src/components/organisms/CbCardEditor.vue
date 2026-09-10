@@ -19,7 +19,11 @@
       class="relative flex flex-col items-center gap-6 pr-88"
       @click="clearSelectionOnMiss"
     >
-      <CbCardToolbar class="transition-opacity" :class="fadeInClasses" />
+      <CbToolbar
+        :elements="cardToolbarElements"
+        class="transition-opacity"
+        :class="fadeInClasses"
+      />
 
       <!-- The ring is placed next to the flying wrapper, so it stays put while
            the card moves. -->
@@ -65,7 +69,8 @@ import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
-import CbCardToolbar from '../molecules/CbCardToolbar.vue'
+import CbToolbar from '../molecules/CbToolbar.vue'
+import { cardToolbarElements } from '../molecules/cardToolbarElements'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { editorZoom } from '../../card/cardFormat'

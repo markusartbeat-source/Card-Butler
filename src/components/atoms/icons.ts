@@ -11,6 +11,7 @@ import Close from '~icons/material-symbols/close-rounded'
 import Colorize from '~icons/material-symbols/colorize-outline-rounded'
 import CropFree from '~icons/material-symbols/crop-free-rounded'
 import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
+import Delete from '~icons/material-symbols/delete-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import East from '~icons/material-symbols/east-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
@@ -38,6 +39,8 @@ import NorthWest from '~icons/material-symbols/north-west-rounded'
 import PhotoLibrary from '~icons/material-symbols/photo-library-outline-rounded'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
 import Print from '~icons/material-symbols/print-outline-rounded'
+// The looping arrow of the material symbol called "360".
+import Rotate360 from '~icons/material-symbols/360-rounded'
 import Search from '~icons/material-symbols/search-rounded'
 import SouthEast from '~icons/material-symbols/south-east-rounded'
 import SouthWest from '~icons/material-symbols/south-west-rounded'
@@ -59,6 +62,7 @@ export const icons = {
   colorize: Colorize,
   crop_free: CropFree,
   dark_mode: DarkMode,
+  delete: Delete,
   door_open: DoorOpen,
   east: East,
   filter: Filter,
@@ -84,6 +88,7 @@ export const icons = {
   photo_library: PhotoLibrary,
   playing_cards: PlayingCards,
   print: Print,
+  rotate_360: Rotate360,
   search: Search,
   settings: Settings,
   share: Share,

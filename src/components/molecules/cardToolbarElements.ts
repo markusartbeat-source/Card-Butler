@@ -1,8 +1,8 @@
 import { computed } from 'vue'
-import type { IconName } from '../atoms/icons'
+import type { ToolbarElement } from './toolbarElement'
 
 // The elements the card toolbar offers, in toolbar order.
-export const cbCardToolbarElements = computed<{ name: string; icon: IconName }[]>(() => [
+export const cardToolbarElements = computed<ToolbarElement[]>(() => [
   { name: dictionary.cardEditor.square, icon: 'square' },
   { name: dictionary.cardEditor.circle, icon: 'circle' },
   { name: dictionary.cardEditor.line, icon: 'horizontal_rule' },

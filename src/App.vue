@@ -27,6 +27,9 @@
         </router-view>
       </main>
     </div>
+    <!-- Stands here and not on the page, because the page area moves during a
+         page change and a fixed bar inside it would move with it. -->
+    <CbCardDropBar />
     <CbToaster />
   </div>
 </template>
@@ -35,6 +38,7 @@
 import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
+import CbCardDropBar from './cardDrag/CbCardDropBar.vue'
 import { dimWhileDraggingClasses } from './cardDrag/dimWhileDragging'
 import { startPeopleBroadcast } from './presence/usePeopleBroadcast'
 

@@ -33,6 +33,11 @@ export const dictionaryGerman = {
   search: {
     noResults: 'Keine Karte gefunden',
   },
+  // The bar that drops down while a card is being dragged.
+  cardDrag: {
+    deleteCard: 'Karte löschen',
+    flipAllCards: 'Alle Karten umdrehen',
+  },
   // The page with the picture library.
   images: {
     title: 'Bilder',
