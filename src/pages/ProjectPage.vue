@@ -76,6 +76,7 @@
               :number="card.number"
               :element-values="card.elementValues"
               :highlight-color="highlightColorForCard(card.id)"
+              highlight-search
             >
               <CbCursor
                 v-for="cursor in cursorsOnCard(card.id)"

@@ -16,6 +16,7 @@
         v-if="element.type === 'text'"
         :id="element.id"
         :content="elementValues[element.id]"
+        :highlight-search="highlightSearch"
         :style="placementStyle(element.placement)"
       />
     </template>
@@ -33,6 +34,7 @@ import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 // The card is always its real size — zoom is the only thing a view decides.
 // highlightColor draws a thin frame in the colour of the person standing here.
 // The elements come from the deck, elementValues are this card's own contents.
+// highlightSearch marks the search hits in the texts — only the overview wants that.
 withDefaults(
   defineProps<{
     id: string
@@ -40,7 +42,8 @@ withDefaults(
     zoom?: number
     highlightColor?: string
     elementValues?: CardElementValues
+    highlightSearch?: boolean
   }>(),
-  { zoom: gridZoom, elementValues: () => ({}) },
+  { zoom: gridZoom, elementValues: () => ({}), highlightSearch: false },
 )
 </script>
