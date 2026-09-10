@@ -31,16 +31,11 @@
         <VueDraggable
           v-if="!hasNoSearchResults"
           v-model="cards"
-          :animation="200"
+          v-bind="cardDragOptions"
           :disabled="isSearching"
-          draggable=".cb-card"
-          :force-fallback="true"
-          :fallback-tolerance="8"
-          ghost-class="cb-card-ghost"
-          drag-class="cb-card-dragged"
           class="mt-8 flex h-max min-w-0 flex-1 flex-wrap justify-center gap-6 px-16 select-none"
-          @start="isDragging = true"
-          @end="endDragging"
+          @start="startCardDrag"
+          @end="endCardDrag"
         >
           <!-- The button stands in front of the row. It is not a ".cb-card", so the
                drag library skips it: a card is only ever put before or after another
@@ -116,6 +111,8 @@ import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
+import { cardDragOptions } from '../cardDrag/cardDragOptions'
+import { endCardDrag, isDraggingCard, startCardDrag } from '../cardDrag/cardDragState'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast } from '../components/atoms/toaster'
@@ -185,18 +182,8 @@ const selectedCard = computed(() => cards.value.find((card) => card.id === selec
 // Where the clicked card sits in the grid — the editor starts its flight there.
 const selectedCardRect = ref<DOMRect | null>(null)
 
-// A finished drag still fires a click on the card, so we keep the flag alive
-// until that click is over.
-const isDragging = ref(false)
-
-function endDragging() {
-  setTimeout(() => {
-    isDragging.value = false
-  }, 0)
-}
-
 function selectCard(id: string, event: MouseEvent) {
-  if (isDragging.value) return
+  if (isDraggingCard.value) return
   selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
   selectedCardId.value = id
 }

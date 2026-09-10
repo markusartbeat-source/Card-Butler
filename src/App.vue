@@ -5,7 +5,10 @@
     <!-- The header sits above the animated area, so a page change only moves
          the content below it. Each page says what it should show. -->
     <div class="flex flex-1 flex-col overflow-hidden">
+      <!-- While a card is dragged, the header steps back and only the cards
+           stay bright. -->
       <CbHeader
+        :class="dimWhileDraggingClasses"
         :title="headerSettings.title"
         :searchbar="headerSettings.searchbar"
         :buttons="headerSettings.buttons"
@@ -32,6 +35,7 @@
 import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
+import { dimWhileDraggingClasses } from './cardDrag/dimWhileDragging'
 import { startPeopleBroadcast } from './presence/usePeopleBroadcast'
 
 startPeopleBroadcast()
