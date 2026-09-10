@@ -29,6 +29,10 @@ export const dictionaryGerman = {
     shareProject: 'Dieses Projekt teilen',
     userManagement: 'Benutzerverwaltung',
   },
+  // The search over all cards, started in the header pill.
+  search: {
+    noResults: 'Keine Karte gefunden',
+  },
   // The page with the picture library.
   images: {
     title: 'Bilder',

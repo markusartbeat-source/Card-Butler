@@ -27,6 +27,9 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     shareProject: 'Compartir este proyecto',
     userManagement: 'Gestión de usuarios',
   },
+  search: {
+    noResults: 'Ninguna carta encontrada',
+  },
   images: {
     title: 'Imágenes',
     addImages: 'Añadir imágenes',

@@ -29,6 +29,7 @@
     <div class="flex min-w-0 flex-1 flex-col">
       <div class="flex flex-1">
         <VueDraggable
+          v-if="!hasNoSearchResults"
           v-model="cards"
           :animation="200"
           :disabled="isSearching"
@@ -43,8 +44,10 @@
         >
           <!-- The button stands in front of the row. It is not a ".cb-card", so the
                drag library skips it: a card is only ever put before or after another
-               card, which keeps the button the first thing in the row. -->
+               card, which keeps the button the first thing in the row. While
+               searching it steps aside — the row then shows hits only. -->
           <CbInteractive
+            v-if="!isSearching"
             class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
             :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
             :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
@@ -54,6 +57,7 @@
             <CbIcon name="add_2" />
             <span>{{ dictionary.project.newCard }}</span>
           </CbInteractive>
+
 
           <!-- The box the drag library picks up. It must be plain page pixels: the
                library writes the position of the dragged copy into "transform", and
@@ -89,6 +93,8 @@
             </CbCard>
           </div>
         </VueDraggable>
+
+        <CbSearchNoResults v-else />
       </div>
 
       <CbPrintExportBar @open="isExportDialogOpen = true" />
@@ -108,6 +114,7 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
+import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
@@ -148,6 +155,9 @@ const visibleCards = computed(() =>
   cards.value.filter((card) => cardMatchesSearch(card.elementValues)),
 )
 const isSearching = computed(() => searchWord.value.trim() !== '')
+
+// Then the placeholder box takes the whole card area instead of the row.
+const hasNoSearchResults = computed(() => isSearching.value && visibleCards.value.length === 0)
 
 // The cards of the first render fan in one after the other, behind the button
 // that stands in front of them. A card added later should show up right away,
