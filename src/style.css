@@ -173,7 +173,14 @@ body {
   .cb-card-dragged .cb-card-face {
     scale: 1.05;
     rotate: 3deg;
+    transition: scale 350ms ease;
     @apply shadow-2xl;
+  }
+
+  /* Over a field of the drop bar the card shrinks, so the field underneath
+     stays readable and it is clear that the drop would count. */
+  .cb-over-drop-field .cb-card-dragged .cb-card-face {
+    scale: 0.5;
   }
 
   /* An opening list rolls out of nothing: the grid row grows from 0fr to the
