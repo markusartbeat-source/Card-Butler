@@ -44,7 +44,10 @@
           <CbInteractive
             v-if="!isSearching"
             class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
-            :class="risenCardIds.has(addCardId) ? '' : 'animate-cb-rise'"
+            :class="[
+              risenCardIds.has(addCardId) ? '' : 'animate-cb-rise',
+              dimWhileDraggingClasses,
+            ]"
             :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
             @animationend="markRisen(addCardId, $event)"
             @click="addCard"
@@ -92,10 +95,10 @@
         <CbSearchNoResults v-else />
       </div>
 
-      <CbPrintExportBar @open="isExportDialogOpen = true" />
+      <CbPrintExportBar :class="dimWhileDraggingClasses" @open="isExportDialogOpen = true" />
     </div>
 
-    <CbCardSetsPanel />
+    <CbCardSetsPanel :class="dimWhileDraggingClasses" />
   </div>
 </template>
 
@@ -113,6 +116,7 @@ import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
 import { endCardDrag, isDraggingCard, startCardDrag } from '../cardDrag/cardDragState'
+import { dimWhileDraggingClasses } from '../cardDrag/dimWhileDragging'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast } from '../components/atoms/toaster'
