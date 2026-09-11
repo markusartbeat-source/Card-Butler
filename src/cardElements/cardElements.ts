@@ -7,10 +7,15 @@ import type { TextElement } from './text/textElement'
 // card — the content of a text, the link of an image.
 // Each element type has its own folder next to this file.
 
+// The back of a card is built the same way as the front — each element says
+// which side it sits on. Ids are unique across both sides.
+export type CardSide = 'front' | 'back'
+
 // What every element type has, no matter what it shows.
 export type CardElementBase = {
   id: string
   name: string
+  side: CardSide
   placement: ElementPlacement
 }
 
@@ -18,7 +23,7 @@ export type CardElement = TextElement
 
 // Fixed for now, editing the build-up comes later.
 export const cardElements = ref<CardElement[]>([
-  { id: 'effect-text', name: 'Effekt', type: 'text', placement: { x: 8, y: 55 } },
+  { id: 'effect-text', name: 'Effekt', type: 'text', side: 'front', placement: { x: 8, y: 55 } },
 ])
 
 // Dragging an element moves it on every card of the deck — the build-up belongs

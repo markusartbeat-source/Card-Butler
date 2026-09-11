@@ -60,15 +60,17 @@
           <!-- The box the drag library picks up. It must be plain page pixels: the
                library writes the position of the dragged copy into "transform", and
                the "zoom" that draws the card would shrink that movement, so the card
-               would fall behind the cursor. The zoom sits on the card inside. -->
+               would fall behind the cursor. The zoom sits on the card inside.
+               Front and back share the one grid cell of the box, so they lie on top
+               of each other; the flip turns the two faces (see style.css). -->
           <div
             v-for="(card, cardIndex) in visibleCards"
             :key="card.id"
-            class="cb-card"
+            class="cb-card grid"
             :style="riseDelay(card.id, cardIndex)"
             :class="[
               risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
-              { invisible: card.id === selectedCardId },
+              { invisible: card.id === selectedCardId, 'cb-card-flipped': showingCardBacks },
             ]"
             @animationend="markRisen(card.id, $event)"
             @click="selectCard(card.id, $event)"
@@ -79,6 +81,7 @@
               :element-values="card.elementValues"
               :highlight-color="highlightColorForCard(card.id)"
               highlight-search
+              class="cb-card-front col-start-1 row-start-1"
             >
               <CbCursor
                 v-for="cursor in cursorsOnCard(card.id)"
@@ -89,6 +92,15 @@
                 :color="cursor.color"
               />
             </CbCard>
+            <CbCard
+              :id="card.id"
+              :number="card.number"
+              :element-values="card.elementValues"
+              :highlight-color="highlightColorForCard(card.id)"
+              highlight-search
+              side="back"
+              class="cb-card-back col-start-1 row-start-1"
+            />
           </div>
         </VueDraggable>
 
@@ -123,6 +135,7 @@ import {
 } from '../cardDrag/cardDragState'
 import { dimWhileDraggingClasses } from '../cardDrag/dimWhileDragging'
 import { deleteDroppedCard } from '../cardDrag/deleteDroppedCard'
+import { flipAllCards, showingCardBacks } from '../cardDrag/flipAllCards'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast } from '../components/atoms/toaster'
@@ -203,8 +216,10 @@ function selectCard(id: string, event: MouseEvent) {
 // animation along, which is why it gives the drag state back itself.
 function finishCardDrag() {
   const { droppedOn, cardIndex, cardElement } = endCardDrag()
-  if (droppedOn === 'deleteCard') deleteDroppedCard(cards, cardIndex, cardElement)
-  else releaseCardDrag()
+  if (droppedOn === 'deleteCard') return deleteDroppedCard(cards, cardIndex, cardElement)
+
+  if (droppedOn === 'flipAllCards') flipAllCards()
+  releaseCardDrag()
 }
 
 // Where my own mouse currently is, as { card, x%, y% } — null outside the cards.

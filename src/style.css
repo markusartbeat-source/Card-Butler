@@ -206,6 +206,41 @@ body {
     scale: 0.5;
   }
 
+  /* The two faces of a card in the grid. Each hides its own back, the back
+     face starts turned away, and flipping turns both faces together — a real
+     3D turn about their shared centre. The turn is written into "transform",
+     which is safe on a face: the drag library only ever drives the box around
+     the faces. The box itself can't be the thing that turns, because its
+     y-rotation would mirror the movement the library writes into it.
+     "rotate" stays free for the tilt of a dragged card, which is applied on
+     top of the turn. 1000px of perspective keeps the foreshortening gentle. */
+  .cb-card-front,
+  .cb-card-back {
+    backface-visibility: hidden;
+    transition-property: scale, rotate, transform;
+    /* The turn eases in and out, so the cards start and settle like paper
+       instead of snapping — it moves the whole grid, hence the longer time. */
+    transition-duration: 150ms, 150ms, 500ms;
+    transition-timing-function: ease, ease, ease-in-out;
+  }
+
+  .cb-card-front {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+
+  .cb-card-back {
+    transform: perspective(1000px) rotateY(180deg);
+  }
+
+  .cb-card-flipped .cb-card-front {
+    transform: perspective(1000px) rotateY(180deg);
+  }
+
+  /* On to 360 instead of back to 0, so both faces turn the same way. */
+  .cb-card-flipped .cb-card-back {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+
   /* An opening list rolls out of nothing: the grid row grows from 0fr to the
      height the content needs, so no fixed height has to be known. Keyframes
      instead of a transition, because Ark UI waits for an animation to end
