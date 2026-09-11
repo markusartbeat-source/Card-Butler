@@ -28,6 +28,7 @@
               v-ripple
               :value="item.value"
               class="cb-hover relative flex items-center gap-2 overflow-hidden rounded-md px-2 py-1.5"
+              :class="{ 'text-gold': item.value === activeItem }"
             >
               <CbIcon v-if="item.icon" :name="item.icon" />
               {{ item.label }}
@@ -44,7 +45,12 @@ import { Menu } from '@ark-ui/vue'
 import CbIcon from './CbIcon.vue'
 import type { IconName } from './icons'
 
-defineProps<{ items: { value: string; label: string; icon?: IconName }[] }>()
+// activeItem is the value of the entry the user is on right now. It is drawn in
+// gold, so the list also tells where one is.
+defineProps<{
+  items: { value: string; label: string; icon?: IconName }[]
+  activeItem?: string
+}>()
 
 // The value of the clicked entry.
 defineEmits<{ select: [value: string] }>()

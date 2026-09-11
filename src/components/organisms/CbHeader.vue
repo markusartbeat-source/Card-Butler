@@ -57,9 +57,14 @@
         v-for="menu in navigationMenus"
         :key="menu.value"
         :items="menu.items"
+        :active-item="menu.activeItem"
         @select="$emit('action', $event)"
       >
-        <CbButton variant="ghost" class="cb-header-menu">
+        <CbButton
+          variant="ghost"
+          class="cb-header-menu"
+          :class="{ 'cb-header-menu-active': menu.activeItem }"
+        >
           {{ menu.label }}
           <CbIcon name="keyboard_arrow_down" class="cb-header-menu-arrow" />
         </CbButton>
@@ -110,6 +115,21 @@ defineEmits<{ action: [key: string] }>()
 // The menus of the design. They belong to the header itself, so they stand in
 // every page.
 const navigationMenus = computed(() => [
+  {
+    value: 'cards',
+    label: dictionary.header.cards,
+    // The only set there is, until the card sets are real data.
+    activeItem: 'first-card-set',
+    items: [
+      // Every card set stands here with its own name, the last entry adds one.
+      {
+        value: 'first-card-set',
+        label: dictionary.header.firstCardSet,
+        icon: 'playing_cards' as const,
+      },
+      { value: 'new-card-set', label: dictionary.header.newCardSet, icon: 'add_2' as const },
+    ],
+  },
   {
     value: 'images',
     label: dictionary.images.title,
@@ -174,5 +194,25 @@ const peopleHere = computed(() =>
 
 .cb-header-menu-arrow {
   transition: rotate 250ms ease;
+}
+
+/* The menu the user is in is gold and carries a straight gold line under its
+   label. The line is drawn as its own element, not as a border: the button is
+   rounded and clips its content, so a border would bend up at the corners. The
+   line starts inside the corner radius (8px, the button's padding) and so stays
+   straight. It is a ::before, because ::after already belongs to the hover
+   lightening of cb-hover. */
+.cb-header-menu-active {
+  color: var(--color-gold);
+}
+
+.cb-header-menu-active::before {
+  content: '';
+  position: absolute;
+  right: 8px;
+  bottom: 0;
+  left: 8px;
+  height: 2px;
+  background-color: var(--color-gold);
 }
 </style>

@@ -27,6 +27,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     collaboration: 'Collaboration',
     shareProject: 'Share this project',
     userManagement: 'User management',
+    cards: 'Cards',
+    firstCardSet: 'My first card set',
+    newCardSet: 'New card set',
   },
   search: {
     noResults: 'No card found',

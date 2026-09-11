@@ -29,6 +29,11 @@ export const dictionaryGerman = {
     collaboration: 'Zusammenarbeit',
     shareProject: 'Dieses Projekt teilen',
     userManagement: 'Benutzerverwaltung',
+    // The entries of the cards menu. The first set is a placeholder until the
+    // card sets are real data.
+    cards: 'Karten',
+    firstCardSet: 'Mein erstes Kartenset',
+    newCardSet: 'Neues Kartenset',
   },
   // The search over all cards, started in the header pill.
   search: {

@@ -27,6 +27,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     collaboration: 'Collaboration',
     shareProject: 'Partager ce projet',
     userManagement: 'Gestion des utilisateurs',
+    cards: 'Cartes',
+    firstCardSet: 'Mon premier jeu de cartes',
+    newCardSet: 'Nouveau jeu de cartes',
   },
   search: {
     noResults: 'Aucune carte trouvée',
