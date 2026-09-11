@@ -35,7 +35,7 @@
           :disabled="isSearching"
           class="mt-8 flex h-max min-w-0 flex-1 flex-wrap justify-center gap-6 px-16 select-none"
           @start="startCardDrag"
-          @end="endCardDrag"
+          @end="finishCardDrag"
         >
           <!-- The button stands in front of the row. It is not a ".cb-card", so the
                drag library skips it: a card is only ever put before or after another
@@ -115,8 +115,14 @@ import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
-import { endCardDrag, isDraggingCard, startCardDrag } from '../cardDrag/cardDragState'
+import {
+  endCardDrag,
+  isDraggingCard,
+  releaseCardDrag,
+  startCardDrag,
+} from '../cardDrag/cardDragState'
 import { dimWhileDraggingClasses } from '../cardDrag/dimWhileDragging'
+import { deleteDroppedCard } from '../cardDrag/deleteDroppedCard'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast } from '../components/atoms/toaster'
@@ -190,6 +196,15 @@ function selectCard(id: string, event: MouseEvent) {
   if (isDraggingCard.value) return
   selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
   selectedCardId.value = id
+}
+
+// Letting go over a field of the drop bar is not a sort — the row stays as it
+// was, and the field decides what happens to the card. Deleting brings its own
+// animation along, which is why it gives the drag state back itself.
+function finishCardDrag() {
+  const { droppedOn, cardIndex, cardElement } = endCardDrag()
+  if (droppedOn === 'deleteCard') deleteDroppedCard(cards, cardIndex, cardElement)
+  else releaseCardDrag()
 }
 
 // Where my own mouse currently is, as { card, x%, y% } — null outside the cards.

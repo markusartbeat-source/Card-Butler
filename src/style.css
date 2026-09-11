@@ -142,6 +142,29 @@ body {
     @apply pointer-events-none fixed right-0 bottom-0 z-50 h-72 w-96;
   }
 
+  /* The surface the snippets of a shredded card fall on. Unlike the export
+     confetti they need the whole window, because they rain from the drop bar
+     at the top edge all the way down across the cards. A canvas brings its own
+     size along, so "inset-0" alone would leave it at 300 × 150 px in the
+     corner — the width and the height have to be said out loud. */
+  .cb-shred-stage {
+    @apply pointer-events-none fixed inset-0 z-50 h-full w-full;
+  }
+
+  /* The copy of a card that is pulled into a drop field. It lies over the page
+     on its own, so the row it left can already close its gap. */
+  .cb-flying-card {
+    @apply pointer-events-none fixed z-50;
+  }
+
+  /* It takes over from the dragged card, so it has to start out exactly as
+     small and as tilted as that one was over the field. */
+  .cb-flying-card .cb-card-face {
+    scale: 0.5;
+    rotate: 3deg;
+    @apply shadow-2xl;
+  }
+
   /* Frame that is golden only at its left and right edges and stays dark
      across the middle. Tailwind's gradient classes allow just one middle
      colour, so the four stops are written out here. */

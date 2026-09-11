@@ -22,6 +22,7 @@ import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue'
 import CbToolbar from '../components/molecules/CbToolbar.vue'
 import { isDraggingCard } from './cardDragState'
 import { dropFields, hoveredDropField } from './dropField'
+import { rememberDropGeometry } from './shredCard'
 import type { ToolbarElement } from '../components/molecules/toolbarElement'
 
 // How the fields of the bar are shown, in the same order as "dropFields".
@@ -40,10 +41,17 @@ const hoveredFieldIndex = computed(() =>
 // dragged card is measured instead — that is the copy the drag library moves
 // around. A card is wider than a field, so the field it covers most wins.
 function updateDropTarget() {
-  if (!isDraggingCard.value) return
+  // No dragged card means the mouse has already let go. The field then keeps
+  // its highlight, so the card can still be pulled into a lit up field.
   const cardRect = document.querySelector('.cb-card-dragged')?.getBoundingClientRect()
-  const index = cardRect ? toolbar.value?.indexOverlapping(cardRect) : null
-  hoveredDropField.value = index === null || index === undefined ? null : dropFields[index]
+  if (!cardRect) return
+
+  const index = toolbar.value?.indexOverlapping(cardRect) ?? null
+  hoveredDropField.value = index === null ? null : dropFields[index]
+
+  // The drop itself is reported without the card, which is off the page by then
+  // — so what an animation over the field needs is measured here.
+  rememberDropGeometry(cardRect, index === null ? null : (toolbar.value?.rectOfEntry(index) ?? null))
 }
 
 onMounted(() => window.addEventListener('mousemove', updateDropTarget))

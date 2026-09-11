@@ -14,6 +14,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     close: 'Fechar',
     cancel: 'Cancelar',
     back: 'Voltar',
+    undo: 'Desfazer',
     notAvailableTitle: 'Não disponível',
     notAvailableText: 'Esta função ainda não existe.',
     support: 'Suporte',
@@ -33,6 +34,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   cardDrag: {
     deleteCard: 'Excluir carta',
     flipAllCards: 'Virar todas as cartas',
+    cardDeleted: 'Carta excluída',
   },
   images: {
     title: 'Imagens',

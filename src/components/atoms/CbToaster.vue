@@ -20,6 +20,12 @@
         <Toast.Description v-if="toast.description" class="text-sm opacity-80">
           {{ toast.description }}
         </Toast.Description>
+        <Toast.ActionTrigger v-if="toast.action" as-child>
+          <CbButton variant="secondary" class="mt-1">
+            <CbIcon name="undo" />
+            {{ toast.action.label }}
+          </CbButton>
+        </Toast.ActionTrigger>
         <Toast.CloseTrigger class="absolute top-2 right-2 cursor-pointer rounded p-1 opacity-60 hover:opacity-100">
           <CbIcon name="close" />
         </Toast.CloseTrigger>
@@ -31,6 +37,7 @@
 <script setup lang="ts">
 import { Toast, Toaster } from '@ark-ui/vue'
 import CbExportProgressToast from '../../export/CbExportProgressToast.vue'
+import CbButton from './CbButton.vue'
 import CbIcon from './CbIcon.vue'
 import { toaster } from './toaster'
 

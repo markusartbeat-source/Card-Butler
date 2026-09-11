@@ -55,5 +55,11 @@ function indexOverlapping(rect: DOMRect) {
   return coveredIndex
 }
 
-defineExpose({ indexOverlapping })
+/** Where one entry sits on screen — for callers that let something fly into it
+    or draw on top of it. */
+function rectOfEntry(index: number) {
+  return barElement.value?.children[index]?.getBoundingClientRect() ?? null
+}
+
+defineExpose({ indexOverlapping, rectOfEntry })
 </script>

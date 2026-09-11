@@ -14,3 +14,8 @@ export function showSuccessToast(title: string, description?: string) {
 export function showDangerToast(title: string, description?: string) {
   toaster.error({ title, description })
 }
+
+/** A toast that lets you take the last change back while it is on screen. */
+export function showUndoToast(title: string, onUndo: () => void) {
+  toaster.create({ title, action: { label: dictionary.general.undo, onClick: onUndo } })
+}

@@ -13,6 +13,7 @@ export const dictionaryGerman = {
     close: 'Schließen',
     cancel: 'Abbrechen',
     back: 'Zurück',
+    undo: 'Rückgängig',
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
     support: 'Support',
@@ -37,6 +38,7 @@ export const dictionaryGerman = {
   cardDrag: {
     deleteCard: 'Karte löschen',
     flipAllCards: 'Alle Karten umdrehen',
+    cardDeleted: 'Karte gelöscht',
   },
   // The page with the picture library.
   images: {

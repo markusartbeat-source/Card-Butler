@@ -49,6 +49,7 @@ import Share from '~icons/material-symbols/share-outline'
 import Square from '~icons/material-symbols/square-outline-rounded'
 import SupportAgent from '~icons/material-symbols/support-agent-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
+import Undo from '~icons/material-symbols/undo-rounded'
 import West from '~icons/material-symbols/west-rounded'
 
 export const icons = {
@@ -97,6 +98,7 @@ export const icons = {
   square: Square,
   support_agent: SupportAgent,
   title: Title,
+  undo: Undo,
   west: West,
 }
 
