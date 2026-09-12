@@ -28,7 +28,6 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     shareProject: 'Share this project',
     userManagement: 'User management',
     cards: 'Cards',
-    firstCardSet: 'My first card set',
     newCardSet: 'New card set',
   },
   search: {
@@ -54,8 +53,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   },
   cardSets: {
     title: 'Card sets',
-    playerCards: 'Player cards',
-    villainCards: 'Villain cards',
+    cardSetName: (number: number) => `Card set ${number}`,
   },
   exportDialog: {
     digitalGroup: 'Digital & preview',

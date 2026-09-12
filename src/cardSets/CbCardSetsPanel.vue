@@ -5,20 +5,20 @@
     <CbTableOfContents
       v-model="activeCardSet"
       :title="dictionary.cardSets.title"
-      :items="cardSets"
+      :items="cardSetItems"
     />
   </aside>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import CbTableOfContents from '../components/atoms/CbTableOfContents.vue'
+import { cardSets } from './cardSets'
 
-// Placeholder sets — they do not filter the cards yet.
-const cardSets = [
-  { value: 'player-cards', label: dictionary.cardSets.playerCards },
-  { value: 'villain-cards', label: dictionary.cardSets.villainCards },
-]
+// The sets do not filter the cards yet.
+const cardSetItems = computed(() =>
+  cardSets.value.map((cardSet) => ({ value: cardSet.id, label: cardSet.name })),
+)
 
-const activeCardSet = ref(cardSets[0].value)
+const activeCardSet = ref(cardSets.value[0].id)
 </script>

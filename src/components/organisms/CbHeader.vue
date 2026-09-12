@@ -103,6 +103,7 @@ import CbInteractive from '../atoms/CbInteractive.vue'
 import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
+import { cardSets } from '../../cardSets/cardSets'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 
@@ -117,7 +118,7 @@ const route = useRoute()
 
 // Menu entries that are a page of their own, with the URL they lead to.
 const pageByMenuItem: Record<string, string> = {
-  // The only set there is, until the card sets are real data.
+  // The only set there is, until every set has its own section.
   'first-card-set': '/project',
   'all-images': '/images/all',
   'icons-in-text': '/images/icons-in-text',
@@ -150,9 +151,10 @@ const navigationMenus = computed(() => [
     label: dictionary.header.cards,
     items: [
       // Every card set stands here with its own name, the last entry adds one.
+      // Only the first set for now, until every set has its own section.
       {
         value: 'first-card-set',
-        label: dictionary.header.firstCardSet,
+        label: cardSets.value[0].name,
         icon: 'playing_cards' as const,
       },
       { value: 'new-card-set', label: dictionary.header.newCardSet, icon: 'add_2' as const },

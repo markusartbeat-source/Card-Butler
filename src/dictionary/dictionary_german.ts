@@ -29,10 +29,8 @@ export const dictionaryGerman = {
     collaboration: 'Zusammenarbeit',
     shareProject: 'Dieses Projekt teilen',
     userManagement: 'Benutzerverwaltung',
-    // The entries of the cards menu. The first set is a placeholder until the
-    // card sets are real data.
+    // The entries of the cards menu.
     cards: 'Karten',
-    firstCardSet: 'Mein erstes Kartenset',
     newCardSet: 'Neues Kartenset',
   },
   // The search over all cards, started in the header pill.
@@ -63,9 +61,8 @@ export const dictionaryGerman = {
   // The list of card sets at the right edge of the project page.
   cardSets: {
     title: 'Kartensets',
-    // Placeholder sets until the card sets are real data.
-    playerCards: 'Spielerkarten',
-    villainCards: 'Bösewichtkarten',
+    // The name a set gets when it is created, numbered in order.
+    cardSetName: (number: number) => `Kartenset ${number}`,
   },
   // The dialog for picking an export format.
   exportDialog: {

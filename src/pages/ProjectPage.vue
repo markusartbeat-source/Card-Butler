@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, toRef } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
@@ -124,6 +124,7 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
+import { cardSets } from '../cardSets/cardSets'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
@@ -144,7 +145,6 @@ import { projectName } from '../project/project'
 import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
 import { cardMatchesSearch } from '../search/cardMatchesSearch'
 import { searchWord } from '../search/searchWord'
-import type { CardElementValues } from '../cardElements/cardElements'
 
 const isExportDialogOpen = ref(false)
 
@@ -155,17 +155,8 @@ useHeader(() => ({
     showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
 }))
 
-// The id stays with a card forever — the number is only what the card is called.
-// The starter cards use fixed ids so every window means the same card. Real
-// shared card data comes later with live sync.
-const cards = ref(
-  [1, 2, 3, 4, 5, 6, 7, 8].map((number) => ({
-    id: `starter-card-${number}`,
-    number,
-    // What this card fills into the deck's elements. Placeholder for now.
-    elementValues: (number === 3 ? { 'effect-text': 'Test' } : {}) as CardElementValues,
-  })),
-)
+// The page shows the first set only, until every set gets its own section.
+const cards = toRef(cardSets.value[0], 'cards')
 const selectedCardId = ref<string | null>(null)
 
 // While searching, only the cards with a hit stand in the row. Reordering is off
