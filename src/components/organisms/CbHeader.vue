@@ -57,13 +57,13 @@
         v-for="menu in navigationMenus"
         :key="menu.value"
         :items="menu.items"
-        :active-item="menu.activeItem"
-        @select="$emit('action', $event)"
+        :active-item="activeItemOf(menu.items)"
+        @select="runMenuAction"
       >
         <CbButton
           variant="ghost"
           class="cb-header-menu"
-          :class="{ 'cb-header-menu-active': menu.activeItem }"
+          :class="{ 'cb-header-menu-active': activeItemOf(menu.items) }"
         >
           {{ menu.label }}
           <CbIcon name="keyboard_arrow_down" class="cb-header-menu-arrow" />
@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
@@ -110,7 +110,37 @@ withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: Header
   searchbar: true,
   buttons: () => [],
 })
-defineEmits<{ action: [key: string] }>()
+const emit = defineEmits<{ action: [key: string] }>()
+
+const router = useRouter()
+const route = useRoute()
+
+// Menu entries that are a page of their own, with the URL they lead to.
+const pageByMenuItem: Record<string, string> = {
+  // The only set there is, until the card sets are real data.
+  'first-card-set': '/project',
+  'all-images': '/images/all',
+  'icons-in-text': '/images/icons-in-text',
+  'share-project': '/collaboration/share',
+  'user-management': '/collaboration/users',
+}
+
+// The entry whose page is open right now. Only one menu holds it at a time, so
+// the user always sees where they are.
+const activeMenuItem = computed(() =>
+  Object.keys(pageByMenuItem).find((item) => pageByMenuItem[item] === route.path),
+)
+
+function activeItemOf(menuItems: { value: string }[]) {
+  return menuItems.find((item) => item.value === activeMenuItem.value)?.value
+}
+
+// An entry with a page opens it, every other entry is left to the page.
+function runMenuAction(value: string) {
+  const path = pageByMenuItem[value]
+  if (path) router.push(path)
+  else emit('action', value)
+}
 
 // The menus of the design. They belong to the header itself, so they stand in
 // every page.
@@ -118,8 +148,6 @@ const navigationMenus = computed(() => [
   {
     value: 'cards',
     label: dictionary.header.cards,
-    // The only set there is, until the card sets are real data.
-    activeItem: 'first-card-set',
     items: [
       // Every card set stands here with its own name, the last entry adds one.
       {
@@ -166,8 +194,6 @@ const searchModeLabel = computed(() =>
     ? dictionary.header.searchInCards
     : dictionary.header.askButler,
 )
-
-const router = useRouter()
 
 const { people } = usePeopleBroadcast()
 

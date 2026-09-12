@@ -5,8 +5,13 @@
     {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
   </CbButton>
 
-  <CbDropdown :items="profileMenuItems" @select="runProfileAction">
-    <CbInteractive class="rounded-full">
+  <CbDropdown :items="profileMenuItems" :active-item="activeProfileItem" @select="runProfileAction">
+    <!-- On one of the profile menu's pages the picture wears a gold ring, the
+         same way an open menu above shows its gold underline. -->
+    <CbInteractive
+      class="rounded-full"
+      :class="{ 'outline-2 outline-gold': activeProfileItem }"
+    >
       <CbAvatar :name="userLabel" :image-url="userPicture" />
     </CbInteractive>
   </CbDropdown>
@@ -14,13 +19,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import CbAvatar from '../atoms/CbAvatar.vue'
 import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
-import { showToast } from '../atoms/toaster'
 import { signInWithGoogle, signOut, useCurrentUser } from '../../composables/useCurrentUser'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 
@@ -39,16 +43,26 @@ const profileMenuItems = computed(() => [
 ])
 
 const router = useRouter()
+const route = useRoute()
+
+// The menu entries that are a page of their own, with the URL they lead to.
+const pageByProfileItem: Record<string, string> = {
+  settings: '/settings',
+  support: '/support',
+}
+
+// The entry whose page is open right now.
+const activeProfileItem = computed(() =>
+  Object.keys(pageByProfileItem).find((item) => pageByProfileItem[item] === route.path),
+)
 
 function goToUpgrade() {
   router.push('/upgrade')
 }
 
 function runProfileAction(value: string) {
-  if (value === 'settings') router.push('/settings')
-  // Support has no page yet, so it only says so.
-  else if (value === 'support')
-    showToast(dictionary.general.support, dictionary.general.notAvailableText)
+  const path = pageByProfileItem[value]
+  if (path) router.push(path)
   else signOut()
 }
 </script>
