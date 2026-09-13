@@ -23,7 +23,7 @@
   <!-- The card sets stand at the right edge and their divider line runs the
        whole height. Everything else belongs to the cards, so the print bar
        ends up centred under them and not under the whole page. -->
-  <div class="flex min-h-full">
+  <div ref="pageContent" class="flex min-h-full">
     <!-- The print bar stands under the cards, so it ends up at the bottom edge
          of a short page and stays there while a long page scrolls. -->
     <div class="flex min-w-0 flex-1 flex-col">
@@ -136,6 +136,7 @@ import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
 import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCardSetSection'
+import { updateVisibleCardSet } from '../cardSets/visibleCardSet'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
@@ -270,8 +271,24 @@ function updateMyAnchor(event: MouseEvent) {
   myAnchor.value = readAnchorFromMouse(event)
 }
 
-onMounted(() => window.addEventListener('mousemove', updateMyAnchor))
-onUnmounted(() => window.removeEventListener('mousemove', updateMyAnchor))
+// The page area (the "main" of App.vue) scrolls, not the page itself. Which set
+// is in view is read off it on every scroll, so the sets panel can mark it.
+const pageContent = ref<HTMLElement | null>(null)
+const pageArea = computed(() => pageContent.value?.closest('main') ?? null)
+
+function updateVisibleCardSetFromScroll() {
+  if (pageArea.value) updateVisibleCardSet(pageArea.value)
+}
+
+onMounted(() => {
+  window.addEventListener('mousemove', updateMyAnchor)
+  pageArea.value?.addEventListener('scroll', updateVisibleCardSetFromScroll)
+  updateVisibleCardSetFromScroll()
+})
+onUnmounted(() => {
+  window.removeEventListener('mousemove', updateMyAnchor)
+  pageArea.value?.removeEventListener('scroll', updateVisibleCardSetFromScroll)
+})
 
 // A new card appears right where the button is, so it goes to the front of its
 // set. Its number keeps counting up within the set — it is a name, not the

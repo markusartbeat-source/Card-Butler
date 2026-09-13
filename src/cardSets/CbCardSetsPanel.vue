@@ -1,24 +1,27 @@
 <template>
   <!-- The panel stands at the right edge of the project page, a thin line
-       divides it from the cards. -->
-  <aside class="w-44 shrink-0 border-l border-surface-light pt-8">
-    <CbTableOfContents
-      v-model="activeCardSet"
-      :title="dictionary.cardSets.title"
-      :items="cardSetItems"
-    />
+       divides it from the cards. The line runs the whole page height, the list
+       inside sticks to the top while the page scrolls. -->
+  <aside class="w-44 shrink-0 border-l border-surface-light">
+    <div class="sticky top-0 pt-8">
+      <!-- The marked entry follows the scrolling, a click glides to that set. -->
+      <CbTableOfContents
+        :model-value="visibleCardSetId"
+        :title="dictionary.cardSets.title"
+        :items="cardSetItems"
+        @update:model-value="cardSetIdToShow = $event"
+      />
+    </div>
   </aside>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import CbTableOfContents from '../components/atoms/CbTableOfContents.vue'
-import { cardSets } from './cardSets'
+import { cardSetIdToShow, cardSets } from './cardSets'
+import { visibleCardSetId } from './visibleCardSet'
 
-// The sets do not filter the cards yet.
 const cardSetItems = computed(() =>
   cardSets.value.map((cardSet) => ({ value: cardSet.id, label: cardSet.name })),
 )
-
-const activeCardSet = ref(cardSets.value[0].id)
 </script>

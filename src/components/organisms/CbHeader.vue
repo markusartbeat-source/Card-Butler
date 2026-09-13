@@ -104,6 +104,7 @@ import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
 import { addCardSet, cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
+import { visibleCardSetId } from '../../cardSets/visibleCardSet'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 
@@ -116,10 +117,9 @@ const emit = defineEmits<{ action: [key: string] }>()
 const router = useRouter()
 const route = useRoute()
 
-// Menu entries that are a page of their own, with the URL they lead to.
+// Menu entries that are a page of their own, with the URL they lead to. The
+// card sets are not in here: they share the project page and go by their id.
 const pageByMenuItem: Record<string, string> = {
-  // The only set there is, until every set has its own section.
-  'first-card-set': '/project',
   'all-images': '/images/all',
   'icons-in-text': '/images/icons-in-text',
   'share-project': '/collaboration/share',
@@ -127,19 +127,29 @@ const pageByMenuItem: Record<string, string> = {
 }
 
 // The entry whose page is open right now. Only one menu holds it at a time, so
-// the user always sees where they are.
+// the user always sees where they are. On the project page that is the set
+// the user is looking at.
 const activeMenuItem = computed(() =>
-  Object.keys(pageByMenuItem).find((item) => pageByMenuItem[item] === route.path),
+  route.path === '/project'
+    ? visibleCardSetId.value
+    : Object.keys(pageByMenuItem).find((item) => pageByMenuItem[item] === route.path),
 )
 
 function activeItemOf(menuItems: { value: string }[]) {
   return menuItems.find((item) => item.value === activeMenuItem.value)?.value
 }
 
-// An entry with a page opens it, every other entry is left to the page.
+// A set (new or existing) is shown on the project page, an entry with a page
+// opens it, every other entry is left to the page.
 function runMenuAction(value: string) {
   if (value === 'new-card-set') {
     cardSetIdToShow.value = addCardSet().id
+    router.push('/project')
+    return
+  }
+
+  if (cardSets.value.some((cardSet) => cardSet.id === value)) {
+    cardSetIdToShow.value = value
     router.push('/project')
     return
   }
@@ -157,12 +167,11 @@ const navigationMenus = computed(() => [
     label: dictionary.header.cards,
     items: [
       // Every card set stands here with its own name, the last entry adds one.
-      // Only the first set for now, until every set has its own section.
-      {
-        value: 'first-card-set',
-        label: cardSets.value[0].name,
+      ...cardSets.value.map((cardSet) => ({
+        value: cardSet.id,
+        label: cardSet.name,
         icon: 'playing_cards' as const,
-      },
+      })),
       { value: 'new-card-set', label: dictionary.header.newCardSet, icon: 'add_2' as const },
     ],
   },
