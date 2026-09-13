@@ -26,14 +26,20 @@ export const cardSets = ref<CardSet[]>([
       elementValues: (number === 3 ? { 'effect-text': 'Test' } : {}) as CardElementValues,
     })),
   },
-  // Dummy set to check the sections — leaves again once sets can be created.
-  {
-    id: 'dummy-card-set',
-    name: dictionary.cardSets.cardSetName(2),
-    cards: [1, 2, 3].map((number) => ({
-      id: `dummy-card-${number}`,
-      number,
-      elementValues: {},
-    })),
-  },
 ])
+
+/** A new set starts with one empty card, so it is not an empty section. Its
+    name counts on from the sets there are. */
+export function addCardSet() {
+  const cardSet: CardSet = {
+    id: crypto.randomUUID(),
+    name: dictionary.cardSets.cardSetName(cardSets.value.length + 1),
+    cards: [{ id: crypto.randomUUID(), number: 1, elementValues: {} }],
+  }
+  cardSets.value.push(cardSet)
+  return cardSet
+}
+
+/** The set the project page should scroll to as soon as it shows it. The header
+    sets it, the page clears it once it has scrolled there. */
+export const cardSetIdToShow = ref<string | null>(null)

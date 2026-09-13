@@ -29,18 +29,21 @@
     <div class="flex min-w-0 flex-1 flex-col">
       <div class="flex flex-1">
         <!-- Every set is a section of its own, a thin line divides them. A card
-             can only be sorted within its set: the sections share no drag group. -->
+             can only be sorted within its set: the sections share no drag group.
+             The rows pack at the top, so the minimum height does not stretch
+             the cards. -->
         <div
           v-if="!hasNoSearchResults"
           class="flex min-w-0 flex-1 flex-col divide-y divide-surface-light"
         >
           <VueDraggable
             v-for="cardSet in cardSets"
+            :id="cardSetElementId(cardSet.id)"
             :key="cardSet.id"
             v-model="cardSet.cards"
             v-bind="cardDragOptions"
             :disabled="isSearching"
-            class="flex flex-wrap justify-center gap-6 px-16 py-32 select-none"
+            class="cb-card-set-section flex flex-wrap content-start justify-center gap-6 px-16 py-32 select-none"
             @start="startCardDrag"
             @end="finishCardDrag(cardSet)"
           >
@@ -122,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, toRef } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
@@ -131,7 +134,8 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
-import { cardSets, type CardSet } from '../cardSets/cardSets'
+import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
+import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCardSetSection'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
@@ -193,6 +197,20 @@ function riseDelay(id: string, index: number) {
 function addCardId(cardSet: CardSet) {
   return `add-card-button-${cardSet.id}`
 }
+
+// The header asks for a set to be shown — right away when the page is already
+// open, or as soon as it has been mounted. The page waits one tick so the
+// section of a brand-new set is in the DOM before it scrolls there.
+watch(
+  cardSetIdToShow,
+  async (cardSetId) => {
+    if (!cardSetId) return
+    await nextTick()
+    scrollToCardSetSection(cardSetId)
+    cardSetIdToShow.value = null
+  },
+  { immediate: true },
+)
 
 // Dropping a card on the spot it came from makes the drag library put every
 // element of the row back into the page one by one, which would start the
@@ -263,3 +281,13 @@ function addCard(cardSet: CardSet) {
   cardSet.cards.unshift({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
 }
 </script>
+
+<style scoped>
+/* A section is at least as tall as the page area — the screen minus the 100px
+   header (see CbHeader) — so a set scrolled to the top stands alone on the
+   screen. A percentage cannot do this: nothing above the section has a fixed
+   height, the page only has a minimum. */
+.cb-card-set-section {
+  min-height: calc(100vh - 100px);
+}
+</style>

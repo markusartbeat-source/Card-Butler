@@ -103,7 +103,7 @@ import CbInteractive from '../atoms/CbInteractive.vue'
 import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
-import { cardSets } from '../../cardSets/cardSets'
+import { addCardSet, cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 
@@ -138,6 +138,12 @@ function activeItemOf(menuItems: { value: string }[]) {
 
 // An entry with a page opens it, every other entry is left to the page.
 function runMenuAction(value: string) {
+  if (value === 'new-card-set') {
+    cardSetIdToShow.value = addCardSet().id
+    router.push('/project')
+    return
+  }
+
   const path = pageByMenuItem[value]
   if (path) router.push(path)
   else emit('action', value)
