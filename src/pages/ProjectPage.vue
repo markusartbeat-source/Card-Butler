@@ -1,5 +1,5 @@
 <template>
-  <CbExportDialog v-model:open="isExportDialogOpen" :cards="cards" />
+  <CbExportDialog v-model:open="isExportDialogOpen" :cards="allCards" />
 
   <CbCardEditor
     v-if="selectedCard && selectedCardRect"
@@ -28,81 +28,88 @@
          of a short page and stays there while a long page scrolls. -->
     <div class="flex min-w-0 flex-1 flex-col">
       <div class="flex flex-1">
-        <VueDraggable
+        <!-- Every set is a section of its own, a thin line divides them. A card
+             can only be sorted within its set: the sections share no drag group. -->
+        <div
           v-if="!hasNoSearchResults"
-          v-model="cards"
-          v-bind="cardDragOptions"
-          :disabled="isSearching"
-          class="mt-8 flex h-max min-w-0 flex-1 flex-wrap justify-center gap-6 px-16 select-none"
-          @start="startCardDrag"
-          @end="finishCardDrag"
+          class="flex min-w-0 flex-1 flex-col divide-y divide-surface-light"
         >
-          <!-- The button stands in front of the row. It is not a ".cb-card", so the
-               drag library skips it: a card is only ever put before or after another
-               card, which keeps the button the first thing in the row. While
-               searching it steps aside — the row then shows hits only. -->
-          <CbInteractive
-            v-if="!isSearching"
-            class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
-            :class="[
-              risenCardIds.has(addCardId) ? '' : 'animate-cb-rise',
-              dimWhileDraggingClasses,
-            ]"
-            :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
-            @animationend="markRisen(addCardId, $event)"
-            @click="addCard"
+          <VueDraggable
+            v-for="cardSet in cardSets"
+            :key="cardSet.id"
+            v-model="cardSet.cards"
+            v-bind="cardDragOptions"
+            :disabled="isSearching"
+            class="flex flex-wrap justify-center gap-6 px-16 py-32 select-none"
+            @start="startCardDrag"
+            @end="finishCardDrag(cardSet)"
           >
-            <CbIcon name="add_2" />
-            <span>{{ dictionary.project.newCard }}</span>
-          </CbInteractive>
-
-
-          <!-- The box the drag library picks up. It must be plain page pixels: the
-               library writes the position of the dragged copy into "transform", and
-               the "zoom" that draws the card would shrink that movement, so the card
-               would fall behind the cursor. The zoom sits on the card inside.
-               Front and back share the one grid cell of the box, so they lie on top
-               of each other; the flip turns the two faces (see style.css). -->
-          <div
-            v-for="(card, cardIndex) in visibleCards"
-            :key="card.id"
-            class="cb-card grid"
-            :style="riseDelay(card.id, cardIndex)"
-            :class="[
-              risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
-              { invisible: card.id === selectedCardId, 'cb-card-flipped': showingCardBacks },
-            ]"
-            @animationend="markRisen(card.id, $event)"
-            @click="selectCard(card.id, $event)"
-          >
-            <CbCard
-              :id="card.id"
-              :number="card.number"
-              :element-values="card.elementValues"
-              :highlight-color="highlightColorForCard(card.id)"
-              highlight-search
-              class="cb-card-front col-start-1 row-start-1"
+            <!-- The button stands in front of the row. It is not a ".cb-card", so the
+                 drag library skips it: a card is only ever put before or after another
+                 card, which keeps the button the first thing in the row. While
+                 searching it steps aside — the row then shows hits only. -->
+            <CbInteractive
+              v-if="!isSearching"
+              class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
+              :class="[
+                risenCardIds.has(addCardId(cardSet)) ? '' : 'animate-cb-rise',
+                dimWhileDraggingClasses,
+              ]"
+              :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
+              @animationend="markRisen(addCardId(cardSet), $event)"
+              @click="addCard(cardSet)"
             >
-              <CbCursor
-                v-for="cursor in cursorsOnCard(card.id)"
-                :key="cursor.senderId"
-                :x="cursor.x"
-                :y="cursor.y"
-                :name="cursor.name"
-                :color="cursor.color"
+              <CbIcon name="add_2" />
+              <span>{{ dictionary.project.newCard }}</span>
+            </CbInteractive>
+
+            <!-- The box the drag library picks up. It must be plain page pixels: the
+                 library writes the position of the dragged copy into "transform", and
+                 the "zoom" that draws the card would shrink that movement, so the card
+                 would fall behind the cursor. The zoom sits on the card inside.
+                 Front and back share the one grid cell of the box, so they lie on top
+                 of each other; the flip turns the two faces (see style.css). -->
+            <div
+              v-for="(card, cardIndex) in visibleCardsOf(cardSet)"
+              :key="card.id"
+              class="cb-card grid"
+              :style="riseDelay(card.id, cardIndex)"
+              :class="[
+                risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
+                { invisible: card.id === selectedCardId, 'cb-card-flipped': showingCardBacks },
+              ]"
+              @animationend="markRisen(card.id, $event)"
+              @click="selectCard(card.id, $event)"
+            >
+              <CbCard
+                :id="card.id"
+                :number="card.number"
+                :element-values="card.elementValues"
+                :highlight-color="highlightColorForCard(card.id)"
+                highlight-search
+                class="cb-card-front col-start-1 row-start-1"
+              >
+                <CbCursor
+                  v-for="cursor in cursorsOnCard(card.id)"
+                  :key="cursor.senderId"
+                  :x="cursor.x"
+                  :y="cursor.y"
+                  :name="cursor.name"
+                  :color="cursor.color"
+                />
+              </CbCard>
+              <CbCard
+                :id="card.id"
+                :number="card.number"
+                :element-values="card.elementValues"
+                :highlight-color="highlightColorForCard(card.id)"
+                highlight-search
+                side="back"
+                class="cb-card-back col-start-1 row-start-1"
               />
-            </CbCard>
-            <CbCard
-              :id="card.id"
-              :number="card.number"
-              :element-values="card.elementValues"
-              :highlight-color="highlightColorForCard(card.id)"
-              highlight-search
-              side="back"
-              class="cb-card-back col-start-1 row-start-1"
-            />
-          </div>
-        </VueDraggable>
+            </div>
+          </VueDraggable>
+        </div>
 
         <CbSearchNoResults v-else />
       </div>
@@ -124,7 +131,7 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
-import { cardSets } from '../cardSets/cardSets'
+import { cardSets, type CardSet } from '../cardSets/cardSets'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
@@ -155,32 +162,37 @@ useHeader(() => ({
     showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
 }))
 
-// The page shows the first set only, until every set gets its own section.
-const cards = toRef(cardSets.value[0], 'cards')
+// The cards of every set in one row — for the editor and the export.
+const allCards = computed(() => cardSets.value.flatMap((cardSet) => cardSet.cards))
 const selectedCardId = ref<string | null>(null)
 
 // While searching, only the cards with a hit stand in the row. Reordering is off
-// then: the drag library writes the new order of the shown cards back into
-// "cards", which would shuffle the hidden ones.
-const visibleCards = computed(() =>
-  cards.value.filter((card) => cardMatchesSearch(card.elementValues)),
-)
+// then: the drag library writes the new order of the shown cards back into the
+// set, which would shuffle the hidden ones.
+function visibleCardsOf(cardSet: CardSet) {
+  return cardSet.cards.filter((card) => cardMatchesSearch(card.elementValues))
+}
 const isSearching = computed(() => searchWord.value.trim() !== '')
 
-// Then the placeholder box takes the whole card area instead of the row.
-const hasNoSearchResults = computed(() => isSearching.value && visibleCards.value.length === 0)
+// Then the placeholder box takes the whole card area instead of the sections.
+const hasNoSearchResults = computed(
+  () => isSearching.value && !allCards.value.some((card) => cardMatchesSearch(card.elementValues)),
+)
 
 // The cards of the first render fan in one after the other, behind the button
 // that stands in front of them. A card added later should show up right away,
 // so it gets no delay — and since it is put in front, only its id tells the two
 // apart, no longer its place in the row.
-const initialCardIds = new Set(cards.value.map((card) => card.id))
+const initialCardIds = new Set(allCards.value.map((card) => card.id))
 
 function riseDelay(id: string, index: number) {
   return initialCardIds.has(id) ? { animationDelay: `${(index + 1) * 60}ms` } : undefined
 }
 
-const addCardId = 'add-card-button'
+// Every set has its own button, so each one remembers its rise on its own.
+function addCardId(cardSet: CardSet) {
+  return `add-card-button-${cardSet.id}`
+}
 
 // Dropping a card on the spot it came from makes the drag library put every
 // element of the row back into the page one by one, which would start the
@@ -191,7 +203,9 @@ const risenCardIds = ref(new Set<string>())
 function markRisen(id: string, event: AnimationEvent) {
   if (event.animationName === 'cb-rise') risenCardIds.value.add(id)
 }
-const selectedCard = computed(() => cards.value.find((card) => card.id === selectedCardId.value))
+const selectedCard = computed(() =>
+  allCards.value.find((card) => card.id === selectedCardId.value),
+)
 
 // Where the clicked card sits in the grid — the editor starts its flight there.
 const selectedCardRect = ref<DOMRect | null>(null)
@@ -205,9 +219,11 @@ function selectCard(id: string, event: MouseEvent) {
 // Letting go over a field of the drop bar is not a sort — the row stays as it
 // was, and the field decides what happens to the card. Deleting brings its own
 // animation along, which is why it gives the drag state back itself.
-function finishCardDrag() {
+function finishCardDrag(cardSet: CardSet) {
   const { droppedOn, cardIndex, cardElement } = endCardDrag()
-  if (droppedOn === 'deleteCard') return deleteDroppedCard(cards, cardIndex, cardElement)
+  if (droppedOn === 'deleteCard') {
+    return deleteDroppedCard(toRef(cardSet, 'cards'), cardIndex, cardElement)
+  }
 
   if (droppedOn === 'flipAllCards') flipAllCards()
   releaseCardDrag()
@@ -239,10 +255,11 @@ function updateMyAnchor(event: MouseEvent) {
 onMounted(() => window.addEventListener('mousemove', updateMyAnchor))
 onUnmounted(() => window.removeEventListener('mousemove', updateMyAnchor))
 
-// A new card appears right where the button is, so it goes to the front of the
-// row. Its number keeps counting up — it is a name, not the place in the row.
-function addCard() {
-  const highestNumber = Math.max(...cards.value.map((card) => card.number))
-  cards.value.unshift({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
+// A new card appears right where the button is, so it goes to the front of its
+// set. Its number keeps counting up within the set — it is a name, not the
+// place in the row.
+function addCard(cardSet: CardSet) {
+  const highestNumber = Math.max(0, ...cardSet.cards.map((card) => card.number))
+  cardSet.cards.unshift({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
 }
 </script>

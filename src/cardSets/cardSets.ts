@@ -26,4 +26,14 @@ export const cardSets = ref<CardSet[]>([
       elementValues: (number === 3 ? { 'effect-text': 'Test' } : {}) as CardElementValues,
     })),
   },
+  // Dummy set to check the sections — leaves again once sets can be created.
+  {
+    id: 'dummy-card-set',
+    name: dictionary.cardSets.cardSetName(2),
+    cards: [1, 2, 3].map((number) => ({
+      id: `dummy-card-${number}`,
+      number,
+      elementValues: {},
+    })),
+  },
 ])
