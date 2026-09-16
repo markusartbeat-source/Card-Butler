@@ -138,6 +138,7 @@ import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
+import { flashCardSetsPanel } from '../cardSets/panelVisibility'
 import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCardSetSection'
 import { updateVisibleCardSet } from '../cardSets/visibleCardSet'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
@@ -209,12 +210,14 @@ function addCardId(cardSet: CardSet) {
 
 // The header asks for a set to be shown — right away when the page is already
 // open, or as soon as it has been mounted. The page waits one tick so the
-// section of a brand-new set is in the DOM before it scrolls there.
+// section of a brand-new set is in the DOM before it scrolls there. The sets
+// panel comes along, so the mark can be seen moving to the set.
 watch(
   cardSetIdToShow,
   async (cardSetId) => {
     if (!cardSetId) return
     await nextTick()
+    flashCardSetsPanel()
     scrollToCardSetSection(cardSetId)
     cardSetIdToShow.value = null
   },
