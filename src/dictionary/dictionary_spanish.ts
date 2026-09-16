@@ -159,6 +159,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
   },
   support: {
     title: '¿Qué te gustaría contarnos?',
+    feedbackHeading: 'Describe tu comentario con gusto',
+    feedbackPlaceholder: 'Tu texto aquí',
   },
   userManagement: {
     title: '¿Qué queremos cambiar en la colaboración?',

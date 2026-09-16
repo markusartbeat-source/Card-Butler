@@ -159,6 +159,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   },
   support: {
     title: 'What would you like to tell us?',
+    feedbackHeading: 'Feel free to describe your feedback',
+    feedbackPlaceholder: 'Your text here',
   },
   userManagement: {
     title: 'What shall we change about the collaboration?',

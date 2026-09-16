@@ -181,6 +181,8 @@ export const dictionaryGerman = {
   // The support page with the feedback form.
   support: {
     title: 'Was möchtest du uns mitteilen?',
+    feedbackHeading: 'Beschreibe gerne dein Feedback',
+    feedbackPlaceholder: 'Hier dein Text',
   },
   // The page with the list of everyone who is in the project.
   userManagement: {
