@@ -20,13 +20,15 @@
     />
   </CbCardEditor>
 
-  <!-- The card sets stand at the right edge and their divider line runs the
-       whole height. Everything else belongs to the cards, so the print bar
-       ends up centred under them and not under the whole page. -->
-  <div ref="pageContent" class="flex min-h-full">
-    <!-- The print bar stands under the cards, so it ends up at the bottom edge
-         of a short page and stays there while a long page scrolls. -->
-    <div class="flex min-w-0 flex-1 flex-col">
+  <!-- The card area and the card sets panel share the one grid cell, so the
+       panel floats over the cards at the right edge instead of taking space.
+       Sideways overflow is clipped, so the panel sliding out past the right
+       edge never brings a horizontal scrollbar. -->
+  <div ref="pageContent" class="grid min-h-full grid-cols-1 grid-rows-1 overflow-x-clip">
+    <!-- The cards take at most 80% of the page and stand centred. The print
+         bar stands under the cards, so it ends up at the bottom edge of a
+         short page and stays there while a long page scrolls. -->
+    <div class="col-start-1 row-start-1 mx-auto flex w-full max-w-4/5 min-w-0 flex-col">
       <div class="flex flex-1">
         <!-- Every set is a section of its own, a thin line divides them. A card
              can only be sorted within its set: the sections share no drag group.
@@ -121,7 +123,7 @@
       <CbPrintExportBar :class="dimWhileDraggingClasses" @open="isExportDialogOpen = true" />
     </div>
 
-    <CbCardSetsPanel :class="dimWhileDraggingClasses" />
+    <CbCardSetsPanel class="col-start-1 row-start-1" :class="dimWhileDraggingClasses" />
   </div>
 </template>
 
