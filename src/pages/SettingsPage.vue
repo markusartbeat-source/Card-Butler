@@ -2,7 +2,7 @@
   <div class="flex min-h-full flex-col">
     <!-- The groups stay centred on every screen width. -->
     <div class="flex flex-col items-center gap-8 pb-6">
-      <CbSettingsGroup :title="dictionary.settings.accountGroup">
+      <CbSettingsGroup :title="dictionary.settings.accountGroup" same-row-height>
         <!-- The spacer pushes the button to the right edge of the row. -->
         <div class="animate-cb-rise flex items-center gap-3.5 p-6" :style="riseDelay(0)">
           <CbAvatar :name="userLabel" :image-url="userPicture" />
@@ -41,7 +41,7 @@
         </div>
       </CbSettingsGroup>
 
-      <CbSettingsGroup :title="dictionary.settings.subscriptionGroup">
+      <CbSettingsGroup :title="dictionary.settings.subscriptionGroup" same-row-height>
         <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(4)">
           {{ subscription.planName }}, {{ subscription.pricePerMonth }}€
           {{ dictionary.settings.perMonth }}

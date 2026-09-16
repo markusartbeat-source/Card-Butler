@@ -277,10 +277,11 @@ function updateMyAnchor(event: MouseEvent) {
   myAnchor.value = readAnchorFromMouse(event)
 }
 
-// The page area (the "main" of App.vue) scrolls, not the page itself. Which set
-// is in view is read off it on every scroll, so the sets panel can mark it.
+// The page area (the page wrapper in App.vue) scrolls, not the page itself.
+// Which set is in view is read off it on every scroll, so the sets panel can
+// mark it.
 const pageContent = ref<HTMLElement | null>(null)
-const pageArea = computed(() => pageContent.value?.closest('main') ?? null)
+const pageArea = computed(() => pageContent.value?.closest<HTMLElement>('.cb-page-area') ?? null)
 
 function updateVisibleCardSetFromScroll() {
   if (pageArea.value) updateVisibleCardSet(pageArea.value)

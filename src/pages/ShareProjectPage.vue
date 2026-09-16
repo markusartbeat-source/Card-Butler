@@ -5,14 +5,16 @@
       <CbSettingsGroup :title="dictionary.shareProject.title">
         <!-- Image row: a dark box in the photo's shape until the real image
              arrives. The width comes from the panel, the height follows. -->
-        <div class="border-b-0 px-6 pt-6">
+        <div class="animate-cb-rise border-b-0 px-6 pt-6" :style="riseDelay(0)">
           <div class="share-image-placeholder w-full rounded-2xl bg-background"></div>
         </div>
 
         <!-- Link row -->
         <div class="flex flex-col gap-3 p-6">
-          <h3 class="text-sm text-white">{{ dictionary.shareProject.linkHeading }}</h3>
-          <div class="flex items-center gap-3">
+          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(1)">
+            {{ dictionary.shareProject.linkHeading }}
+          </h3>
+          <div class="animate-cb-rise flex items-center gap-3" :style="riseDelay(2)">
             <CbInput v-model="shareLink" :label="dictionary.shareProject.linkHeading" class="grow" />
             <CbButton class="w-24" @click="copyShareLink">
               {{ dictionary.shareProject.copy }}
@@ -23,14 +25,23 @@
             variant="field"
             :label="dictionary.shareProject.permission"
             :items="permissions"
+            class="animate-cb-rise"
+            :style="riseDelay(3)"
           />
-          <CbInput v-model="linkPassword" :label="dictionary.shareProject.password" />
+          <CbInput
+            v-model="linkPassword"
+            :label="dictionary.shareProject.password"
+            class="animate-cb-rise"
+            :style="riseDelay(4)"
+          />
         </div>
 
         <!-- Mail row -->
         <div class="flex flex-col gap-3 p-6">
-          <h3 class="text-sm text-white">{{ dictionary.shareProject.mailHeading }}</h3>
-          <div class="flex items-center gap-3">
+          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(5)">
+            {{ dictionary.shareProject.mailHeading }}
+          </h3>
+          <div class="animate-cb-rise flex items-center gap-3" :style="riseDelay(6)">
             <CbInput
               v-model="inviteMail"
               :label="dictionary.shareProject.invite"
@@ -44,6 +55,8 @@
             variant="field"
             :label="dictionary.shareProject.permission"
             :items="permissions"
+            class="animate-cb-rise"
+            :style="riseDelay(7)"
           />
         </div>
       </CbSettingsGroup>
@@ -86,6 +99,12 @@ const invitePermission = ref('view')
 // No backend yet: only tells the user the invitation went out.
 function sendInvite() {
   showSuccessToast(dictionary.shareProject.inviteSent(inviteMail.value))
+}
+
+// Every row waits a moment longer than the one above it, so the panel builds
+// itself up from top to bottom — the same feel as the settings page.
+function riseDelay(step: number) {
+  return { animationDelay: `${step * 60}ms` }
 }
 </script>
 

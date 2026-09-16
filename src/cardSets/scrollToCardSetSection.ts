@@ -11,7 +11,7 @@ const scrollDurationMs = 800
 /** Glides the page area until the section of the given set stands at its top. */
 export function scrollToCardSetSection(cardSetId: string) {
   const section = document.getElementById(cardSetElementId(cardSetId))
-  const pageArea = section?.closest('main')
+  const pageArea = section?.closest<HTMLElement>('.cb-page-area')
   if (!section || !pageArea) return
 
   const startTop = pageArea.scrollTop

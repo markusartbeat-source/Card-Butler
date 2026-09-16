@@ -30,6 +30,7 @@
         class="animate-cb-rise"
         :style="riseDelay(0)"
         :title="dictionary.exportDialog.digitalGroup"
+        same-row-height
       >
         <CbSettingsRow
           interactive
@@ -61,6 +62,7 @@
         class="animate-cb-rise"
         :style="riseDelay(1)"
         :title="dictionary.exportDialog.printGroup"
+        same-row-height
       >
         <CbSettingsRow
           interactive
