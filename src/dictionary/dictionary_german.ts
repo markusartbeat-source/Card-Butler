@@ -185,6 +185,9 @@ export const dictionaryGerman = {
     feedbackPlaceholder: 'Hier dein Text',
     screenshotHeading: 'Lade gerne Screenshots des Problems hoch:',
     screenshotTile: 'Bild',
+    notifyUpdatesCheckbox: 'Informiere mich über Updates per Mail',
+    allowContactCheckbox:
+      'Um das Feedback besser verstehen zu können, dürfen Entwickler mich per Mail kontaktieren.',
   },
   // The page with the list of everyone who is in the project.
   userManagement: {

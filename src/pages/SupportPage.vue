@@ -48,6 +48,23 @@
             {{ file.name }}
           </p>
         </div>
+
+        <!-- Contact row: each checkbox carries its own 6 px of padding, so the
+             rows need no gap of their own. -->
+        <div class="flex flex-col p-6 text-white">
+          <CbCheckbox
+            v-model="notifyAboutUpdates"
+            :label="dictionary.support.notifyUpdatesCheckbox"
+            class="animate-cb-rise"
+            :style="riseDelay(5)"
+          />
+          <CbCheckbox
+            v-model="allowContact"
+            :label="dictionary.support.allowContactCheckbox"
+            class="animate-cb-rise"
+            :style="riseDelay(6)"
+          />
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
@@ -55,6 +72,7 @@
 
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
+import CbCheckbox from '../components/atoms/CbCheckbox.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
@@ -73,6 +91,10 @@ const screenshots = ref<File[]>([])
 function pickScreenshots(event: Event) {
   screenshots.value = Array.from((event.target as HTMLInputElement).files ?? [])
 }
+
+// Both start ticked, as in the design.
+const notifyAboutUpdates = ref(true)
+const allowContact = ref(true)
 
 // Every row waits a moment longer than the one above it, so the panel builds
 // itself up from top to bottom — the same feel as the share project page.

@@ -163,6 +163,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     feedbackPlaceholder: 'Ton texte ici',
     screenshotHeading: "N'hésite pas à joindre des captures d'écran du problème :",
     screenshotTile: 'Image',
+    notifyUpdatesCheckbox: 'Informe-moi des mises à jour par e-mail',
+    allowContactCheckbox:
+      'Pour mieux comprendre le retour, les développeurs peuvent me contacter par e-mail.',
   },
   userManagement: {
     title: 'Que voulons-nous changer dans la collaboration ?',

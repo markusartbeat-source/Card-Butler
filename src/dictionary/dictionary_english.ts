@@ -163,6 +163,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     feedbackPlaceholder: 'Your text here',
     screenshotHeading: 'Feel free to upload screenshots of the problem:',
     screenshotTile: 'Image',
+    notifyUpdatesCheckbox: 'Notify me about updates by email',
+    allowContactCheckbox:
+      'To understand the feedback better, developers may contact me by email.',
   },
   userManagement: {
     title: 'What shall we change about the collaboration?',
