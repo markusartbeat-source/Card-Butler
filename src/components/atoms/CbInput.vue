@@ -11,8 +11,9 @@
       <span :class="icon && 'sr-only'">{{ label }}</span>
     </Field.Label>
     <Field.Input
-      class="w-full min-w-0 cursor-text bg-transparent text-white outline-none"
+      class="w-full min-w-0 cursor-text bg-transparent text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
       :value="modelValue"
+      :placeholder="placeholder"
       @input="(event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
     />
   </Field.Root>
@@ -23,6 +24,6 @@ import { Field } from '@ark-ui/vue'
 import CbIcon from './CbIcon.vue'
 import type { IconName } from './icons'
 
-defineProps<{ label: string; modelValue: string; icon?: IconName }>()
+defineProps<{ label: string; modelValue: string; icon?: IconName; placeholder?: string }>()
 defineEmits<{ 'update:modelValue': [value: string] }>()
 </script>

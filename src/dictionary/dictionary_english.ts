@@ -152,6 +152,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     permissionEdit: 'Can edit',
     permissionAdmin: 'Admin',
     password: 'Password*',
+    mailHeading: 'Mail',
+    invite: 'Invite',
+    mailPlaceholder: 'Enter the mail address here',
   },
   upgrade: {
     title: 'Plans that grow with you',

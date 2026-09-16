@@ -26,7 +26,24 @@
         </div>
 
         <!-- Mail row -->
-        <div class="p-6"></div>
+        <div class="flex flex-col gap-3 p-6">
+          <h3 class="text-sm text-white">{{ dictionary.shareProject.mailHeading }}</h3>
+          <div class="flex items-center gap-3">
+            <CbInput
+              v-model="inviteMail"
+              :label="dictionary.shareProject.invite"
+              :placeholder="dictionary.shareProject.mailPlaceholder"
+              class="grow"
+            />
+            <CbButton class="w-24">{{ dictionary.shareProject.invite }}</CbButton>
+          </div>
+          <CbSelect
+            v-model="invitePermission"
+            variant="field"
+            :label="dictionary.shareProject.permission"
+            :items="permissions"
+          />
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
@@ -53,6 +70,10 @@ const permissions = computed(() => [
 ])
 const linkPermission = ref('view')
 const linkPassword = ref('')
+
+// The person to invite by mail and what they may do.
+const inviteMail = ref('')
+const invitePermission = ref('view')
 </script>
 
 <style scoped>

@@ -173,6 +173,9 @@ export const dictionaryGerman = {
     permissionEdit: 'Darf schreiben',
     permissionAdmin: 'Admin',
     password: 'Passwort*',
+    mailHeading: 'Mail',
+    invite: 'Einladen',
+    mailPlaceholder: 'Trage hier die Mail ein',
   },
   // The upgrade page with the three plan cards.
   upgrade: {
