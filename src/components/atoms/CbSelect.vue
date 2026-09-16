@@ -2,10 +2,12 @@
   <!-- Ark UI brings the behaviour only, the whole look comes from here.
        An entry can carry its own icon, e.g. a flag or a moon. -->
   <Select.Root
+    v-model:open="open"
     :collection="collection"
     :model-value="[modelValue]"
     :positioning="{ sameWidth: true }"
     @update:model-value="(values) => $emit('update:modelValue', values[0])"
+    @interact-outside="$emit('interactOutside', $event)"
   >
     <Select.Control>
       <Select.Trigger
@@ -25,10 +27,13 @@
       </Select.Trigger>
     </Select.Control>
 
-    <Select.Positioner>
-      <!-- The open menu has to stay above the rows that come after it. Ark
-           copies the z-index of this content onto the positioner, so the
-           class belongs here and not one level up. -->
+    <!-- The list is moved to the body, so a parent that clips its content
+         (a row with a ripple) cannot cut the open list off. -->
+    <Teleport to="body">
+      <Select.Positioner>
+      <!-- The open menu has to stay above everything else. Ark copies the
+           z-index of this content onto the positioner, so the class belongs
+           here and not one level up. -->
       <!-- cb-collapse rolls the list open and shut. The padding sits on the
            inner list, otherwise it would stay behind as a thin strip. -->
       <!-- sameWidth on the root makes the list as wide as the closed field. -->
@@ -52,13 +57,14 @@
           </div>
         </div>
       </Select.Content>
-    </Select.Positioner>
+      </Select.Positioner>
+    </Teleport>
   </Select.Root>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Select, createListCollection } from '@ark-ui/vue'
+import { Select, createListCollection, type SelectInteractOutsideEvent } from '@ark-ui/vue'
 import CbIcon from './CbIcon.vue'
 import type { IconName } from './icons'
 
@@ -70,7 +76,16 @@ const props = defineProps<{
   label?: string
 }>()
 
-defineEmits<{ 'update:modelValue': [value: string] }>()
+defineEmits<{
+  'update:modelValue': [value: string]
+  // Fired on a click outside the list. A parent can preventDefault() on it to
+  // keep the list open, e.g. when the click was on a row that toggles it.
+  interactOutside: [event: SelectInteractOutsideEvent]
+}>()
+
+// Whether the list is open. A parent may bind it to open the list from
+// outside (v-model:open); without a binding the select handles it alone.
+const open = defineModel<boolean>('open')
 
 const collection = computed(() => createListCollection({ items: props.items }))
 
