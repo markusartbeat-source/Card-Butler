@@ -113,6 +113,15 @@
                 side="back"
                 class="cb-card-back col-start-1 row-start-1"
               />
+              <!-- How often the card is printed — only worth showing from 2 up.
+                   "relative" keeps it above the faces: their transform would
+                   otherwise paint them over plain text. -->
+              <span
+                v-if="card.printCount >= 2"
+                class="relative col-start-1 row-start-1 m-2 self-end justify-self-end text-xs text-background"
+              >
+                x{{ card.printCount }}
+              </span>
             </div>
           </VueDraggable>
         </div>
@@ -313,7 +322,12 @@ onUnmounted(() => {
 // place in the row.
 function addCard(cardSet: CardSet) {
   const highestNumber = Math.max(0, ...cardSet.cards.map((card) => card.number))
-  cardSet.cards.unshift({ id: crypto.randomUUID(), number: highestNumber + 1, elementValues: {} })
+  cardSet.cards.unshift({
+    id: crypto.randomUUID(),
+    number: highestNumber + 1,
+    elementValues: {},
+    printCount: 1,
+  })
 }
 </script>
 

@@ -1,5 +1,7 @@
 <template>
+  <!-- The spacers share the free height 2:3 — see ShareProjectPage. -->
   <div class="flex min-h-full flex-col">
+    <div class="grow-2"></div>
     <!-- The panel stays centred on every screen width. -->
     <div class="flex flex-col items-center pb-6">
       <CbSettingsGroup :title="dictionary.support.title">
@@ -74,6 +76,7 @@
         </div>
       </CbSettingsGroup>
     </div>
+    <div class="grow-3"></div>
   </div>
 </template>
 

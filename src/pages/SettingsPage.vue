@@ -1,5 +1,7 @@
 <template>
+  <!-- The spacers share the free height 2:3 — see ShareProjectPage. -->
   <div class="flex min-h-full flex-col">
+    <div class="grow-2"></div>
     <!-- The groups stay centred on every screen width. -->
     <div class="flex flex-col items-center gap-8 pb-6">
       <CbSettingsGroup :title="dictionary.settings.accountGroup" same-row-height>
@@ -97,6 +99,7 @@
         </div>
       </CbSettingsGroup>
     </div>
+    <div class="grow-3"></div>
   </div>
 </template>
 

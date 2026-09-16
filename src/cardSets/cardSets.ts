@@ -7,6 +7,8 @@ export type Card = {
   number: number
   // What this card fills into the deck's elements.
   elementValues: CardElementValues
+  // How many copies of this card get printed. 1 is the normal card.
+  printCount: number
 }
 
 // A project has many card sets, each with its own cards. Header, project page
@@ -24,6 +26,8 @@ export const cardSets = ref<CardSet[]>([
       number,
       // Placeholder content for now.
       elementValues: (number === 3 ? { 'effect-text': 'Test' } : {}) as CardElementValues,
+      // Cards 2, 3 and 5 are printed more than once, so the count shows.
+      printCount: [2, 3, 5].includes(number) ? number : 1,
     })),
   },
 ])
@@ -34,7 +38,7 @@ export function addCardSet() {
   const cardSet: CardSet = {
     id: crypto.randomUUID(),
     name: dictionary.cardSets.cardSetName(cardSets.value.length + 1),
-    cards: [{ id: crypto.randomUUID(), number: 1, elementValues: {} }],
+    cards: [{ id: crypto.randomUUID(), number: 1, elementValues: {}, printCount: 1 }],
   }
   cardSets.value.push(cardSet)
   return cardSet
