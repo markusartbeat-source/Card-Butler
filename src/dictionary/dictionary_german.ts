@@ -178,6 +178,13 @@ export const dictionaryGerman = {
     mailPlaceholder: 'Trage hier die Mail ein',
     inviteSent: (mail: string) => `Einladung verschickt an ${mail}`,
   },
+  // The page with the list of everyone who is in the project.
+  userManagement: {
+    title: 'Was wollen wir an der Zusammenarbeit ändern?',
+    removeUser: 'Benutzer entfernen',
+    removeUserQuestion: (name: string) => `Soll ${name} wirklich aus dem Projekt entfernt werden?`,
+    remove: 'Entfernen',
+  },
   // The upgrade page with the three plan cards.
   upgrade: {
     title: 'Pläne, die mit dir wachsen',

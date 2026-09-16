@@ -157,6 +157,12 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     mailPlaceholder: 'Digite aqui o e-mail',
     inviteSent: (mail: string) => `Convite enviado para ${mail}`,
   },
+  userManagement: {
+    title: 'O que queremos mudar na colaboração?',
+    removeUser: 'Remover usuário',
+    removeUserQuestion: (name: string) => `Remover mesmo ${name} do projeto?`,
+    remove: 'Remover',
+  },
   upgrade: {
     title: 'Planos que crescem com você',
     priceNote: 'EUR / mês + impostos',
