@@ -1,34 +1,47 @@
 <template>
-  <!-- The panel floats over the cards at the right edge of the project page and
-       slides in from there. It sticks to the top while the page scrolls and is
-       as tall as the page area. The thin gradient line on its left divides it
-       from the cards, the blurred, half transparent surface gives it the dark
-       glass look of the other panels. -->
-  <Transition name="slide" appear>
-    <aside
-      v-show="isCardSetsPanelShown"
-      class="cb-card-sets-panel sticky top-0 z-10 w-44 self-start justify-self-end bg-gradient-to-b from-white/30 to-transparent pl-px"
-    >
-      <div
-        class="h-full bg-gradient-to-b from-surface/80 to-background/80 pt-8 backdrop-blur-md"
+  <!-- The strip stands invisibly at the right edge of the project page, sticks
+       to the top while the page scrolls and is as tall as the page area. The
+       cursor touching it slides the panel in over the cards; the strip then
+       grows to the panel's width, so leaving it means leaving the panel, which
+       starts the timer that slides the panel out again. -->
+  <div
+    class="cb-card-sets-panel sticky top-0 z-10 flex min-w-6 self-start justify-self-end"
+    @mouseenter="showCardSetsPanel"
+    @mouseleave="hideCardSetsPanelAfterDelay"
+  >
+    <!-- The thin gradient line on the panel's left divides it from the cards,
+         the blurred, half transparent surface gives it the dark glass look of
+         the other panels. -->
+    <Transition name="slide">
+      <aside
+        v-show="isCardSetsPanelShown"
+        class="w-44 bg-gradient-to-b from-white/30 to-transparent pl-px"
       >
-        <!-- The marked entry follows the scrolling, a click glides to that set. -->
-        <CbTableOfContents
-          :model-value="visibleCardSetId"
-          :title="dictionary.cardSets.title"
-          :items="cardSetItems"
-          @update:model-value="cardSetIdToShow = $event"
-        />
-      </div>
-    </aside>
-  </Transition>
+        <div
+          class="h-full bg-gradient-to-b from-surface/80 to-background/80 pt-8 backdrop-blur-md"
+        >
+          <!-- The marked entry follows the scrolling, a click glides to that set. -->
+          <CbTableOfContents
+            :model-value="visibleCardSetId"
+            :title="dictionary.cardSets.title"
+            :items="cardSetItems"
+            @update:model-value="cardSetIdToShow = $event"
+          />
+        </div>
+      </aside>
+    </Transition>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import CbTableOfContents from '../components/atoms/CbTableOfContents.vue'
 import { cardSetIdToShow, cardSets } from './cardSets'
-import { isCardSetsPanelShown } from './panelVisibility'
+import {
+  hideCardSetsPanelAfterDelay,
+  isCardSetsPanelShown,
+  showCardSetsPanel,
+} from './panelVisibility'
 import { visibleCardSetId } from './visibleCardSet'
 
 const cardSetItems = computed(() =>
