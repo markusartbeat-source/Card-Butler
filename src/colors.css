@@ -13,11 +13,14 @@
   /* The thin decorative strokes around the print button use their own gold —
      read out of the design file, where it is a raw colour, not a variable. */
   --color-gold-line: #e6cd68;
-  /* The sheets stacked behind a card that is printed more than once — from the
-     design file, where they are raw colours. "near" lies right behind the card,
-     "far" behind that. */
-  --color-card-backdrop-near: #7c7c87;
-  --color-card-backdrop-far: #4e4e5e;
+  /* The sheets stacked behind a card that is printed more than once. 1 lies
+     right behind the card, 5 is the deepest; each step is one shade darker.
+     The first one is from the design file, the rest step down evenly from it. */
+  --color-card-backdrop-1: #7c7c87;
+  --color-card-backdrop-2: #6a6a76;
+  --color-card-backdrop-3: #585865;
+  --color-card-backdrop-4: #464654;
+  --color-card-backdrop-5: #343443;
   --color-success: #16a34a;
   --color-danger: #dc2626;
 

@@ -27,7 +27,8 @@ export const cardSets = ref<CardSet[]>([
       // Placeholder content for now.
       elementValues: (number === 3 ? { 'effect-text': 'Test' } : {}) as CardElementValues,
       // Cards 2, 3 and 5 are printed more than once, so the count shows.
-      printCount: [2, 3, 5].includes(number) ? number : 1,
+      // Card 2 gets 5 copies, which fills the backdrop stack.
+      printCount: number === 2 ? 5 : [3, 5].includes(number) ? number : 1,
     })),
   },
 ])
