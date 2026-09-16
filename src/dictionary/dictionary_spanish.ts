@@ -157,6 +157,9 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     mailPlaceholder: 'Escribe aquí el correo',
     inviteSent: (mail: string) => `Invitación enviada a ${mail}`,
   },
+  support: {
+    title: '¿Qué te gustaría contarnos?',
+  },
   userManagement: {
     title: '¿Qué queremos cambiar en la colaboración?',
     removeUser: 'Quitar usuario',

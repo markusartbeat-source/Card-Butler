@@ -178,6 +178,10 @@ export const dictionaryGerman = {
     mailPlaceholder: 'Trage hier die Mail ein',
     inviteSent: (mail: string) => `Einladung verschickt an ${mail}`,
   },
+  // The support page with the feedback form.
+  support: {
+    title: 'Was möchtest du uns mitteilen?',
+  },
   // The page with the list of everyone who is in the project.
   userManagement: {
     title: 'Was wollen wir an der Zusammenarbeit ändern?',
