@@ -31,13 +31,14 @@
         <!-- Every set is a section of its own, a thin line divides them. A card
              can only be sorted within its set: the sections share no drag group.
              The rows pack at the top, so the minimum height does not stretch
-             the cards. -->
+             the cards. While searching, a set without a hit is left out, and
+             with it its line. -->
         <div
           v-if="!hasNoSearchResults"
           class="flex min-w-0 flex-1 flex-col divide-y divide-surface-light"
         >
           <VueDraggable
-            v-for="cardSet in cardSets"
+            v-for="cardSet in shownCardSets"
             :id="cardSetElementId(cardSet.id)"
             :key="cardSet.id"
             v-model="cardSet.cards"
@@ -179,10 +180,15 @@ function visibleCardsOf(cardSet: CardSet) {
 }
 const isSearching = computed(() => searchWord.value.trim() !== '')
 
-// Then the placeholder box takes the whole card area instead of the sections.
-const hasNoSearchResults = computed(
-  () => isSearching.value && !allCards.value.some((card) => cardMatchesSearch(card.elementValues)),
+// While searching, only the sets with at least one hit get a section.
+const shownCardSets = computed(() =>
+  isSearching.value
+    ? cardSets.value.filter((cardSet) => visibleCardsOf(cardSet).length > 0)
+    : cardSets.value,
 )
+
+// Then the placeholder box takes the whole card area instead of the sections.
+const hasNoSearchResults = computed(() => isSearching.value && shownCardSets.value.length === 0)
 
 // The cards of the first render fan in one after the other, behind the button
 // that stands in front of them. A card added later should show up right away,
