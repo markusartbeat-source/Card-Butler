@@ -85,6 +85,7 @@
                 { invisible: card.id === selectedCardId, 'cb-card-flipped': showingCardBacks },
               ]"
               @animationend="markRisen(card.id, $event)"
+              @transitionend="cardTurnEnded"
               @click="selectCard(card.id, $event)"
             >
               <CbCard
@@ -114,14 +115,17 @@
                 class="cb-card-back col-start-1 row-start-1"
               />
               <!-- How often the card is printed — only worth showing from 2 up.
-                   "relative" keeps it above the faces: their transform would
-                   otherwise paint them over plain text. -->
-              <span
+                   It does not turn with the card: front and back show it in the
+                   same place; it vanishes at once while the turn runs and fades
+                   back in after. It lies in page pixels, not card zoom. "relative"
+                   keeps it above the faces: their transform would otherwise
+                   paint them over it. -->
+              <CbPrintCountBadge
                 v-if="card.printCount >= 2"
-                class="relative col-start-1 row-start-1 m-2 self-end justify-self-end text-xs text-background"
-              >
-                x{{ card.printCount }}
-              </span>
+                :count="card.printCount"
+                class="relative col-start-1 row-start-1 m-2 self-end justify-self-end transition-opacity"
+                :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
+              />
             </div>
           </VueDraggable>
         </div>
@@ -148,6 +152,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
+import CbPrintCountBadge from '../components/atoms/CbPrintCountBadge.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
@@ -167,7 +172,12 @@ import {
 } from '../cardDrag/cardDragState'
 import { dimWhileDraggingClasses } from '../cardDrag/dimWhileDragging'
 import { deleteDroppedCard } from '../cardDrag/deleteDroppedCard'
-import { flipAllCards, showingCardBacks } from '../cardDrag/flipAllCards'
+import {
+  cardTurnEnded,
+  flipAllCards,
+  isTurningCards,
+  showingCardBacks,
+} from '../cardDrag/flipAllCards'
 import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
 import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast } from '../components/atoms/toaster'

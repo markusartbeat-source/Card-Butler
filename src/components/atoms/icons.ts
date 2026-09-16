@@ -47,6 +47,7 @@ import SouthWest from '~icons/material-symbols/south-west-rounded'
 import Settings from '~icons/material-symbols/settings-outline-rounded'
 import Share from '~icons/material-symbols/share-outline'
 import Square from '~icons/material-symbols/square-outline-rounded'
+import Stacks from '~icons/material-symbols/stacks-rounded'
 import SupportAgent from '~icons/material-symbols/support-agent-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
 import Undo from '~icons/material-symbols/undo-rounded'
@@ -96,6 +97,7 @@ export const icons = {
   south_east: SouthEast,
   south_west: SouthWest,
   square: Square,
+  stacks: Stacks,
   support_agent: SupportAgent,
   title: Title,
   undo: Undo,
