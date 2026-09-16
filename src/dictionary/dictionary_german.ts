@@ -176,6 +176,7 @@ export const dictionaryGerman = {
     mailHeading: 'Mail',
     invite: 'Einladen',
     mailPlaceholder: 'Trage hier die Mail ein',
+    inviteSent: (mail: string) => `Einladung verschickt an ${mail}`,
   },
   // The upgrade page with the three plan cards.
   upgrade: {

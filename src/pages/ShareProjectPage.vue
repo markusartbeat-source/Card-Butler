@@ -37,7 +37,7 @@
               :placeholder="dictionary.shareProject.mailPlaceholder"
               class="grow"
             />
-            <CbButton class="w-24">{{ dictionary.shareProject.invite }}</CbButton>
+            <CbButton class="w-24" @click="sendInvite">{{ dictionary.shareProject.invite }}</CbButton>
           </div>
           <CbSelect
             v-model="invitePermission"
@@ -82,6 +82,11 @@ async function copyShareLink() {
 // The person to invite by mail and what they may do.
 const inviteMail = ref('')
 const invitePermission = ref('view')
+
+// No backend yet: only tells the user the invitation went out.
+function sendInvite() {
+  showSuccessToast(dictionary.shareProject.inviteSent(inviteMail.value))
+}
 </script>
 
 <style scoped>
