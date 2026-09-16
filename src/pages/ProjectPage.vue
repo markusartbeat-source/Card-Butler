@@ -78,7 +78,7 @@
             <div
               v-for="(card, cardIndex) in visibleCardsOf(cardSet)"
               :key="card.id"
-              class="cb-card grid"
+              class="cb-card group grid"
               :style="riseDelay(card.id, cardIndex)"
               :class="[
                 risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
@@ -127,11 +127,12 @@
                    same place; it vanishes at once while the turn runs and fades
                    back in after. It lies in page pixels, not card zoom. "relative"
                    keeps it above the faces: their transform would otherwise
-                   paint them over it. -->
+                   paint them over it. While the mouse is on the card (the
+                   "group" box) it fades out, so it never hides the corner. -->
               <CbPrintCountBadge
                 v-if="card.printCount >= 2"
                 :count="card.printCount"
-                class="relative col-start-1 row-start-1 m-2 self-end justify-self-end transition-opacity"
+                class="relative col-start-1 row-start-1 m-2 self-end justify-self-end transition-opacity group-hover:opacity-0"
                 :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
               />
             </div>
