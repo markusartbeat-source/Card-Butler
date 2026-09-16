@@ -143,6 +143,9 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     dataLocationSoonTitle: 'Próximamente',
     dataLocationSoonText: 'Aquí podrás elegir dónde se guardan tus datos.',
   },
+  shareProject: {
+    title: '¿A quién te gustaría invitar?',
+  },
   upgrade: {
     title: 'Planes que crecen contigo',
     priceNote: 'EUR / mes + IVA',

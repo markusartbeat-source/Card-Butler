@@ -163,6 +163,10 @@ export const dictionaryGerman = {
     dataLocationSoonTitle: 'Kommt bald',
     dataLocationSoonText: 'Hier kannst du später den Ort deiner Daten wählen.',
   },
+  // The page for sharing a project by link or mail.
+  shareProject: {
+    title: 'Wen würdest du gern einladen?',
+  },
   // The upgrade page with the three plan cards.
   upgrade: {
     title: 'Pläne, die mit dir wachsen',
