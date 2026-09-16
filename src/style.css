@@ -189,6 +189,12 @@ body {
     opacity: 1 !important;
   }
 
+  /* Only one card is in the hand: the stack behind a multi-copy card stays in
+     the grid, the dragged copy does not bring it along. */
+  .cb-card-dragged .cb-card-backdrops {
+    display: none;
+  }
+
   /* The tilt belongs on the card inside the box, not on the box itself: the
      library moves the box with "transform", and a "scale" or "rotate" on the
      same element would stretch and turn that movement — the card would drift

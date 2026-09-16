@@ -88,6 +88,14 @@
               @transitionend="cardTurnEnded"
               @click="selectCard(card.id, $event)"
             >
+              <!-- Behind the faces, so it comes first. Vanishes and fades back in
+                   with the turn just like the badge below. -->
+              <CbCardBackdrops
+                v-if="card.printCount >= 2"
+                :count="card.printCount"
+                class="col-start-1 row-start-1 transition-opacity"
+                :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
+              />
               <CbCard
                 :id="card.id"
                 :number="card.number"
@@ -150,6 +158,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
+import CbCardBackdrops from '../components/atoms/CbCardBackdrops.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbPrintCountBadge from '../components/atoms/CbPrintCountBadge.vue'
