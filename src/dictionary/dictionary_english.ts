@@ -145,6 +145,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   },
   shareProject: {
     title: 'Who would you like to invite?',
+    linkHeading: 'Link',
+    copy: 'Copy',
   },
   upgrade: {
     title: 'Plans that grow with you',

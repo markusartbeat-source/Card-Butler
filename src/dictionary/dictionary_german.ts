@@ -166,6 +166,8 @@ export const dictionaryGerman = {
   // The page for sharing a project by link or mail.
   shareProject: {
     title: 'Wen würdest du gern einladen?',
+    linkHeading: 'Link',
+    copy: 'Kopieren',
   },
   // The upgrade page with the three plan cards.
   upgrade: {

@@ -10,7 +10,13 @@
         </div>
 
         <!-- Link row -->
-        <div class="p-6"></div>
+        <div class="flex flex-col gap-3 p-6">
+          <h3 class="text-sm text-white">{{ dictionary.shareProject.linkHeading }}</h3>
+          <div class="flex items-center gap-3">
+            <CbInput v-model="shareLink" :label="dictionary.shareProject.linkHeading" class="grow" />
+            <CbButton class="w-24">{{ dictionary.shareProject.copy }}</CbButton>
+          </div>
+        </div>
 
         <!-- Mail row -->
         <div class="p-6"></div>
@@ -20,10 +26,16 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import CbButton from '../components/atoms/CbButton.vue'
+import CbInput from '../components/atoms/CbInput.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import { useHeader } from '../components/organisms/headerState'
 
 useHeader(() => ({ title: dictionary.header.shareProject, searchbar: false }))
+
+// A made-up link until the project has a real one to share.
+const shareLink = ref('https://abc.de')
 </script>
 
 <style scoped>
