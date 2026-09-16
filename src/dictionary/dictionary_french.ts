@@ -155,6 +155,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     mailHeading: 'Mail',
     invite: 'Inviter',
     mailPlaceholder: 'Saisis ici l’adresse mail',
+    passwordMissing: 'Saisis un mot de passe',
   },
   upgrade: {
     title: 'Des offres qui grandissent avec toi',

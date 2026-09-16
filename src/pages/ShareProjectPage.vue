@@ -14,7 +14,9 @@
           <h3 class="text-sm text-white">{{ dictionary.shareProject.linkHeading }}</h3>
           <div class="flex items-center gap-3">
             <CbInput v-model="shareLink" :label="dictionary.shareProject.linkHeading" class="grow" />
-            <CbButton class="w-24">{{ dictionary.shareProject.copy }}</CbButton>
+            <CbButton class="w-24" @click="copyShareLink">
+              {{ dictionary.shareProject.copy }}
+            </CbButton>
           </div>
           <CbSelect
             v-model="linkPermission"
@@ -56,6 +58,7 @@ import CbInput from '../components/atoms/CbInput.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import { useHeader } from '../components/organisms/headerState'
+import { showSuccessToast } from '../components/atoms/toaster'
 
 useHeader(() => ({ title: dictionary.header.shareProject, searchbar: false }))
 
@@ -70,6 +73,11 @@ const permissions = computed(() => [
 ])
 const linkPermission = ref('view')
 const linkPassword = ref('')
+
+async function copyShareLink() {
+  await navigator.clipboard.writeText(shareLink.value)
+  showSuccessToast(dictionary.project.linkCopiedTitle, dictionary.project.linkCopiedText)
+}
 
 // The person to invite by mail and what they may do.
 const inviteMail = ref('')

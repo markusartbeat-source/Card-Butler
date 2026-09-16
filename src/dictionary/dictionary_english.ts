@@ -151,7 +151,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     permissionView: 'View only',
     permissionEdit: 'Can edit',
     permissionAdmin: 'Admin',
-    password: 'Password*',
+    password: 'Password',
     mailHeading: 'Mail',
     invite: 'Invite',
     mailPlaceholder: 'Enter the mail address here',

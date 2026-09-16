@@ -151,10 +151,11 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     permissionView: 'Solo ver',
     permissionEdit: 'Puede editar',
     permissionAdmin: 'Admin',
-    password: 'Contraseña*',
+    password: 'Contraseña',
     mailHeading: 'Correo',
     invite: 'Invitar',
     mailPlaceholder: 'Escribe aquí el correo',
+    passwordMissing: 'Introduce una contraseña',
   },
   upgrade: {
     title: 'Planes que crecen contigo',

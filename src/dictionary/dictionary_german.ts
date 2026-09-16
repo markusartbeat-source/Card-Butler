@@ -172,7 +172,7 @@ export const dictionaryGerman = {
     permissionView: 'Nur sehend',
     permissionEdit: 'Darf schreiben',
     permissionAdmin: 'Admin',
-    password: 'Passwort*',
+    password: 'Passwort',
     mailHeading: 'Mail',
     invite: 'Einladen',
     mailPlaceholder: 'Trage hier die Mail ein',
