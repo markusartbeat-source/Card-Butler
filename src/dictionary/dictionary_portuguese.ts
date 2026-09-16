@@ -166,6 +166,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     notifyUpdatesCheckbox: 'Avise-me sobre novidades por e-mail',
     allowContactCheckbox:
       'Para entender melhor o feedback, os desenvolvedores podem me contatar por e-mail.',
+    submit: 'Enviar',
+    sentToast: 'Obrigado pelo seu feedback',
   },
   userManagement: {
     title: 'O que queremos mudar na colaboração?',

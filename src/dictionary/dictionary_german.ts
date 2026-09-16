@@ -188,6 +188,8 @@ export const dictionaryGerman = {
     notifyUpdatesCheckbox: 'Informiere mich über Updates per Mail',
     allowContactCheckbox:
       'Um das Feedback besser verstehen zu können, dürfen Entwickler mich per Mail kontaktieren.',
+    submit: 'Absenden',
+    sentToast: 'Danke für dein Feedback',
   },
   // The page with the list of everyone who is in the project.
   userManagement: {

@@ -65,6 +65,13 @@
             :style="riseDelay(6)"
           />
         </div>
+
+        <!-- Submit row: the button sits on the right, as in the design. -->
+        <div class="flex justify-end p-6">
+          <CbButton class="animate-cb-rise w-24" :style="riseDelay(7)" @click="sendFeedback">
+            {{ dictionary.support.submit }}
+          </CbButton>
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
@@ -72,12 +79,14 @@
 
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
+import CbButton from '../components/atoms/CbButton.vue'
 import CbCheckbox from '../components/atoms/CbCheckbox.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbTextarea from '../components/atoms/CbTextarea.vue'
 import { useHeader } from '../components/organisms/headerState'
+import { showSuccessToast } from '../components/atoms/toaster'
 
 useHeader(() => ({ title: dictionary.general.support, searchbar: false }))
 
@@ -95,6 +104,15 @@ function pickScreenshots(event: Event) {
 // Both start ticked, as in the design.
 const notifyAboutUpdates = ref(true)
 const allowContact = ref(true)
+
+// No backend yet: thanks the user and clears the form. The hidden input is
+// reset too, so picking the same files again fires its change event.
+function sendFeedback() {
+  showSuccessToast(dictionary.support.sentToast)
+  feedbackText.value = ''
+  screenshots.value = []
+  if (screenshotInput.value) screenshotInput.value.value = ''
+}
 
 // Every row waits a moment longer than the one above it, so the panel builds
 // itself up from top to bottom — the same feel as the share project page.
