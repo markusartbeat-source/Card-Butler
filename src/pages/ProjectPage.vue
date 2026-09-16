@@ -123,7 +123,13 @@
       <CbPrintExportBar :class="dimWhileDraggingClasses" @open="isExportDialogOpen = true" />
     </div>
 
-    <CbCardSetsPanel class="col-start-1 row-start-1" :class="dimWhileDraggingClasses" />
+    <!-- With a single set there is nothing to jump between, so neither the
+         panel nor its edge strip exists. -->
+    <CbCardSetsPanel
+      v-if="cardSets.length > 1"
+      class="col-start-1 row-start-1"
+      :class="dimWhileDraggingClasses"
+    />
   </div>
 </template>
 
