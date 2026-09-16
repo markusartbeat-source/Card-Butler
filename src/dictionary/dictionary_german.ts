@@ -183,6 +183,8 @@ export const dictionaryGerman = {
     title: 'Was möchtest du uns mitteilen?',
     feedbackHeading: 'Beschreibe gerne dein Feedback',
     feedbackPlaceholder: 'Hier dein Text',
+    screenshotHeading: 'Lade gerne Screenshots des Problems hoch:',
+    screenshotTile: 'Bild',
   },
   // The page with the list of everyone who is in the project.
   userManagement: {

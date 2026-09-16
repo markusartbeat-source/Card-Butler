@@ -22,13 +22,41 @@
             :style="riseDelay(2)"
           />
         </div>
+
+        <!-- Screenshot row: the dashed tile opens the hidden file picker. -->
+        <div class="flex flex-col gap-3 p-6">
+          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(3)">
+            {{ dictionary.support.screenshotHeading }}
+          </h3>
+          <CbInteractive
+            class="animate-cb-rise flex w-28 flex-col items-center gap-2.5 rounded-md border-2 border-dashed border-label py-4 text-sm text-label"
+            :style="riseDelay(4)"
+            @click="screenshotInput?.click()"
+          >
+            <CbIcon name="filter" />
+            <span>{{ dictionary.support.screenshotTile }}</span>
+          </CbInteractive>
+          <input
+            ref="screenshotInput"
+            type="file"
+            accept="image/*"
+            multiple
+            class="hidden"
+            @change="pickScreenshots"
+          />
+          <p v-for="file in screenshots" :key="file.name" class="text-sm text-label">
+            {{ file.name }}
+          </p>
+        </div>
       </CbSettingsGroup>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
+import CbIcon from '../components/atoms/CbIcon.vue'
+import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbTextarea from '../components/atoms/CbTextarea.vue'
 import { useHeader } from '../components/organisms/headerState'
@@ -37,6 +65,14 @@ useHeader(() => ({ title: dictionary.general.support, searchbar: false }))
 
 // What the user wants to tell us. Only page state, no backend yet.
 const feedbackText = ref('')
+
+// The chosen screenshots. The real input stays hidden, the tile clicks it.
+const screenshotInput = useTemplateRef<HTMLInputElement>('screenshotInput')
+const screenshots = ref<File[]>([])
+
+function pickScreenshots(event: Event) {
+  screenshots.value = Array.from((event.target as HTMLInputElement).files ?? [])
+}
 
 // Every row waits a moment longer than the one above it, so the panel builds
 // itself up from top to bottom — the same feel as the share project page.

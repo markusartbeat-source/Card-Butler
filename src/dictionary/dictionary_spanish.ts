@@ -161,6 +161,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     title: '¿Qué te gustaría contarnos?',
     feedbackHeading: 'Describe tu comentario con gusto',
     feedbackPlaceholder: 'Tu texto aquí',
+    screenshotHeading: 'Sube capturas de pantalla del problema si quieres:',
+    screenshotTile: 'Imagen',
   },
   userManagement: {
     title: '¿Qué queremos cambiar en la colaboración?',

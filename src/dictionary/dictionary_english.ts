@@ -161,6 +161,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     title: 'What would you like to tell us?',
     feedbackHeading: 'Feel free to describe your feedback',
     feedbackPlaceholder: 'Your text here',
+    screenshotHeading: 'Feel free to upload screenshots of the problem:',
+    screenshotTile: 'Image',
   },
   userManagement: {
     title: 'What shall we change about the collaboration?',
