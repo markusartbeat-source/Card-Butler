@@ -89,12 +89,17 @@
               @click="selectCard(card.id, $event)"
             >
               <!-- Behind the faces, so it comes first. Vanishes and fades back in
-                   with the turn just like the badge below. -->
+                   with the turn just like the badge below. "visible" lifts the
+                   box's "invisible" while its card is in the editor: the
+                   backdrops fade out and in instead of vanishing at once. -->
               <CbCardBackdrops
                 v-if="card.printCount >= 2"
                 :count="card.printCount"
-                class="col-start-1 row-start-1 transition-opacity"
-                :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
+                class="visible col-start-1 row-start-1 transition-opacity"
+                :class="[
+                  isTurningCards ? 'duration-0' : 'duration-300',
+                  isTurningCards || card.id === selectedCardId ? 'opacity-0' : 'opacity-100',
+                ]"
               />
               <CbCard
                 :id="card.id"
