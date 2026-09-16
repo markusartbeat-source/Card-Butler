@@ -168,6 +168,11 @@ export const dictionaryGerman = {
     title: 'Wen würdest du gern einladen?',
     linkHeading: 'Link',
     copy: 'Kopieren',
+    permission: 'Berechtigung',
+    permissionView: 'Nur sehend',
+    permissionEdit: 'Darf schreiben',
+    permissionAdmin: 'Admin',
+    password: 'Passwort*',
   },
   // The upgrade page with the three plan cards.
   upgrade: {

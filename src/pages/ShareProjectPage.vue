@@ -16,6 +16,13 @@
             <CbInput v-model="shareLink" :label="dictionary.shareProject.linkHeading" class="grow" />
             <CbButton class="w-24">{{ dictionary.shareProject.copy }}</CbButton>
           </div>
+          <CbSelect
+            v-model="linkPermission"
+            variant="field"
+            :label="dictionary.shareProject.permission"
+            :items="permissions"
+          />
+          <CbInput v-model="linkPassword" :label="dictionary.shareProject.password" />
         </div>
 
         <!-- Mail row -->
@@ -26,9 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbInput from '../components/atoms/CbInput.vue'
+import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import { useHeader } from '../components/organisms/headerState'
 
@@ -36,6 +44,15 @@ useHeader(() => ({ title: dictionary.header.shareProject, searchbar: false }))
 
 // A made-up link until the project has a real one to share.
 const shareLink = ref('https://abc.de')
+
+// What a person opening the link may do. Only page state for now.
+const permissions = computed(() => [
+  { value: 'view', label: dictionary.shareProject.permissionView },
+  { value: 'edit', label: dictionary.shareProject.permissionEdit },
+  { value: 'admin', label: dictionary.shareProject.permissionAdmin },
+])
+const linkPermission = ref('view')
+const linkPassword = ref('')
 </script>
 
 <style scoped>

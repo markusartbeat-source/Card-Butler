@@ -147,6 +147,11 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     title: 'Qui aimerais-tu inviter ?',
     linkHeading: 'Lien',
     copy: 'Copier',
+    permission: 'Autorisation',
+    permissionView: 'Lecture seule',
+    permissionEdit: 'Peut modifier',
+    permissionAdmin: 'Admin',
+    password: 'Mot de passe*',
   },
   upgrade: {
     title: 'Des offres qui grandissent avec toi',
