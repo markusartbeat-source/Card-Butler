@@ -91,16 +91,22 @@
               <!-- Behind the faces, so it comes first. Vanishes and fades back in
                    with the turn just like the badge below. "visible" lifts the
                    box's "invisible" while its card is in the editor: the
-                   backdrops fade out and in instead of vanishing at once. -->
-              <CbCardBackdrops
+                   backdrops fade out and in instead of vanishing at once.
+                   The tooltip opens from the strip that peeks out under the
+                   card — the faces cover the rest. -->
+              <CbTooltip
                 v-if="card.printCount >= 2"
-                :count="card.printCount"
-                class="visible col-start-1 row-start-1 transition-opacity"
-                :class="[
-                  isTurningCards ? 'duration-0' : 'duration-300',
-                  isTurningCards || card.id === selectedCardId ? 'opacity-0' : 'opacity-100',
-                ]"
-              />
+                :text="dictionary.project.printCountTooltip(card.printCount)"
+              >
+                <CbCardBackdrops
+                  :count="card.printCount"
+                  class="visible col-start-1 row-start-1 transition-opacity"
+                  :class="[
+                    isTurningCards ? 'duration-0' : 'duration-300',
+                    isTurningCards || card.id === selectedCardId ? 'opacity-0' : 'opacity-100',
+                  ]"
+                />
+              </CbTooltip>
               <CbCard
                 :id="card.id"
                 :number="card.number"
@@ -168,6 +174,7 @@ import CbCardBackdrops from '../components/atoms/CbCardBackdrops.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbPrintCountBadge from '../components/atoms/CbPrintCountBadge.vue'
+import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'

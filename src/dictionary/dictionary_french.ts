@@ -50,6 +50,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     newCard: 'Nouvelle carte',
     linkCopiedTitle: 'Lien copié',
     linkCopiedText: 'Le lien est dans le presse-papiers.',
+    printCountTooltip: (count: number) =>
+      `Cette carte est imprimée ${count} fois. Tu peux changer le nombre dans les paramètres de cette carte, ou avec Alt + molette de la souris.`,
   },
   cardSets: {
     title: 'Jeux de cartes',

@@ -57,6 +57,8 @@ export const dictionaryGerman = {
     newCard: 'Neue Karte',
     linkCopiedTitle: 'Link kopiert',
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',
+    printCountTooltip: (count: number) =>
+      `Diese Karte wird ${count}-mal gedruckt. Du kannst die Anzahl in den Karteneinstellungen dieser Karte ändern, oder mit Alt + Mausrad.`,
   },
   // The list of card sets at the right edge of the project page.
   cardSets: {
