@@ -87,6 +87,7 @@
               @animationend="markRisen(card.id, $event)"
               @transitionend="cardTurnEnded"
               @click="selectCard(card.id, $event)"
+              @wheel="changePrintCountByWheel(card, $event)"
             >
               <!-- Behind the faces, so it comes first. Vanishes and fades back in
                    with the turn just like the badge below. "visible" lifts the
@@ -185,6 +186,7 @@ import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCa
 import { updateVisibleCardSet } from '../cardSets/visibleCardSet'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
+import { changePrintCountByWheel } from '../printCount/changePrintCountByWheel'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
 import {
   endCardDrag,
