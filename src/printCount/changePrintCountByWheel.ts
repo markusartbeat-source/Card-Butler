@@ -1,4 +1,5 @@
 import type { Card } from '../cardSets/cardSets'
+import { showPrintCountOverlay } from './printCountOverlayState'
 
 // A card is printed at least once, and never more than 99 times.
 export const minPrintCount = 1
@@ -13,4 +14,5 @@ export function changePrintCountByWheel(card: Card, event: WheelEvent) {
 
   const step = event.deltaY < 0 ? 1 : -1
   card.printCount = Math.min(maxPrintCount, Math.max(minPrintCount, card.printCount + step))
+  showPrintCountOverlay(card.id)
 }

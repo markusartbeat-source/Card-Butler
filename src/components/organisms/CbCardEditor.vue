@@ -6,11 +6,7 @@
     :class="{ 'pointer-events-none': isClosing }"
   >
     <!-- Own layer, so fading it does not fade the card as well. -->
-    <div
-      ref="backdrop"
-      class="bg-background/80 absolute inset-0 backdrop-blur-md"
-      @click="startClosing"
-    ></div>
+    <CbDimLayer ref="backdrop" class="absolute inset-0" @click="startClosing" />
 
     <!-- Padding matches the settings panel, so the card sits in the middle of
          the space left of it instead of the middle of the screen.
@@ -69,6 +65,7 @@ import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
+import CbDimLayer from '../atoms/CbDimLayer.vue'
 import CbToolbar from '../molecules/CbToolbar.vue'
 import { cardToolbarElements } from '../molecules/cardToolbarElements'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
@@ -92,7 +89,7 @@ const emit = defineEmits<{ close: [] }>()
 const flightDurationInMilliseconds = 350
 
 const cardWrapper = useTemplateRef<HTMLElement>('cardWrapper')
-const backdrop = useTemplateRef<HTMLElement>('backdrop')
+const backdrop = useTemplateRef<InstanceType<typeof CbDimLayer>>('backdrop')
 
 // Button, tool bar and settings panel only show up once the card has landed.
 const areControlsVisible = ref(false)
@@ -113,7 +110,7 @@ let closingFlight: Animation | null = null
 function playBackdropFade(direction: 'in' | 'out') {
   const steps = [{ opacity: 0 }, { opacity: 1 }]
 
-  backdrop.value?.animate(direction === 'in' ? steps : [...steps].reverse(), {
+  backdrop.value?.$el.animate(direction === 'in' ? steps : [...steps].reverse(), {
     duration: flightDurationInMilliseconds,
     easing: 'ease-out',
     fill: 'forwards',

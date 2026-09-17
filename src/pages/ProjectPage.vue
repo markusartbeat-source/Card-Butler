@@ -147,6 +147,13 @@
                 class="relative col-start-1 row-start-1 m-2 self-end justify-self-end transition-opacity group-hover:opacity-0"
                 :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
               />
+              <!-- Shows while Alt + wheel changes the count. Last in the cell,
+                   so it lies over faces and badge. -->
+              <CbPrintCountOverlay
+                v-if="card.id === printCountOverlayCardId"
+                :count="card.printCount"
+                class="relative col-start-1 row-start-1"
+              />
             </div>
           </VueDraggable>
         </div>
@@ -186,7 +193,9 @@ import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCa
 import { updateVisibleCardSet } from '../cardSets/visibleCardSet'
 import CbSearchNoResults from '../search/CbSearchNoResults.vue'
 import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
+import CbPrintCountOverlay from '../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../printCount/changePrintCountByWheel'
+import { printCountOverlayCardId } from '../printCount/printCountOverlayState'
 import { cardDragOptions } from '../cardDrag/cardDragOptions'
 import {
   endCardDrag,

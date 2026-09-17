@@ -10,6 +10,8 @@
 
   /* The smallest text in the design is 10 px, Tailwind stops at 12 px. */
   --text-2xs: 0.625rem;
+  /* The 40 px of the print count overlay — Tailwind jumps from 36 to 48 px. */
+  --text-display: 2.5rem;
 }
 
 :root {
