@@ -23,7 +23,13 @@ export type CardElement = TextElement
 
 // Fixed for now, editing the build-up comes later.
 export const cardElements = ref<CardElement[]>([
-  { id: 'effect-text', name: 'Effekt', type: 'text', side: 'front', placement: { x: 8, y: 55 } },
+  {
+    id: 'effect-text',
+    name: 'Effekt',
+    type: 'text',
+    side: 'front',
+    placement: { x: 8, y: 55, rotation: 0 },
+  },
 ])
 
 // Dragging an element moves it on every card of the deck — the build-up belongs
@@ -33,8 +39,19 @@ export function moveElementBy(id: string, moveXInMillimeters: number, moveYInMil
   if (!element) return
 
   element.placement = {
+    ...element.placement,
     x: element.placement.x + moveXInMillimeters,
     y: element.placement.y + moveYInMillimeters,
+  }
+}
+
+export function rotateElementBy(id: string, turnInDegrees: number) {
+  const element = cardElements.value.find((element) => element.id === id)
+  if (!element) return
+
+  element.placement = {
+    ...element.placement,
+    rotation: element.placement.rotation + turnInDegrees,
   }
 }
 

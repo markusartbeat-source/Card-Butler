@@ -1,11 +1,14 @@
 <template>
   <!-- The library takes its props as a plain name list, so Vue does not turn a
-       bare "draggable" into true — every switch needs an explicit value. -->
+       bare "draggable" into true — every switch needs an explicit value.
+       rootContainer is the card: it is drawn with CSS zoom, and Moveable only
+       counts that zoom into its angles when it knows the zoomed element. -->
   <Moveable
     v-if="targetElement"
     ref="moveable"
     class-name="cb-element-transform"
     :target="targetElement"
+    :root-container="card"
     :draggable="true"
     :resizable="true"
     :rotatable="true"
@@ -14,6 +17,7 @@
     @drag-end="measureElementAgain"
     @resize="applyResize"
     @rotate="applyRotate"
+    @rotate-end="measureElementAgain"
   />
 </template>
 
@@ -21,7 +25,7 @@
 import { nextTick, ref, useTemplateRef, watch } from 'vue'
 import Moveable, { type OnDrag, type OnResize, type OnRotate } from 'vue3-moveable'
 import { selectedElementId } from './elementSelection'
-import { moveElementBy } from '../cardElements/cardElements'
+import { moveElementBy, rotateElementBy } from '../cardElements/cardElements'
 
 // The card the selected element lives in. Searching inside it instead of the
 // whole page keeps us away from the same element on the other cards.
@@ -73,8 +77,11 @@ function applyResize(event: OnResize) {
   event.target.style.transform = event.drag.transform
 }
 
+// Same as the position: the angle goes into the placement, not onto the element.
 function applyRotate(event: OnRotate) {
-  event.target.style.transform = event.drag.transform
+  if (!selectedElementId.value) return
+
+  rotateElementBy(selectedElementId.value, event.delta)
 }
 </script>
 
