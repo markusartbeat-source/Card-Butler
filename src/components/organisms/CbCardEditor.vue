@@ -42,12 +42,17 @@
           </CbCard>
           <!-- Shows while Alt + wheel changes the count. The corner follows the
                big card: 3 mm at the editor zoom is about 18 px, "rounded-2xl"
-               is 16. -->
-          <CbPrintCountOverlay
-            v-if="card.id === printCountOverlayCardId"
-            :count="card.printCount"
-            class="absolute inset-0 rounded-2xl"
-          />
+               is 16. It appears at once and fades out when it goes. -->
+          <Transition
+            leave-active-class="transition-opacity duration-300"
+            leave-to-class="opacity-0"
+          >
+            <CbPrintCountOverlay
+              v-if="card.id === printCountOverlayCardId"
+              :count="card.printCount"
+              class="absolute inset-0 rounded-2xl"
+            />
+          </Transition>
         </div>
 
         <!-- Next to the flying wrapper, not inside it: the wrapper is scaled

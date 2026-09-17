@@ -13,6 +13,24 @@
              shown, so the groups rise in again instead of only once. -->
         <div v-if="isVisible" :key="activeTab" class="mt-6">
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(0)">
+            <div class="flex items-center gap-1.5">
+              <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.printGroup }}</h3>
+              <CbTooltip :text="dictionary.cardEditor.printInfo">
+                <CbButton
+                  variant="icon"
+                  size="small"
+                  :aria-label="dictionary.cardEditor.printInfo"
+                >
+                  <CbIcon name="info" size="small" />
+                </CbButton>
+              </CbTooltip>
+            </div>
+            <CbInput v-model="printCount" :label="dictionary.cardEditor.printCount" />
+          </div>
+
+          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(1)" />
+
+          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(1)">
             <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.sizesGroup }}</h3>
             <div class="flex items-center gap-3">
               <CbInput v-model="width" class="flex-1" :label="dictionary.cardEditor.width" />
@@ -32,9 +50,9 @@
           </div>
 
           <!-- A divider rises in together with the group below it. -->
-          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(1)" />
+          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(2)" />
 
-          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(1)">
+          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(2)">
             <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.cornersGroup }}</h3>
             <div class="flex items-center gap-3">
               <!-- One field for all corners, or one field per corner. -->
@@ -70,16 +88,16 @@
             </div>
           </div>
 
-          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(2)" />
+          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(3)" />
 
-          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(2)">
+          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(3)">
             <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.colorGroup }}</h3>
             <CbColorPicker v-model="color" :label="dictionary.cardEditor.pickColor" />
           </div>
 
-          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(3)" />
+          <CbDivider class="animate-cb-rise my-6" :style="riseDelay(4)" />
 
-          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(3)">
+          <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(4)">
             <div class="flex items-center gap-1.5">
               <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.bleedGroup }}</h3>
               <CbTooltip :text="dictionary.cardEditor.bleedInfo">
@@ -135,6 +153,7 @@ function riseDelay(step: number) {
 }
 
 // The values only live in the panel for now, they do not change the card yet.
+const printCount = ref('1')
 const width = ref('20')
 const height = ref('90')
 const areSizesLinked = ref(false)

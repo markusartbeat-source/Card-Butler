@@ -147,12 +147,18 @@
               />
               <!-- Shows while Alt + wheel changes the count. Last in the cell,
                    so it lies over faces and badge. The corner follows the card:
-                   3 mm at the grid zoom is about 9 px, "rounded-lg" is 8. -->
-              <CbPrintCountOverlay
-                v-if="card.id === printCountOverlayCardId"
-                :count="card.printCount"
-                class="relative col-start-1 row-start-1 rounded-lg"
-              />
+                   3 mm at the grid zoom is about 9 px, "rounded-lg" is 8.
+                   It appears at once and fades out when it goes. -->
+              <Transition
+                leave-active-class="transition-opacity duration-300"
+                leave-to-class="opacity-0"
+              >
+                <CbPrintCountOverlay
+                  v-if="card.id === printCountOverlayCardId"
+                  :count="card.printCount"
+                  class="relative col-start-1 row-start-1 rounded-lg"
+                />
+              </Transition>
             </div>
           </VueDraggable>
         </div>
