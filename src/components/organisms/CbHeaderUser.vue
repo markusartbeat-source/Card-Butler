@@ -1,6 +1,8 @@
 <template>
-  <!-- The end of the header: upgrading (or signing in) and the own profile. -->
-  <CbButton @click="currentUser ? goToUpgrade() : signInWithGoogle()">
+  <!-- The end of the header: upgrading (or signing in) and the own profile.
+       Below laptop width the button leaves the header (it moves into the
+       profile menu). -->
+  <CbButton class="hidden laptop:block" @click="currentUser ? goToUpgrade() : signInWithGoogle()">
     <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
     {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
   </CbButton>

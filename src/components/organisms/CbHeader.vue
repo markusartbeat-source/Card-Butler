@@ -2,20 +2,28 @@
   <!-- Height and side spacing come from the design: 100px tall, 24px inset. -->
   <div class="flex h-25 w-full shrink-0 items-center gap-2.5 px-6">
     <!-- Left side is as wide as the right side, so the search stays centered. -->
-    <div class="flex flex-1 items-center gap-2.5">
-      <!-- The back button belongs to the heading, so it only shows with one. -->
+    <div class="flex min-w-0 flex-1 items-center gap-2.5">
+      <!-- The back button belongs to the heading, so it only shows with one.
+           A long title never wraps, it ends in "..." instead. min-w-0 lets
+           the heading shrink below its text width, which flex items refuse
+           to do by default. -->
       <template v-if="title">
         <CbButton variant="icon" @click="router.back()">
           <CbIcon name="west" />
         </CbButton>
-        <h1 class="text-2xl text-white">{{ title }}</h1>
+        <h1 class="min-w-0 truncate text-xl text-white">{{ title }}</h1>
       </template>
 
       <!-- Everybody who is in the project right now, next to the project name. -->
       <CbAvatarGroup :people="peopleHere" size="small" />
     </div>
 
-    <div v-if="searchbar" class="bg-surface flex w-96 items-center rounded-full text-white shadow-lg">
+    <!-- Below laptop width the search leaves the header (it moves into the
+         profile menu). -->
+    <div
+      v-if="searchbar"
+      class="bg-surface hidden w-96 items-center rounded-full text-white shadow-lg laptop:flex"
+    >
       <!-- The typing happens here, the icons next to it only switch the mode.
            The label carries hover and ripple, because those need a child
            element and an input cannot have one. -->
@@ -50,9 +58,14 @@
       </div>
     </div>
 
-    <div class="flex flex-1 items-center justify-end gap-3">
+    <!-- Only from laptop width both sides are equal (that centers the search).
+         Below, the right side is as wide as its content, so the title keeps
+         its room. -->
+    <div class="flex items-center justify-end gap-3 laptop:flex-1">
       <!-- The three menus of the design. They open the same list as every other
-           menu in the header, the one of the profile included. -->
+           menu in the header, the one of the profile included. Below laptop
+           width only the cards menu stays, the others move into the profile
+           menu. -->
       <CbDropdown
         v-for="menu in navigationMenus"
         :key="menu.value"
@@ -63,7 +76,10 @@
         <CbButton
           variant="ghost"
           class="cb-header-menu"
-          :class="{ 'cb-header-menu-active': activeItemOf(menu.items) }"
+          :class="{
+            'cb-header-menu-active': activeItemOf(menu.items),
+            'hidden laptop:flex': menu.value !== 'cards',
+          }"
         >
           {{ menu.label }}
           <CbIcon name="keyboard_arrow_down" class="cb-header-menu-arrow" />
