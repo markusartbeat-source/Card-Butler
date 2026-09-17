@@ -44,7 +44,7 @@
             v-model="cardSet.cards"
             v-bind="cardDragOptions"
             :disabled="isSearching"
-            class="cb-card-set-section flex flex-wrap content-start justify-center gap-6 px-16 py-32 select-none"
+            class="cb-card-set-section flex flex-wrap content-start justify-center gap-6 py-32 select-none tablet:px-16"
             @start="startCardDrag"
             @end="finishCardDrag(cardSet)"
           >

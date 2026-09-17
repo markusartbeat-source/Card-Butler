@@ -4,7 +4,8 @@
    Tailwind's md / lg / xl — those names are switched off, so nobody mixes the
    two sets by habit.
    "static" writes the widths into the page as CSS variables even though no
-   class reads them, so script (useIsBelowLaptop) can read the same width. */
+   class reads them, so script (useIsBelowBreakpoint) can read the same
+   widths. */
 @theme static {
   --breakpoint-*: initial;
   --breakpoint-tablet: 768px;

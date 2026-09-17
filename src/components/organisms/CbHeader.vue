@@ -63,7 +63,7 @@
          its room. -->
     <div class="flex items-center justify-end gap-3 laptop:flex-1">
       <!-- The three menus of the design. They open the same list as every other
-           menu in the header, the one of the profile included. Below laptop
+           menu in the header, the one of the profile included. Below desktop
            width only the cards menu stays, the others move into the profile
            menu. -->
       <CbDropdown
@@ -78,7 +78,7 @@
           class="cb-header-menu"
           :class="{
             'cb-header-menu-active': activeItemOf(menu.items),
-            'hidden laptop:flex': menu.value !== 'cards',
+            'hidden desktop:flex': menu.value !== 'cards',
           }"
         >
           {{ menu.label }}
