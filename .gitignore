@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-# Environment variables (Supabase keys)
+# Environment variables (backend address)
 .env
 
 # Editor directories and files
