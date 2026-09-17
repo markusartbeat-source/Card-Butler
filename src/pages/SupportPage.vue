@@ -5,10 +5,14 @@
     <!-- The panel stays centred on every screen width. -->
     <div class="flex flex-col items-center pb-6">
       <CbSettingsGroup :title="dictionary.support.title">
-        <!-- Image row: a dark box in the photo's shape until the real image
-             arrives. The width comes from the panel, the height follows. -->
+        <!-- Image row: the same shape as on the share page. Decorative only,
+             so the alt text stays empty. -->
         <div class="animate-cb-rise border-b-0 px-6 pt-6" :style="riseDelay(0)">
-          <div class="support-image-placeholder w-full rounded-2xl bg-background"></div>
+          <img
+            src="../assets/visuals/Support.png"
+            alt=""
+            class="support-image w-full rounded-2xl object-cover"
+          />
         </div>
 
         <!-- Feedback row -->
@@ -125,8 +129,8 @@ function riseDelay(step: number) {
 </script>
 
 <style scoped>
-/* The photo's shape from the design (582 × 125). */
-.support-image-placeholder {
-  aspect-ratio: 582 / 125;
+/* A little taller than the design's 582 × 125, so the photo gets more room. */
+.support-image {
+  aspect-ratio: 582 / 160;
 }
 </style>
