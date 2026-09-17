@@ -1,8 +1,26 @@
 <template>
-  <div></div>
+  <!-- One centred column, the same width as a settings group. -->
+  <div class="mx-auto flex max-w-160 flex-col gap-12 px-4 py-6 tablet:px-6">
+    <p class="text-3xl leading-normal text-white">{{ dictionary.textIcons.exampleText }}</p>
+
+    <CbDivider />
+
+    <div class="flex items-center gap-1.5">
+      <h2 class="text-xl text-white">{{ dictionary.textIcons.myIcons }}</h2>
+      <CbTooltip :text="dictionary.textIcons.shortcodeHint">
+        <CbButton variant="icon" size="small" :aria-label="dictionary.textIcons.shortcodeHint">
+          <CbIcon name="info" />
+        </CbButton>
+      </CbTooltip>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+import CbButton from '../components/atoms/CbButton.vue'
+import CbDivider from '../components/atoms/CbDivider.vue'
+import CbIcon from '../components/atoms/CbIcon.vue'
+import CbTooltip from '../components/atoms/CbTooltip.vue'
 import { useHeader } from '../components/organisms/headerState'
 
 useHeader(() => ({ title: dictionary.header.iconsInText, searchbar: false }))

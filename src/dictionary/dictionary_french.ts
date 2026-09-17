@@ -128,6 +128,13 @@ export const dictionaryFrench: typeof dictionaryGerman = {
   imageViewer: {
     imageSettings: "Réglages de l'image",
   },
+  textIcons: {
+    exampleText:
+      "Clique ici et modifie le texte d'exemple si tu veux. Voici un exemple d'icône dans le texte : +4",
+    myIcons: 'Mes icônes',
+    shortcodeHint:
+      "Une icône s'insère dans le texte via un raccourci : son nom en minuscules entre deux deux-points, p. ex. :gold:",
+  },
   settings: {
     title: 'Paramètres',
     accountGroup: 'Compte',

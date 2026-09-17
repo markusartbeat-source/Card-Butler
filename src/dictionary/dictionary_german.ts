@@ -148,6 +148,14 @@ export const dictionaryGerman = {
   imageViewer: {
     imageSettings: 'Bildeinstellungen',
   },
+  // The page with the small pictures that can sit inside a text.
+  textIcons: {
+    exampleText:
+      'Klicke hier rein und ändere gerne den Beispieltext. Hier ist ein Beispiel Icon im Text: +4',
+    myIcons: 'Meine Icons',
+    shortcodeHint:
+      'Ein Icon kommt per Kürzel in den Text: Der Name in Kleinbuchstaben zwischen zwei Doppelpunkten, z.B. :gold:',
+  },
   // The settings page.
   settings: {
     title: 'Einstellungen',
