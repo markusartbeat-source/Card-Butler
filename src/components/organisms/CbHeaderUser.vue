@@ -36,10 +36,12 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-// The pages of the header menus come first, then upgrading (or signing in),
-// the same as the button next to the picture. Only somebody who is signed in
-// can sign out.
+// The search comes first (it does nothing yet), then the pages of the header
+// menus, then upgrading (or signing in), the same as the button next to the
+// picture. Only somebody who is signed in can sign out.
 const profileMenuItems = computed<DropdownItem[]>(() => [
+  { value: 'search', label: dictionary.header.search, icon: 'search' as const },
+  'separator',
   ...imagePages.value,
   'separator',
   ...collaborationPages.value,
@@ -83,6 +85,7 @@ function runProfileAction(value: string) {
   const path = pageByProfileItem[value] ?? headerPagePath(value)
   if (path) router.push(path)
   else if (value === 'signIn') signInWithGoogle()
-  else signOut()
+  else if (value === 'signOut') signOut()
+  // The search entry only closes the menu for now.
 }
 </script>

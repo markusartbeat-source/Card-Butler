@@ -29,6 +29,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     userManagement: 'User management',
     cards: 'Cards',
     newCardSet: 'New card set',
+    search: 'Search',
   },
   search: {
     noResults: 'No card found',

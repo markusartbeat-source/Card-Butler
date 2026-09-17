@@ -32,6 +32,8 @@ export const dictionaryGerman = {
     // The entries of the cards menu.
     cards: 'Karten',
     newCardSet: 'Neues Kartenset',
+    // The search entry of the profile menu on narrow screens.
+    search: 'Suche',
   },
   // The search over all cards, started in the header pill.
   search: {
