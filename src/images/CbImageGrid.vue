@@ -10,6 +10,7 @@
       class="rounded-lg bg-gradient-to-br"
       :class="image.gradientClasses"
       :style="tileStyle(image)"
+      @click="$emit('open', image)"
     />
   </div>
 </template>
@@ -21,6 +22,7 @@ import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
 import type { DummyImage } from './dummyImages'
 
 defineProps<{ images: DummyImage[] }>()
+defineEmits<{ open: [image: DummyImage] }>()
 
 // 302px comes from the design; the smaller screens get lower rows so a
 // picture still fits next to another one.
