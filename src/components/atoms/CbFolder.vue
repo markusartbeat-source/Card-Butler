@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-20 flex-col items-center gap-2.25">
+  <CbInteractive class="flex w-24 flex-col items-center gap-2.25 rounded-lg p-2" @click="$emit('click')">
     <!-- The folder is drawn as an SVG, traced from the design file (100×83px,
          shown here at 80×66px):
          a tab on the top left, the golden body and a picture set into it.
@@ -40,13 +40,15 @@
       />
     </svg>
     <span class="text-2xs text-center text-white">{{ name }}</span>
-  </div>
+  </CbInteractive>
 </template>
 
 <script setup lang="ts">
 import { useId } from 'vue'
+import CbInteractive from './CbInteractive.vue'
 
 defineProps<{ name: string }>()
+defineEmits<{ click: [] }>()
 
 const id = useId()
 </script>
