@@ -26,16 +26,28 @@
       <div class="relative">
         <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
 
-        <div ref="cardWrapper">
+        <div
+          ref="cardWrapper"
+          class="relative"
+          @wheel="changePrintCountByWheel(card, $event)"
+        >
           <CbCard
-            :id="id"
-            :number="number"
-            :element-values="elementValues"
+            :id="card.id"
+            :number="card.number"
+            :element-values="card.elementValues"
             :zoom="editorZoom"
           >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
           </CbCard>
+          <!-- Shows while Alt + wheel changes the count. The corner follows the
+               big card: 3 mm at the editor zoom is about 18 px, "rounded-2xl"
+               is 16. -->
+          <CbPrintCountOverlay
+            v-if="card.id === printCountOverlayCardId"
+            :count="card.printCount"
+            class="absolute inset-0 rounded-2xl"
+          />
         </div>
 
         <!-- Next to the flying wrapper, not inside it: the wrapper is scaled
@@ -75,13 +87,14 @@ import {
   clearElementSelection,
   clearSelectionOnMiss,
 } from '../../elementTransform/elementSelection'
-import type { CardElementValues } from '../../cardElements/cardElements'
+import CbPrintCountOverlay from '../../printCount/CbPrintCountOverlay.vue'
+import { changePrintCountByWheel } from '../../printCount/changePrintCountByWheel'
+import { printCountOverlayCardId } from '../../printCount/printCountOverlayState'
+import type { Card } from '../../cardSets/cardSets'
 
 const props = defineProps<{
-  id: string
-  number: number
+  card: Card
   startRect: DOMRect
-  elementValues?: CardElementValues
 }>()
 
 const emit = defineEmits<{ close: [] }>()

@@ -2,10 +2,10 @@
   <!-- Lies over the whole card while its print count is being changed: the
        editor's dim layer with the stack icon and the count in the middle.
        Layout from the Figma frame 230:9826 — its grey is left out, the dim
-       layer's look wins. The corner radius follows the card: 3 mm at the
-       grid zoom is about 9 px, "rounded-lg" is 8. -->
+       layer's look wins. The corner radius comes from the caller, because the
+       card is drawn at a different zoom in the grid and in the editor. -->
   <CbDimLayer
-    class="pointer-events-none flex flex-col items-center justify-center gap-2 rounded-lg text-white"
+    class="pointer-events-none flex flex-col items-center justify-center gap-2 text-white"
   >
     <CbIcon name="stacks" size="large" />
     <!-- Old and new number share one cell, so the old one slides out while the

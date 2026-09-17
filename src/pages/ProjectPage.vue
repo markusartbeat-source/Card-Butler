@@ -4,9 +4,7 @@
   <CbCardEditor
     v-if="selectedCard && selectedCardRect"
     :key="selectedCard.id"
-    :id="selectedCard.id"
-    :number="selectedCard.number"
-    :element-values="selectedCard.elementValues"
+    :card="selectedCard"
     :start-rect="selectedCardRect"
     @close="selectedCardId = null"
   >
@@ -148,11 +146,12 @@
                 :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
               />
               <!-- Shows while Alt + wheel changes the count. Last in the cell,
-                   so it lies over faces and badge. -->
+                   so it lies over faces and badge. The corner follows the card:
+                   3 mm at the grid zoom is about 9 px, "rounded-lg" is 8. -->
               <CbPrintCountOverlay
                 v-if="card.id === printCountOverlayCardId"
                 :count="card.printCount"
-                class="relative col-start-1 row-start-1"
+                class="relative col-start-1 row-start-1 rounded-lg"
               />
             </div>
           </VueDraggable>
