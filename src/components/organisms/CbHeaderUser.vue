@@ -24,7 +24,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CbAvatar from '../atoms/CbAvatar.vue'
 import CbButton from '../atoms/CbButton.vue'
-import CbDropdown from '../atoms/CbDropdown.vue'
+import CbDropdown, { type DropdownItem } from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import { signInWithGoogle, signOut, useCurrentUser } from '../../composables/useCurrentUser'
@@ -35,8 +35,13 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-// Only somebody who is signed in can sign out.
-const profileMenuItems = computed(() => [
+// Upgrading (or signing in) stands on top, the same as the button next to the
+// picture. Only somebody who is signed in can sign out.
+const profileMenuItems = computed<DropdownItem[]>(() => [
+  currentUser.value
+    ? { value: 'upgrade', label: dictionary.general.upgrade, icon: 'arrow_circle_up' as const }
+    : { value: 'signIn', label: dictionary.general.signIn, icon: 'login' as const },
+  'separator',
   { value: 'settings', label: dictionary.settings.title, icon: 'settings' as const },
   { value: 'support', label: dictionary.general.support, icon: 'support_agent' as const },
   ...(currentUser.value
@@ -49,6 +54,7 @@ const route = useRoute()
 
 // The menu entries that are a page of their own, with the URL they lead to.
 const pageByProfileItem: Record<string, string> = {
+  upgrade: '/upgrade',
   settings: '/settings',
   support: '/support',
 }
@@ -59,12 +65,13 @@ const activeProfileItem = computed(() =>
 )
 
 function goToUpgrade() {
-  router.push('/upgrade')
+  router.push(pageByProfileItem.upgrade)
 }
 
 function runProfileAction(value: string) {
   const path = pageByProfileItem[value]
   if (path) router.push(path)
+  else if (value === 'signIn') signInWithGoogle()
   else signOut()
 }
 </script>
