@@ -6,17 +6,13 @@
     <div class="-mx-2 flex gap-2">
       <CbFolder v-for="folder in folders" :key="folder" :name="dictionary.project.name" />
     </div>
-    <!-- Temporary check list, replaced by the picture grid in the next step. -->
-    <ul class="mt-6 text-sm text-white">
-      <li v-for="image in dummyImages" :key="image.id">
-        {{ image.id }} – {{ image.ratioWidth }}:{{ image.ratioHeight }}
-      </li>
-    </ul>
+    <CbImageGrid class="mt-6" :images="dummyImages" />
   </div>
 </template>
 
 <script setup lang="ts">
 import CbFolder from '../components/atoms/CbFolder.vue'
+import CbImageGrid from '../images/CbImageGrid.vue'
 import { dummyImages } from '../images/dummyImages'
 import { useHeader } from '../components/organisms/headerState'
 
