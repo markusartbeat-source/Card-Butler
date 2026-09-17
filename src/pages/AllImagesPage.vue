@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-315">
+  <div class="mx-auto max-w-315 px-4 tablet:px-6">
     <!-- Each folder carries 8px of padding for its hover layer, so the row
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
