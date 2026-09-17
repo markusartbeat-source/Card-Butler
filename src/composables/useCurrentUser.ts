@@ -1,6 +1,7 @@
 import { computed, ref } from 'vue'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '../supabase'
+import { backendUrl } from '../backend/backendUrl'
 
 const currentUser = ref<User | null>(null)
 
@@ -15,9 +16,12 @@ export async function restoreSession() {
   currentUser.value = data.session?.user ?? null
 }
 
-/** Starts the Google sign in flow. */
+/** Sends the browser to the backend's Google sign in. After it, the backend
+ *  brings the user back to the page they started from. */
 export function signInWithGoogle() {
-  supabase.auth.signInWithOAuth({ provider: 'google' })
+  const loginUrl = new URL('/login/google', backendUrl)
+  loginUrl.searchParams.set('returnTo', location.pathname + location.search)
+  window.location.assign(loginUrl)
 }
 
 /** Ends the current session. */
