@@ -1,5 +1,11 @@
 <template>
-  <CbImageViewer v-if="openedImage" :image="openedImage" @close="openedImage = null" />
+  <CbImageViewer
+    v-if="openedImage && openedImageRect"
+    :key="openedImage.id"
+    :image="openedImage"
+    :start-rect="openedImageRect"
+    @close="openedImage = null"
+  />
 
   <div class="mx-auto max-w-315 px-4 tablet:px-6">
     <!-- Each folder carries 8px of padding for its hover layer, so the row
@@ -8,7 +14,12 @@
     <div class="-mx-2 flex gap-2">
       <CbFolder v-for="folder in folders" :key="folder" :name="dictionary.project.name" />
     </div>
-    <CbImageGrid class="mt-6" :images="dummyImages" @open="openedImage = $event" />
+    <CbImageGrid
+      class="mt-6"
+      :images="dummyImages"
+      :opened-image-id="openedImage?.id"
+      @open="openImage"
+    />
   </div>
 </template>
 
@@ -25,4 +36,11 @@ useHeader(() => ({ title: dictionary.header.allImages, searchbar: false }))
 const folders = [1, 2, 3]
 
 const openedImage = ref<DummyImage | null>(null)
+// Where the clicked tile sits in the grid — the viewer starts its flight there.
+const openedImageRect = ref<DOMRect | null>(null)
+
+function openImage(image: DummyImage, tileRect: DOMRect) {
+  openedImageRect.value = tileRect
+  openedImage.value = image
+}
 </script>

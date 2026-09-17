@@ -3,14 +3,16 @@
        at the width its aspect ratio gives it and grows in proportion until the
        row is filled, exactly like the rows in the design. -->
   <div class="flex flex-wrap gap-3">
+    <!-- The opened tile stays in the layout but hides: the viewer shows its
+         picture flying up from that spot and back. -->
     <CbInteractive
       v-for="image in images"
       :key="image.id"
       :id="image.id"
       class="rounded-lg bg-gradient-to-br"
-      :class="image.gradientClasses"
+      :class="[image.gradientClasses, { invisible: image.id === openedImageId }]"
       :style="tileStyle(image)"
-      @click="$emit('open', image)"
+      @click="openImage(image, $event)"
     />
   </div>
 </template>
@@ -21,8 +23,14 @@ import CbInteractive from '../components/atoms/CbInteractive.vue'
 import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
 import type { DummyImage } from './dummyImages'
 
-defineProps<{ images: DummyImage[] }>()
-defineEmits<{ open: [image: DummyImage] }>()
+defineProps<{ images: DummyImage[]; openedImageId?: string }>()
+const emit = defineEmits<{ open: [image: DummyImage, tileRect: DOMRect] }>()
+
+// Passes on where the clicked tile sits on the screen — the viewer starts its
+// flight there.
+function openImage(image: DummyImage, event: MouseEvent) {
+  emit('open', image, (event.currentTarget as HTMLElement).getBoundingClientRect())
+}
 
 // 302px comes from the design; the smaller screens get lower rows so a
 // picture still fits next to another one.

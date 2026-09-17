@@ -125,6 +125,9 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     bleedGroup: 'Sangria',
     bleedInfo: 'Margem extra à volta da carta que é cortada na impressão.',
   },
+  imageViewer: {
+    imageSettings: 'Definições da imagem',
+  },
   settings: {
     title: 'Configurações',
     accountGroup: 'Conta',

@@ -144,6 +144,10 @@ export const dictionaryGerman = {
     bleedGroup: 'Anschnitt',
     bleedInfo: 'Zusätzlicher Rand rund um die Karte, der beim Drucken abgeschnitten wird.',
   },
+  // The overlay for looking at a single picture.
+  imageViewer: {
+    imageSettings: 'Bildeinstellungen',
+  },
   // The settings page.
   settings: {
     title: 'Einstellungen',

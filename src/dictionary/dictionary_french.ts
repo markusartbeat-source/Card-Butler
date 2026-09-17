@@ -125,6 +125,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     bleedGroup: 'Fond perdu',
     bleedInfo: "Bordure supplémentaire autour de la carte, coupée à l'impression.",
   },
+  imageViewer: {
+    imageSettings: "Réglages de l'image",
+  },
   settings: {
     title: 'Paramètres',
     accountGroup: 'Compte',
