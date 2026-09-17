@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './colors.css';
+@import './breakpoints.css';
 @import '@fontsource/comfortaa/300.css';
 @import '@fontsource/comfortaa/400.css';
 @import '@fontsource/comfortaa/700.css';

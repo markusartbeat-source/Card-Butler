@@ -10,6 +10,10 @@ Diese Regeln werden mit der Zeit ergänzt. Der Skill `/check` prüft
   Dateien.
 - Tailwind-Klassen möglichst ohne eckige Klammern (`[...]`) verwenden — also
   Tailwind-Basisklassen statt Arbitrary Values.
+- Responsive nur über die eigenen Breakpoints aus `src/breakpoints.css`
+  (`tablet:`, `laptop:`, `desktop:`, ohne Präfix = Handy). Keine
+  Tailwind-Namen (`sm:`, `md:`, `lg:`, `xl:`) und keine eigenen
+  `@media`-Regeln mit Pixelwerten.
 
 ## Struktur
 

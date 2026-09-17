@@ -1,0 +1,11 @@
+/* Tailwind is mobile first: a class without prefix applies everywhere, a prefix
+   means "from this width upwards". So the phone is the base without a prefix,
+   and each name says which device the step begins at. Same widths as
+   Tailwind's md / lg / xl — those names are switched off, so nobody mixes the
+   two sets by habit. */
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 768px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-desktop: 1280px;
+}
