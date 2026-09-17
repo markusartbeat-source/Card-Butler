@@ -134,6 +134,11 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     myIcons: 'Mes icônes',
     shortcodeHint:
       "Une icône s'insère dans le texte via un raccourci : son nom en minuscules entre deux deux-points, p. ex. :gold:",
+    iconSettings: 'Réglages des icônes',
+    height: 'Hauteur',
+    width: 'Largeur',
+    verticalOffset: 'Décalage vertical',
+    sideSpacing: 'Espace gauche/droite',
   },
   settings: {
     title: 'Paramètres',

@@ -21,6 +21,7 @@ import FlagDe from '~icons/flag/de-4x3'
 import FlagEs from '~icons/flag/es-4x3'
 import FlagFr from '~icons/flag/fr-4x3'
 import FlagGb from '~icons/flag/gb-4x3'
+import FormatLetterSpacingWider from '~icons/material-symbols/format-letter-spacing-wider-rounded'
 import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
@@ -51,6 +52,7 @@ import Stacks from '~icons/material-symbols/stacks-rounded'
 import SupportAgent from '~icons/material-symbols/support-agent-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
 import Undo from '~icons/material-symbols/undo-rounded'
+import VerticalAlignCenter from '~icons/material-symbols/vertical-align-center-rounded'
 import West from '~icons/material-symbols/west-rounded'
 
 export const icons = {
@@ -73,6 +75,7 @@ export const icons = {
   flag_es: FlagEs,
   flag_fr: FlagFr,
   flag_gb: FlagGb,
+  format_letter_spacing_wider: FormatLetterSpacingWider,
   forum: Forum,
   home: Home,
   horizontal_rule: HorizontalRule,
@@ -101,6 +104,7 @@ export const icons = {
   support_agent: SupportAgent,
   title: Title,
   undo: Undo,
+  vertical_align_center: VerticalAlignCenter,
   west: West,
 }
 

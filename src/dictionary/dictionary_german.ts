@@ -155,6 +155,11 @@ export const dictionaryGerman = {
     myIcons: 'Meine Icons',
     shortcodeHint:
       'Ein Icon kommt per Kürzel in den Text: Der Name in Kleinbuchstaben zwischen zwei Doppelpunkten, z.B. :gold:',
+    iconSettings: 'Einstellungen der Icons',
+    height: 'Höhe',
+    width: 'Breite',
+    verticalOffset: 'Vertikaler Versatz',
+    sideSpacing: 'Abstand links/rechts',
   },
   // The settings page.
   settings: {

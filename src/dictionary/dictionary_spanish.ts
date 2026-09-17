@@ -134,6 +134,11 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     myIcons: 'Mis iconos',
     shortcodeHint:
       'Un icono entra en el texto mediante un código corto: su nombre en minúsculas entre dos puntos, p. ej. :gold:',
+    iconSettings: 'Ajustes de los iconos',
+    height: 'Altura',
+    width: 'Anchura',
+    verticalOffset: 'Desplazamiento vertical',
+    sideSpacing: 'Espacio izquierda/derecha',
   },
   settings: {
     title: 'Ajustes',

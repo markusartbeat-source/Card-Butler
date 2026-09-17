@@ -5,13 +5,16 @@
 
     <CbDivider />
 
-    <div class="flex items-center gap-1.5">
-      <h2 class="text-xl text-white">{{ dictionary.textIcons.myIcons }}</h2>
-      <CbTooltip :text="dictionary.textIcons.shortcodeHint">
-        <CbButton variant="icon" size="small" :aria-label="dictionary.textIcons.shortcodeHint">
-          <CbIcon name="info" />
-        </CbButton>
-      </CbTooltip>
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center gap-1.5">
+        <h2 class="text-xl text-white">{{ dictionary.textIcons.myIcons }}</h2>
+        <CbTooltip :text="dictionary.textIcons.shortcodeHint">
+          <CbButton variant="icon" size="small" :aria-label="dictionary.textIcons.shortcodeHint">
+            <CbIcon name="info" />
+          </CbButton>
+        </CbTooltip>
+      </div>
+      <CbTextIconSettings />
     </div>
   </div>
 </template>
@@ -22,6 +25,7 @@ import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import { useHeader } from '../components/organisms/headerState'
+import CbTextIconSettings from '../textIcons/CbTextIconSettings.vue'
 
 useHeader(() => ({ title: dictionary.header.iconsInText, searchbar: false }))
 </script>
