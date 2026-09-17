@@ -13,6 +13,9 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/home' },
+    // The backend lands here after a Google sign in without "returnTo". The
+    // user is already loaded by then (main.ts waits for it), so straight on.
+    { path: '/login/success', redirect: '/home' },
     { path: '/home', component: HomePage },
     { path: '/images/all', component: AllImagesPage },
     { path: '/images/icons-in-text', component: IconsInTextPage },

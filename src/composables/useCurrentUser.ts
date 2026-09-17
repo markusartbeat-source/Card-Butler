@@ -1,5 +1,4 @@
 import { computed, ref } from 'vue'
-import { supabase } from '../supabase'
 import { backendUrl } from '../backend/backendUrl'
 
 // What the backend's /api/me answers for the signed in person.
@@ -36,9 +35,21 @@ export function signInWithGoogle() {
   window.location.assign(loginUrl)
 }
 
-/** Ends the current session. */
-export function signOut() {
-  supabase.auth.signOut()
+/** Ends the session on the backend. A POST needs the CSRF token first, sent
+ *  under the header name the backend hands out with it. */
+export async function signOut() {
+  const csrfResponse = await fetch(`${backendUrl}/api/csrf`, { credentials: 'include' })
+  const csrf: { headerName: string; token: string } = await csrfResponse.json()
+
+  // The backend answers with a redirect to the frontend. Following it would
+  // fail the CORS check and throw, so the redirect is left alone.
+  await fetch(`${backendUrl}/logout`, {
+    method: 'POST',
+    credentials: 'include',
+    redirect: 'manual',
+    headers: { [csrf.headerName]: csrf.token },
+  })
+  currentUser.value = null
 }
 
 /** The person currently signed in with Google, or null when nobody is. */
