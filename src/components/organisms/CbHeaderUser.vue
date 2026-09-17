@@ -7,7 +7,7 @@
     {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
   </CbButton>
 
-  <CbDropdown :items="profileMenuItems" :active-item="activeProfileItem" @select="runProfileAction">
+  <CbDropdown :items="profileMenuItems" :active-item="activeMenuEntry" @select="runProfileAction">
     <!-- On one of the profile menu's pages the picture wears a gold ring, the
          same way an open menu above shows its gold underline. -->
     <CbInteractive
@@ -29,15 +29,21 @@ import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import { signInWithGoogle, signOut, useCurrentUser } from '../../composables/useCurrentUser'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
+import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
 
 const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-// Upgrading (or signing in) stands on top, the same as the button next to the
-// picture. Only somebody who is signed in can sign out.
+// The pages of the header menus come first, then upgrading (or signing in),
+// the same as the button next to the picture. Only somebody who is signed in
+// can sign out.
 const profileMenuItems = computed<DropdownItem[]>(() => [
+  ...imagePages.value,
+  'separator',
+  ...collaborationPages.value,
+  'separator',
   currentUser.value
     ? { value: 'upgrade', label: dictionary.general.upgrade, icon: 'arrow_circle_up' as const }
     : { value: 'signIn', label: dictionary.general.signIn, icon: 'login' as const },
@@ -64,12 +70,17 @@ const activeProfileItem = computed(() =>
   Object.keys(pageByProfileItem).find((item) => pageByProfileItem[item] === route.path),
 )
 
+// The gold entry in the list: one of the profile's own pages, or one of the
+// header pages. The ring around the picture only follows the profile's own
+// pages, the header pages already show themselves in their header menu.
+const activeMenuEntry = computed(() => activeProfileItem.value ?? headerPageAt(route.path))
+
 function goToUpgrade() {
   router.push(pageByProfileItem.upgrade)
 }
 
 function runProfileAction(value: string) {
-  const path = pageByProfileItem[value]
+  const path = pageByProfileItem[value] ?? headerPagePath(value)
   if (path) router.push(path)
   else if (value === 'signIn') signInWithGoogle()
   else signOut()

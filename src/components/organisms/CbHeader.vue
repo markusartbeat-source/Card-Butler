@@ -123,6 +123,7 @@ import { addCardSet, cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
 import { visibleCardSetId } from '../../cardSets/visibleCardSet'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
+import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
 
 withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: HeaderButton[] }>(), {
   searchbar: true,
@@ -133,22 +134,11 @@ const emit = defineEmits<{ action: [key: string] }>()
 const router = useRouter()
 const route = useRoute()
 
-// Menu entries that are a page of their own, with the URL they lead to. The
-// card sets are not in here: they share the project page and go by their id.
-const pageByMenuItem: Record<string, string> = {
-  'all-images': '/images/all',
-  'icons-in-text': '/images/icons-in-text',
-  'share-project': '/collaboration/share',
-  'user-management': '/collaboration/users',
-}
-
 // The entry whose page is open right now. Only one menu holds it at a time, so
 // the user always sees where they are. On the project page that is the set
 // the user is looking at.
 const activeMenuItem = computed(() =>
-  route.path === '/project'
-    ? visibleCardSetId.value
-    : Object.keys(pageByMenuItem).find((item) => pageByMenuItem[item] === route.path),
+  route.path === '/project' ? visibleCardSetId.value : headerPageAt(route.path),
 )
 
 function activeItemOf(menuItems: { value: string }[]) {
@@ -170,7 +160,7 @@ function runMenuAction(value: string) {
     return
   }
 
-  const path = pageByMenuItem[value]
+  const path = headerPagePath(value)
   if (path) router.push(path)
   else emit('action', value)
 }
@@ -191,30 +181,8 @@ const navigationMenus = computed(() => [
       { value: 'new-card-set', label: dictionary.header.newCardSet, icon: 'add_2' as const },
     ],
   },
-  {
-    value: 'images',
-    label: dictionary.images.title,
-    items: [
-      { value: 'all-images', label: dictionary.header.allImages, icon: 'photo_library' as const },
-      {
-        value: 'icons-in-text',
-        label: dictionary.header.iconsInText,
-        icon: 'art_track' as const,
-      },
-    ],
-  },
-  {
-    value: 'collaboration',
-    label: dictionary.header.collaboration,
-    items: [
-      { value: 'share-project', label: dictionary.header.shareProject, icon: 'share' as const },
-      {
-        value: 'user-management',
-        label: dictionary.header.userManagement,
-        icon: 'manage_accounts' as const,
-      },
-    ],
-  },
+  { value: 'images', label: dictionary.images.title, items: imagePages.value },
+  { value: 'collaboration', label: dictionary.header.collaboration, items: collaborationPages.value },
 ])
 
 // Each search mode has its own icon button and its own text in the pill.
