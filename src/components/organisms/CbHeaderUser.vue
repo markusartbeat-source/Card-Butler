@@ -7,7 +7,7 @@
     {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
   </CbButton>
 
-  <CbDropdown :items="profileMenuItems" :active-item="activeMenuEntry" @select="runProfileAction">
+  <CbDropdown :items="profileMenuItems" :active-item="activeProfileItem" @select="runProfileAction">
     <!-- On one of the profile menu's pages the picture wears a gold ring, the
          same way an open menu above shows its gold underline. -->
     <CbInteractive
@@ -28,6 +28,7 @@ import CbDropdown, { type DropdownItem } from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import { signInWithGoogle, signOut, useCurrentUser } from '../../composables/useCurrentUser'
+import { useIsBelowLaptop } from '../../composables/useIsBelowLaptop'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
 
@@ -36,10 +37,11 @@ const { currentUser, displayName, avatarUrl } = useCurrentUser()
 const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
 
-// The search comes first (it does nothing yet), then the pages of the header
-// menus, then upgrading (or signing in), the same as the button next to the
-// picture. Only somebody who is signed in can sign out.
-const profileMenuItems = computed<DropdownItem[]>(() => [
+const { isBelowLaptop } = useIsBelowLaptop()
+
+// What left the header on a narrow screen: the search (it does nothing yet),
+// the pages of the header menus, and upgrading (or signing in).
+const narrowScreenItems = computed<DropdownItem[]>(() => [
   { value: 'search', label: dictionary.header.search, icon: 'search' as const },
   'separator',
   ...imagePages.value,
@@ -50,6 +52,11 @@ const profileMenuItems = computed<DropdownItem[]>(() => [
     ? { value: 'upgrade', label: dictionary.general.upgrade, icon: 'arrow_circle_up' as const }
     : { value: 'signIn', label: dictionary.general.signIn, icon: 'login' as const },
   'separator',
+])
+
+// Only somebody who is signed in can sign out.
+const profileMenuItems = computed<DropdownItem[]>(() => [
+  ...(isBelowLaptop.value ? narrowScreenItems.value : []),
   { value: 'settings', label: dictionary.settings.title, icon: 'settings' as const },
   { value: 'support', label: dictionary.general.support, icon: 'support_agent' as const },
   ...(currentUser.value
@@ -60,29 +67,32 @@ const profileMenuItems = computed<DropdownItem[]>(() => [
 const router = useRouter()
 const route = useRoute()
 
-// The menu entries that are a page of their own, with the URL they lead to.
+// The profile's own pages, with the URL they lead to.
 const pageByProfileItem: Record<string, string> = {
-  upgrade: '/upgrade',
   settings: '/settings',
   support: '/support',
 }
 
-// The entry whose page is open right now.
-const activeProfileItem = computed(() =>
-  Object.keys(pageByProfileItem).find((item) => pageByProfileItem[item] === route.path),
-)
+const upgradePath = '/upgrade'
 
-// The gold entry in the list: one of the profile's own pages, or one of the
-// header pages. The ring around the picture only follows the profile's own
-// pages, the header pages already show themselves in their header menu.
-const activeMenuEntry = computed(() => activeProfileItem.value ?? headerPageAt(route.path))
+// The entry whose page is open right now. On a narrow screen the entries that
+// moved in from the header count as well — on a wide one their header menu
+// already shows where the user is.
+const activeProfileItem = computed(() => {
+  const ownPage = Object.keys(pageByProfileItem).find(
+    (item) => pageByProfileItem[item] === route.path,
+  )
+  if (ownPage || !isBelowLaptop.value) return ownPage
+  return route.path === upgradePath ? 'upgrade' : headerPageAt(route.path)
+})
 
 function goToUpgrade() {
-  router.push(pageByProfileItem.upgrade)
+  router.push(upgradePath)
 }
 
 function runProfileAction(value: string) {
-  const path = pageByProfileItem[value] ?? headerPagePath(value)
+  const path =
+    pageByProfileItem[value] ?? (value === 'upgrade' ? upgradePath : headerPagePath(value))
   if (path) router.push(path)
   else if (value === 'signIn') signInWithGoogle()
   else if (value === 'signOut') signOut()
