@@ -13,9 +13,6 @@
         </CbButton>
         <h1 class="min-w-0 truncate text-xl text-white">{{ title }}</h1>
       </template>
-
-      <!-- Everybody who is in the project right now, next to the project name. -->
-      <CbAvatarGroup :people="peopleHere" size="small" />
     </div>
 
     <!-- Below laptop width the search leaves the header (it moves into the
@@ -116,9 +113,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
-import CbAvatarGroup from '../molecules/CbAvatarGroup.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
-import { usePeopleBroadcast } from '../../presence/usePeopleBroadcast'
 import { addCardSet, cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
 import { visibleCardSetId } from '../../cardSets/visibleCardSet'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
@@ -194,17 +189,6 @@ const searchModeLabel = computed(() =>
   activeSearchMode.value === 'search'
     ? dictionary.header.searchInCards
     : dictionary.header.askButler,
-)
-
-const { people } = usePeopleBroadcast()
-
-const peopleHere = computed(() =>
-  Object.entries(people.value).map(([id, person]) => ({
-    id,
-    name: person.name,
-    imageUrl: person.pictureUrl,
-    color: person.color,
-  })),
 )
 </script>
 

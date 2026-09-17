@@ -7,16 +7,7 @@
     :card="selectedCard"
     :start-rect="selectedCardRect"
     @close="selectedCardId = null"
-  >
-    <CbCursor
-      v-for="cursor in cursorsOnCard(selectedCard.id)"
-      :key="cursor.senderId"
-      :x="cursor.x"
-      :y="cursor.y"
-      :name="cursor.name"
-      :color="cursor.color"
-    />
-  </CbCardEditor>
+  />
 
   <!-- The card area and the card sets panel share the one grid cell, so the
        panel floats over the cards at the right edge instead of taking space.
@@ -110,24 +101,13 @@
                 :id="card.id"
                 :number="card.number"
                 :element-values="card.elementValues"
-                :highlight-color="highlightColorForCard(card.id)"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
-              >
-                <CbCursor
-                  v-for="cursor in cursorsOnCard(card.id)"
-                  :key="cursor.senderId"
-                  :x="cursor.x"
-                  :y="cursor.y"
-                  :name="cursor.name"
-                  :color="cursor.color"
-                />
-              </CbCard>
+              />
               <CbCard
                 :id="card.id"
                 :number="card.number"
                 :element-values="card.elementValues"
-                :highlight-color="highlightColorForCard(card.id)"
                 highlight-search
                 side="back"
                 class="cb-card-back col-start-1 row-start-1"
@@ -189,7 +169,6 @@ import CbInteractive from '../components/atoms/CbInteractive.vue'
 import CbPrintCountBadge from '../components/atoms/CbPrintCountBadge.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
-import CbCursor from '../livecursors/CbCursor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
@@ -216,8 +195,6 @@ import {
   isTurningCards,
   showingCardBacks,
 } from '../cardDrag/flipAllCards'
-import { readAnchorFromMouse, type CursorAnchor } from '../livecursors/cursorAnchor'
-import { useLiveCursors } from '../livecursors/useLiveCursors'
 import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
 import { projectName } from '../project/project'
@@ -322,29 +299,6 @@ function finishCardDrag(cardSet: CardSet) {
   releaseCardDrag()
 }
 
-// Where my own mouse currently is, as { card, x%, y% } — null outside the cards.
-const myAnchor = ref<CursorAnchor | null>(null)
-const { foreignCursors } = useLiveCursors(myAnchor)
-
-// The cursors of other people that are sitting on this card right now.
-function cursorsOnCard(cardId: string) {
-  return foreignCursors.value.flatMap((cursor) =>
-    cursor.anchor?.cardId === cardId
-      ? [{ ...cursor, x: cursor.anchor.x, y: cursor.anchor.y }]
-      : [],
-  )
-}
-
-// The card somebody stands on gets a frame in their colour. If several people
-// are on the same card, the first one wins — the frame can only show one.
-function highlightColorForCard(cardId: string) {
-  return foreignCursors.value.find((cursor) => cursor.anchor?.cardId === cardId)?.color
-}
-
-function updateMyAnchor(event: MouseEvent) {
-  myAnchor.value = readAnchorFromMouse(event)
-}
-
 // The page area (the page wrapper in App.vue) scrolls, not the page itself.
 // Which set is in view is read off it on every scroll, so the sets panel can
 // mark it.
@@ -356,12 +310,10 @@ function updateVisibleCardSetFromScroll() {
 }
 
 onMounted(() => {
-  window.addEventListener('mousemove', updateMyAnchor)
   pageArea.value?.addEventListener('scroll', updateVisibleCardSetFromScroll)
   updateVisibleCardSetFromScroll()
 })
 onUnmounted(() => {
-  window.removeEventListener('mousemove', updateMyAnchor)
   pageArea.value?.removeEventListener('scroll', updateVisibleCardSetFromScroll)
 })
 

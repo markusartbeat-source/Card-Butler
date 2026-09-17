@@ -43,9 +43,6 @@ import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
 import CbCardDropBar from './cardDrag/CbCardDropBar.vue'
 import { dimWhileDraggingClasses } from './cardDrag/dimWhileDragging'
-import { startPeopleBroadcast } from './presence/usePeopleBroadcast'
-
-startPeopleBroadcast()
 </script>
 
 <style scoped>
