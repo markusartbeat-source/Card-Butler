@@ -29,7 +29,8 @@
         </span>
         <textarea
           v-model="exampleText"
-          class="block w-full field-sizing-content resize-none bg-transparent text-3xl leading-normal text-white outline-none"
+          class="block w-full field-sizing-content resize-none bg-transparent leading-normal text-white outline-none"
+          :style="exampleTextStyle"
           @focus="editing = true"
         />
       </label>
@@ -38,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import {
@@ -58,6 +59,12 @@ const fontWeightItems = [
   { value: 'bold', label: dictionary.textIcons.fontWeightBold },
 ]
 const fontSizeItems = fontSizes.map((size) => ({ value: size, label: size }))
+
+const exampleTextStyle = computed(() => ({
+  fontFamily: fontFamily.value,
+  fontWeight: fontWeight.value === 'bold' ? 'bold' : 'normal',
+  fontSize: `${fontSize.value}px`,
+}))
 
 // A click outside the panel closes it. The open select list lives in the
 // body, so a click on one of its entries must not count as outside.
