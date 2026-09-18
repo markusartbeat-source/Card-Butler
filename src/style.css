@@ -286,9 +286,26 @@ body {
 
   /* A grid row can only shrink to 0 if its content may be cut off. This box
      does the cutting, and the content inside it keeps its full height. */
-  .cb-collapse > * {
+  .cb-collapse > *,
+  .cb-unfold > * {
     min-height: 0;
     overflow: hidden;
+  }
+
+  /* Like cb-collapse, but driven by a class instead of Ark UI: the block is
+     folded away until cb-unfold-open is added, then it rolls out smoothly. */
+  .cb-unfold {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 350ms ease-out,
+      opacity 350ms ease-out;
+  }
+
+  .cb-unfold-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
   }
 
   /* A dialog and its darkened backdrop come and go together. Like the list

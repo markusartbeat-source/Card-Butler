@@ -141,6 +141,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     sideSpacing: 'Espace gauche/droite',
     newIcon: 'Nouvelle icône',
     name: 'Nom',
+    exampleTextLabel: "Texte d'exemple",
+    fontWeightRegular: 'Normal',
+    fontWeightBold: 'Gras',
   },
   settings: {
     title: 'Paramètres',

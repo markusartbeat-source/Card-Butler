@@ -1,7 +1,7 @@
 <template>
   <!-- One centred column, the same width as a settings group. -->
   <div class="mx-auto flex max-w-160 flex-col gap-12 px-4 py-6 tablet:px-6">
-    <p class="text-3xl leading-normal text-white">{{ dictionary.textIcons.exampleText }}</p>
+    <CbExampleTextEditor />
 
     <CbDivider />
 
@@ -30,6 +30,7 @@ import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import { useHeader } from '../components/organisms/headerState'
+import CbExampleTextEditor from '../textIcons/CbExampleTextEditor.vue'
 import CbTextIconSettings from '../textIcons/CbTextIconSettings.vue'
 import CbTextIconTiles from '../textIcons/CbTextIconTiles.vue'
 

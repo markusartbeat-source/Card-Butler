@@ -162,6 +162,9 @@ export const dictionaryGerman = {
     sideSpacing: 'Abstand links/rechts',
     newIcon: 'Neues Icon',
     name: 'Name',
+    exampleTextLabel: 'Beispieltext',
+    fontWeightRegular: 'Regular',
+    fontWeightBold: 'Fett',
   },
   // The settings page.
   settings: {
