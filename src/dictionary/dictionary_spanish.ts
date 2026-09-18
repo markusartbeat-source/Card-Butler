@@ -139,6 +139,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     width: 'Anchura',
     verticalOffset: 'Desplazamiento vertical',
     sideSpacing: 'Espacio izquierda/derecha',
+    newIcon: 'Nuevo icono',
+    name: 'Nombre',
   },
   settings: {
     title: 'Ajustes',

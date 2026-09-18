@@ -14,7 +14,12 @@
           </CbButton>
         </CbTooltip>
       </div>
-      <CbTextIconSettings />
+      <!-- The dark panel: settings on top, the icon tiles below a line. -->
+      <div class="rounded-3xl bg-surface shadow-lg">
+        <CbTextIconSettings />
+        <CbDivider />
+        <CbTextIconTiles />
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +31,7 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import { useHeader } from '../components/organisms/headerState'
 import CbTextIconSettings from '../textIcons/CbTextIconSettings.vue'
+import CbTextIconTiles from '../textIcons/CbTextIconTiles.vue'
 
 useHeader(() => ({ title: dictionary.header.iconsInText, searchbar: false }))
 </script>

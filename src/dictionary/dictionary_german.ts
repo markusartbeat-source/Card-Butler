@@ -160,6 +160,8 @@ export const dictionaryGerman = {
     width: 'Breite',
     verticalOffset: 'Vertikaler Versatz',
     sideSpacing: 'Abstand links/rechts',
+    newIcon: 'Neues Icon',
+    name: 'Name',
   },
   // The settings page.
   settings: {
