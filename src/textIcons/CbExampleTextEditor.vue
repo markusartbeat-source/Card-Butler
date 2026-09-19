@@ -36,7 +36,7 @@
           aria-multiline="true"
           :aria-label="dictionary.textIcons.exampleTextLabel"
           class="leading-normal whitespace-pre-wrap text-white outline-none"
-          :style="exampleTextStyle"
+          :style="[exampleTextStyle, iconStyleVariables]"
           @focus="editing = true"
           @input="onInput"
           @keydown.enter.prevent="insertLineBreak"
@@ -59,6 +59,7 @@ import {
   fontFamilies,
   fontSizes,
 } from './exampleText'
+import { iconStyleVariables } from './textIconSettings'
 import { nodesToText, replaceTypedIconWords, textToNodes } from './textIconWords'
 
 const editing = ref(false)

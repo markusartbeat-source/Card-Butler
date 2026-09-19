@@ -13,13 +13,18 @@ function findIconByName(name: string) {
 }
 
 // The picture that stands in for the icon name inside the editable text.
+// Size, lift and side spacing come from the CSS variables the text carries
+// (see textIconSettings.ts). A positive offset lifts the icon.
 export function createIconImage(icon: TextIcon) {
   const image = document.createElement('img')
   image.src = icon.image
   image.alt = icon.name
   image.dataset.iconName = icon.name
-  image.className = 'inline align-middle'
-  image.style.height = '1em'
+  image.className = 'inline object-contain align-middle'
+  image.style.height = 'var(--icon-height)'
+  image.style.width = 'var(--icon-width)'
+  image.style.translate = '0 calc(-1 * var(--icon-vertical-offset))'
+  image.style.marginInline = 'var(--icon-side-spacing)'
   return image
 }
 
