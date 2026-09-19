@@ -1,5 +1,5 @@
 <template>
-  <!-- The example text is always the same big textarea. Clicking into it
+  <!-- The example text is always the same big editable area. Clicking into it
        lets the panel around it appear: the dark shell, the font choices on
        top and the field box with its label. Nothing is swapped, so the text
        keeps its size and only the shell fades and unfolds around it. -->
@@ -20,20 +20,29 @@
     </div>
 
     <div class="transition-all duration-350" :class="editing ? 'p-6' : 'p-0'">
-      <label
-        class="block rounded-md transition-all duration-350"
+      <div
+        class="rounded-md transition-all duration-350"
         :class="editing && 'bg-surface-light px-1.5 py-1'"
       >
-        <span class="cb-unfold text-sm text-label" :class="editing && 'cb-unfold-open'">
-          <span>{{ dictionary.textIcons.exampleTextLabel }}</span>
-        </span>
-        <textarea
-          v-model="exampleText"
-          class="block w-full field-sizing-content resize-none bg-transparent leading-normal text-white outline-none"
+        <div class="cb-unfold text-sm text-label" :class="editing && 'cb-unfold-open'">
+          <div>{{ dictionary.textIcons.exampleTextLabel }}</div>
+        </div>
+        <!-- An editable area instead of a textarea, because a textarea cannot
+             show pictures. Enter gives a line break, paste stays plain text. -->
+        <div
+          ref="editor"
+          contenteditable="true"
+          role="textbox"
+          aria-multiline="true"
+          :aria-label="dictionary.textIcons.exampleTextLabel"
+          class="leading-normal whitespace-pre-wrap text-white outline-none"
           :style="exampleTextStyle"
           @focus="editing = true"
+          @input="onInput"
+          @keydown.enter.prevent="insertLineBreak"
+          @paste.prevent="pastePlainText"
         />
-      </label>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +59,7 @@ import {
   fontFamilies,
   fontSizes,
 } from './exampleText'
+import { nodesToText, replaceTypedShortcodes, textToNodes } from './textIconShortcodes'
 
 const editing = ref(false)
 
@@ -65,6 +75,25 @@ const exampleTextStyle = computed(() => ({
   fontWeight: fontWeight.value === 'bold' ? 'bold' : 'normal',
   fontSize: `${fontSize.value}px`,
 }))
+
+// The editable area is filled once from the stored text; from then on the
+// browser owns its content and every change is written back as text.
+const editor = useTemplateRef<HTMLElement>('editor')
+onMounted(() => editor.value?.replaceChildren(...textToNodes(exampleText.value)))
+
+function onInput() {
+  if (!editor.value) return
+  replaceTypedShortcodes(editor.value)
+  exampleText.value = nodesToText(editor.value)
+}
+
+function insertLineBreak() {
+  document.execCommand('insertLineBreak')
+}
+
+function pastePlainText(event: ClipboardEvent) {
+  document.execCommand('insertText', false, event.clipboardData?.getData('text/plain'))
+}
 
 // A click outside the panel closes it. The open select list lives in the
 // body, so a click on one of its entries must not count as outside.

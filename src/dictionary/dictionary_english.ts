@@ -130,7 +130,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   },
   textIcons: {
     exampleText:
-      'Click in here and feel free to change the example text. Here is an example icon in the text: +4',
+      'Click in here and feel free to change the example text. Here is an example icon in the text: +4:gold:',
     myIcons: 'My icons',
     shortcodeHint:
       'An icon goes into the text via a shortcode: its name in lowercase between two colons, e.g. :gold:',
