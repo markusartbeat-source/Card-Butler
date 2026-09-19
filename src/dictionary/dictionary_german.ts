@@ -151,10 +151,10 @@ export const dictionaryGerman = {
   // The page with the small pictures that can sit inside a text.
   textIcons: {
     exampleText:
-      'Klicke hier rein und ändere gerne den Beispieltext. Hier ist ein Beispiel Icon im Text: +4:gold:',
+      'Klicke hier rein und ändere gerne den Beispieltext. Hier ist ein Beispiel Icon im Text: +4Gold',
     myIcons: 'Meine Icons',
     shortcodeHint:
-      'Ein Icon kommt per Kürzel in den Text: Der Name in Kleinbuchstaben zwischen zwei Doppelpunkten, z.B. :gold:',
+      'Ein Icon kommt in den Text, indem du seinen Namen als eigenes Wort tippst, z.B. Gold. Innerhalb anderer Wörter (Golden) bleibt es Text.',
     iconSettings: 'Einstellungen der Icons',
     height: 'Höhe',
     width: 'Breite',

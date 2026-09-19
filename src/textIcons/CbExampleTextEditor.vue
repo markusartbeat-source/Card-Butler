@@ -59,7 +59,7 @@ import {
   fontFamilies,
   fontSizes,
 } from './exampleText'
-import { nodesToText, replaceTypedShortcodes, textToNodes } from './textIconShortcodes'
+import { nodesToText, replaceTypedIconWords, textToNodes } from './textIconWords'
 
 const editing = ref(false)
 
@@ -83,8 +83,22 @@ onMounted(() => editor.value?.replaceChildren(...textToNodes(exampleText.value))
 
 function onInput() {
   if (!editor.value) return
-  replaceTypedShortcodes(editor.value)
+  replaceTypedIconWords(editor.value)
   exampleText.value = nodesToText(editor.value)
+}
+
+// Leaving the text also finishes a word that ends exactly at the caret.
+// An emptied text comes back as the original example, so the page is never
+// left without a sample to look at.
+function finishEditing() {
+  editing.value = false
+  editor.value?.blur()
+  window.getSelection()?.removeAllRanges()
+  onInput()
+  if (exampleText.value.trim() === '') {
+    exampleText.value = dictionary.textIcons.exampleText
+    editor.value?.replaceChildren(...textToNodes(exampleText.value))
+  }
 }
 
 function insertLineBreak() {
@@ -101,7 +115,7 @@ const panel = useTemplateRef<HTMLElement>('panel')
 function closeOnClickOutside(event: PointerEvent) {
   const target = event.target as HTMLElement
   if (panel.value?.contains(target) || target.closest('[data-scope="select"]')) return
-  editing.value = false
+  if (editing.value) finishEditing()
 }
 onMounted(() => document.addEventListener('pointerdown', closeOnClickOutside))
 onUnmounted(() => document.removeEventListener('pointerdown', closeOnClickOutside))

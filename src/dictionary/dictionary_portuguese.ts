@@ -130,10 +130,10 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   },
   textIcons: {
     exampleText:
-      'Clica aqui e altera o texto de exemplo à vontade. Aqui está um ícone de exemplo no texto: +4:gold:',
+      'Clica aqui e altera o texto de exemplo à vontade. Aqui está um ícone de exemplo no texto: +4Gold',
     myIcons: 'Os meus ícones',
     shortcodeHint:
-      'Um ícone entra no texto através de um código curto: o nome em minúsculas entre dois dois-pontos, p. ex. :gold:',
+      'Um ícone entra no texto quando escreves o seu nome como palavra própria, p. ex. Gold. Dentro de outras palavras (Golden) continua a ser texto.',
     iconSettings: 'Definições dos ícones',
     height: 'Altura',
     width: 'Largura',
