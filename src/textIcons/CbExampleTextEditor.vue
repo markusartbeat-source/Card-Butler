@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import {
@@ -59,6 +59,7 @@ import {
   fontFamilies,
   fontSizes,
 } from './exampleText'
+import { textIcons } from './textIconList'
 import { iconStyleVariables } from './textIconSettings'
 import { nodesToText, replaceTypedIconWords, textToNodes } from './textIconWords'
 
@@ -81,6 +82,18 @@ const exampleTextStyle = computed(() => ({
 // browser owns its content and every change is written back as text.
 const editor = useTemplateRef<HTMLElement>('editor')
 onMounted(() => editor.value?.replaceChildren(...textToNodes(exampleText.value)))
+
+// A renamed icon: the pictures stay where they are and simply report the new
+// name when the text is read back; a plain word that now matches the new
+// name becomes a picture.
+watch(
+  () => textIcons.value.map((icon) => icon.name),
+  () => {
+    if (!editor.value || editing.value) return
+    replaceTypedIconWords(editor.value)
+    exampleText.value = nodesToText(editor.value)
+  },
+)
 
 function onInput() {
   if (!editor.value) return
