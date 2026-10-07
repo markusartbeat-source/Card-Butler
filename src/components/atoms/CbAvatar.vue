@@ -8,7 +8,15 @@
     <Avatar.Fallback :class="size === 'small' ? 'text-xs' : 'text-sm'" class="text-white">
       {{ initials }}
     </Avatar.Fallback>
-    <Avatar.Image v-if="imageUrl" :src="imageUrl" :alt="name" class="size-full object-cover" />
+    <!-- Google answers its profile pictures with 429 once a referrer comes
+         along, so none is sent. -->
+    <Avatar.Image
+      v-if="imageUrl"
+      :src="imageUrl"
+      :alt="name"
+      referrerpolicy="no-referrer"
+      class="size-full object-cover"
+    />
   </Avatar.Root>
 </template>
 
