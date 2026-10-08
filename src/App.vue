@@ -40,6 +40,8 @@
          page change and a fixed bar inside it would move with it. -->
     <CbCardDropBar />
     <CbToaster />
+    <!-- TEMPORÄR (Poststellen-Protokoll): wird im Aufräumschritt entfernt. -->
+    <CbRequestLogPanel />
   </div>
 </template>
 
@@ -50,6 +52,8 @@ import CbToaster from './components/atoms/CbToaster.vue'
 import CbHomeScene from './home/CbHomeScene.vue'
 import CbCardDropBar from './cardDrag/CbCardDropBar.vue'
 import { dimWhileDraggingClasses } from './cardDrag/dimWhileDragging'
+// TEMPORÄR (Poststellen-Protokoll): wird im Aufräumschritt entfernt.
+import CbRequestLogPanel from './requestLog/CbRequestLogPanel.vue'
 </script>
 
 <style scoped>

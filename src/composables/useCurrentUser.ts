@@ -1,4 +1,5 @@
 import { computed, ref } from 'vue'
+import { postOffice } from '../api/postOffice/postOffice'
 
 // What the backend's /api/me answers for the signed in person.
 export type CurrentUser = {
@@ -10,17 +11,12 @@ export type CurrentUser = {
 
 const currentUser = ref<CurrentUser | null>(null)
 
-/** Asks the backend who is signed in. The session lives in a cookie, so the
- *  request has to send it along. 401 means nobody — and so does a backend
- *  that cannot be reached, because the app works without signing in. Await
- *  this before mounting the app. */
+/** Fragt das Backend, wer angemeldet ist. 401 heißt niemand – ebenso ein
+ *  nicht erreichbares Backend, denn die App funktioniert auch ohne Anmeldung.
+ *  Vor dem Mounten der App abwarten. */
 export async function restoreSession() {
   try {
-    const response = await fetch('/api/me', {
-      credentials: 'include',
-      headers: { Accept: 'application/json' },
-    })
-    currentUser.value = response.ok ? await response.json() : null
+    currentUser.value = await postOffice.request<CurrentUser>('/api/me')
   } catch {
     currentUser.value = null
   }
