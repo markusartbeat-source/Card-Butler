@@ -37,6 +37,12 @@ export const dictionaryGerman = {
     search: 'Suche',
   },
   // The search over all cards, started in the header pill.
+  home: {
+    titleCards: 'Deine Karten.',
+    titleStories: 'Deine Geschichten.',
+    description:
+      'Gestalte, bearbeite und exportiere deine Brettspielkarten - kreativ, einfach. Dein neues Lieblingstool!',
+  },
   search: {
     noResults: 'Keine Karte gefunden',
   },

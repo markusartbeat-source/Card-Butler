@@ -32,6 +32,12 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     newCardSet: 'Novo conjunto de cartas',
     search: 'Busca',
   },
+  home: {
+    titleCards: 'Suas cartas.',
+    titleStories: 'Suas histórias.',
+    description:
+      'Crie, edite e exporte suas cartas de jogos de tabuleiro - criativo, simples. Sua nova ferramenta favorita!',
+  },
   search: {
     noResults: 'Nenhuma carta encontrada',
   },

@@ -32,6 +32,12 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     newCardSet: 'New card set',
     search: 'Search',
   },
+  home: {
+    titleCards: 'Your cards.',
+    titleStories: 'Your stories.',
+    description:
+      'Design, edit and export your board game cards - creative, simple. Your new favourite tool!',
+  },
   search: {
     noResults: 'No card found',
   },
