@@ -251,4 +251,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
       },
     },
   },
+  serverErrors: {
+    unreachable: 'Serveur injoignable',
+  },
 }

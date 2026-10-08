@@ -278,4 +278,8 @@ export const dictionaryGerman = {
       },
     },
   },
+  // Fehler beim Austausch mit dem Server.
+  serverErrors: {
+    unreachable: 'Server nicht erreichbar',
+  },
 }

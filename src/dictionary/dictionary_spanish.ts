@@ -251,4 +251,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
       },
     },
   },
+  serverErrors: {
+    unreachable: 'Servidor no disponible',
+  },
 }

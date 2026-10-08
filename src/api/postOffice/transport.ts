@@ -2,6 +2,7 @@
 // Fachliches gehört in die Themen-Ordner unter src/api/. Nur diese nutzen die
 // Datei direkt, der Rest der App geht über postOffice.ts.
 import { requestLog } from '../../requestLog/requestLog'
+import { ApiError } from './apiError'
 
 export type PostOfficeRequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
@@ -16,7 +17,7 @@ type CsrfToken = { headerName: string; token: string }
 let csrfToken: CsrfToken | null = null
 
 /** Schickt einen Aufruf ans Backend (relativer Pfad, Sitzungs-Cookie dabei)
- *  und liefert die Antwort als JSON. Wirft bei einem Fehlerstatus. */
+ *  und liefert die Antwort als JSON. Wirft bei Fehlern nur `ApiError`. */
 async function request<ResponseBody>(
   path: string,
   { method = 'GET', body }: PostOfficeRequestOptions = {},
@@ -32,15 +33,25 @@ async function request<ResponseBody>(
 
   const startTime = performance.now()
   let status = 0
+  let unreachable = false // TEMPORÄR (Poststellen-Protokoll)
+
+  // Baut den Fehler und schreibt ihn in die Konsole – die einzige Stelle dafür.
+  function fail(detail: string | null = null) {
+    const error = new ApiError({ status, detail, method, path, requestId })
+    console.error(error)
+    return error
+  }
 
   try {
+    // Keine Antwort (offline, Server aus) wirft hier – das wird Status 0.
     const response = await fetch(path, {
       method,
       credentials: 'include',
       redirect: 'manual',
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
-    })
+    }).catch(() => null)
+    if (!response) throw fail()
 
     // Weiterleitungen des Backends (z.B. nach dem Abmelden) gelten der
     // Adresszeile, nicht diesem Aufruf: Ihnen wird nicht gefolgt, sie zählen
@@ -52,11 +63,19 @@ async function request<ResponseBody>(
     }
 
     status = response.status
-    if (!response.ok) throw new Error(`${method} ${path} ${status}`)
+    if (!response.ok) {
+      // Nicht jede Fehlerantwort hat einen JSON-Inhalt (z.B. 502 vom Proxy).
+      const problem = await response.json().catch(() => null)
+      throw fail(problem?.detail ?? null)
+    }
 
     // Manche Antworten (z.B. 204) haben keinen Inhalt.
     const responseText = await response.text()
     return responseText ? JSON.parse(responseText) : undefined
+  } catch (error) {
+    // TEMPORÄR (Poststellen-Protokoll): wird im Aufräumschritt entfernt.
+    unreachable = error instanceof ApiError && error.isUnreachable
+    throw error
   } finally {
     // TEMPORÄR (Poststellen-Protokoll): wird im Aufräumschritt entfernt.
     requestLog.unshift({
@@ -65,6 +84,7 @@ async function request<ResponseBody>(
       status,
       durationInMilliseconds: Math.round(performance.now() - startTime),
       requestId,
+      unreachable,
     })
   }
 }

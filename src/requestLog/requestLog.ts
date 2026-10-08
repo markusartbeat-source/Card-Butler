@@ -8,6 +8,7 @@ export type RequestLogEntry = {
   status: number
   durationInMilliseconds: number
   requestId: string
+  unreachable: boolean
 }
 
 /** Alle Aufrufe der Poststelle, der neueste zuerst. */
