@@ -10,6 +10,8 @@
     <!-- Hintere Ebene: liegt hinter Header und Seite. -->
     <div v-if="isHome" class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
       <img src="../assets/visuals/Background.png" alt="" class="size-full object-cover blur-sm" />
+      <!-- Blauer Verlauf ab Header-Unterkante: links dunkler, damit der Text lesbar bleibt. -->
+      <div class="from-background/60 absolute inset-x-0 top-25 bottom-0 bg-linear-to-r to-transparent to-42%" />
     </div>
   </Transition>
 
