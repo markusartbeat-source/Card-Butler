@@ -1,10 +1,13 @@
 <template>
   <!-- The window itself never scrolls: the page ends at the bottom edge of the
        screen, only the page area scrolls on its own. -->
-  <div class="bg-background flex h-screen overflow-hidden">
+  <div class="bg-background relative flex h-screen overflow-hidden">
+    <!-- Bühne der Home-Seite: Ebenen hinter und vor Header und Seite. -->
+    <CbHomeScene />
+
     <!-- The header sits above the animated area, so a page change only moves
          the content below it. Each page says what it should show. -->
-    <div class="flex flex-1 flex-col overflow-hidden">
+    <div class="relative z-10 flex flex-1 flex-col overflow-hidden">
       <!-- While a card is dragged, the header steps back and only the cards
            stay bright. -->
       <CbHeader
@@ -41,6 +44,7 @@
 import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
+import CbHomeScene from './home/CbHomeScene.vue'
 import CbCardDropBar from './cardDrag/CbCardDropBar.vue'
 import { dimWhileDraggingClasses } from './cardDrag/dimWhileDragging'
 </script>

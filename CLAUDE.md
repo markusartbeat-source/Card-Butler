@@ -21,3 +21,9 @@ Diese Regeln werden mit der Zeit ergänzt. Der Skill `/check` prüft
 - Thematisch zusammengehörige Inhalte in eigene Dateien auslagern, wenn das
   für den jeweiligen Bereich üblich ist (z.B. Komponenten, Utilities). Keine
   Datei, die viele fachfremde Dinge gemeinsam enthält.
+- Komponenten-Präfix: `Cb` (z.B. `CbButton`). UI-Library: Ark UI.
+
+## Texte
+
+- Dictionary in `src/dictionary/`. Jeder Text in alle 5 Sprachdateien:
+  Deutsch, Englisch, Spanisch, Französisch, Portugiesisch.
