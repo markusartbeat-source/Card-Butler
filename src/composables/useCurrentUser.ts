@@ -30,20 +30,10 @@ export function signInWithGoogle() {
   window.location.assign(loginUrl)
 }
 
-/** Ends the session on the backend. A POST needs the CSRF token first, sent
- *  under the header name the backend hands out with it. */
+/** Beendet die Sitzung im Backend. */
 export async function signOut() {
-  const csrfResponse = await fetch('/api/csrf', { credentials: 'include' })
-  const csrf: { headerName: string; token: string } = await csrfResponse.json()
-
-  // Das Backend antwortet mit einer Weiterleitung auf eine Frontend-Seite.
-  // Die braucht hier niemand, deshalb wird ihr nicht gefolgt.
-  await fetch('/logout', {
-    method: 'POST',
-    credentials: 'include',
-    redirect: 'manual',
-    headers: { [csrf.headerName]: csrf.token },
-  })
+  await postOffice.request('/logout', { method: 'POST' })
+  postOffice.forgetCsrfToken()
   currentUser.value = null
 }
 

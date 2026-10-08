@@ -8,6 +8,12 @@ export type PostOfficeRequestOptions = {
   body?: unknown
 }
 
+type CsrfToken = { headerName: string; token: string }
+
+// Schutz gegen gefälschte Aufrufe fremder Seiten. Wird beim ersten
+// schreibenden Aufruf geholt und im Speicher gehalten.
+let csrfToken: CsrfToken | null = null
+
 /** Schickt einen Aufruf ans Backend (relativer Pfad, Sitzungs-Cookie dabei)
  *  und liefert die Antwort als JSON. Wirft bei einem Fehlerstatus. */
 async function request<ResponseBody>(
@@ -16,6 +22,13 @@ async function request<ResponseBody>(
 ): Promise<ResponseBody> {
   // Kennzeichnet den Aufruf, damit er sich in Protokollen wiederfinden lässt.
   const requestId = crypto.randomUUID()
+  const headers: Record<string, string> = { Accept: 'application/json', 'X-Request-Id': requestId }
+  if (body !== undefined) headers['Content-Type'] = 'application/json'
+  if (method !== 'GET') {
+    csrfToken ??= await request<CsrfToken>('/api/csrf')
+    headers[csrfToken.headerName] = csrfToken.token
+  }
+
   const startTime = performance.now()
   let status = 0
 
@@ -23,13 +36,20 @@ async function request<ResponseBody>(
     const response = await fetch(path, {
       method,
       credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'X-Request-Id': requestId,
-        ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
-      },
+      redirect: 'manual',
+      headers,
       body: body === undefined ? undefined : JSON.stringify(body),
     })
+
+    // Weiterleitungen des Backends (z.B. nach dem Abmelden) gelten der
+    // Adresszeile, nicht diesem Aufruf: Ihnen wird nicht gefolgt, sie zählen
+    // als Erfolg ohne Inhalt. Den Status verbirgt der Browser dabei; Spring
+    // schickt 302.
+    if (response.type === 'opaqueredirect') {
+      status = 302
+      return undefined as ResponseBody
+    }
+
     status = response.status
     if (!response.ok) throw new Error(`${method} ${path} ${status}`)
 
@@ -48,6 +68,11 @@ async function request<ResponseBody>(
   }
 }
 
+/** Nach dem Abmelden aufrufen: Das Backend macht den Token dann ungültig. */
+function forgetCsrfToken() {
+  csrfToken = null
+}
+
 /** Aufruf immer als `postOffice.request(...)`, damit sofort erkennbar ist:
  *  hier geht etwas ans Backend. */
-export const postOffice = { request }
+export const postOffice = { request, forgetCsrfToken }
