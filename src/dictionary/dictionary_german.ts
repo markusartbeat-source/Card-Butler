@@ -43,6 +43,8 @@ export const dictionaryGerman = {
     description:
       'Gestalte, bearbeite und exportiere deine Brettspielkarten - kreativ, einfach. Dein neues Lieblingstool!',
     watchVideoTutorial: 'Video-Tutorial ansehen',
+    projectsTitle: 'Deine Projekte',
+    noProjects: 'Noch keine Projekte',
   },
   search: {
     noResults: 'Keine Karte gefunden',

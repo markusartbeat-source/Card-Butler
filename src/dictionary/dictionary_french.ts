@@ -38,6 +38,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     description:
       'Conçois, modifie et exporte tes cartes de jeux de société - créatif, simple. Ton nouvel outil préféré !',
     watchVideoTutorial: 'Voir le tutoriel vidéo',
+    projectsTitle: 'Tes projets',
+    noProjects: 'Pas encore de projets',
   },
   search: {
     noResults: 'Aucune carte trouvée',
