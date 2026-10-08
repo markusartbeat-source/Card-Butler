@@ -8,16 +8,13 @@
         <!-- The spacer pushes the button to the right edge of the row. -->
         <div class="animate-cb-rise flex items-center gap-3.5 p-6" :style="riseDelay(0)">
           <CbAvatar :name="userLabel" :image-url="userPicture" />
-          <div>
-            <p class="text-sm text-white">{{ userLabel }}</p>
-            <p v-if="currentUser" class="text-xs text-white/50">{{ currentUser.email }}</p>
-          </div>
+          <p class="text-sm text-white">{{ userLabel }}</p>
           <div class="grow"></div>
 
           <CbButton
             variant="light"
             class="w-52 justify-center"
-            @click="currentUser ? signOut() : signInWithGoogle()"
+            @click="currentUser ? signOut() : postOffice.user.signInWithGoogle()"
           >
             <CbIcon :name="currentUser ? 'door_open' : 'login'" />
             {{ currentUser ? dictionary.general.signOut : dictionary.general.signInWithGoogle }}
@@ -117,7 +114,8 @@ import CbSwitch from '../components/atoms/CbSwitch.vue'
 import { useHeader } from '../components/organisms/headerState'
 import { showToast } from '../components/atoms/toaster'
 import type { IconName } from '../components/atoms/icons'
-import { signInWithGoogle, signOut, useCurrentUser } from '../composables/useCurrentUser'
+import { postOffice } from '../api/postOffice/postOffice'
+import { signOut, useCurrentUser } from '../composables/useCurrentUser'
 import { subscription } from '../settings/subscription'
 import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 

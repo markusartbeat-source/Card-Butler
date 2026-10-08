@@ -1,13 +1,6 @@
 import { computed, ref } from 'vue'
 import { postOffice } from '../api/postOffice/postOffice'
-
-// What the backend's /api/me answers for the signed in person.
-export type CurrentUser = {
-  id: string
-  email: string
-  name: string
-  picture: string
-}
+import type { CurrentUser } from '../api/user/userApi'
 
 const currentUser = ref<CurrentUser | null>(null)
 
@@ -16,24 +9,15 @@ const currentUser = ref<CurrentUser | null>(null)
  *  Vor dem Mounten der App abwarten. */
 export async function restoreSession() {
   try {
-    currentUser.value = await postOffice.request<CurrentUser>('/api/me')
+    currentUser.value = await postOffice.user.loadCurrentUser()
   } catch {
     currentUser.value = null
   }
 }
 
-/** Sends the browser to the backend's Google sign in. After it, the backend
- *  brings the user back to the page they started from. */
-export function signInWithGoogle() {
-  const loginUrl = new URL('/login/google', location.origin)
-  loginUrl.searchParams.set('returnTo', location.pathname + location.search)
-  window.location.assign(loginUrl)
-}
-
-/** Beendet die Sitzung im Backend. */
+/** Beendet die Sitzung im Backend und vergisst die Person. */
 export async function signOut() {
-  await postOffice.request('/logout', { method: 'POST' })
-  postOffice.forgetCsrfToken()
+  await postOffice.user.signOut()
   currentUser.value = null
 }
 

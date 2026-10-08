@@ -2,7 +2,7 @@
   <!-- The end of the header: upgrading (or signing in) and the own profile.
        Below laptop width the button leaves the header (it moves into the
        profile menu). -->
-  <CbButton class="hidden laptop:block" @click="currentUser ? goToUpgrade() : signInWithGoogle()">
+  <CbButton class="hidden laptop:block" @click="currentUser ? goToUpgrade() : postOffice.user.signInWithGoogle()">
     <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
     {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
   </CbButton>
@@ -27,7 +27,8 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown, { type DropdownItem } from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
-import { signInWithGoogle, signOut, useCurrentUser } from '../../composables/useCurrentUser'
+import { postOffice } from '../../api/postOffice/postOffice'
+import { signOut, useCurrentUser } from '../../composables/useCurrentUser'
 import { useIsBelowBreakpoint } from '../../composables/useIsBelowBreakpoint'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
 import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
@@ -105,7 +106,7 @@ function runProfileAction(value: string) {
   const path =
     pageByProfileItem[value] ?? (value === 'upgrade' ? upgradePath : headerPagePath(value))
   if (path) router.push(path)
-  else if (value === 'signIn') signInWithGoogle()
+  else if (value === 'signIn') postOffice.user.signInWithGoogle()
   else if (value === 'signOut') signOut()
   // The search entry only closes the menu for now.
 }
