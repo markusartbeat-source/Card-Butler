@@ -37,6 +37,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     titleStories: 'Tes histoires.',
     description:
       'Conçois, modifie et exporte tes cartes de jeux de société - créatif, simple. Ton nouvel outil préféré !',
+    watchVideoTutorial: 'Voir le tutoriel vidéo',
   },
   search: {
     noResults: 'Aucune carte trouvée',

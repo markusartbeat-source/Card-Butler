@@ -37,6 +37,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     titleStories: 'Your stories.',
     description:
       'Design, edit and export your board game cards - creative, simple. Your new favourite tool!',
+    watchVideoTutorial: 'Watch the video tutorial',
   },
   search: {
     noResults: 'No card found',

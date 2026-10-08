@@ -30,6 +30,7 @@ import Info from '~icons/material-symbols/info-outline-rounded'
 import KeyboardArrowDown from '~icons/material-symbols/keyboard-arrow-down-rounded'
 import LightMode from '~icons/material-symbols/light-mode-outline-rounded'
 import Link from '~icons/material-symbols/link-rounded'
+import LiveTv from '~icons/material-symbols/live-tv-outline-rounded'
 import LocationOn from '~icons/material-symbols/location-on-outline-rounded'
 import Login from '~icons/material-symbols/login-rounded'
 import ManageAccounts from '~icons/material-symbols/manage-accounts-outline-rounded'
@@ -84,6 +85,7 @@ export const icons = {
   keyboard_arrow_down: KeyboardArrowDown,
   light_mode: LightMode,
   link: Link,
+  live_tv: LiveTv,
   location_on: LocationOn,
   login: Login,
   manage_accounts: ManageAccounts,

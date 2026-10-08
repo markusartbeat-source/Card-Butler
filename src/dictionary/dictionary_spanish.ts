@@ -37,6 +37,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     titleStories: 'Tus historias.',
     description:
       'Diseña, edita y exporta tus cartas de juegos de mesa - creativo, sencillo. ¡Tu nueva herramienta favorita!',
+    watchVideoTutorial: 'Ver el videotutorial',
   },
   search: {
     noResults: 'Ninguna carta encontrada',

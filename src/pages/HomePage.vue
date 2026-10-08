@@ -6,10 +6,17 @@
       <span class="text-gold">{{ dictionary.home.titleStories }}</span>
     </h1>
     <p class="w-100 font-bold text-white">{{ dictionary.home.description }}</p>
+    <!-- Vorerst ohne Funktion. -->
+    <CbButton class="self-start">
+      <CbIcon name="live_tv" />
+      {{ dictionary.home.watchVideoTutorial }}
+    </CbButton>
   </div>
 </template>
 
 <script setup lang="ts">
+import CbButton from '../components/atoms/CbButton.vue'
+import CbIcon from '../components/atoms/CbIcon.vue'
 import { useHeader } from '../components/organisms/headerState'
 
 useHeader(() => ({ logo: true, menus: false, searchbar: false, goldLine: true }))
