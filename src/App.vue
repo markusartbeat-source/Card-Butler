@@ -12,6 +12,9 @@
            stay bright. -->
       <CbHeader
         :class="dimWhileDraggingClasses"
+        :logo="headerSettings.logo"
+        :menus="headerSettings.menus"
+        :gold-line="headerSettings.goldLine"
         :title="headerSettings.title"
         :searchbar="headerSettings.searchbar"
         :buttons="headerSettings.buttons"

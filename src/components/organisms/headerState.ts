@@ -2,6 +2,10 @@ import { onUnmounted, ref, watchEffect } from 'vue'
 import type { HeaderButton } from './headerButton'
 
 export type HeaderSettings = {
+  // Jede Seite schaltet die Teile des Headers einzeln an oder aus.
+  logo?: boolean
+  menus?: boolean
+  goldLine?: boolean
   title?: string
   searchbar?: boolean
   buttons?: HeaderButton[]

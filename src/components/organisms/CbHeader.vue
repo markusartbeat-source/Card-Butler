@@ -5,13 +5,26 @@
   <div
     class="from-background via-background/20 to-background relative z-20 flex h-25 w-full shrink-0 items-center gap-2.5 bg-linear-to-r px-6 backdrop-blur-lg"
   >
+    <!-- Goldene Linie an der Unterkante, blendet zur Mitte hin aus. Liegt im
+         Header, damit dessen Höhe bei 100px bleibt. Nur wenn die Seite sie anschaltet. -->
+    <div
+      v-if="goldLine"
+      class="from-gold-dark to-gold-dark absolute inset-x-0 bottom-0 h-px bg-linear-to-r via-transparent via-56%"
+      aria-hidden="true"
+    />
+
     <!-- Left side is as wide as the right side, so the search stays centered. -->
     <div class="flex min-w-0 flex-1 items-center gap-2.5">
+      <template v-if="logo">
+        <img src="../../assets/logos/logo.svg" alt="" class="size-12" />
+        <span class="text-xl text-white">{{ dictionary.header.appName }}</span>
+      </template>
+
       <!-- The back button belongs to the heading, so it only shows with one.
            A long title never wraps, it ends in "..." instead. min-w-0 lets
            the heading shrink below its text width, which flex items refuse
            to do by default. -->
-      <template v-if="title">
+      <template v-else-if="title">
         <CbButton variant="icon" @click="router.back()">
           <CbIcon name="west" />
         </CbButton>
@@ -68,7 +81,7 @@
            width only the cards menu stays, the others move into the profile
            menu. -->
       <CbDropdown
-        v-for="menu in navigationMenus"
+        v-for="menu in menus ? navigationMenus : []"
         :key="menu.value"
         :items="menu.items"
         :active-item="activeItemOf(menu.items)"
@@ -124,10 +137,21 @@ import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
 
-withDefaults(defineProps<{ title?: string; searchbar?: boolean; buttons?: HeaderButton[] }>(), {
-  searchbar: true,
-  buttons: () => [],
-})
+withDefaults(
+  defineProps<{
+    logo?: boolean
+    menus?: boolean
+    goldLine?: boolean
+    title?: string
+    searchbar?: boolean
+    buttons?: HeaderButton[]
+  }>(),
+  {
+    menus: true,
+    searchbar: true,
+    buttons: () => [],
+  },
+)
 const emit = defineEmits<{ action: [key: string] }>()
 
 const router = useRouter()

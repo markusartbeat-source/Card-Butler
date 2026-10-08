@@ -20,6 +20,7 @@ export const dictionaryGerman = {
   },
   // The bar at the top of every page.
   header: {
+    appName: 'Card Butler',
     searchInCards: 'In den Karten finden',
     askButler: 'Frag den Butler',
     // The entries of the images menu.

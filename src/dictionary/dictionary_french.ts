@@ -20,6 +20,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     support: 'Assistance',
   },
   header: {
+    appName: 'Card Butler',
     searchInCards: 'Rechercher dans les cartes',
     askButler: 'Demande au majordome',
     allImages: 'Toutes les images',
