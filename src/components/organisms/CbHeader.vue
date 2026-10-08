@@ -1,6 +1,10 @@
 <template>
   <!-- Height and side spacing come from the design: 100px tall, 24px inset. -->
-  <div class="flex h-25 w-full shrink-0 items-center gap-2.5 px-6">
+  <!-- Außen deckend, in der Mitte durchscheinend und verschwommen. Die Unschärfe
+       macht den Header zu einer eigenen Ebene; z-20 hält seine Menüs über der Seite. -->
+  <div
+    class="from-background via-background/20 to-background relative z-20 flex h-25 w-full shrink-0 items-center gap-2.5 bg-linear-to-r px-6 backdrop-blur-lg"
+  >
     <!-- Left side is as wide as the right side, so the search stays centered. -->
     <div class="flex min-w-0 flex-1 items-center gap-2.5">
       <!-- The back button belongs to the heading, so it only shows with one.
