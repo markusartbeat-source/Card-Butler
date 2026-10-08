@@ -5,8 +5,8 @@ import type { CurrentUser } from '../api/user/userApi'
 const currentUser = ref<CurrentUser | null>(null)
 
 /** Fragt das Backend, wer angemeldet ist. 401 heißt niemand – ebenso ein
- *  nicht erreichbares Backend, denn die App funktioniert auch ohne Anmeldung.
- *  Vor dem Mounten der App abwarten. */
+ *  nicht erreichbares Backend (meldet die Poststelle per Toast), denn die App
+ *  funktioniert auch ohne Anmeldung. Vor dem Mounten der App abwarten. */
 export async function restoreSession() {
   try {
     currentUser.value = await postOffice.user.loadCurrentUser()

@@ -16,9 +16,10 @@ export type CurrentUser = {
   version: number | null
 }
 
-/** Lädt die angemeldete Person. Wirft bei 401, also wenn niemand angemeldet ist. */
+/** Lädt die angemeldete Person. Wirft bei 401, also wenn niemand angemeldet
+ *  ist – ohne Toast, denn die App funktioniert auch ohne Anmeldung. */
 function loadCurrentUser() {
-  return postOffice.request<CurrentUser>('/api/me')
+  return postOffice.request<CurrentUser>('/api/me', { expectedStatuses: [401] })
 }
 
 /** Schickt den Browser zur Google-Anmeldung des Backends. Danach bringt das

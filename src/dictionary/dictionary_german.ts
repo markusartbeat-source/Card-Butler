@@ -281,5 +281,10 @@ export const dictionaryGerman = {
   // Fehler beim Austausch mit dem Server.
   serverErrors: {
     unreachable: 'Server nicht erreichbar',
+    forbidden: 'Dafür fehlen dir die Rechte',
+    notFound: 'Nicht gefunden',
+    changedMeanwhile: 'Wurde inzwischen von jemand anderem geändert',
+    general: 'Etwas ist schiefgelaufen',
+    errorId: (requestId: string) => `Fehler-ID: ${requestId}`,
   },
 }

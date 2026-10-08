@@ -3,11 +3,15 @@
 // Datei direkt, der Rest der App geht über postOffice.ts.
 import { requestLog } from '../../requestLog/requestLog'
 import { ApiError } from './apiError'
+import { showErrorToast } from './errorToast'
 
 export type PostOfficeRequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   /** Wird als JSON gesendet. */
   body?: unknown
+  /** Status, mit denen der Aufrufer rechnet: Geworfen wird trotzdem, aber
+   *  ohne Toast und Konsole (z.B. 401 bei /api/me = niemand angemeldet). */
+  expectedStatuses?: number[]
 }
 
 type CsrfToken = { headerName: string; token: string }
@@ -20,7 +24,7 @@ let csrfToken: CsrfToken | null = null
  *  und liefert die Antwort als JSON. Wirft bei Fehlern nur `ApiError`. */
 async function request<ResponseBody>(
   path: string,
-  { method = 'GET', body }: PostOfficeRequestOptions = {},
+  { method = 'GET', body, expectedStatuses = [] }: PostOfficeRequestOptions = {},
 ): Promise<ResponseBody> {
   // Kennzeichnet den Aufruf, damit er sich in Protokollen wiederfinden lässt.
   const requestId = crypto.randomUUID()
@@ -35,10 +39,14 @@ async function request<ResponseBody>(
   let status = 0
   let unreachable = false // TEMPORÄR (Poststellen-Protokoll)
 
-  // Baut den Fehler und schreibt ihn in die Konsole – die einzige Stelle dafür.
+  // Baut den Fehler und meldet ihn in Konsole und Toast – die einzige Stelle
+  // dafür. Erwartete Status bleiben still.
   function fail(detail: string | null = null) {
     const error = new ApiError({ status, detail, method, path, requestId })
-    console.error(error)
+    if (!expectedStatuses.includes(status)) {
+      console.error(error)
+      showErrorToast(error)
+    }
     return error
   }
 

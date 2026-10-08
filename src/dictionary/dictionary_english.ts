@@ -253,5 +253,10 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   },
   serverErrors: {
     unreachable: 'Server unreachable',
+    forbidden: 'You are not allowed to do this',
+    notFound: 'Not found',
+    changedMeanwhile: 'Someone else changed this in the meantime',
+    general: 'Something went wrong',
+    errorId: (requestId: string) => `Error ID: ${requestId}`,
   },
 }

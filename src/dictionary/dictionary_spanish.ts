@@ -253,5 +253,10 @@ export const dictionarySpanish: typeof dictionaryGerman = {
   },
   serverErrors: {
     unreachable: 'Servidor no disponible',
+    forbidden: 'No tienes permiso para hacer esto',
+    notFound: 'No encontrado',
+    changedMeanwhile: 'Otra persona lo ha cambiado mientras tanto',
+    general: 'Algo salió mal',
+    errorId: (requestId: string) => `ID del error: ${requestId}`,
   },
 }
