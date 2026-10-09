@@ -20,10 +20,15 @@ function loadProjects() {
   return postOffice.request<Project[]>('/api/projects')
 }
 
+/** Lädt ein Projekt. 404, wenn es das Projekt nicht gibt oder der Zugriff fehlt. */
+function loadProject(projectId: string) {
+  return postOffice.request<Project>(`/api/projects/${encodeURIComponent(projectId)}`)
+}
+
 /** Legt ein Projekt an; es gehört dann der angemeldeten Person. */
 function createProject(name: string) {
   return postOffice.request<Project>('/api/projects', { method: 'POST', body: { name } })
 }
 
 /** Fach `projects` der Poststelle, Aufruf als `postOffice.projects.…()`. */
-export const projectsApi = { loadProjects, createProject }
+export const projectsApi = { loadProjects, loadProject, createProject }

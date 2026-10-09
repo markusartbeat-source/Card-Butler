@@ -56,9 +56,9 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   images: {
     title: 'Imagens',
     addImages: 'Adicionar imagens',
+    placeholderFolderName: 'Meu primeiro projeto',
   },
   project: {
-    name: 'Meu primeiro projeto',
     share: 'Compartilhar',
     export: 'Exportar',
     printExport: 'Impressão / exportação',

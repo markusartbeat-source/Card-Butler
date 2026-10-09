@@ -22,7 +22,12 @@
         {{ dictionary.home.projectsTitle }}
       </h2>
       <ul v-if="projects.length" class="flex flex-col gap-2">
-        <CbProjectListItem v-for="project in projects" :key="project.id" :name="project.name" />
+        <CbProjectListItem
+          v-for="project in projects"
+          :key="project.id"
+          :project-id="project.id"
+          :name="project.name"
+        />
       </ul>
       <p v-else class="text-label text-sm">{{ dictionary.home.noProjects }}</p>
       <CbButton variant="secondary" class="self-start" @click="isNewProjectDialogOpen = true">

@@ -21,7 +21,9 @@ const router = createRouter({
     { path: '/images/icons-in-text', component: IconsInTextPage },
     { path: '/collaboration/share', component: ShareProjectPage },
     { path: '/collaboration/users', component: UserManagementPage },
-    { path: '/project', component: ProjectPage },
+    // Ohne Projekt-ID gibt es nichts zu zeigen.
+    { path: '/project', redirect: '/home' },
+    { path: '/project/:projectId', component: ProjectPage, props: true },
     { path: '/upgrade', component: UpgradePage },
     { path: '/settings', component: SettingsPage },
     { path: '/support', component: SupportPage },

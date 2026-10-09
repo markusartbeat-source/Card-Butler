@@ -133,6 +133,7 @@ import CbInteractive from '../atoms/CbInteractive.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { addCardSet, cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
 import { visibleCardSetId } from '../../cardSets/visibleCardSet'
+import { currentProject } from '../../project/currentProject'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
@@ -161,7 +162,7 @@ const route = useRoute()
 // the user always sees where they are. On the project page that is the set
 // the user is looking at.
 const activeMenuItem = computed(() =>
-  route.path === '/project' ? visibleCardSetId.value : headerPageAt(route.path),
+  route.params.projectId ? visibleCardSetId.value : headerPageAt(route.path),
 )
 
 function activeItemOf(menuItems: { value: string }[]) {
@@ -172,20 +173,25 @@ function activeItemOf(menuItems: { value: string }[]) {
 // opens it, every other entry is left to the page.
 function runMenuAction(value: string) {
   if (value === 'new-card-set') {
-    cardSetIdToShow.value = addCardSet().id
-    router.push('/project')
+    showCardSet(addCardSet().id)
     return
   }
 
   if (cardSets.value.some((cardSet) => cardSet.id === value)) {
-    cardSetIdToShow.value = value
-    router.push('/project')
+    showCardSet(value)
     return
   }
 
   const path = headerPagePath(value)
   if (path) router.push(path)
   else emit('action', value)
+}
+
+// Kartensets liegen im geöffneten Projekt. Ist noch keins offen, geht es zur
+// Startseite mit der Projektliste.
+function showCardSet(cardSetId: string) {
+  cardSetIdToShow.value = cardSetId
+  router.push(currentProject.value ? `/project/${currentProject.value.id}` : '/home')
 }
 
 // The menus of the design. They belong to the header itself, so they stand in

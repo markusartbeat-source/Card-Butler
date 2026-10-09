@@ -12,7 +12,7 @@
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
     <div class="-mx-2 flex gap-2">
-      <CbFolder v-for="folder in folders" :key="folder" :name="dictionary.project.name" />
+      <CbFolder v-for="folder in folders" :key="folder" :name="dictionary.images.placeholderFolderName" />
     </div>
     <CbImageGrid
       class="mt-6"

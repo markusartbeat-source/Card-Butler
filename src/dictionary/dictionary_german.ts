@@ -64,10 +64,10 @@ export const dictionaryGerman = {
   images: {
     title: 'Bilder',
     addImages: 'Bilder hinzufügen',
+    placeholderFolderName: 'Mein erstes Projekt',
   },
   // The page with the card grid.
   project: {
-    name: 'Mein erstes Projekt',
     share: 'Teilen',
     export: 'Exportieren',
     printExport: 'Druck / Export',

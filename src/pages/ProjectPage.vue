@@ -161,6 +161,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbCardBackdrops from '../components/atoms/CbCardBackdrops.vue'
@@ -197,15 +198,24 @@ import {
 } from '../cardDrag/flipAllCards'
 import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
-import { projectName } from '../project/project'
+import { currentProject, openProject } from '../project/currentProject'
 import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
 import { cardMatchesSearch } from '../search/cardMatchesSearch'
 import { searchWord } from '../search/searchWord'
 
+const props = defineProps<{ projectId: string }>()
+
+// Unbekanntes Projekt: Den Toast zeigt schon die Poststelle, also zurück zur
+// Startseite. "replace", damit „Zurück“ nicht wieder hierher führt.
+const router = useRouter()
+openProject(props.projectId).then((isOpened) => {
+  if (!isOpened) router.replace('/home')
+})
+
 const isExportDialogOpen = ref(false)
 
 useHeader(() => ({
-  title: projectName.value,
+  title: currentProject.value?.name,
   // Every entry of the header menus is still a placeholder.
   onAction: () =>
     showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
