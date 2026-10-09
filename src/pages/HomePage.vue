@@ -25,23 +25,34 @@
         <CbProjectListItem v-for="project in projects" :key="project.id" :name="project.name" />
       </ul>
       <p v-else class="text-label text-sm">{{ dictionary.home.noProjects }}</p>
+      <CbButton variant="secondary" class="self-start" @click="isNewProjectDialogOpen = true">
+        <CbIcon name="add_2" />
+        {{ dictionary.home.newProject }}
+      </CbButton>
+      <CbProjectNameDialog
+        v-model:open="isNewProjectDialogOpen"
+        :title="dictionary.home.newProject"
+        :save="createProject"
+      />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbProjectListItem from '../components/molecules/CbProjectListItem.vue'
+import CbProjectNameDialog from '../components/organisms/CbProjectNameDialog.vue'
 import { useHeader } from '../components/organisms/headerState'
 import { useCurrentUser } from '../composables/useCurrentUser'
-import { loadProjects, projects } from '../project/projects'
+import { createProject, loadProjects, projects } from '../project/projects'
 
 useHeader(() => ({ logo: true, menus: false, searchbar: false, goldLine: true }))
 
 const { currentUser } = useCurrentUser()
 const isMember = computed(() => currentUser.value?.guest === false)
+const isNewProjectDialogOpen = ref(false)
 
 onMounted(() => {
   if (isMember.value) loadProjects()

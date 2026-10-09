@@ -15,6 +15,7 @@
       class="w-full min-w-0 cursor-text bg-transparent text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
       :value="modelValue"
       :placeholder="placeholder"
+      :autofocus="autofocus"
       @input="(event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
     />
   </Field.Root>
@@ -31,6 +32,8 @@ defineProps<{
   icon?: IconName
   placeholder?: string
   hideLabel?: boolean
+  /** In einem Dialog bekommt dieses Feld beim Öffnen den Fokus. */
+  autofocus?: boolean
 }>()
 defineEmits<{ 'update:modelValue': [value: string] }>()
 </script>

@@ -45,6 +45,11 @@ export const dictionaryGerman = {
     watchVideoTutorial: 'Video-Tutorial ansehen',
     projectsTitle: 'Deine Projekte',
     noProjects: 'Noch keine Projekte',
+    newProject: 'Neues Projekt',
+  },
+  // Der Dialog zum Benennen eines Projekts (Anlegen und Umbenennen).
+  projectNameDialog: {
+    name: 'Name',
   },
   search: {
     noResults: 'Keine Karte gefunden',

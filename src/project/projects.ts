@@ -15,3 +15,14 @@ export async function loadProjects() {
     // Bereits gemeldet.
   }
 }
+
+/** Legt ein Projekt an und nimmt es in die Liste auf. Liefert, ob das geklappt
+ *  hat – Fehler meldet schon die Poststelle per Toast. */
+export async function createProject(name: string) {
+  try {
+    projects.value?.push(await postOffice.projects.createProject(name))
+    return true
+  } catch {
+    return false
+  }
+}

@@ -20,5 +20,10 @@ function loadProjects() {
   return postOffice.request<Project[]>('/api/projects')
 }
 
+/** Legt ein Projekt an; es gehört dann der angemeldeten Person. */
+function createProject(name: string) {
+  return postOffice.request<Project>('/api/projects', { method: 'POST', body: { name } })
+}
+
 /** Fach `projects` der Poststelle, Aufruf als `postOffice.projects.…()`. */
-export const projectsApi = { loadProjects }
+export const projectsApi = { loadProjects, createProject }

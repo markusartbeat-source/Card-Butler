@@ -9,7 +9,7 @@
        that way, and the Tab key still walks through the dialog from the top. -->
   <Dialog.Root
     :open="open"
-    :initial-focus-el="() => panel"
+    :initial-focus-el="initialFocusElement"
     @update:open="$emit('update:open', $event)"
   >
     <Teleport to="body">
@@ -68,6 +68,12 @@ import CbButton from './CbButton.vue'
 import CbIcon from './CbIcon.vue'
 
 const panel = useTemplateRef<HTMLElement>('panel')
+
+// Ausnahme zum Fokus auf dem Panel (siehe oben): Ein Feld mit autofocus, z.B.
+// ein Namensfeld, bekommt ihn direkt, damit man sofort tippen kann.
+function initialFocusElement() {
+  return panel.value?.querySelector<HTMLElement>('[autofocus]') ?? panel.value
+}
 
 // sizeClass is how wide and tall the dialog is, panelClass the space between
 // its title, its content and its footer. Both come from whoever opens the

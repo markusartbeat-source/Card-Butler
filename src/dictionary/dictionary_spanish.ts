@@ -40,6 +40,10 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     watchVideoTutorial: 'Ver el videotutorial',
     projectsTitle: 'Tus proyectos',
     noProjects: 'Todavía no hay proyectos',
+    newProject: 'Nuevo proyecto',
+  },
+  projectNameDialog: {
+    name: 'Nombre',
   },
   search: {
     noResults: 'Ninguna carta encontrada',
