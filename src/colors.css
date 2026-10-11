@@ -21,6 +21,8 @@
   --color-card-backdrop-3: #585865;
   --color-card-backdrop-4: #464654;
   --color-card-backdrop-5: #343443;
+  /* Hintergrundfarbe neuer Kartensets – wird im Backend am Set gespeichert. */
+  --color-card-default: #ffffff;
   --color-success: #16a34a;
   --color-danger: #dc2626;
 

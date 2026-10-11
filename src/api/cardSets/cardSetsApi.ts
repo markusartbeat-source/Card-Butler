@@ -22,5 +22,13 @@ function loadCardSets(projectId: string) {
   )
 }
 
+/** Legt im Projekt ein Kartenset an. */
+function createCardSet(projectId: string, cardSetData: CardSetData) {
+  return postOffice.request<CardSetResource>(
+    `/api/projects/${encodeURIComponent(projectId)}/sets`,
+    { method: 'POST', body: cardSetData },
+  )
+}
+
 /** Fach `cardSets` der Poststelle, Aufruf als `postOffice.cardSets.…()`. */
-export const cardSetsApi = { loadCardSets }
+export const cardSetsApi = { loadCardSets, createCardSet }

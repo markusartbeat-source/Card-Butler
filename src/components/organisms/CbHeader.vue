@@ -131,7 +131,8 @@ import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
-import { addCardSet, cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
+import { cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
+import { createCardSet } from '../../cardSets/createCardSet'
 import { visibleCardSetId } from '../../cardSets/visibleCardSet'
 import { currentProject } from '../../project/currentProject'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
@@ -173,7 +174,7 @@ function activeItemOf(menuItems: { value: string }[]) {
 // opens it, every other entry is left to the page.
 function runMenuAction(value: string) {
   if (value === 'new-card-set') {
-    showCardSet(addCardSet().id)
+    addCardSet()
     return
   }
 
@@ -185,6 +186,15 @@ function runMenuAction(value: string) {
   const path = headerPagePath(value)
   if (path) router.push(path)
   else emit('action', value)
+}
+
+// Ohne geöffnetes Projekt wird nichts angelegt, es geht zur Startseite mit der
+// Projektliste.
+async function addCardSet() {
+  if (!currentProject.value) return router.push('/home')
+
+  const cardSet = await createCardSet(currentProject.value.id)
+  if (cardSet) showCardSet(cardSet.id)
 }
 
 // Kartensets liegen im geöffneten Projekt. Ist noch keins offen, geht es zur
