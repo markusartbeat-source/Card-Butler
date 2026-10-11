@@ -177,7 +177,7 @@ function runMenuAction(value: string) {
     return
   }
 
-  if (cardSets.value.some((cardSet) => cardSet.id === value)) {
+  if (cardSets.value?.some((cardSet) => cardSet.id === value)) {
     showCardSet(value)
     return
   }
@@ -202,7 +202,7 @@ const navigationMenus = computed(() => [
     label: dictionary.header.cards,
     items: [
       // Every card set stands here with its own name, the last entry adds one.
-      ...cardSets.value.map((cardSet) => ({
+      ...(cardSets.value ?? []).map((cardSet) => ({
         value: cardSet.id,
         label: cardSet.name,
         icon: 'playing_cards' as const,

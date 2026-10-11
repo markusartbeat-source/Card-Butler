@@ -157,7 +157,7 @@
     <!-- With a single set there is nothing to jump between, so neither the
          panel nor its edge strip exists. -->
     <CbCardSetsPanel
-      v-if="cardSets.length > 1"
+      v-if="loadedCardSets.length > 1"
       class="col-start-1 row-start-1"
       :class="dimWhileDraggingClasses"
     />
@@ -228,8 +228,11 @@ useHeader(() => ({
     showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
 }))
 
+// Solange die Sets laden, zeigt die Seite einfach keine.
+const loadedCardSets = computed(() => cardSets.value ?? [])
+
 // The cards of every set in one row — for the editor and the export.
-const allCards = computed(() => cardSets.value.flatMap((cardSet) => cardSet.cards))
+const allCards = computed(() => loadedCardSets.value.flatMap((cardSet) => cardSet.cards))
 const selectedCardId = ref<string | null>(null)
 
 // While searching, only the cards with a hit stand in the row. Reordering is off
@@ -243,8 +246,8 @@ const isSearching = computed(() => searchWord.value.trim() !== '')
 // While searching, only the sets with at least one hit get a section.
 const shownCardSets = computed(() =>
   isSearching.value
-    ? cardSets.value.filter((cardSet) => visibleCardsOf(cardSet).length > 0)
-    : cardSets.value,
+    ? loadedCardSets.value.filter((cardSet) => visibleCardsOf(cardSet).length > 0)
+    : loadedCardSets.value,
 )
 
 // Then the placeholder box takes the whole card area instead of the sections.
@@ -330,6 +333,9 @@ onMounted(() => {
   pageArea.value?.addEventListener('scroll', updateVisibleCardSetFromScroll)
   updateVisibleCardSetFromScroll()
 })
+// Die Sets kommen oft erst nach dem Einhängen der Seite – dann, sobald ihre
+// Abschnitte auf der Seite stehen.
+watch(cardSets, updateVisibleCardSetFromScroll, { flush: 'post' })
 onUnmounted(() => {
   pageArea.value?.removeEventListener('scroll', updateVisibleCardSetFromScroll)
 })

@@ -1,6 +1,6 @@
 <template>
   <!-- Ark UI brings the behaviour only, the whole look comes from here. -->
-  <Toc.Root :items="tocItems" :active-ids="[modelValue]">
+  <Toc.Root :items="tocItems" :active-ids="modelValue ? [modelValue] : []">
     <Toc.Title class="px-3 text-base font-bold text-white">{{ title }}</Toc.Title>
 
     <!-- Ark measures the active entry against this list, so it has to be the
@@ -31,7 +31,8 @@ import { Toc } from '@ark-ui/vue'
 const props = defineProps<{
   title: string
   items: { value: string; label: string }[]
-  modelValue: string
+  /** null: kein Eintrag ist markiert. */
+  modelValue: string | null
 }>()
 
 defineEmits<{ 'update:modelValue': [value: string] }>()

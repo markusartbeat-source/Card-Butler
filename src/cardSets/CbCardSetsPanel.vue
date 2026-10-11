@@ -48,7 +48,7 @@ import {
 import { visibleCardSetId } from './visibleCardSet'
 
 const cardSetItems = computed(() =>
-  cardSets.value.map((cardSet) => ({ value: cardSet.id, label: cardSet.name })),
+  (cardSets.value ?? []).map((cardSet) => ({ value: cardSet.id, label: cardSet.name })),
 )
 
 // Scrolling into another set shows the panel briefly and moves the mark.

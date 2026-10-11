@@ -15,3 +15,9 @@ export type Resource<Data> = {
   createdBy: string
   modifiedBy: string
 }
+
+/** Zum Sortieren: die ältere Ressource zuerst. Das Backend liefert Listen in
+ *  keiner festen Reihenfolge. */
+export function olderFirst(first: Resource<unknown>, second: Resource<unknown>) {
+  return Date.parse(first.createdAt) - Date.parse(second.createdAt)
+}
