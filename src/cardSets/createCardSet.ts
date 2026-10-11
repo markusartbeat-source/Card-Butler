@@ -1,6 +1,7 @@
 import { postOffice } from '../api/postOffice/postOffice'
 import { cardFormat } from '../card/cardFormat'
 import { cardSetFromResource, cardSets } from './cardSets'
+import { createCard } from './createCard'
 // TEMPORÄR: für den JSON-Kasten.
 import { loadedCardSetResources } from './loadCardSets'
 
@@ -18,8 +19,9 @@ function defaultCardSetColor() {
   return String(context.fillStyle)
 }
 
-/** Legt im Projekt ein Kartenset an und nimmt es in die Liste auf. Sein Name
- *  zählt von den vorhandenen Sets weiter. Liefert das neue Set oder null –
+/** Legt im Projekt ein Kartenset mit einer Karte an und nimmt es in die Liste
+ *  auf. Sein Name zählt von den vorhandenen Sets weiter. Liefert das neue Set
+ *  oder null –
  *  Fehler meldet schon die Poststelle per Toast. */
 export async function createCardSet(projectId: string) {
   try {
@@ -34,7 +36,10 @@ export async function createCardSet(projectId: string) {
     // TEMPORÄR: Backend-Antwort im JSON-Kasten zeigen.
     loadedCardSetResources.value?.push(cardSetResource)
 
+    // Die Karte kommt dazu, bevor das Set erscheint – so steht es gleich
+    // vollständig da. Klappt das nicht, zeigt es das Set trotzdem: Es gibt es ja.
     const cardSet = cardSetFromResource(cardSetResource)
+    await createCard(cardSet)
     cardSets.value?.push(cardSet)
     return cardSet
   } catch {

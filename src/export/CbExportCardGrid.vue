@@ -13,7 +13,6 @@
       v-for="card in cards"
       :key="card.id"
       :id="card.id"
-      :number="card.number"
       :element-values="card.elementValues"
       :zoom="exportZoom"
       class="pointer-events-none"

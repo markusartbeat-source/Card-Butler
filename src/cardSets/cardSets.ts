@@ -1,11 +1,12 @@
 import { ref } from 'vue'
 import type { CardSetResource } from '../api/cardSets/cardSetsApi'
+import type { CardResource } from '../api/cards/cardsApi'
 import type { CardElementValues } from '../cardElements/cardElements'
 
-// The id stays with a card forever — the number is only what the card is called.
 export type Card = {
   id: string
-  number: number
+  /** Stand der Karte im Backend, wird beim Ändern als If-Match mitgeschickt. */
+  version: number
   // What this card fills into the deck's elements.
   elementValues: CardElementValues
   // How many copies of this card get printed. 1 is the normal card.
@@ -23,6 +24,12 @@ export const cardSets = ref<CardSet[] | null>(null)
     eigens dazu. */
 export function cardSetFromResource(cardSetResource: CardSetResource): CardSet {
   return { id: cardSetResource.id, name: cardSetResource.data.name, cards: [] }
+}
+
+/** Macht aus einer Karte des Backends eine der App. Ihren Namen braucht die App
+    nicht, Inhalte und Druckanzahl kennt das Backend noch nicht. */
+export function cardFromResource(cardResource: CardResource): Card {
+  return { id: cardResource.id, version: cardResource.version, elementValues: {}, printCount: 1 }
 }
 
 /** The set the project page should scroll to as soon as it shows it. The header

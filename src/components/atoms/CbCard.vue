@@ -7,12 +7,6 @@
     :style="{ ...cardFormatStyle(cardFormat), zoom, outlineColor: highlightColor }"
     :data-card-id="id"
   >
-    <span
-      v-if="side === 'front'"
-      class="absolute inset-x-0 top-4 text-center text-3xl font-bold text-background"
-    >
-      {{ number }}
-    </span>
     <!-- Every element type brings its own component from its folder. -->
     <template v-for="element in elementsOnThisSide" :key="element.id">
       <CbTextElement
@@ -47,7 +41,6 @@ import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 const props = withDefaults(
   defineProps<{
     id: string
-    number: number
     zoom?: number
     highlightColor?: string
     elementValues?: CardElementValues

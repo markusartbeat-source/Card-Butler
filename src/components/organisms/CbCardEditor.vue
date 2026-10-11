@@ -33,7 +33,6 @@
         >
           <CbCard
             :id="card.id"
-            :number="card.number"
             :element-values="card.elementValues"
             :zoom="editorZoom"
           >

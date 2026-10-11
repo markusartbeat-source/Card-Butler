@@ -18,9 +18,13 @@
          bar stands under the cards, so it ends up at the bottom edge of a
          short page and stays there while a long page scrolls. -->
     <div class="col-start-1 row-start-1 mx-auto flex w-full max-w-4/5 min-w-0 flex-col">
-      <!-- TEMPORÄR: zeigt die geladenen Kartensets des Projekts. -->
+      <!-- TEMPORÄR: zeigt die zuletzt angelegte Karte und die Kartensets des Projekts. -->
       <pre class="mt-4 max-h-64 overflow-auto rounded bg-surface p-4 text-xs text-label">{{
-        JSON.stringify(loadedCardSetResources, null, 2)
+        JSON.stringify(
+          { lastCreatedCard: lastCreatedCardResource, cardSets: loadedCardSetResources },
+          null,
+          2,
+        )
       }}</pre>
 
       <div class="flex flex-1">
@@ -57,7 +61,7 @@
               ]"
               :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
               @animationend="markRisen(addCardId(cardSet), $event)"
-              @click="addCard(cardSet)"
+              @click="createCard(cardSet)"
             >
               <CbIcon name="add_2" />
               <span>{{ dictionary.project.newCard }}</span>
@@ -104,14 +108,12 @@
               </CbTooltip>
               <CbCard
                 :id="card.id"
-                :number="card.number"
                 :element-values="card.elementValues"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
               />
               <CbCard
                 :id="card.id"
-                :number="card.number"
                 :element-values="card.elementValues"
                 highlight-search
                 side="back"
@@ -178,7 +180,9 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
+import { createCard } from '../cardSets/createCard'
 // TEMPORÄR: für den JSON-Kasten.
+import { lastCreatedCardResource } from '../cardSets/createCard'
 import { loadedCardSetResources } from '../cardSets/loadCardSets'
 import { flashCardSetsPanel } from '../cardSets/panelVisibility'
 import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCardSetSection'
@@ -339,19 +343,6 @@ watch(cardSets, updateVisibleCardSetFromScroll, { flush: 'post' })
 onUnmounted(() => {
   pageArea.value?.removeEventListener('scroll', updateVisibleCardSetFromScroll)
 })
-
-// A new card appears right where the button is, so it goes to the front of its
-// set. Its number keeps counting up within the set — it is a name, not the
-// place in the row.
-function addCard(cardSet: CardSet) {
-  const highestNumber = Math.max(0, ...cardSet.cards.map((card) => card.number))
-  cardSet.cards.unshift({
-    id: crypto.randomUUID(),
-    number: highestNumber + 1,
-    elementValues: {},
-    printCount: 1,
-  })
-}
 </script>
 
 <style scoped>
