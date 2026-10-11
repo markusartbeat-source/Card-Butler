@@ -1,7 +1,6 @@
 // Der Versand der Poststelle: Cookie, CSRF, Request-ID, JSON. Nur Transport –
 // Fachliches gehört in die Themen-Ordner unter src/api/. Nur diese nutzen die
 // Datei direkt, der Rest der App geht über postOffice.ts.
-import { requestLog } from '../../requestLog/requestLog'
 import { ApiError } from './apiError'
 import { showErrorToast } from './errorToast'
 
@@ -40,13 +39,9 @@ async function request<ResponseBody>(
     headers[csrfToken.headerName] = csrfToken.token
   }
 
-  const startTime = performance.now()
-  let status = 0
-  let unreachable = false // TEMPORÄR (Poststellen-Protokoll)
-
   // Baut den Fehler und meldet ihn in Konsole und Toast – die einzige Stelle
   // dafür. Erwartete Status bleiben still.
-  function fail(detail: string | null = null) {
+  function fail(status: number, detail: string | null = null) {
     const error = new ApiError({ status, detail, method, path, requestId })
     if (!expectedStatuses.includes(status)) {
       console.error(error)
@@ -55,52 +50,30 @@ async function request<ResponseBody>(
     return error
   }
 
-  try {
-    // Keine Antwort (offline, Server aus) wirft hier – das wird Status 0.
-    const response = await fetch(path, {
-      method,
-      credentials: 'include',
-      redirect: 'manual',
-      headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
-    }).catch(() => null)
-    if (!response) throw fail()
+  // Keine Antwort (offline, Server aus) wirft hier – das wird Status 0.
+  const response = await fetch(path, {
+    method,
+    credentials: 'include',
+    redirect: 'manual',
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body),
+  }).catch(() => null)
+  if (!response) throw fail(0)
 
-    // Weiterleitungen des Backends (z.B. nach dem Abmelden) gelten der
-    // Adresszeile, nicht diesem Aufruf: Ihnen wird nicht gefolgt, sie zählen
-    // als Erfolg ohne Inhalt. Den Status verbirgt der Browser dabei; Spring
-    // schickt 302.
-    if (response.type === 'opaqueredirect') {
-      status = 302
-      return undefined as ResponseBody
-    }
+  // Weiterleitungen des Backends (z.B. nach dem Abmelden) gelten der
+  // Adresszeile, nicht diesem Aufruf: Ihnen wird nicht gefolgt, sie zählen
+  // als Erfolg ohne Inhalt.
+  if (response.type === 'opaqueredirect') return undefined as ResponseBody
 
-    status = response.status
-    if (!response.ok) {
-      // Nicht jede Fehlerantwort hat einen JSON-Inhalt (z.B. 502 vom Proxy).
-      const problem = await response.json().catch(() => null)
-      throw fail(problem?.detail ?? null)
-    }
-
-    // Manche Antworten (z.B. 204) haben keinen Inhalt.
-    const responseText = await response.text()
-    return responseText ? JSON.parse(responseText) : undefined
-  } catch (error) {
-    // TEMPORÄR (Poststellen-Protokoll): wird im Aufräumschritt entfernt.
-    unreachable = error instanceof ApiError && error.isUnreachable
-    throw error
-  } finally {
-    // TEMPORÄR (Poststellen-Protokoll): wird im Aufräumschritt entfernt.
-    requestLog.unshift({
-      method,
-      path,
-      status,
-      durationInMilliseconds: Math.round(performance.now() - startTime),
-      requestId,
-      unreachable,
-      ifMatch: headers['If-Match'],
-    })
+  if (!response.ok) {
+    // Nicht jede Fehlerantwort hat einen JSON-Inhalt (z.B. 502 vom Proxy).
+    const problem = await response.json().catch(() => null)
+    throw fail(response.status, problem?.detail ?? null)
   }
+
+  // Manche Antworten (z.B. 204) haben keinen Inhalt.
+  const responseText = await response.text()
+  return responseText ? JSON.parse(responseText) : undefined
 }
 
 /** Nach dem Abmelden aufrufen: Das Backend macht den Token dann ungültig. */
