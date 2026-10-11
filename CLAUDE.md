@@ -1,7 +1,6 @@
 # Card-Butler – Coding-Regeln
 
-Diese Regeln werden mit der Zeit ergänzt. Der Skill `/check` prüft
-Änderungen dagegen — hier ergänzen, nicht im Skill selbst.
+Diese Regeln werden mit der Zeit ergänzt.
 
 ## Styling
 

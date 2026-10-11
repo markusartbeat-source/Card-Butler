@@ -18,6 +18,11 @@
          bar stands under the cards, so it ends up at the bottom edge of a
          short page and stays there while a long page scrolls. -->
     <div class="col-start-1 row-start-1 mx-auto flex w-full max-w-4/5 min-w-0 flex-col">
+      <!-- TEMPORÄR: zeigt die geladenen Kartensets des Projekts. -->
+      <pre class="mt-4 max-h-64 overflow-auto rounded bg-surface p-4 text-xs text-label">{{
+        JSON.stringify(loadedCardSetResources, null, 2)
+      }}</pre>
+
       <div class="flex flex-1">
         <!-- Every set is a section of its own, a thin line divides them. A card
              can only be sorted within its set: the sections share no drag group.
@@ -173,6 +178,8 @@ import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
+// TEMPORÄR: für den JSON-Kasten.
+import { loadedCardSetResources } from '../cardSets/loadCardSets'
 import { flashCardSetsPanel } from '../cardSets/panelVisibility'
 import { cardSetElementId, scrollToCardSetSection } from '../cardSets/scrollToCardSetSection'
 import { updateVisibleCardSet } from '../cardSets/visibleCardSet'

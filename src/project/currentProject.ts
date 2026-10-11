@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { postOffice } from '../api/postOffice/postOffice'
 import type { Project } from '../api/projects/projectsApi'
+import { loadCardSets } from '../cardSets/loadCardSets'
 import { projects } from './projects'
 
 // Das geöffnete Projekt. Header und Projektseite lesen es von hier; es bleibt
@@ -17,9 +18,11 @@ export async function openProject(projectId: string) {
 
   try {
     currentProject.value = await postOffice.projects.loadProject(projectId)
-    return true
   } catch {
     currentProject.value = null
     return false
   }
+
+  // Erst danach: Fehlt das Projekt, käme sonst ein zweiter Fehler-Toast.
+  return loadCardSets(projectId)
 }
