@@ -11,6 +11,7 @@
     >
       {{ entry.method }} {{ entry.path }} {{ entry.status }} · {{ entry.durationInMilliseconds }} ms ·
       {{ entry.requestId }}
+      <template v-if="entry.ifMatch"> · If-Match {{ entry.ifMatch }}</template>
       <template v-if="entry.unreachable"> · {{ dictionary.serverErrors.unreachable }}</template>
     </li>
   </ol>

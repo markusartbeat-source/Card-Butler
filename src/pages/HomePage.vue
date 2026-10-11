@@ -27,6 +27,7 @@
           :key="project.id"
           :project-id="project.id"
           :name="project.name"
+          @rename="projectToRename = project"
         />
       </ul>
       <p v-else class="text-label text-sm">{{ dictionary.home.noProjects }}</p>
@@ -39,12 +40,21 @@
         :title="dictionary.home.newProject"
         :save="createProject"
       />
+      <!-- Der Dialog meldet nur das Schließen, daher immer zurück auf null. -->
+      <CbProjectNameDialog
+        :open="projectToRename !== null"
+        :title="dictionary.home.renameProject"
+        :initial-name="projectToRename?.name"
+        :save="(name) => renameProject(projectToRename!.id, name)"
+        @update:open="projectToRename = null"
+      />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import type { Project } from '../api/projects/projectsApi'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbProjectListItem from '../components/molecules/CbProjectListItem.vue'
@@ -52,12 +62,15 @@ import CbProjectNameDialog from '../components/organisms/CbProjectNameDialog.vue
 import { useHeader } from '../components/organisms/headerState'
 import { useCurrentUser } from '../composables/useCurrentUser'
 import { createProject, loadProjects, projects } from '../project/projects'
+import { renameProject } from '../project/renameProject'
 
 useHeader(() => ({ logo: true, menus: false, searchbar: false, goldLine: true }))
 
 const { currentUser } = useCurrentUser()
 const isMember = computed(() => currentUser.value?.guest === false)
 const isNewProjectDialogOpen = ref(false)
+// Das Projekt im Umbenennen-Dialog – null, solange der Dialog zu ist.
+const projectToRename = ref<Project | null>(null)
 
 onMounted(() => {
   if (isMember.value) loadProjects()

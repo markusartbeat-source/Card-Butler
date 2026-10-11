@@ -9,6 +9,9 @@ export type PostOfficeRequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   /** Wird als JSON gesendet. */
   body?: unknown
+  /** Stand (Feld `version`) des Objekts, das geändert wird. Geht als If-Match
+   *  mit; ist er veraltet, antwortet das Backend mit 412. */
+  version?: number
   /** Status, mit denen der Aufrufer rechnet: Geworfen wird trotzdem, aber
    *  ohne Toast und Konsole (z.B. 401 bei /api/me = niemand angemeldet). */
   expectedStatuses?: number[]
@@ -24,12 +27,14 @@ let csrfToken: CsrfToken | null = null
  *  und liefert die Antwort als JSON. Wirft bei Fehlern nur `ApiError`. */
 async function request<ResponseBody>(
   path: string,
-  { method = 'GET', body, expectedStatuses = [] }: PostOfficeRequestOptions = {},
+  { method = 'GET', body, version, expectedStatuses = [] }: PostOfficeRequestOptions = {},
 ): Promise<ResponseBody> {
   // Kennzeichnet den Aufruf, damit er sich in Protokollen wiederfinden lässt.
   const requestId = crypto.randomUUID()
   const headers: Record<string, string> = { Accept: 'application/json', 'X-Request-Id': requestId }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
+  // Das Backend schreibt seine Versionen als ETag in Anführungszeichen.
+  if (version !== undefined) headers['If-Match'] = `"${version}"`
   if (method !== 'GET') {
     csrfToken ??= await request<CsrfToken>('/api/csrf')
     headers[csrfToken.headerName] = csrfToken.token
@@ -93,6 +98,7 @@ async function request<ResponseBody>(
       durationInMilliseconds: Math.round(performance.now() - startTime),
       requestId,
       unreachable,
+      ifMatch: headers['If-Match'],
     })
   }
 }

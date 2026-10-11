@@ -9,6 +9,8 @@ export type RequestLogEntry = {
   durationInMilliseconds: number
   requestId: string
   unreachable: boolean
+  /** Mitgeschickte Version, z.B. `"3"`, falls der Aufruf etwas ändert. */
+  ifMatch?: string
 }
 
 /** Alle Aufrufe der Poststelle, der neueste zuerst. */

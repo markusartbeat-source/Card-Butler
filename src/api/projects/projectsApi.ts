@@ -30,5 +30,15 @@ function createProject(name: string) {
   return postOffice.request<Project>('/api/projects', { method: 'POST', body: { name } })
 }
 
+/** Benennt ein Projekt um. `version` ist der Stand, den der Aufrufer kennt –
+ *  ist er veraltet, antwortet das Backend mit 412. */
+function renameProject(projectId: string, name: string, version: number) {
+  return postOffice.request<Project>(`/api/projects/${encodeURIComponent(projectId)}`, {
+    method: 'PUT',
+    body: { name },
+    version,
+  })
+}
+
 /** Fach `projects` der Poststelle, Aufruf als `postOffice.projects.…()`. */
-export const projectsApi = { loadProjects, loadProject, createProject }
+export const projectsApi = { loadProjects, loadProject, createProject, renameProject }

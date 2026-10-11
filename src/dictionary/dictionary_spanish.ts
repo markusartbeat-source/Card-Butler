@@ -41,6 +41,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     projectsTitle: 'Tus proyectos',
     noProjects: 'Todavía no hay proyectos',
     newProject: 'Nuevo proyecto',
+    renameProject: 'Cambiar el nombre del proyecto',
+    renameProjectLabel: (name: string) => `Cambiar el nombre del proyecto «${name}»`,
   },
   projectNameDialog: {
     name: 'Nombre',

@@ -14,6 +14,7 @@ import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import Delete from '~icons/material-symbols/delete-outline-rounded'
 import DoorOpen from '~icons/material-symbols/door-open-outline-rounded'
 import East from '~icons/material-symbols/east-rounded'
+import Edit from '~icons/material-symbols/edit-outline-rounded'
 import Filter from '~icons/material-symbols/filter-outline-rounded'
 // Flags keep their own colours, they are not tinted like the symbols above.
 import FlagBr from '~icons/flag/br-4x3'
@@ -70,6 +71,7 @@ export const icons = {
   delete: Delete,
   door_open: DoorOpen,
   east: East,
+  edit: Edit,
   filter: Filter,
   flag_br: FlagBr,
   flag_de: FlagDe,

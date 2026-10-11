@@ -46,6 +46,9 @@ export const dictionaryGerman = {
     projectsTitle: 'Deine Projekte',
     noProjects: 'Noch keine Projekte',
     newProject: 'Neues Projekt',
+    renameProject: 'Projekt umbenennen',
+    // Für den Stift-Button: Mit Namen, damit Screenreader die Buttons unterscheiden.
+    renameProjectLabel: (name: string) => `Projekt „${name}“ umbenennen`,
   },
   // Der Dialog zum Benennen eines Projekts (Anlegen und Umbenennen).
   projectNameDialog: {
