@@ -19,13 +19,14 @@ function defaultCardSetColor() {
   return String(context.fillStyle)
 }
 
-/** Legt im Projekt ein Kartenset mit einer Karte an – nur im Backend, in keiner
- *  Liste. Liefert das neue Set oder null – Fehler meldet schon die Poststelle
- *  per Toast. */
-export async function createCardSetInBackend(projectId: string, cardSetNumber: number) {
+/** Legt im Projekt ein Kartenset mit einer Karte an und nimmt es in die Liste
+ *  auf. Sein Name zählt von den vorhandenen Sets weiter. Liefert das neue Set
+ *  oder null –
+ *  Fehler meldet schon die Poststelle per Toast. */
+export async function createCardSet(projectId: string) {
   try {
     const cardSetResource = await postOffice.cardSets.createCardSet(projectId, {
-      name: dictionary.cardSets.cardSetName(cardSetNumber),
+      name: dictionary.cardSets.cardSetName((cardSets.value?.length ?? 0) + 1),
       width: cardFormat.value.width,
       height: cardFormat.value.height,
       color: defaultCardSetColor(),
@@ -35,22 +36,13 @@ export async function createCardSetInBackend(projectId: string, cardSetNumber: n
     // TEMPORÄR: Backend-Antwort im JSON-Kasten zeigen.
     loadedCardSetResources.value?.push(cardSetResource)
 
-    // Klappt die Karte nicht, gibt es das Set trotzdem.
+    // Die Karte kommt dazu, bevor das Set erscheint – so steht es gleich
+    // vollständig da. Klappt das nicht, zeigt es das Set trotzdem: Es gibt es ja.
     const cardSet = cardSetFromResource(cardSetResource)
     await createCard(cardSet)
+    cardSets.value?.push(cardSet)
     return cardSet
   } catch {
     return null
   }
-}
-
-/** Legt im geöffneten Projekt ein Kartenset mit einer Karte an und nimmt es in
- *  die Liste auf. Sein Name zählt von den vorhandenen Sets weiter. Liefert das
- *  neue Set oder null – Fehler meldet schon die Poststelle per Toast. */
-export async function createCardSet(projectId: string) {
-  // Die Karte kommt dazu, bevor das Set erscheint – so steht es gleich
-  // vollständig da.
-  const cardSet = await createCardSetInBackend(projectId, (cardSets.value?.length ?? 0) + 1)
-  if (cardSet) cardSets.value?.push(cardSet)
-  return cardSet
 }

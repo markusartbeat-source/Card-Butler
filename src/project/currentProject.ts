@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { postOffice } from '../api/postOffice/postOffice'
 import type { Project } from '../api/projects/projectsApi'
 import { cardSets } from '../cardSets/cardSets'
+import { createCardSet } from '../cardSets/createCardSet'
 import { loadCardSets } from '../cardSets/loadCardSets'
 import { projects } from './projects'
 
@@ -30,5 +31,11 @@ export async function openProject(projectId: string) {
   // Erst danach: Fehlt das Projekt, käme sonst ein zweiter Fehler-Toast. Schon
   // geladene Sets bleiben, sonst ginge beim Seitenwechsel die lokale
   // Reihenfolge der Karten verloren.
-  return cardSets.value !== null || loadCardSets(projectId)
+  if (cardSets.value === null && !(await loadCardSets(projectId))) return false
+
+  // Ein Projekt ohne Kartenset bekommt gleich eins mit einer Karte – so steht
+  // der „Neue Karte“-Button immer bereit. Klappt das nicht, bleibt das Projekt
+  // trotzdem offen.
+  if (cardSets.value?.length === 0) await createCardSet(projectId)
+  return true
 }
