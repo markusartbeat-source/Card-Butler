@@ -2,8 +2,6 @@ import { postOffice } from '../api/postOffice/postOffice'
 import { cardFormat } from '../card/cardFormat'
 import { cardSetFromResource, cardSets } from './cardSets'
 import { createCard } from './createCard'
-// TEMPORÄR: für den JSON-Kasten.
-import { loadedCardSetResources } from './loadCardSets'
 
 // Anschnitt neuer Sets in mm, auf jeder Seite.
 const defaultBleed = 3
@@ -33,8 +31,6 @@ export async function createCardSet(projectId: string) {
       bleedWidth: defaultBleed,
       bleedHeight: defaultBleed,
     })
-    // TEMPORÄR: Backend-Antwort im JSON-Kasten zeigen.
-    loadedCardSetResources.value?.push(cardSetResource)
 
     // Die Karte kommt dazu, bevor das Set erscheint – so steht es gleich
     // vollständig da. Klappt das nicht, zeigt es das Set trotzdem: Es gibt es ja.
