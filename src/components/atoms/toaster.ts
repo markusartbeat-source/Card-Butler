@@ -15,7 +15,18 @@ export function showDangerToast(title: string, description?: string) {
   toaster.error({ title, description })
 }
 
-/** A toast that lets you take the last change back while it is on screen. */
-export function showUndoToast(title: string, onUndo: () => void) {
-  toaster.create({ title, action: { label: dictionary.general.undo, onClick: onUndo } })
+/** Ein Toast mit einem Button. `onClose` läuft, sobald der Toast verschwunden
+    ist – egal, ob über den Button, das Kreuz oder von selbst. */
+export function showActionToast(
+  title: string,
+  action: { label: string; onClick: () => void },
+  onClose?: () => void,
+) {
+  toaster.create({
+    title,
+    action,
+    onStatusChange: ({ status }) => {
+      if (status === 'unmounted') onClose?.()
+    },
+  })
 }

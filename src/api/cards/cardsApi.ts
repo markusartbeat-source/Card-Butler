@@ -15,5 +15,14 @@ function createCard(cardSetId: string, name: string) {
   })
 }
 
+/** Löscht eine Karte. `version` ist der Stand, den der Aufrufer kennt – ist er
+ *  veraltet, antwortet das Backend mit 412. */
+function deleteCard(cardId: string, version: number) {
+  return postOffice.request<void>(`/api/cards/${encodeURIComponent(cardId)}`, {
+    method: 'DELETE',
+    version,
+  })
+}
+
 /** Fach `cards` der Poststelle, Aufruf als `postOffice.cards.…()`. */
-export const cardsApi = { createCard }
+export const cardsApi = { createCard, deleteCard }

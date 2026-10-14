@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { postOffice } from '../api/postOffice/postOffice'
 import { olderFirst } from '../api/postOffice/resource'
 import type { CardSetResource } from '../api/cardSets/cardSetsApi'
-import { cardSetFromFullCardSet, cardSets } from './cardSets'
+import { cardSetFromFullCardSet, cardSets, type CardSet } from './cardSets'
 
 // TEMPORÄR: Rohdaten der Kartensets für den JSON-Kasten auf der Projektseite.
 export const loadedCardSetResources = ref<CardSetResource[] | null>(null)
@@ -22,6 +22,19 @@ export async function loadCardSets(projectId: string) {
       ),
     )
     cardSets.value = fullCardSets.map(cardSetFromFullCardSet)
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** Holt ein Kartenset samt Karten neu vom Backend, z.B. wenn jemand anderes es
+ *  inzwischen geändert hat. Lokale Reihenfolge und Druckanzahl gehen dabei
+ *  verloren. Liefert, ob das geklappt hat. */
+export async function reloadCardSet(cardSet: CardSet) {
+  try {
+    const fullCardSet = await postOffice.cardSets.loadFullCardSet(cardSet.id)
+    Object.assign(cardSet, cardSetFromFullCardSet(fullCardSet))
     return true
   } catch {
     return false

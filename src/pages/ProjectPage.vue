@@ -167,7 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
@@ -325,7 +325,7 @@ function selectCard(id: string, event: MouseEvent) {
 function finishCardDrag(cardSet: CardSet) {
   const { droppedOn, cardIndex, cardElement } = endCardDrag()
   if (droppedOn === 'deleteCard') {
-    return deleteDroppedCard(toRef(cardSet, 'cards'), cardIndex, cardElement)
+    return deleteDroppedCard(cardSet, cardIndex, cardElement)
   }
 
   if (droppedOn === 'flipAllCards') flipAllCards()

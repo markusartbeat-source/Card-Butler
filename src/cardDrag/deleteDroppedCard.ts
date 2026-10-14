@@ -1,23 +1,36 @@
-import type { Ref } from 'vue'
-import { showUndoToast } from '../components/atoms/toaster'
+import { showActionToast } from '../components/atoms/toaster'
+import type { CardSet } from '../cardSets/cardSets'
+import { deleteCard } from '../cardSets/deleteCard'
 import { releaseCardDrag } from './cardDragState'
 import { playCardShredding } from './shredCard'
 
 /** The card leaves the row at once and is shredded in the drop field. Only when
     its snippets start falling does the surface come back and the toast offer to
-    put the card exactly where it stood. */
-export async function deleteDroppedCard<Card>(
-  cards: Ref<Card[]>,
+    put the card exactly where it stood. Gelöscht wird im Backend erst, wenn der
+    Toast ohne „Rückgängig“ verschwunden ist. */
+export async function deleteDroppedCard(
+  cardSet: CardSet,
   cardIndex: number,
   cardElement: HTMLElement | null,
 ) {
-  const [deletedCard] = cards.value.splice(cardIndex, 1)
+  const [deletedCard] = cardSet.cards.splice(cardIndex, 1)
   if (!deletedCard) return releaseCardDrag()
 
   await playCardShredding(cardElement)
   releaseCardDrag()
 
-  showUndoToast(dictionary.cardDrag.cardDeleted, () => {
-    cards.value.splice(cardIndex, 0, deletedCard)
-  })
+  let isUndone = false
+  showActionToast(
+    dictionary.cardDrag.cardDeleted,
+    {
+      label: dictionary.general.undo,
+      onClick: () => {
+        isUndone = true
+        cardSet.cards.splice(cardIndex, 0, deletedCard)
+      },
+    },
+    () => {
+      if (!isUndone) deleteCard(cardSet, deletedCard)
+    },
+  )
 }
