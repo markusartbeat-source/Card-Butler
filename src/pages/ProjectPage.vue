@@ -261,7 +261,16 @@ const hasNoSearchResults = computed(() => isSearching.value && shownCardSets.val
 // that stands in front of them. A card added later should show up right away,
 // so it gets no delay — and since it is put in front, only its id tells the two
 // apart, no longer its place in the row.
-const initialCardIds = new Set(allCards.value.map((card) => card.id))
+// Meist kommen die Karten erst nach dem Einhängen der Seite – dann zählen die,
+// mit denen die Sets geladen werden.
+const initialCardIds = new Set<string>()
+watch(
+  () => cardSets.value !== null,
+  (isLoaded) => {
+    if (isLoaded) allCards.value.forEach((card) => initialCardIds.add(card.id))
+  },
+  { immediate: true },
+)
 
 function riseDelay(id: string, index: number) {
   return initialCardIds.has(id) ? { animationDelay: `${(index + 1) * 60}ms` } : undefined

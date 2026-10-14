@@ -1,6 +1,7 @@
 import { ref } from 'vue'
-import type { CardSetResource } from '../api/cardSets/cardSetsApi'
+import type { CardSetResource, FullCardSet } from '../api/cardSets/cardSetsApi'
 import type { CardResource } from '../api/cards/cardsApi'
+import { newerFirst } from '../api/postOffice/resource'
 import type { CardElementValues } from '../cardElements/cardElements'
 
 export type Card = {
@@ -30,6 +31,15 @@ export function cardSetFromResource(cardSetResource: CardSetResource): CardSet {
     nicht, Inhalte und Druckanzahl kennt das Backend noch nicht. */
 export function cardFromResource(cardResource: CardResource): Card {
   return { id: cardResource.id, version: cardResource.version, elementValues: {}, printCount: 1 }
+}
+
+/** Macht aus einem vollständigen Kartenset des Backends eins der App, samt
+    Karten. Die neueste Karte steht vorn – dort, wo auch neu angelegte hinkommen. */
+export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
+  return {
+    ...cardSetFromResource(fullCardSet.set),
+    cards: fullCardSet.cards.sort(newerFirst).map(cardFromResource),
+  }
 }
 
 /** The set the project page should scroll to as soon as it shows it. The header

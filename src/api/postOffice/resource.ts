@@ -21,3 +21,8 @@ export type Resource<Data> = {
 export function olderFirst(first: Resource<unknown>, second: Resource<unknown>) {
   return Date.parse(first.createdAt) - Date.parse(second.createdAt)
 }
+
+/** Zum Sortieren: die neuere Ressource zuerst. */
+export function newerFirst(first: Resource<unknown>, second: Resource<unknown>) {
+  return olderFirst(second, first)
+}
