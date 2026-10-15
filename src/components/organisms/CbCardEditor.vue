@@ -19,6 +19,7 @@
         :elements="cardToolbarElements"
         class="transition-opacity"
         :class="fadeInClasses"
+        @select="addElementFromToolbar"
       />
 
       <!-- The ring is placed next to the flying wrapper, so it stays put while
@@ -73,6 +74,13 @@
       :class="fadeInClasses"
       :is-visible="areControlsVisible"
     />
+
+    <!-- TEMPORÄR: zeigt die Daten des neuen Felds, bis es im Backend landet. -->
+    <pre
+      v-if="newElementData"
+      class="bg-surface absolute top-8 left-8 max-w-80 rounded-lg p-4 text-xs whitespace-pre-wrap text-white"
+      >{{ JSON.stringify(newElementData, null, 2) }}</pre
+    >
   </div>
 </template>
 
@@ -83,10 +91,12 @@ import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbDimLayer from '../atoms/CbDimLayer.vue'
 import CbToolbar from '../molecules/CbToolbar.vue'
-import { cardToolbarElements } from '../molecules/cardToolbarElements'
+import { cardToolbarElements, cardTools } from '../molecules/cardToolbarElements'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
-import { editorZoom } from '../../card/cardFormat'
+import { cardFormat, editorZoom } from '../../card/cardFormat'
+import { newTextElementData } from '../../cardElements/text/newTextElementData'
+import type { ElementData } from '../../api/elements/elementsApi'
 import {
   clearElementSelection,
   clearSelectionOnMiss,
@@ -119,6 +129,16 @@ const fadeInClasses = computed(() =>
 )
 
 const isClosing = ref(false)
+
+// TEMPORÄR: Daten des zuletzt berechneten Felds für den Kasten.
+const newElementData = ref<ElementData | null>(null)
+
+// Ein Klick auf „Text“ setzt das Feld in die Kartenmitte. Die anderen Einträge
+// haben noch keine Funktion.
+function addElementFromToolbar(index: number) {
+  if (cardTools[index] !== 'text') return
+  newElementData.value = newTextElementData(cardFormat.value.width / 2, cardFormat.value.height / 2)
+}
 
 // Keeps the closing flight, so an early unmount can drop its finish handler.
 let closingFlight: Animation | null = null

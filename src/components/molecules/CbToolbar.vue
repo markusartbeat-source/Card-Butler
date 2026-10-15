@@ -13,6 +13,7 @@
           index === activeIndex ? 'bg-radial from-gold-light to-gold text-surface' : 'text-white'
         "
         :title="showNames ? undefined : element.name"
+        @click="emit('select', index)"
       >
         <CbIcon :name="element.icon" />
         <span v-if="showNames">{{ element.name }}</span>
@@ -28,6 +29,9 @@ import CbInteractive from '../atoms/CbInteractive.vue'
 import type { ToolbarElement } from './toolbarElement'
 
 defineProps<{ elements: ToolbarElement[]; showNames?: boolean; activeIndex?: number | null }>()
+
+// Meldet nur, welcher Eintrag geklickt wurde – was er bewirkt, entscheidet der Aufrufer.
+const emit = defineEmits<{ select: [index: number] }>()
 
 const barElement = useTemplateRef<HTMLElement>('bar')
 
