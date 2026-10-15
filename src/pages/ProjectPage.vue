@@ -19,6 +19,18 @@
          bar stands under the cards, so it ends up at the bottom edge of a
          short page and stays there while a long page scrolls. -->
     <div class="col-start-1 row-start-1 mx-auto flex w-full max-w-4/5 min-w-0 flex-col">
+      <!-- TEMPORÄR: Elemente je Set, bis sie auf den Karten zu sehen sind. -->
+      <ul class="pt-8 text-xs">
+        <li v-for="cardSet in loadedCardSets" :key="cardSet.id">
+          {{ cardSet.name }}
+          <ul class="pl-4">
+            <li v-for="element in cardSet.elements" :key="element.id">
+              {{ element.data.name }} {{ JSON.stringify(element.data.position) }}
+            </li>
+          </ul>
+        </li>
+      </ul>
+
       <div class="flex flex-1">
         <!-- Every set is a section of its own, a thin line divides them. A card
              can only be sorted within its set: the sections share no drag group.

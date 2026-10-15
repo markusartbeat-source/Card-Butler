@@ -1,5 +1,6 @@
 // Alles, was das Backend über Kartensets weiß und mit ihnen macht.
 import type { CardResource } from '../cards/cardsApi'
+import type { ElementResource } from '../elements/elementsApi'
 import type { Resource } from '../postOffice/resource'
 import { postOffice } from '../postOffice/transport'
 
@@ -17,9 +18,13 @@ export type CardSetData = {
 export type CardSetResource = Resource<CardSetData>
 
 // Ein Kartenset mit allem, was dazugehört, auf einem Stand (im Backend
-// „Snapshot“). Das Backend liefert noch mehr (revision, elements, values,
-// comments, images) – hier steht nur, was die App schon nutzt.
-export type FullCardSet = { set: CardSetResource; cards: CardResource[] }
+// „Snapshot“). Das Backend liefert noch mehr (revision, values, comments,
+// images) – hier steht nur, was die App schon nutzt.
+export type FullCardSet = {
+  set: CardSetResource
+  cards: CardResource[]
+  elements: ElementResource[]
+}
 
 /** Lädt alle Kartensets eines Projekts – in keiner festen Reihenfolge. */
 function loadCardSets(projectId: string) {
@@ -36,7 +41,8 @@ function createCardSet(projectId: string, cardSetData: CardSetData) {
   )
 }
 
-/** Lädt ein Kartenset samt Karten – die Karten in keiner festen Reihenfolge. */
+/** Lädt ein Kartenset samt Karten und Elementen – beide in keiner festen
+ *  Reihenfolge. */
 function loadFullCardSet(cardSetId: string) {
   return postOffice.request<FullCardSet>(`/api/sets/${encodeURIComponent(cardSetId)}/snapshot`)
 }

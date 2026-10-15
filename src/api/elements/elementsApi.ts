@@ -8,7 +8,9 @@ export type HorizontalAlignment = 'LEFT' | 'CENTER' | 'RIGHT'
 export type VerticalAlignment = 'TOP' | 'CENTER' | 'BOTTOM'
 
 // Was ein Element speichert. Maße in mm; die Position ist die linke obere Ecke,
-// gemessen von der linken oberen Ecke der Karte.
+// gemessen von der linken oberen Ecke der Karte. Die optionalen Felder liefert
+// das Backend mit (sonst null); sie müssen beim Ändern mitgehen, sonst löscht
+// das Backend sie.
 export type ElementData = {
   name: string
   type: ElementType
@@ -17,6 +19,13 @@ export type ElementData = {
   height: number
   alignment: { horizontal: HorizontalAlignment; vertical: VerticalAlignment }
   position: { x: number; y: number }
+  radius?: number | null
+  color?: string | null
+  border?: { color: string; lineType: 'SOLID' | 'DASHED'; width: number } | null
+  text?: string | null
+  imageId?: string | null
+  fontSize?: number | null
+  fontFamily?: string | null
 }
 
 export type ElementResource = Resource<ElementData>
