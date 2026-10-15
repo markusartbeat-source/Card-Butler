@@ -16,8 +16,9 @@ export type Card = {
 }
 
 // Ein Element des Sets mit seinen vollständigen Backend-Daten. Die Version geht
-// beim Ändern als If-Match mit.
-export type CardSetElement = { id: string; version: number; data: ElementData }
+// beim Ändern als If-Match mit. Die Drehung (Grad) kennt das Backend nicht – sie
+// lebt nur hier und geht beim Neuladen verloren.
+export type CardSetElement = { id: string; version: number; data: ElementData; rotation: number }
 
 // A project has many card sets, each with its own cards. Header, project page
 // and the sets panel all read from this one list.
@@ -34,7 +35,7 @@ export function cardSetFromResource(cardSetResource: CardSetResource): CardSet {
 
 /** Macht aus einem Element des Backends eins des Sets. */
 export function cardSetElementFromResource({ id, version, data }: ElementResource): CardSetElement {
-  return { id, version, data }
+  return { id, version, data, rotation: 0 }
 }
 
 /** Macht aus einer Karte des Backends eine der App. Ihren Namen braucht die App

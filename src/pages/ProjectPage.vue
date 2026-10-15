@@ -1,5 +1,5 @@
 <template>
-  <CbExportDialog v-model:open="isExportDialogOpen" :cards="allCards" />
+  <CbExportDialog v-model:open="isExportDialogOpen" :cards="exportCards" />
 
   <CbCardEditor
     v-if="selectedCard && selectedCardSet && selectedCardRect"
@@ -112,12 +112,14 @@
               </CbTooltip>
               <CbCard
                 :id="card.id"
+                :elements="cardSet.elements"
                 :element-values="card.elementValues"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
               />
               <CbCard
                 :id="card.id"
+                :elements="cardSet.elements"
                 :element-values="card.elementValues"
                 highlight-search
                 side="back"
@@ -236,8 +238,14 @@ useHeader(() => ({
 // Solange die Sets laden, zeigt die Seite einfach keine.
 const loadedCardSets = computed(() => cardSets.value ?? [])
 
-// The cards of every set in one row — for the editor and the export.
+// The cards of every set in one row — for the editor.
 const allCards = computed(() => loadedCardSets.value.flatMap((cardSet) => cardSet.cards))
+// Für den Export: jede Karte mit den Elementen ihres Sets.
+const exportCards = computed(() =>
+  loadedCardSets.value.flatMap((cardSet) =>
+    cardSet.cards.map((card) => ({ ...card, elements: cardSet.elements })),
+  ),
+)
 const selectedCardId = ref<string | null>(null)
 
 // While searching, only the cards with a hit stand in the row. Reordering is off

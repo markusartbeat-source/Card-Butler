@@ -9,6 +9,7 @@
       v-for="card in cards"
       :key="card.id"
       :id="card.id"
+      :elements="card.elements"
       :element-values="card.elementValues"
       :zoom="1"
     />

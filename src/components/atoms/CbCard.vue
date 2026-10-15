@@ -13,8 +13,9 @@
         v-if="element.type === 'text'"
         :id="element.id"
         :content="elementValues[element.id]"
+        :placeholder="markEmptyElements ? element.name : undefined"
         :highlight-search="highlightSearch"
-        :style="placementStyle(element.placement)"
+        :style="elementStyle(element)"
       />
     </template>
     <!-- On top of the card, e.g. the cursors of other people. -->
@@ -25,32 +26,56 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import {
-  cardElements,
+  cardElementFromCardSetElement,
+  type CardElement,
   type CardElementValues,
   type CardSide,
 } from '../../cardElements/cardElements'
+import type { CardSetElement } from '../../cardSets/cardSets'
 import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import { placementStyle } from '../../elementTransform/elementPlacement'
 import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 
 // The card is always its real size — zoom is the only thing a view decides.
 // highlightColor draws a thin frame in the colour of the person standing here.
-// The elements come from the deck, elementValues are this card's own contents.
+// elements sind die Elemente des Sets, elementValues this card's own contents.
 // highlightSearch marks the search hits in the texts — only the overview wants that.
 // side says which face of the card this is — only that side's elements show.
+// markEmptyElements zeigt leere Elemente mit Rahmen und Namen – nur der Editor
+// will das, damit man sie sieht und anklicken kann.
 const props = withDefaults(
   defineProps<{
     id: string
+    elements: CardSetElement[]
     zoom?: number
     highlightColor?: string
     elementValues?: CardElementValues
     highlightSearch?: boolean
     side?: CardSide
+    markEmptyElements?: boolean
   }>(),
-  { zoom: gridZoom, elementValues: () => ({}), highlightSearch: false, side: 'front' },
+  {
+    zoom: gridZoom,
+    elementValues: () => ({}),
+    highlightSearch: false,
+    side: 'front',
+    markEmptyElements: false,
+  },
 )
 
 const elementsOnThisSide = computed(() =>
-  cardElements.value.filter((element) => element.side === props.side),
+  props.elements
+    .map(cardElementFromCardSetElement)
+    .filter((element): element is CardElement => element?.side === props.side),
 )
+
+// Lage, Größe (mm) und Deckkraft eines Elements.
+function elementStyle(element: CardElement) {
+  return {
+    ...placementStyle(element.placement),
+    width: `${element.width}mm`,
+    height: `${element.height}mm`,
+    opacity: element.opacity,
+  }
+}
 </script>

@@ -34,8 +34,10 @@
         >
           <CbCard
             :id="card.id"
+            :elements="cardSet.elements"
             :element-values="card.elementValues"
             :zoom="editorZoom"
+            mark-empty-elements
           >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
