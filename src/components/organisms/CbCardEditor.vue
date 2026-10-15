@@ -75,11 +75,11 @@
       :is-visible="areControlsVisible"
     />
 
-    <!-- TEMPORÄR: zeigt die Daten des neuen Felds, bis es im Backend landet. -->
+    <!-- TEMPORÄR: zeigt die Antwort des Backends zum neuen Feld. -->
     <pre
-      v-if="newElementData"
+      v-if="createdElement"
       class="bg-surface absolute top-8 left-8 max-w-80 rounded-lg p-4 text-xs whitespace-pre-wrap text-white"
-      >{{ JSON.stringify(newElementData, null, 2) }}</pre
+      >{{ JSON.stringify(createdElement, null, 2) }}</pre
     >
   </div>
 </template>
@@ -95,8 +95,9 @@ import { cardToolbarElements, cardTools } from '../molecules/cardToolbarElements
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
+import { createElement } from '../../cardElements/createElement'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
-import type { ElementData } from '../../api/elements/elementsApi'
+import type { ElementResource } from '../../api/elements/elementsApi'
 import {
   clearElementSelection,
   clearSelectionOnMiss,
@@ -104,10 +105,12 @@ import {
 import CbPrintCountOverlay from '../../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../../printCount/changePrintCountByWheel'
 import { printCountOverlayCardId } from '../../printCount/printCountOverlayState'
-import type { Card } from '../../cardSets/cardSets'
+import type { Card, CardSet } from '../../cardSets/cardSets'
 
 const props = defineProps<{
   card: Card
+  // Das Set der Karte – ihm gehören die Elemente.
+  cardSet: CardSet
   startRect: DOMRect
 }>()
 
@@ -130,14 +133,15 @@ const fadeInClasses = computed(() =>
 
 const isClosing = ref(false)
 
-// TEMPORÄR: Daten des zuletzt berechneten Felds für den Kasten.
-const newElementData = ref<ElementData | null>(null)
+// TEMPORÄR: Antwort des Backends zum zuletzt angelegten Feld für den Kasten.
+const createdElement = ref<ElementResource | null>(null)
 
-// Ein Klick auf „Text“ setzt das Feld in die Kartenmitte. Die anderen Einträge
-// haben noch keine Funktion.
-function addElementFromToolbar(index: number) {
+// Ein Klick auf „Text“ legt das Feld in der Kartenmitte an. Die anderen
+// Einträge haben noch keine Funktion.
+async function addElementFromToolbar(index: number) {
   if (cardTools[index] !== 'text') return
-  newElementData.value = newTextElementData(cardFormat.value.width / 2, cardFormat.value.height / 2)
+  const data = newTextElementData(cardFormat.value.width / 2, cardFormat.value.height / 2)
+  createdElement.value = await createElement(props.cardSet, data)
 }
 
 // Keeps the closing flight, so an early unmount can drop its finish handler.

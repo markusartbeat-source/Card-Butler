@@ -1,5 +1,7 @@
 // Alles, was das Backend über Elemente weiß und mit ihnen macht. Elemente
 // gehören zum Kartenset und gelten für alle seine Karten.
+import type { Resource } from '../postOffice/resource'
+import { postOffice } from '../postOffice/transport'
 
 export type ElementType = 'SQUARE' | 'CIRCLE' | 'LINE' | 'TEXT' | 'PICTURE'
 export type HorizontalAlignment = 'LEFT' | 'CENTER' | 'RIGHT'
@@ -16,3 +18,16 @@ export type ElementData = {
   alignment: { horizontal: HorizontalAlignment; vertical: VerticalAlignment }
   position: { x: number; y: number }
 }
+
+export type ElementResource = Resource<ElementData>
+
+/** Legt in einem Kartenset ein Element an. */
+function createElement(cardSetId: string, data: ElementData) {
+  return postOffice.request<ElementResource>(
+    `/api/sets/${encodeURIComponent(cardSetId)}/elements`,
+    { method: 'POST', body: data },
+  )
+}
+
+/** Fach `elements` der Poststelle, Aufruf als `postOffice.elements.…()`. */
+export const elementsApi = { createElement }

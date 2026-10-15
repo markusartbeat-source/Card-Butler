@@ -2,9 +2,10 @@
   <CbExportDialog v-model:open="isExportDialogOpen" :cards="allCards" />
 
   <CbCardEditor
-    v-if="selectedCard && selectedCardRect"
+    v-if="selectedCard && selectedCardSet && selectedCardRect"
     :key="selectedCard.id"
     :card="selectedCard"
+    :card-set="selectedCardSet"
     :start-rect="selectedCardRect"
     @close="selectedCardId = null"
   />
@@ -296,6 +297,12 @@ function markRisen(id: string, event: AnimationEvent) {
 }
 const selectedCard = computed(() =>
   allCards.value.find((card) => card.id === selectedCardId.value),
+)
+// Das Set der gewählten Karte – ihm gehören die Elemente, die der Editor anlegt.
+const selectedCardSet = computed(() =>
+  loadedCardSets.value.find((cardSet) =>
+    cardSet.cards.some((card) => card.id === selectedCardId.value),
+  ),
 )
 
 // Where the clicked card sits in the grid — the editor starts its flight there.
