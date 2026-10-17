@@ -3,13 +3,17 @@
        The slot element becomes the trigger itself, so a tooltip can be put
        around an existing button without changing how that button looks.
        Both close flags stay off, otherwise a click would hide the text again. -->
+  <!-- Steckt der Tooltip selbst in einer as-child-Kette (z.B. ToggleGroup.Item),
+       gehen deren Attribute an den Knopf durch und gewinnen gegen die des
+       Tooltips. Er findet den Knopf dann über dessen id. -->
   <Tooltip.Root
+    :ids="{ trigger: $attrs.id as string | undefined }"
     :open-delay="200"
     :close-delay="100"
     :close-on-click="false"
     :close-on-pointer-down="false"
   >
-    <Tooltip.Trigger as-child>
+    <Tooltip.Trigger as-child v-bind="$attrs">
       <slot />
     </Tooltip.Trigger>
 
@@ -30,6 +34,7 @@
 <script setup lang="ts">
 import { Tooltip } from '@ark-ui/vue'
 
+defineOptions({ inheritAttrs: false })
 defineProps<{ text: string }>()
 
 const arrowStyle = {

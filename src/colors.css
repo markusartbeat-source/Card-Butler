@@ -6,6 +6,9 @@
   --color-surface: #2c2f45;
   --color-surface-light: #3a3d5c;
   --color-label: #9697a2;
+  /* Der ausgewählte Knopf in einer Icon-Reihe – im Designfile eine rohe Farbe
+     (rgba 101 107 147 mit 60 % Deckkraft). */
+  --color-surface-selected: #656b9399;
   --color-gold-dark: #b98522;
   --color-gold: #cfa23f;
   --color-gold-light: #e0c151;

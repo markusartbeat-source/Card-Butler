@@ -10,6 +10,7 @@ import AlignVerticalBottom from '~icons/material-symbols/align-vertical-bottom-r
 import AlignVerticalCenter from '~icons/material-symbols/align-vertical-center-rounded'
 import AlignVerticalTop from '~icons/material-symbols/align-vertical-top-rounded'
 import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-rounded'
+import Article from '~icons/material-symbols/article-outline-rounded'
 import ArtTrack from '~icons/material-symbols/art-track-outline-rounded'
 import Check from '~icons/material-symbols/check-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
@@ -57,11 +58,13 @@ import Settings from '~icons/material-symbols/settings-outline-rounded'
 import Share from '~icons/material-symbols/share-outline'
 import Square from '~icons/material-symbols/square-outline-rounded'
 import Stacks from '~icons/material-symbols/stacks-rounded'
+import Start from '~icons/material-symbols/start-rounded'
 import SupportAgent from '~icons/material-symbols/support-agent-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
 import Undo from '~icons/material-symbols/undo-rounded'
 import VerticalAlignCenter from '~icons/material-symbols/vertical-align-center-rounded'
 import West from '~icons/material-symbols/west-rounded'
+import WrapText from '~icons/material-symbols/wrap-text-rounded'
 
 export const icons = {
   add_2: Add2,
@@ -73,6 +76,7 @@ export const icons = {
   align_vertical_center: AlignVerticalCenter,
   align_vertical_top: AlignVerticalTop,
   arrow_circle_up: ArrowCircleUp,
+  article: Article,
   art_track: ArtTrack,
   check: Check,
   circle: Circle,
@@ -117,11 +121,13 @@ export const icons = {
   south_west: SouthWest,
   square: Square,
   stacks: Stacks,
+  start: Start,
   support_agent: SupportAgent,
   title: Title,
   undo: Undo,
   vertical_align_center: VerticalAlignCenter,
   west: West,
+  wrap_text: WrapText,
 }
 
 export type IconName = keyof typeof icons

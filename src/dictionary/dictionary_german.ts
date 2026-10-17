@@ -177,6 +177,11 @@ export const dictionaryGerman = {
     alignTop: 'Oben ausrichten',
     alignVerticalCenter: 'Vertikal zentrieren',
     alignBottom: 'Unten ausrichten',
+    textboxGroup: 'Textbox',
+    textboxSizing: 'Größe der Textbox',
+    autoWidth: 'Automatische Breite',
+    autoHeight: 'Automatische Höhe',
+    fixedSize: 'Feste Größe',
   },
   // The overlay for looking at a single picture.
   imageViewer: {

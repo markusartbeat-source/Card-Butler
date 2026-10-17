@@ -156,6 +156,11 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     alignTop: 'Aligner en haut',
     alignVerticalCenter: 'Centrer verticalement',
     alignBottom: 'Aligner en bas',
+    textboxGroup: 'Zone de texte',
+    textboxSizing: 'Taille de la zone de texte',
+    autoWidth: 'Largeur automatique',
+    autoHeight: 'Hauteur automatique',
+    fixedSize: 'Taille fixe',
   },
   imageViewer: {
     imageSettings: "Réglages de l'image",
