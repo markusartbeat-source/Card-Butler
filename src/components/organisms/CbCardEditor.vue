@@ -40,7 +40,7 @@
             :zoom="editorZoom"
             mark-empty-elements
             editable-elements
-            @change-element-value="(elementId, value) => setElementValue(card, elementId, value)"
+            @change-element-value="changeElementValue"
           >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
@@ -80,6 +80,13 @@
       :is-visible="areControlsVisible"
     />
 
+    <!-- TEMPORÄR (Plan „Textfeld bearbeiten“, Aufräumschritt): Backend-Antwort
+         der letzten Text-Speicherung samt Kartenversion vorher/nachher. -->
+    <pre
+      v-if="lastCardTextSave"
+      class="bg-surface text-label absolute bottom-8 left-8 max-h-96 max-w-96 overflow-auto rounded p-2 text-2xs"
+    >{{ JSON.stringify(lastCardTextSave, null, 2) }}</pre>
+
     <!-- Nur Größe und Name zählen, die Lage gibt der Zeiger vor. -->
     <CbNewElementPreview
       v-if="dragPosition"
@@ -91,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import CbButton from '../atoms/CbButton.vue'
 import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
@@ -104,11 +111,17 @@ import { cardFormat, editorZoom } from '../../card/cardFormat'
 import { setElementValue } from '../../cardElements/cardElements'
 import { createElement } from '../../cardElements/createElement'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
+import {
+  lastCardTextSave,
+  saveCardTextAfterPause,
+  saveWaitingCardTexts,
+} from '../../cardElements/text/saveCardText'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
 import {
   clearElementSelection,
   clearSelectionOnMiss,
+  isTypingInSelectedElement,
   selectElement,
   stepBackElementSelection,
 } from '../../elementTransform/elementSelection'
@@ -142,6 +155,18 @@ const fadeInClasses = computed(() =>
 )
 
 const isClosing = ref(false)
+
+// Der Text gilt nur für diese Karte und geht nach einer Tipp-Pause ins Backend.
+function changeElementValue(elementId: string, value: string) {
+  setElementValue(props.card, elementId, value)
+  saveCardTextAfterPause(props.card.id, elementId)
+}
+
+// Wer das Feld verlässt, wartet nicht auf die Pause. Nicht beim Verlust des
+// Fokus: Ziehen an der Kante nimmt ihn, das Tippen geht aber weiter.
+watch(isTypingInSelectedElement, (isTyping) => {
+  if (!isTyping) saveWaitingCardTexts()
+})
 
 // Legt ein Textfeld mit der Mitte auf diesem Punkt der Karte (mm) an und wählt
 // es gleich aus.

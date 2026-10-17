@@ -15,6 +15,11 @@ function createCard(cardSetId: string, name: string) {
   })
 }
 
+/** Lädt eine Karte, z.B. um ihre aktuelle Version zu erfahren. */
+function loadCard(cardId: string) {
+  return postOffice.request<CardResource>(`/api/cards/${encodeURIComponent(cardId)}`)
+}
+
 /** Löscht eine Karte. `version` ist der Stand, den der Aufrufer kennt – ist er
  *  veraltet, antwortet das Backend mit 412. */
 function deleteCard(cardId: string, version: number) {
@@ -25,4 +30,4 @@ function deleteCard(cardId: string, version: number) {
 }
 
 /** Fach `cards` der Poststelle, Aufruf als `postOffice.cards.…()`. */
-export const cardsApi = { createCard, deleteCard }
+export const cardsApi = { createCard, loadCard, deleteCard }

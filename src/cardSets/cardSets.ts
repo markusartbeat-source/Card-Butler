@@ -39,18 +39,26 @@ export function cardSetElementFromResource({ id, version, data }: ElementResourc
 }
 
 /** Macht aus einer Karte des Backends eine der App. Ihren Namen braucht die App
-    nicht, Inhalte und Druckanzahl kennt das Backend noch nicht. */
+    nicht, Inhalte kommen eigens dazu, die Druckanzahl kennt das Backend noch
+    nicht. */
 export function cardFromResource(cardResource: CardResource): Card {
   return { id: cardResource.id, version: cardResource.version, elementValues: {}, printCount: 1 }
 }
 
 /** Macht aus einem vollständigen Kartenset des Backends eins der App, samt
-    Karten und Elementen. Die neueste Karte steht vorn – dort, wo auch neu
-    angelegte hinkommen. Das neueste Element steht hinten, also obenauf. */
+    Karten, Elementen und Texten der Karten. Die neueste Karte steht vorn – dort,
+    wo auch neu angelegte hinkommen. Das neueste Element steht hinten, also
+    obenauf. */
 export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
+  const cards = fullCardSet.cards.sort(newerFirst).map(cardFromResource)
+  // Bilder (ohne Text) kennt die App noch nicht.
+  for (const { parentId, data } of fullCardSet.values) {
+    const card = cards.find((card) => card.id === parentId)
+    if (card && data.value.text !== null) card.elementValues[data.elementId] = data.value.text
+  }
   return {
     ...cardSetFromResource(fullCardSet.set),
-    cards: fullCardSet.cards.sort(newerFirst).map(cardFromResource),
+    cards,
     elements: fullCardSet.elements.sort(olderFirst).map(cardSetElementFromResource),
   }
 }

@@ -6,6 +6,7 @@ import { cardsApi } from '../cards/cardsApi'
 import { elementsApi } from '../elements/elementsApi'
 import { projectsApi } from '../projects/projectsApi'
 import { userApi } from '../user/userApi'
+import { valuesApi } from '../values/valuesApi'
 
 export const postOffice = {
   user: userApi,
@@ -13,4 +14,5 @@ export const postOffice = {
   cardSets: cardSetsApi,
   cards: cardsApi,
   elements: elementsApi,
+  values: valuesApi,
 }
