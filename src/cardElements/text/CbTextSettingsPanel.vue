@@ -1,6 +1,8 @@
 <template>
   <!-- Die Abschnitte in der Reihenfolge aus Figma. -->
   <CbElementSettingsPanel :element-id="elementId" :title="dictionary.cardEditor.textSettings">
+    <CbTextAppearanceSettings />
+    <CbDivider />
     <CbTextboxSettings :element-id="elementId" />
     <CbDivider />
     <CbElementPositionSettings :element-id="elementId" />
@@ -11,6 +13,7 @@
 import CbDivider from '../../components/atoms/CbDivider.vue'
 import CbElementPositionSettings from '../CbElementPositionSettings.vue'
 import CbElementSettingsPanel from '../CbElementSettingsPanel.vue'
+import CbTextAppearanceSettings from './CbTextAppearanceSettings.vue'
 import CbTextboxSettings from './CbTextboxSettings.vue'
 
 defineProps<{ elementId: string }>()

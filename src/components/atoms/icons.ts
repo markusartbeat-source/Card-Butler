@@ -30,6 +30,8 @@ import FlagEs from '~icons/flag/es-4x3'
 import FlagFr from '~icons/flag/fr-4x3'
 import FlagGb from '~icons/flag/gb-4x3'
 import FormatLetterSpacingWider from '~icons/material-symbols/format-letter-spacing-wider-rounded'
+// Eigenes Icon (Zeilenhöhe) aus src/assets/custom_icons.
+import FormatLineHeight from '~icons/card-butler/format-line-height'
 import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
@@ -95,6 +97,7 @@ export const icons = {
   flag_fr: FlagFr,
   flag_gb: FlagGb,
   format_letter_spacing_wider: FormatLetterSpacingWider,
+  format_line_height: FormatLineHeight,
   forum: Forum,
   home: Home,
   horizontal_rule: HorizontalRule,

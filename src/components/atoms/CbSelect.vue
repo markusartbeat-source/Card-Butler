@@ -21,7 +21,7 @@
       >
         <CbIcon v-if="selectedItem?.icon" :name="selectedItem.icon" />
         <!-- The field variant names the value with a grey word in front of it. -->
-        <span v-if="label" class="text-label">{{ label }}</span>
+        <span v-if="label" class="text-label" :class="hideLabel && 'sr-only'">{{ label }}</span>
         <Select.ValueText class="grow text-left" />
         <CbIcon name="keyboard_arrow_down" />
       </Select.Trigger>
@@ -74,6 +74,8 @@ const props = defineProps<{
   // 'field' looks like the dark input boxes in the card settings panel.
   variant?: 'default' | 'field'
   label?: string
+  /** Das Wort ist nur für Screenreader da, sichtbar steht allein der Wert. */
+  hideLabel?: boolean
 }>()
 
 defineEmits<{

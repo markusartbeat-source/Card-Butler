@@ -20,6 +20,7 @@
     :line-padding="8"
     :use-resize-observer="true"
     :resizable="true"
+    :render-directions="resizeDirections"
     :rotatable="true"
     :origin="false"
     @drag="applyDrag"
@@ -33,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import Moveable, {
   type OnDrag,
   type OnDragEnd,
@@ -52,11 +53,7 @@ import {
   rotateElementBy,
 } from '../cardElements/cardElements'
 import { saveElement } from '../cardElements/saveElement'
-import {
-  switchTextSizing,
-  textSizingForResize,
-  type TextSizing,
-} from '../cardElements/text/textSizing'
+import { textSizingOf, type TextSizing } from '../cardElements/text/textSizing'
 
 // The card the selected element lives in. Searching inside it instead of the
 // whole page keeps us away from the same element on the other cards.
@@ -114,6 +111,20 @@ function finishDrag(event: OnDragEnd) {
   if (event.isDrag && selectedElementId.value) saveElement(selectedElementId.value)
 }
 
+// Anfasser zum Größe-Ändern, als Himmelsrichtungen wie in Moveable. Eine
+// automatische Seite folgt dem Text und hat keinen – den Modus stellt nur das
+// Panel um.
+const resizeDirectionsBySizing: Record<TextSizing, string[]> = {
+  autoWidth: [],
+  autoHeight: ['w', 'e'],
+  fixed: ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'],
+}
+
+const resizeDirections = computed(() => {
+  const element = selectedElementId.value ? findCardSetElement(selectedElementId.value) : undefined
+  return resizeDirectionsBySizing[textSizingOf(element)]
+})
+
 // Wie das Feld während des Ziehens zu seiner Größe kommt. Nur Textfelder kennen
 // mehr als die feste Größe.
 let sizingWhileResizing: TextSizing = 'fixed'
@@ -126,7 +137,7 @@ function setResizeStartSize(event: OnResizeStart) {
   const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
   if (!element) return
 
-  sizingWhileResizing = textSizingForResize(element, event.direction[1] === 0)
+  sizingWhileResizing = textSizingOf(element)
   const size = measureInMillimeters(event.target as HTMLElement)
   event.set([millimetersToPixels(size.width), millimetersToPixels(size.height)])
   // Wächst die Höhe mit dem Text, bleibt die Oberkante liegen statt der Mitte.
@@ -136,11 +147,7 @@ function setResizeStartSize(event: OnResizeStart) {
 // Während des Ziehens gehen Größe und Verschiebung als px direkt aufs Element:
 // Moveable misst gleich nach diesem Aufruf nach, Vue zeichnet aber erst später.
 // Ändert sich dazwischen die Lage, rechnet Moveable die Größe falsch.
-// Der Modus wechselt erst mit der ersten Bewegung – ein bloßer Klick ändert nichts.
 function applyResize(event: OnResize) {
-  const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
-  if (element) switchTextSizing(element, sizingWhileResizing)
-
   event.target.style.width = `${event.width}px`
   if (sizingWhileResizing === 'fixed') event.target.style.height = `${event.height}px`
   event.target.style.transform = event.drag.transform

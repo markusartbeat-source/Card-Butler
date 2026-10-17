@@ -184,6 +184,23 @@ export const dictionaryGerman = {
     fixedSize: 'Feste Größe',
     automaticSizeMark: '-',
     automaticSize: 'automatisch',
+    appearanceGroup: 'Darstellung',
+    fontFamily: 'Schriftart',
+    fontWeight: 'Schriftschnitt',
+    fontWeightRegular: 'Regular',
+    fontWeightBold: 'Fett',
+    fontSize: 'Schriftgröße',
+    lineHeight: 'Zeilenhöhe',
+    letterSpacing: 'Zeichenabstand',
+    textAlignHorizontally: 'Text horizontal ausrichten',
+    textAlignVertically: 'Text vertikal ausrichten',
+    textAlignLeft: 'Linksbündig',
+    textAlignCenter: 'Zentriert',
+    textAlignRight: 'Rechtsbündig',
+    textAlignTop: 'Oben',
+    textAlignMiddle: 'Mittig',
+    textAlignBottom: 'Unten',
+    textColor: 'Textfarbe',
   },
   // The overlay for looking at a single picture.
   imageViewer: {
@@ -204,8 +221,6 @@ export const dictionaryGerman = {
     newIcon: 'Neues Icon',
     name: 'Name',
     exampleTextLabel: 'Beispieltext',
-    fontWeightRegular: 'Regular',
-    fontWeightBold: 'Fett',
   },
   // The settings page.
   settings: {

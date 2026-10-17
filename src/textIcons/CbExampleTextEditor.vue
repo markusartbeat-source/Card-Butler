@@ -51,26 +51,13 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
-import {
-  exampleText,
-  fontFamily,
-  fontWeight,
-  fontSize,
-  fontFamilies,
-  fontSizes,
-} from './exampleText'
+import { fontFamilyItems, fontSizeItems, fontWeightItems } from '../cardElements/text/fonts'
+import { exampleText, fontFamily, fontWeight, fontSize } from './exampleText'
 import { textIcons } from './textIconList'
 import { iconStyleVariables } from './textIconSettings'
 import { nodesToText, replaceTypedIconWords, textToNodes } from './textIconWords'
 
 const editing = ref(false)
-
-const fontFamilyItems = fontFamilies.map((name) => ({ value: name, label: name }))
-const fontWeightItems = [
-  { value: 'regular', label: dictionary.textIcons.fontWeightRegular },
-  { value: 'bold', label: dictionary.textIcons.fontWeightBold },
-]
-const fontSizeItems = fontSizes.map((size) => ({ value: size, label: size }))
 
 const exampleTextStyle = computed(() => ({
   fontFamily: fontFamily.value,
