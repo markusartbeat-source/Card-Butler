@@ -3,6 +3,9 @@
        at the width its aspect ratio gives it and grows in proportion until the
        row is filled, exactly like the rows in the design. -->
   <div class="flex flex-wrap gap-3">
+    <!-- Platz für eine Kachel vor den Bildern, z.B. „Bilder hochladen“. -->
+    <slot name="leading" :tile-style="leadingTileStyle" />
+
     <!-- The opened tile stays in the layout but hides: the viewer shows its
          picture flying up from that spot and back. -->
     <CbInteractive
@@ -42,4 +45,6 @@ function tileStyle(image: DummyImage) {
   const ratio = image.ratioWidth / image.ratioHeight
   return { height: `${rowHeight.value}px`, flexBasis: `${rowHeight.value * ratio}px`, flexGrow: ratio }
 }
-</script>
+
+// Die Kachel vor den Bildern ist so hoch wie eine Zeile und wächst nicht mit.
+const leadingTileStyle = computed(() => ({ height: `${rowHeight.value}px`, flexShrink: 0 }))</script>

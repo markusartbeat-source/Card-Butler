@@ -44,9 +44,11 @@
                  drag library skips it: a card is only ever put before or after another
                  card, which keeps the button the first thing in the row. While
                  searching it steps aside — the row then shows hits only. -->
-            <CbInteractive
+            <CbAddTile
               v-if="!isSearching"
-              class="cb-card-face flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold text-gold"
+              icon="add_2"
+              :label="dictionary.project.newCard"
+              class="cb-card-face"
               :class="[
                 risenCardIds.has(addCardId(cardSet)) ? '' : 'animate-cb-rise',
                 dimWhileDraggingClasses,
@@ -54,10 +56,7 @@
               :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
               @animationend="markRisen(addCardId(cardSet), $event)"
               @click="createCard(cardSet)"
-            >
-              <CbIcon name="add_2" />
-              <span>{{ dictionary.project.newCard }}</span>
-            </CbInteractive>
+            />
 
             <!-- The box the drag library picks up. It must be plain page pixels: the
                  library writes the position of the dragged copy into "transform", and
@@ -165,8 +164,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbCard from '../components/atoms/CbCard.vue'
 import CbCardBackdrops from '../components/atoms/CbCardBackdrops.vue'
-import CbIcon from '../components/atoms/CbIcon.vue'
-import CbInteractive from '../components/atoms/CbInteractive.vue'
+import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbPrintCountBadge from '../components/atoms/CbPrintCountBadge.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'

@@ -68,7 +68,7 @@ export const dictionaryGerman = {
   // The page with the picture library.
   images: {
     title: 'Bilder',
-    addImages: 'Bilder hinzufügen',
+    uploadImages: 'Bilder hochladen',
     placeholderFolderName: 'Mein erstes Projekt',
   },
   // The page with the card grid.

@@ -58,7 +58,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
   },
   images: {
     title: 'Images',
-    addImages: 'Ajouter des images',
+    uploadImages: 'Importer des images',
     placeholderFolderName: 'Mon premier projet',
   },
   project: {

@@ -19,17 +19,29 @@
       :images="dummyImages"
       :opened-image-id="openedImage?.id"
       @open="openImage"
-    />
+    >
+      <!-- Hochkant wie eine Karte, so hoch wie die Bilder. -->
+      <template #leading="{ tileStyle }">
+        <CbAddTile
+          icon="add_2"
+          :label="dictionary.images.uploadImages"
+          class="rounded-lg"
+          :style="[tileStyle, { aspectRatio: cardFormat.width / cardFormat.height }]"
+        />
+      </template>
+    </CbImageGrid>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFolder from '../components/atoms/CbFolder.vue'
 import CbImageGrid from '../images/CbImageGrid.vue'
 import CbImageViewer from '../images/CbImageViewer.vue'
 import { dummyImages, type DummyImage } from '../images/dummyImages'
 import { useHeader } from '../components/organisms/headerState'
+import { cardFormat } from '../card/cardFormat'
 
 useHeader(() => ({ title: dictionary.header.allImages, searchbar: false }))
 
