@@ -24,7 +24,8 @@
          zeichnet Vue nichts mehr hinein, sonst springt der Cursor.
          plaintext-only macht Enter zum Zeilenumbruch und fügt nur reinen Text
          ein. Escape beendet das Tippen hier, damit der Fokus aufs Feld
-         zurückgeht – der Editor darf nicht noch eine Stufe weiter zurück. -->
+         zurückgeht – der Editor darf nicht noch eine Stufe weiter zurück.
+         Leer fiele es sonst auf null Höhe zusammen, wenn es mit dem Text wächst. -->
     <span
       v-if="isTyping"
       ref="editor"
@@ -32,7 +33,7 @@
       role="textbox"
       aria-multiline="true"
       :aria-label="name"
-      class="block size-full px-1 outline-none"
+      class="block size-full min-h-lh px-1 outline-none"
       @input="emitTypedText"
       @keydown.escape.stop="stopTyping"
     />

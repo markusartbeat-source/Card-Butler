@@ -1,3 +1,4 @@
+import type { CardSetElement } from '../../cardSets/cardSets'
 import { findCardSetElement } from '../cardElements'
 
 // Wie ein Textfeld zu seiner Größe kommt, wie in Figma: Breite und Höhe folgen
@@ -8,8 +9,8 @@ export type TextSizing = 'autoWidth' | 'autoHeight' | 'fixed'
 // geht beim Neuladen verloren. Ohne Modus gilt feste Größe, Breite und Höhe sind
 // dann ja Zahlen. Nur über diese beiden Funktionen lesen und setzen: Dann bleibt
 // der spätere Umzug ins Backend (Breite/Höhe = null) klein.
-export function textSizingOf(id: string): TextSizing {
-  return findCardSetElement(id)?.textSizing ?? 'fixed'
+export function textSizingOf(element: CardSetElement | undefined): TextSizing {
+  return element?.textSizing ?? 'fixed'
 }
 
 export function setTextSizing(id: string, sizing: TextSizing) {

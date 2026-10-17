@@ -77,12 +77,13 @@ const elementsOnThisSide = computed(() =>
     .filter((element): element is CardElement => element?.side === props.side),
 )
 
-// Lage, Größe (mm) und Deckkraft eines Elements.
+// Lage, Größe (mm) und Deckkraft eines Elements. Ohne Höhe wächst es mit seinem
+// Inhalt – undefined löscht dabei auch die px, die die Anfasser beim Ziehen setzen.
 function elementStyle(element: CardElement) {
   return {
     ...placementStyle(element.placement),
     width: `${element.width}mm`,
-    height: `${element.height}mm`,
+    height: element.height === null ? undefined : `${element.height}mm`,
     opacity: element.opacity,
   }
 }

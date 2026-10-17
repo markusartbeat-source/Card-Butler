@@ -1,6 +1,7 @@
 import type { ElementPlacement } from '../elementTransform/elementPlacement'
 import { cardSets, type Card, type CardSetElement } from '../cardSets/cardSets'
 import type { TextElement } from './text/textElement'
+import { textSizingOf } from './text/textSizing'
 
 // Alle Karten eines Sets sind gleich aufgebaut: Die Elemente gehören zum Set,
 // nicht zur einzelnen Karte. Nur ein Wert je Element unterscheidet sich von
@@ -11,14 +12,15 @@ import type { TextElement } from './text/textElement'
 // which side it sits on. Ids are unique across both sides.
 export type CardSide = 'front' | 'back'
 
-// What every element type has, no matter what it shows. Breite und Höhe in mm.
+// What every element type has, no matter what it shows. Breite und Höhe in mm,
+// ohne Höhe wächst das Element mit seinem Inhalt.
 export type CardElementBase = {
   id: string
   name: string
   side: CardSide
   placement: ElementPlacement
   width: number
-  height: number
+  height: number | null
   opacity: number
 }
 
@@ -27,11 +29,8 @@ export type CardElement = TextElement
 /** Macht aus einem Element des Sets eins zum Zeichnen. Das Backend kennt keine
     Kartenseiten – alles liegt vorn. Gezeichnet werden bisher nur Textfelder mit
     x/y-Position; andere (z.B. von anderen Programmen angelegt) fehlen noch. */
-export function cardElementFromCardSetElement({
-  id,
-  data,
-  rotation,
-}: CardSetElement): CardElement | null {
+export function cardElementFromCardSetElement(element: CardSetElement): CardElement | null {
+  const { id, data, rotation } = element
   const { x, y } = data.position
   if (data.type !== 'TEXT' || x == null || y == null) return null
 
@@ -42,7 +41,7 @@ export function cardElementFromCardSetElement({
     side: 'front',
     placement: { x, y, rotation },
     width: data.width,
-    height: data.height,
+    height: textSizingOf(element) === 'fixed' ? data.height : null,
     opacity: data.opacity,
   }
 }

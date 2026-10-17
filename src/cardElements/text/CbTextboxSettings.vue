@@ -67,14 +67,15 @@ const sizings = computed(() => [
   },
 ])
 
-const sizing = computed(() => textSizingOf(props.elementId))
+const element = computed(() => findCardSetElement(props.elementId))
+const sizing = computed(() => textSizingOf(element.value))
 
 const sizingIndex = computed({
   get: () => sizings.value.findIndex((item) => item.sizing === sizing.value),
   set: (index) => setTextSizing(props.elementId, sizings.value[index].sizing),
 })
 
-const data = computed(() => findCardSetElement(props.elementId)?.data)
+const data = computed(() => element.value?.data)
 const texts = ref({ width: '', height: '' })
 const areSizesLinked = ref(false)
 

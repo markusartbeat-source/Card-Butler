@@ -5,7 +5,9 @@
        counts that zoom into its angles when it knows the zoomed element.
        check-input: Im Tippmodus markiert Ziehen im Text, statt zu verschieben.
        edge-draggable: Ziehen an der Rahmenkante verschiebt – auch beim Tippen.
-       line-padding macht die sonst 1 px dünne Kante nach außen greifbar. -->
+       line-padding macht die sonst 1 px dünne Kante nach außen greifbar.
+       use-resize-observer: Wächst das Feld mit seinem Text (z.B. beim Tippen),
+       misst Moveable neu – außer während es selbst zieht. -->
   <Moveable
     v-if="targetElement"
     ref="moveable"
@@ -16,6 +18,7 @@
     :draggable="true"
     :edge-draggable="true"
     :line-padding="8"
+    :use-resize-observer="true"
     :resizable="true"
     :rotatable="true"
     :origin="false"
