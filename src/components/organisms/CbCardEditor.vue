@@ -77,7 +77,12 @@
     <!-- Ist ein Feld ausgewählt, zeigt das Panel dessen Einstellungen statt der
          Karte. -->
     <div class="absolute top-8 right-8 bottom-8 w-80 transition-opacity" :class="fadeInClasses">
-      <CbTextSettingsPanel v-if="selectedElementId" class="h-full" />
+      <CbTextSettingsPanel
+        v-if="selectedElementId"
+        :key="selectedElementId"
+        :element-id="selectedElementId"
+        class="h-full"
+      />
       <CbCardSettingsPanel v-else class="h-full" :is-visible="areControlsVisible" />
     </div>
 

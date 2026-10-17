@@ -1,8 +1,10 @@
 <template>
-  <!-- Inhalt kommt später. -->
-  <CbPanel :title="dictionary.cardEditor.textSettings" />
+  <!-- Die Texteinstellungen kommen später. -->
+  <CbElementSettingsPanel :element-id="elementId" :title="dictionary.cardEditor.textSettings" />
 </template>
 
 <script setup lang="ts">
-import CbPanel from '../../components/atoms/CbPanel.vue'
+import CbElementSettingsPanel from '../CbElementSettingsPanel.vue'
+
+defineProps<{ elementId: string }>()
 </script>

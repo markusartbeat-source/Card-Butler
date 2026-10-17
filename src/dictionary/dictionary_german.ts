@@ -140,6 +140,8 @@ export const dictionaryGerman = {
     textElementDeleted: 'Textfeld gelöscht',
     cardSettings: 'Karteneinstellungen',
     textSettings: 'Texteinstellungen',
+    elementName: 'Name',
+    backToCardSettings: 'Zurück zu den Karteneinstellungen',
     settingsTab: 'Einstellungen',
     layersTab: 'Ebenen',
     printGroup: 'Druck',

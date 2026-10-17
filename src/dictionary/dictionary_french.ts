@@ -119,6 +119,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     textElementDeleted: 'Champ de texte supprimé',
     cardSettings: 'Réglages de la carte',
     textSettings: 'Réglages du texte',
+    elementName: 'Nom',
+    backToCardSettings: 'Retour aux réglages de la carte',
     settingsTab: 'Réglages',
     layersTab: 'Calques',
     printGroup: 'Impression',
