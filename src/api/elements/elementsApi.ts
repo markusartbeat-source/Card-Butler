@@ -38,5 +38,15 @@ function createElement(cardSetId: string, data: ElementData) {
   )
 }
 
+/** Ersetzt ein Element komplett – fehlende Felder werden null. `version` ist der
+ *  Stand, den der Aufrufer kennt – ist er veraltet, antwortet das Backend mit 412. */
+function updateElement(elementId: string, data: ElementData, version: number) {
+  return postOffice.request<ElementResource>(`/api/elements/${encodeURIComponent(elementId)}`, {
+    method: 'PUT',
+    body: data,
+    version,
+  })
+}
+
 /** Fach `elements` der Poststelle, Aufruf als `postOffice.elements.…()`. */
-export const elementsApi = { createElement }
+export const elementsApi = { createElement, updateElement }

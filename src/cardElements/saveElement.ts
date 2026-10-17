@@ -1,0 +1,24 @@
+import { ApiError } from '../api/postOffice/apiError'
+import { postOffice } from '../api/postOffice/postOffice'
+import { cardSets } from '../cardSets/cardSets'
+import { reloadCardSet } from '../cardSets/loadCardSets'
+
+/** Speichert den lokalen Stand eines Elements im Backend und übernimmt die neue
+ *  Version. Liefert, ob das geklappt hat – Fehler meldet schon die Poststelle per Toast. */
+export async function saveElement(elementId: string) {
+  const cardSet = cardSets.value?.find((cardSet) =>
+    cardSet.elements.some((element) => element.id === elementId),
+  )
+  const element = cardSet?.elements.find((element) => element.id === elementId)
+  if (!cardSet || !element) return false
+
+  try {
+    const { version } = await postOffice.elements.updateElement(elementId, element.data, element.version)
+    element.version = version
+    return true
+  } catch (error) {
+    // Jemand anderes hat das Element inzwischen geändert oder gelöscht.
+    if (error instanceof ApiError && [404, 412].includes(error.status)) await reloadCardSet(cardSet)
+    return false
+  }
+}

@@ -14,7 +14,7 @@
     :rotatable="true"
     :origin="false"
     @drag="applyDrag"
-    @drag-end="measureElementAgain"
+    @drag-end="finishDrag"
     @resize="applyResize"
     @rotate="applyRotate"
     @rotate-end="measureElementAgain"
@@ -23,9 +23,10 @@
 
 <script setup lang="ts">
 import { nextTick, ref, useTemplateRef, watch } from 'vue'
-import Moveable, { type OnDrag, type OnResize, type OnRotate } from 'vue3-moveable'
+import Moveable, { type OnDrag, type OnDragEnd, type OnResize, type OnRotate } from 'vue3-moveable'
 import { selectedElementId } from './elementSelection'
 import { moveElementBy, rotateElementBy } from '../cardElements/cardElements'
+import { saveElement } from '../cardElements/saveElement'
 
 // The card the selected element lives in. Searching inside it instead of the
 // whole page keeps us away from the same element on the other cards.
@@ -69,6 +70,13 @@ function applyDrag(event: OnDrag) {
 async function measureElementAgain() {
   await nextTick()
   moveable.value?.updateRect()
+}
+
+// Gespeichert wird erst am Ende, nicht bei jedem Schritt. Ein bloßer Klick aufs
+// Feld endet auch hier – dann hat es sich nicht bewegt.
+function finishDrag(event: OnDragEnd) {
+  measureElementAgain()
+  if (event.isDrag && selectedElementId.value) saveElement(selectedElementId.value)
 }
 
 function applyResize(event: OnResize) {
