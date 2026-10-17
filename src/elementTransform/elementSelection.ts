@@ -14,13 +14,23 @@ export function selectElement(id: string) {
   isTypingInSelectedElement.value = false
 }
 
-export function startTypingInSelectedElement() {
+export function startTypingInElement(id: string) {
+  selectedElementId.value = id
   isTypingInSelectedElement.value = true
 }
 
 export function clearElementSelection() {
   selectedElementId.value = null
   isTypingInSelectedElement.value = false
+}
+
+// Eine Stufe zurück: Tippen → ausgewählt → nichts. false, wenn schon nichts
+// mehr ausgewählt war.
+export function stepBackElementSelection() {
+  if (isTypingInSelectedElement.value) isTypingInSelectedElement.value = false
+  else if (selectedElementId.value) selectedElementId.value = null
+  else return false
+  return true
 }
 
 // Für einen Druck auf die Karte, der kein Element traf – beim Drücken, nicht

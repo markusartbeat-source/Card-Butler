@@ -12,6 +12,7 @@
       <CbTextElement
         v-if="element.type === 'text'"
         :id="element.id"
+        :name="element.name"
         :content="elementValues[element.id]"
         :placeholder="markEmptyElements ? element.name : undefined"
         :highlight-search="highlightSearch"

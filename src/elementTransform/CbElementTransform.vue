@@ -3,7 +3,9 @@
        bare "draggable" into true — every switch needs an explicit value.
        rootContainer is the card: it is drawn with CSS zoom, and Moveable only
        counts that zoom into its angles when it knows the zoomed element.
-       check-input: Im Tippmodus markiert Ziehen im Text, statt zu verschieben. -->
+       check-input: Im Tippmodus markiert Ziehen im Text, statt zu verschieben.
+       edge-draggable: Ziehen an der Rahmenkante verschiebt – auch beim Tippen.
+       line-padding macht die sonst 1 px dünne Kante nach außen greifbar. -->
   <Moveable
     v-if="targetElement"
     ref="moveable"
@@ -12,6 +14,8 @@
     :root-container="card"
     :check-input="true"
     :draggable="true"
+    :edge-draggable="true"
+    :line-padding="8"
     :resizable="true"
     :rotatable="true"
     :origin="false"

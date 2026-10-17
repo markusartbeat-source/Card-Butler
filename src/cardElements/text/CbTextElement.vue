@@ -1,8 +1,10 @@
 <template>
   <!-- data-element-id lets the transform handles find this element on the card.
        The card hands in the position, so no "relative" or "inline-block" here.
-       pre-wrap zeigt die Zeilenumbrüche im Text. -->
+       pre-wrap zeigt die Zeilenumbrüche im Text. Im Editor ist das Feld per Tab
+       erreichbar und wie ein Knopf mit Enter oder Leertaste zu bearbeiten. -->
   <span
+    ref="field"
     v-ripple
     class="text-background overflow-hidden rounded whitespace-pre-wrap"
     :class="[
@@ -10,18 +12,29 @@
       { 'border-background/70 border border-dashed': isPlaceholderShown },
     ]"
     :data-element-id="id"
+    :tabindex="editable ? 0 : undefined"
+    :role="isButton ? 'button' : undefined"
+    :aria-label="isButton ? name : undefined"
     @click="selectOrStartTyping"
+    @focus="selectOnKeyboardFocus"
+    @keydown.enter.self.prevent="startTypingAtEnd"
+    @keydown.space.self.prevent="startTypingAtEnd"
   >
     <!-- Im Tippmodus gehört der Inhalt dem Browser: einmal befüllt, danach
          zeichnet Vue nichts mehr hinein, sonst springt der Cursor.
          plaintext-only macht Enter zum Zeilenumbruch und fügt nur reinen Text
-         ein. -->
+         ein. Escape beendet das Tippen hier, damit der Fokus aufs Feld
+         zurückgeht – der Editor darf nicht noch eine Stufe weiter zurück. -->
     <span
       v-if="isTyping"
       ref="editor"
       contenteditable="plaintext-only"
+      role="textbox"
+      aria-multiline="true"
+      :aria-label="name"
       class="block size-full px-1 outline-none"
       @input="emitTypedText"
+      @keydown.escape.stop="stopTyping"
     />
     <template v-else>
       <span v-if="isPlaceholderShown" class="text-background/70">{{ placeholder }}</span>
@@ -41,7 +54,7 @@ import {
   isTypingInSelectedElement,
   selectElement,
   selectedElementId,
-  startTypingInSelectedElement,
+  startTypingInElement,
 } from '../../elementTransform/elementSelection'
 import { splitBySearchWord } from '../../search/splitBySearchWord'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
@@ -49,10 +62,12 @@ import { placeCaretAtPoint } from './placeCaretAtPoint'
 // The content is the one thing each card fills in itself. Only the card
 // overview asks for the found spots to be marked. Mit placeholder zeigt sich
 // ein leeres Feld als gestrichelter Rahmen mit diesem Text. Mit editable kann
-// man ins Feld tippen – nur im Editor.
+// man ins Feld tippen – nur im Editor. name ist der Name des Felds für
+// Screenreader.
 const props = withDefaults(
   defineProps<{
     id: string
+    name: string
     content?: string
     highlightSearch?: boolean
     placeholder?: string
@@ -63,11 +78,15 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:content': [content: string] }>()
 
+const field = useTemplateRef<HTMLElement>('field')
 const editor = useTemplateRef<HTMLElement>('editor')
 
 const isTyping = computed(
   () => props.editable && isTypingInSelectedElement.value && selectedElementId.value === props.id,
 )
+
+// Beim Tippen ist das Textfeld darin dran, kein Knopf drumherum.
+const isButton = computed(() => props.editable && !isTyping.value)
 
 const isPlaceholderShown = computed(() => !props.content && !!props.placeholder)
 
@@ -77,19 +96,40 @@ const textParts = computed(() =>
     : [{ text: props.content, isMatch: false }],
 )
 
-// Der 1. Klick wählt das Feld aus. Ein weiterer startet im Editor das Tippen,
-// der Cursor landet an der Klickstelle. Im Tippmodus setzt der Browser den
-// Cursor selbst.
-async function selectOrStartTyping(event: MouseEvent) {
-  if (isTyping.value) return
-  if (!props.editable || selectedElementId.value !== props.id) return selectElement(props.id)
-
-  startTypingInSelectedElement()
+// placeCaret setzt den Cursor, sobald das Textfeld da ist.
+async function startTyping(placeCaret: (textField: HTMLElement) => void) {
+  startTypingInElement(props.id)
   await nextTick()
   if (!editor.value) return
   editor.value.textContent = props.content
   editor.value.focus()
-  placeCaretAtPoint(editor.value, event.clientX, event.clientY)
+  placeCaret(editor.value)
+}
+
+// Der 1. Klick wählt das Feld aus. Ein weiterer startet im Editor das Tippen,
+// der Cursor landet an der Klickstelle. Im Tippmodus setzt der Browser den
+// Cursor selbst.
+function selectOrStartTyping(event: MouseEvent) {
+  if (isTyping.value) return
+  if (!props.editable || selectedElementId.value !== props.id) return selectElement(props.id)
+
+  startTyping((textField) => placeCaretAtPoint(textField, event.clientX, event.clientY))
+}
+
+function startTypingAtEnd() {
+  startTyping((textField) => window.getSelection()?.collapse(textField, textField.childNodes.length))
+}
+
+// Das Feld bleibt ausgewählt und fokussiert.
+function stopTyping() {
+  selectElement(props.id)
+  field.value?.focus()
+}
+
+// Per Tastatur angesprungen wählt sich das Feld aus. Ein Mausklick fokussiert es
+// auch, wählt aber erst mit dem Klick aus – sonst wäre schon der 1. Klick der 2.
+function selectOnKeyboardFocus() {
+  if (field.value?.matches(':focus-visible')) selectElement(props.id)
 }
 
 // Browser hängen ans Ende oft einen Zeilenumbruch nur als Platzhalter an – der

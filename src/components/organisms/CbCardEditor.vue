@@ -110,6 +110,7 @@ import {
   clearElementSelection,
   clearSelectionOnMiss,
   selectElement,
+  stepBackElementSelection,
 } from '../../elementTransform/elementSelection'
 import CbPrintCountOverlay from '../../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../../printCount/changePrintCountByWheel'
@@ -217,8 +218,10 @@ function startClosing() {
   closingFlight.onfinish = () => emit('close')
 }
 
-function closeOnEscape(event: KeyboardEvent) {
-  if (event.key === 'Escape') startClosing()
+// Escape nimmt erst die Auswahl schrittweise zurück, zuletzt schließt es den
+// Editor.
+function stepBackOnEscape(event: KeyboardEvent) {
+  if (event.key === 'Escape' && !stepBackElementSelection()) startClosing()
 }
 
 onMounted(() => {
@@ -231,12 +234,12 @@ onMounted(() => {
   if (animation) animation.onfinish = () => (areControlsVisible.value = true)
   else areControlsVisible.value = true
 
-  window.addEventListener('keydown', closeOnEscape)
+  window.addEventListener('keydown', stepBackOnEscape)
 })
 
 onUnmounted(() => {
   // A card picked mid-close replaces us — that close must not fire any more.
   if (closingFlight) closingFlight.onfinish = null
-  window.removeEventListener('keydown', closeOnEscape)
+  window.removeEventListener('keydown', stepBackOnEscape)
 })
 </script>
