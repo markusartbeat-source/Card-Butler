@@ -1,4 +1,4 @@
-// Der Versand der Poststelle: Cookie, CSRF, Request-ID, JSON. Nur Transport –
+// Der Versand der Poststelle: Cookie, CSRF, Request-ID, JSON/FormData. Nur Transport –
 // Fachliches gehört in die Themen-Ordner unter src/api/. Nur diese nutzen die
 // Datei direkt, der Rest der App geht über postOffice.ts.
 import { ApiError } from './apiError'
@@ -6,7 +6,7 @@ import { showErrorToast } from './errorToast'
 
 export type PostOfficeRequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  /** Wird als JSON gesendet. */
+  /** Wird als JSON gesendet, `FormData` (z.B. eine Datei) unverändert. */
   body?: unknown
   /** Stand (Feld `version`) des Objekts, das geändert wird. Geht als If-Match
    *  mit; ist er veraltet, antwortet das Backend mit 412. */
@@ -31,7 +31,10 @@ async function request<ResponseBody>(
   // Kennzeichnet den Aufruf, damit er sich in Protokollen wiederfinden lässt.
   const requestId = crypto.randomUUID()
   const headers: Record<string, string> = { Accept: 'application/json', 'X-Request-Id': requestId }
-  if (body !== undefined) headers['Content-Type'] = 'application/json'
+  // Bei FormData setzt der Browser den Content-Type selbst, samt Trenner
+  // zwischen den Teilen.
+  const requestBody = body instanceof FormData || body === undefined ? body : JSON.stringify(body)
+  if (typeof requestBody === 'string') headers['Content-Type'] = 'application/json'
   // Das Backend schreibt seine Versionen als ETag in Anführungszeichen.
   if (version !== undefined) headers['If-Match'] = `"${version}"`
   if (method !== 'GET') {
@@ -56,7 +59,7 @@ async function request<ResponseBody>(
     credentials: 'include',
     redirect: 'manual',
     headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: requestBody,
   }).catch(() => null)
   if (!response) throw fail(0)
 

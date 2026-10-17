@@ -69,6 +69,10 @@ export const dictionaryGerman = {
   images: {
     title: 'Bilder',
     uploadImages: 'Bilder hochladen',
+    // Toast für eine abgelehnte Datei: Titel mit Dateiname, darunter der Grund.
+    imageRejected: (fileName: string) => `„${fileName}“ nicht hochgeladen`,
+    wrongImageType: 'Erlaubt sind nur PNG, JPEG und GIF.',
+    imageTooLarge: (megabytes: number) => `Ein Bild darf höchstens ${megabytes} MB groß sein.`,
     placeholderFolderName: 'Mein erstes Projekt',
   },
   // The page with the card grid.

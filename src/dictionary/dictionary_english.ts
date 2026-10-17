@@ -59,6 +59,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   images: {
     title: 'Images',
     uploadImages: 'Upload images',
+    imageRejected: (fileName: string) => `“${fileName}” not uploaded`,
+    wrongImageType: 'Only PNG, JPEG and GIF are allowed.',
+    imageTooLarge: (megabytes: number) => `An image can be at most ${megabytes} MB.`,
     placeholderFolderName: 'My first project',
   },
   project: {

@@ -1,9 +1,4 @@
 <template>
-  <!-- The event is passed on, not swallowed: a wrapper like CbTooltip attaches
-       its own click handler here and needs the real event. -->
-  <!-- A disabled button swallows the click and the ripple by itself — the
-       browser sends it no mouse events at all. Only the hover has to be taken
-       off by hand, because :hover still matches a disabled button. -->
   <button
     v-ripple
     type="button"
@@ -12,6 +7,13 @@
     :class="{ 'cb-hover': !disabled }"
     @click="$emit('click', $event)"
   >
+    <!-- The event is passed on, not swallowed: a wrapper like CbTooltip attaches
+         its own click handler here and needs the real event. -->
+    <!-- A disabled button swallows the click and the ripple by itself — the
+         browser sends it no mouse events at all. Only the hover has to be taken
+         off by hand, because :hover still matches a disabled button. -->
+    <!-- Kein Kommentar vor der Wurzel: Ark legt sich per as-child darauf
+         (z.B. CbFileUpload über CbAddTile). -->
     <slot />
   </button>
 </template>

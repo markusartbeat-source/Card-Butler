@@ -75,7 +75,7 @@ body {
 
 @layer components {
   .cb-hover {
-    @apply cursor-pointer hover:shadow-lg;
+    @apply cursor-pointer hover:shadow-lg data-dragging:shadow-lg;
   }
 
   /* The lightening lies in a layer of its own instead of changing the
@@ -89,8 +89,11 @@ body {
   /* Ark UI keeps the focus on the list itself and marks the entry the arrow
      keys are standing on with data-highlighted. So the keyboard lights an
      entry up exactly like the mouse does. */
+  /* Zieht man Dateien über eine Ablagefläche, setzt Ark data-dragging. Sie
+     leuchtet dann wie beim Hovern, das der Browser beim Ziehen nicht zeigt. */
   .cb-hover:hover::after,
-  .cb-hover[data-highlighted]::after {
+  .cb-hover[data-highlighted]::after,
+  .cb-hover[data-dragging]::after {
     @apply bg-white/10;
   }
 
