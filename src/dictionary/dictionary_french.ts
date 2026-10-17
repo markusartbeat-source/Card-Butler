@@ -62,6 +62,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     imageRejected: (fileName: string) => `« ${fileName} » non importé`,
     wrongImageType: 'Seuls les formats PNG, JPEG et GIF sont acceptés.',
     imageTooLarge: (megabytes: number) => `Une image ne doit pas dépasser ${megabytes} Mo.`,
+    uploadingImages: 'Importation en cours…',
+    imagesUploaded: (count: number) => (count === 1 ? '1 image importée' : `${count} images importées`),
     placeholderFolderName: 'Mon premier projet',
   },
   project: {

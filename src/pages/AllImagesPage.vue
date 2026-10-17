@@ -23,16 +23,21 @@
     >
       <!-- Hochkant wie eine Karte, wächst mit der Zeile wie die Bilder. -->
       <template #leading="{ tileStyle }">
+        <!-- Während des Hochladens gesperrt. Das Ergebnis meldet danach ein
+             Toast, den Screenreader vorlesen. Kein Kommentar vor CbAddTile:
+             Ark legt sich per as-child darauf. -->
         <CbFileUpload
           :accept="acceptedImageTypes"
           :max-file-size="maximumImageMegabytes * 1024 * 1024"
+          :disabled="isUploadingImages"
           @accept="uploadImages(projectId, $event)"
           @reject="showRejectedImage"
         >
           <CbAddTile
             icon="add_2"
-            :label="dictionary.images.uploadImages"
-            class="rounded-lg"
+            :label="isUploadingImages ? dictionary.images.uploadingImages : dictionary.images.uploadImages"
+            :aria-busy="isUploadingImages"
+            class="rounded-lg data-disabled:cursor-progress"
             :style="tileStyle(cardFormat.width / cardFormat.height)"
           />
         </CbFileUpload>
@@ -54,7 +59,7 @@ import CbImageGrid from '../images/CbImageGrid.vue'
 import CbImageViewer from '../images/CbImageViewer.vue'
 import type { ImageResource } from '../api/images/imagesApi'
 import { loadProjectImages, projectImages } from '../images/projectImages'
-import { uploadImages } from '../images/uploadImages'
+import { isUploadingImages, uploadImages } from '../images/uploadImages'
 import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
 

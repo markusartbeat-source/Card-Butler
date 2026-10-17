@@ -8,12 +8,16 @@
          ginge sie doppelt auf (disable-click). Zags role="application" und sein
          englisches aria-label fallen weg. So behält der Button seine Rolle und
          seinen sichtbaren Text. -->
+    <!-- Gesperrt nimmt Zag keine Dateien an. Ohne preventDefault öffnete der
+         Browser eine abgelegte Datei dann selbst und verließe die App. -->
     <FileUpload.Dropzone
       as-child
       disable-click
       :role="undefined"
       :aria-label="undefined"
       @click="fileUpload.openFilePicker()"
+      @dragover.prevent
+      @drop.prevent
     >
       <slot />
     </FileUpload.Dropzone>
@@ -28,7 +32,8 @@ import { FileUpload, useFileUpload } from '@ark-ui/vue'
 export type FileRejectionReason = 'wrongType' | 'tooLarge'
 
 // accept: erlaubte MIME-Typen, z.B. 'image/png'. maxFileSize in Byte.
-const props = defineProps<{ accept: string[]; maxFileSize: number }>()
+// disabled: nimmt nichts an, bleibt aber per Tastatur erreichbar (aria-disabled).
+const props = defineProps<{ accept: string[]; maxFileSize: number; disabled?: boolean }>()
 
 // accept: die angenommenen Dateien einer Auswahl. reject: einmal je abgelehnter Datei.
 const emit = defineEmits<{
@@ -40,6 +45,7 @@ const fileUpload = useFileUpload(
   computed(() => ({
     accept: props.accept,
     maxFileSize: props.maxFileSize,
+    disabled: props.disabled,
     maxFiles: Number.POSITIVE_INFINITY,
     // Immer leer: Jede Auswahl wird nur gemeldet, nicht gesammelt. Sonst lehnte
     // Zag eine schon einmal gewählte Datei als doppelt ab.

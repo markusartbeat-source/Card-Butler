@@ -73,6 +73,9 @@ export const dictionaryGerman = {
     imageRejected: (fileName: string) => `„${fileName}“ nicht hochgeladen`,
     wrongImageType: 'Erlaubt sind nur PNG, JPEG und GIF.',
     imageTooLarge: (megabytes: number) => `Ein Bild darf höchstens ${megabytes} MB groß sein.`,
+    // Text der Kachel, solange hochgeladen wird, und Toast danach.
+    uploadingImages: 'Wird hochgeladen …',
+    imagesUploaded: (count: number) => (count === 1 ? '1 Bild hochgeladen' : `${count} Bilder hochgeladen`),
     placeholderFolderName: 'Mein erstes Projekt',
   },
   // The page with the card grid.
