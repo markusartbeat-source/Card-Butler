@@ -63,23 +63,49 @@ import CbInput from '../../components/atoms/CbInput.vue'
 import CbSelect from '../../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
+import { findCardSetElement } from '../cardElements'
 import { fontFamilyItems, fontSizeItems, fontWeightItems } from './fonts'
+import { alignTextHorizontally } from './textAppearance'
 
-// Die Werte leben vorerst nur hier und wirken noch nicht auf den Text.
+const props = defineProps<{ elementId: string }>()
+
+// Diese Werte leben vorerst nur hier und wirken noch nicht auf den Text.
 const fontFamily = ref('Arial')
 const fontWeight = ref('regular')
 const fontSize = ref('14')
 const lineHeight = ref('20')
 const letterSpacing = ref('0%')
-const horizontalAlignmentIndex = ref(0)
 const verticalAlignmentIndex = ref(0)
 const color = ref('#ffffff')
 
 const horizontalAlignments = computed(() => [
-  { name: dictionary.cardEditor.textAlignLeft, icon: 'align_horizontal_left' as const },
-  { name: dictionary.cardEditor.textAlignCenter, icon: 'align_horizontal_center' as const },
-  { name: dictionary.cardEditor.textAlignRight, icon: 'align_horizontal_right' as const },
+  {
+    alignment: 'LEFT' as const,
+    name: dictionary.cardEditor.textAlignLeft,
+    icon: 'align_horizontal_left' as const,
+  },
+  {
+    alignment: 'CENTER' as const,
+    name: dictionary.cardEditor.textAlignCenter,
+    icon: 'align_horizontal_center' as const,
+  },
+  {
+    alignment: 'RIGHT' as const,
+    name: dictionary.cardEditor.textAlignRight,
+    icon: 'align_horizontal_right' as const,
+  },
 ])
+
+const element = computed(() => findCardSetElement(props.elementId))
+
+const horizontalAlignmentIndex = computed({
+  get: () =>
+    horizontalAlignments.value.findIndex(
+      (item) => item.alignment === element.value?.data.alignment.horizontal,
+    ),
+  set: (index) =>
+    alignTextHorizontally(props.elementId, horizontalAlignments.value[index].alignment),
+})
 
 const verticalAlignments = computed(() => [
   { name: dictionary.cardEditor.textAlignTop, icon: 'align_vertical_top' as const },

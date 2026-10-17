@@ -44,6 +44,7 @@ export function cardElementFromCardSetElement(element: CardSetElement): CardElem
     width: sizing === 'autoWidth' ? null : data.width,
     height: sizing === 'fixed' ? data.height : null,
     opacity: data.opacity,
+    horizontalAlignment: data.alignment.horizontal,
   }
 }
 

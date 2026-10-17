@@ -8,6 +8,7 @@
     v-ripple
     class="text-background overflow-hidden rounded"
     :class="[
+      textAlignClasses[horizontalAlignment],
       wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
@@ -52,6 +53,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, useTemplateRef } from 'vue'
+import type { HorizontalAlignment } from '../../api/elements/elementsApi'
 import {
   isTypingInSelectedElement,
   selectElement,
@@ -66,11 +68,13 @@ import { placeCaretAtPoint } from './placeCaretAtPoint'
 // ein leeres Feld als gestrichelter Rahmen mit diesem Text. Mit editable kann
 // man ins Feld tippen – nur im Editor. name ist der Name des Felds für
 // Screenreader. Mit wrapsLines brechen lange Zeilen am Rand um, ohne wird das
-// Feld breiter und nur Enter beginnt eine neue Zeile.
+// Feld breiter und nur Enter beginnt eine neue Zeile. horizontalAlignment
+// richtet den Text in der Box aus, auch beim Tippen.
 const props = withDefaults(
   defineProps<{
     id: string
     name: string
+    horizontalAlignment: HorizontalAlignment
     content?: string
     highlightSearch?: boolean
     placeholder?: string
@@ -81,6 +85,8 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{ 'update:content': [content: string] }>()
+
+const textAlignClasses = { LEFT: 'text-left', CENTER: 'text-center', RIGHT: 'text-right' }
 
 const field = useTemplateRef<HTMLElement>('field')
 const editor = useTemplateRef<HTMLElement>('editor')
