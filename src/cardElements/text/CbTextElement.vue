@@ -1,13 +1,14 @@
 <template>
   <!-- data-element-id lets the transform handles find this element on the card.
        The card hands in the position, so no "relative" or "inline-block" here.
-       pre-wrap zeigt die Zeilenumbrüche im Text. Im Editor ist das Feld per Tab
-       erreichbar und wie ein Knopf mit Enter oder Leertaste zu bearbeiten. -->
+       pre-wrap und pre zeigen die Zeilenumbrüche im Text. Im Editor ist das Feld
+       per Tab erreichbar und wie ein Knopf mit Enter oder Leertaste zu bearbeiten. -->
   <span
     ref="field"
     v-ripple
-    class="text-background overflow-hidden rounded whitespace-pre-wrap"
+    class="text-background overflow-hidden rounded"
     :class="[
+      wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
     ]"
@@ -64,7 +65,8 @@ import { placeCaretAtPoint } from './placeCaretAtPoint'
 // overview asks for the found spots to be marked. Mit placeholder zeigt sich
 // ein leeres Feld als gestrichelter Rahmen mit diesem Text. Mit editable kann
 // man ins Feld tippen – nur im Editor. name ist der Name des Felds für
-// Screenreader.
+// Screenreader. Mit wrapsLines brechen lange Zeilen am Rand um, ohne wird das
+// Feld breiter und nur Enter beginnt eine neue Zeile.
 const props = withDefaults(
   defineProps<{
     id: string
@@ -73,8 +75,9 @@ const props = withDefaults(
     highlightSearch?: boolean
     placeholder?: string
     editable?: boolean
+    wrapsLines?: boolean
   }>(),
-  { content: '', highlightSearch: false, placeholder: '', editable: false },
+  { content: '', highlightSearch: false, placeholder: '', editable: false, wrapsLines: true },
 )
 
 const emit = defineEmits<{ 'update:content': [content: string] }>()

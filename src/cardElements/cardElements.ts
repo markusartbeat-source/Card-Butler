@@ -13,13 +13,13 @@ import { textSizingOf } from './text/textSizing'
 export type CardSide = 'front' | 'back'
 
 // What every element type has, no matter what it shows. Breite und Höhe in mm,
-// ohne Höhe wächst das Element mit seinem Inhalt.
+// ohne sie wächst das Element mit seinem Inhalt.
 export type CardElementBase = {
   id: string
   name: string
   side: CardSide
   placement: ElementPlacement
-  width: number
+  width: number | null
   height: number | null
   opacity: number
 }
@@ -34,14 +34,15 @@ export function cardElementFromCardSetElement(element: CardSetElement): CardElem
   const { x, y } = data.position
   if (data.type !== 'TEXT' || x == null || y == null) return null
 
+  const sizing = textSizingOf(element)
   return {
     id,
     name: data.name,
     type: 'text',
     side: 'front',
     placement: { x, y, rotation },
-    width: data.width,
-    height: textSizingOf(element) === 'fixed' ? data.height : null,
+    width: sizing === 'autoWidth' ? null : data.width,
+    height: sizing === 'fixed' ? data.height : null,
     opacity: data.opacity,
   }
 }

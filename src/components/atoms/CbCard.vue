@@ -17,6 +17,7 @@
         :placeholder="markEmptyElements ? element.name : undefined"
         :highlight-search="highlightSearch"
         :editable="editableElements"
+        :wraps-lines="element.width !== null"
         :style="elementStyle(element)"
         @update:content="emit('changeElementValue', element.id, $event)"
       />
@@ -77,12 +78,13 @@ const elementsOnThisSide = computed(() =>
     .filter((element): element is CardElement => element?.side === props.side),
 )
 
-// Lage, Größe (mm) und Deckkraft eines Elements. Ohne Höhe wächst es mit seinem
-// Inhalt – undefined löscht dabei auch die px, die die Anfasser beim Ziehen setzen.
+// Lage, Größe (mm) und Deckkraft eines Elements. Ohne Breite bzw. Höhe wächst es
+// mit seinem Inhalt – undefined löscht dabei auch die px, die die Anfasser beim
+// Ziehen setzen.
 function elementStyle(element: CardElement) {
   return {
     ...placementStyle(element.placement),
-    width: `${element.width}mm`,
+    width: element.width === null ? undefined : `${element.width}mm`,
     height: element.height === null ? undefined : `${element.height}mm`,
     opacity: element.opacity,
   }
