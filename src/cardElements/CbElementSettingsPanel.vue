@@ -1,7 +1,7 @@
 <template>
-  <!-- Rahmen für die Einstellungen jedes Elements: Zurück zur Karte und der
-       Name des Elements, der sich hier umbenennen lässt. Den Rest bringt jeder
-       Elementtyp selbst mit. -->
+  <!-- Rahmen für die Einstellungen jedes Elements: Zurück zur Karte, der Name
+       des Elements, der sich hier umbenennen lässt, und seine Position. Den Rest
+       bringt jeder Elementtyp selbst mit. -->
   <CbPanel>
     <template #title>
       <h2 class="sr-only">{{ title }}</h2>
@@ -22,6 +22,7 @@
         @change="saveName"
       />
     </template>
+    <CbElementPositionSettings class="mt-6" :element-id="elementId" />
     <slot />
   </CbPanel>
 </template>
@@ -33,6 +34,7 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbPanel from '../components/atoms/CbPanel.vue'
 import { clearElementSelection } from '../elementTransform/elementSelection'
+import CbElementPositionSettings from './CbElementPositionSettings.vue'
 import { findCardSetElement } from './cardElements'
 import { maxElementNameLength, renameElement } from './renameElement'
 

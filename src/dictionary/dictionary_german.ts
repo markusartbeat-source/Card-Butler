@@ -166,6 +166,9 @@ export const dictionaryGerman = {
     pickColor: 'Farbe auswählen',
     bleedGroup: 'Anschnitt',
     bleedInfo: 'Zusätzlicher Rand rund um die Karte, der beim Drucken abgeschnitten wird.',
+    positionGroup: 'Position',
+    positionX: 'X',
+    positionY: 'Y',
   },
   // The overlay for looking at a single picture.
   imageViewer: {

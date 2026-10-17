@@ -145,6 +145,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     pickColor: 'Pick a colour',
     bleedGroup: 'Bleed',
     bleedInfo: 'Extra border around the card that is cut off when printing.',
+    positionGroup: 'Position',
+    positionX: 'X',
+    positionY: 'Y',
   },
   imageViewer: {
     imageSettings: 'Image settings',

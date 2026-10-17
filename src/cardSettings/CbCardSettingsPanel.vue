@@ -7,7 +7,7 @@
         <div v-if="isVisible" :key="activeTab" class="mt-6">
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(0)">
             <div class="flex items-center gap-1.5">
-              <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.printGroup }}</h3>
+              <CbSettingsHeading>{{ dictionary.cardEditor.printGroup }}</CbSettingsHeading>
               <CbTooltip :text="dictionary.cardEditor.printInfo">
                 <CbButton
                   variant="icon"
@@ -24,7 +24,7 @@
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(1)" />
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(1)">
-            <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.sizesGroup }}</h3>
+            <CbSettingsHeading>{{ dictionary.cardEditor.sizesGroup }}</CbSettingsHeading>
             <div class="flex items-center gap-3">
               <CbInput v-model="width" class="flex-1" :label="dictionary.cardEditor.width" />
               <CbToggle
@@ -46,7 +46,7 @@
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(2)" />
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(2)">
-            <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.cornersGroup }}</h3>
+            <CbSettingsHeading>{{ dictionary.cardEditor.cornersGroup }}</CbSettingsHeading>
             <div class="flex items-center gap-3">
               <!-- One field for all corners, or one field per corner. -->
               <CbSlideSwap class="grow" :show-second="areCornersSeparate">
@@ -84,7 +84,7 @@
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(3)" />
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(3)">
-            <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.colorGroup }}</h3>
+            <CbSettingsHeading>{{ dictionary.cardEditor.colorGroup }}</CbSettingsHeading>
             <CbColorPicker v-model="color" :label="dictionary.cardEditor.pickColor" />
           </div>
 
@@ -92,7 +92,7 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(4)">
             <div class="flex items-center gap-1.5">
-              <h3 class="text-base font-bold text-white">{{ dictionary.cardEditor.bleedGroup }}</h3>
+              <CbSettingsHeading>{{ dictionary.cardEditor.bleedGroup }}</CbSettingsHeading>
               <CbTooltip :text="dictionary.cardEditor.bleedInfo">
                 <CbButton
                   variant="icon"
@@ -128,6 +128,7 @@ import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbPanel from '../components/atoms/CbPanel.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
+import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
 import CbSlideSwap from '../components/atoms/CbSlideSwap.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'
 import CbToggle from '../components/atoms/CbToggle.vue'
