@@ -15,7 +15,9 @@
     :origin="false"
     @drag="applyDrag"
     @drag-end="finishDrag"
+    @resize-start="setResizeStartSize"
     @resize="applyResize"
+    @resize-end="finishResize"
     @rotate="applyRotate"
     @rotate-end="measureElementAgain"
   />
@@ -23,9 +25,21 @@
 
 <script setup lang="ts">
 import { nextTick, ref, useTemplateRef, watch } from 'vue'
-import Moveable, { type OnDrag, type OnDragEnd, type OnResize, type OnRotate } from 'vue3-moveable'
+import Moveable, {
+  type OnDrag,
+  type OnDragEnd,
+  type OnResize,
+  type OnResizeEnd,
+  type OnResizeStart,
+  type OnRotate,
+} from 'vue3-moveable'
 import { selectedElementId } from './elementSelection'
-import { moveElementBy, rotateElementBy } from '../cardElements/cardElements'
+import {
+  findCardSetElement,
+  moveElementBy,
+  resizeElement,
+  rotateElementBy,
+} from '../cardElements/cardElements'
 import { saveElement } from '../cardElements/saveElement'
 
 // The card the selected element lives in. Searching inside it instead of the
@@ -79,10 +93,41 @@ function finishDrag(event: OnDragEnd) {
   if (event.isDrag && selectedElementId.value) saveElement(selectedElementId.value)
 }
 
+// Moveable liest die Startgröße aus dem Stil des Elements, rechnet mm dabei aber
+// falsch um (Fehler der Library: 96 / 254 statt 96 / 25.4) und startet mit einem
+// Zehntel der Größe. Deshalb geben wir sie selbst in px vor.
+function setResizeStartSize(event: OnResizeStart) {
+  const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
+  if (!element) return
+
+  event.set([element.data.width * pixelsPerMillimeter, element.data.height * pixelsPerMillimeter])
+}
+
+// Während des Ziehens gehen Größe und Verschiebung als px direkt aufs Element:
+// Moveable misst gleich nach diesem Aufruf nach, Vue zeichnet aber erst später.
+// Ändert sich dazwischen die Lage, rechnet Moveable die Größe falsch.
 function applyResize(event: OnResize) {
   event.target.style.width = `${event.width}px`
   event.target.style.height = `${event.height}px`
   event.target.style.transform = event.drag.transform
+}
+
+// Erst am Ende kommen Größe und Verschiebung in mm ins Element. Vue zeichnet es
+// dann neu und ersetzt dabei die px von oben. Ohne letztes Ereignis wurde nur
+// geklickt. beforeDist ist die Verschiebung von links/oben seit dem Start.
+function finishResize(event: OnResizeEnd) {
+  const lastResize: OnResize | undefined = event.lastEvent
+  if (!lastResize || !selectedElementId.value) return
+
+  const [moveX, moveY] = lastResize.drag.beforeDist
+  resizeElement(
+    selectedElementId.value,
+    lastResize.width / pixelsPerMillimeter,
+    lastResize.height / pixelsPerMillimeter,
+  )
+  moveElementBy(selectedElementId.value, moveX / pixelsPerMillimeter, moveY / pixelsPerMillimeter)
+  measureElementAgain()
+  saveElement(selectedElementId.value)
 }
 
 // Same as the position: the angle goes into the placement, not onto the element.

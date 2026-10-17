@@ -48,7 +48,7 @@ export function cardElementFromCardSetElement({
 }
 
 // Sucht ein Element in allen Sets – die ids sind überall eindeutig.
-function findCardSetElement(id: string) {
+export function findCardSetElement(id: string) {
   return cardSets.value?.flatMap((cardSet) => cardSet.elements).find((element) => element.id === id)
 }
 
@@ -64,6 +64,14 @@ export function moveElementBy(id: string, moveXInMillimeters: number, moveYInMil
     x: position.x + moveXInMillimeters,
     y: position.y + moveYInMillimeters,
   }
+}
+
+export function resizeElement(id: string, widthInMillimeters: number, heightInMillimeters: number) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  element.data.width = widthInMillimeters
+  element.data.height = heightInMillimeters
 }
 
 export function rotateElementBy(id: string, turnInDegrees: number) {
