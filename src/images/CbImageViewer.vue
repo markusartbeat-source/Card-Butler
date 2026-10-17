@@ -17,10 +17,13 @@
       >
         <!-- Next to the flying picture, so the ring stays put while it moves. -->
         <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
-        <!-- TEMPORÄR (bis Schritt 8): fester Farbverlauf statt des echten Bildes. -->
-        <div
+        <!-- Zugeschnitten wie im Raster, falls dort das Seitenverhältnis noch
+             nicht bekannt war (1:1). -->
+        <img
           ref="picture"
-          class="w-full rounded-lg bg-gradient-to-br from-gold-dark to-gold-lighter"
+          :src="image.data.location"
+          :alt="image.data.name"
+          class="w-full rounded-lg object-cover"
           :style="{ aspectRatio: ratio }"
         />
       </div>

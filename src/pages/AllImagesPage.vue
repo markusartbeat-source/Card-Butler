@@ -21,7 +21,7 @@
       :opened-image-id="openedImage?.image.id"
       @open="openImage"
     >
-      <!-- Hochkant wie eine Karte, so hoch wie die Bilder. -->
+      <!-- Hochkant wie eine Karte, wächst mit der Zeile wie die Bilder. -->
       <template #leading="{ tileStyle }">
         <CbFileUpload
           :accept="acceptedImageTypes"
@@ -33,7 +33,7 @@
             icon="add_2"
             :label="dictionary.images.uploadImages"
             class="rounded-lg"
-            :style="[tileStyle, { aspectRatio: cardFormat.width / cardFormat.height }]"
+            :style="tileStyle(cardFormat.width / cardFormat.height)"
           />
         </CbFileUpload>
       </template>
