@@ -27,16 +27,34 @@ function roundUp(millimeters: number) {
   return Math.ceil(millimeters * 10) / 10
 }
 
-// Wird eine automatische Seite fest, behält sie die Größe, die sie gerade auf
-// der offenen Karte hat – auf anderen Karten ist der Text ja anders lang.
-// Messen geht nur am ausgewählten Feld.
-function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
-  const previousSizing = textSizingOf(element)
-  setTextSizing(element.id, sizing)
+// Die Größe auf der offenen Karte – auf anderen Karten ist der Text ja anders
+// lang. Messen geht nur am ausgewählten Feld.
+function measuredSizeOf(element: CardSetElement) {
   const node = selectedElementNode.value
-  if (node?.dataset.elementId !== element.id) return
+  return node?.dataset.elementId === element.id ? measureInMillimeters(node) : undefined
+}
 
-  const size = measureInMillimeters(node)
+/** Breite und Höhe in mm, wie das Element gerade zu sehen ist: eine automatische
+    Seite gemessen, sonst aus den Daten. */
+export function visibleSizeOf(element: CardSetElement) {
+  const sizing = textSizingOf(element)
+  const { width, height } = element.data
+  const size = sizing === 'fixed' ? undefined : measuredSizeOf(element)
+  if (!size) return { width, height }
+
+  return { width: sizing === 'autoWidth' ? size.width : width, height: size.height }
+}
+
+/** Stellt den Modus um, ohne zu speichern. Wird eine automatische Seite fest,
+    behält sie die gemessene Größe. */
+export function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
+  const previousSizing = textSizingOf(element)
+  if (previousSizing === sizing) return
+
+  setTextSizing(element.id, sizing)
+  const size = measuredSizeOf(element)
+  if (!size) return
+
   const { width, height } = element.data
   const isWidthFixedNow = previousSizing === 'autoWidth' && sizing !== 'autoWidth'
   const isHeightFixedNow = previousSizing !== 'fixed' && sizing === 'fixed'
@@ -45,6 +63,13 @@ function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
     isWidthFixedNow ? roundUp(size.width) : width,
     isHeightFixedNow ? roundUp(size.height) : height,
   )
+}
+
+/** Wie in Figma: Seitlich ziehen lässt die Höhe weiter mitwachsen – aus
+    Auto-Breite wird Auto-Höhe. Oben, unten oder an der Ecke wird die Größe fest. */
+export function textSizingForResize(element: CardSetElement, isSideHandle: boolean): TextSizing {
+  if (textSizingOf(element) === 'fixed') return 'fixed'
+  return isSideHandle ? 'autoHeight' : 'fixed'
 }
 
 // Der Modus lebt nur lokal – gespeichert wird nur eine geänderte Größe.

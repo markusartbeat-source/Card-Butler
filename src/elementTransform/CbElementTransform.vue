@@ -43,14 +43,20 @@ import Moveable, {
   type OnRotate,
 } from 'vue3-moveable'
 import { selectedElementId, selectedElementNode } from './elementSelection'
-import { millimetersToPixels, pixelsToMillimeters } from '../card/millimeters'
+import { measureInMillimeters, millimetersToPixels, pixelsToMillimeters } from '../card/millimeters'
 import {
   findCardSetElement,
   moveElementBy,
   resizeElement,
+  resizeElementSide,
   rotateElementBy,
 } from '../cardElements/cardElements'
 import { saveElement } from '../cardElements/saveElement'
+import {
+  switchTextSizing,
+  textSizingForResize,
+  type TextSizing,
+} from '../cardElements/text/textSizing'
 
 // The card the selected element lives in. Searching inside it instead of the
 // whole page keeps us away from the same element on the other cards.
@@ -108,38 +114,53 @@ function finishDrag(event: OnDragEnd) {
   if (event.isDrag && selectedElementId.value) saveElement(selectedElementId.value)
 }
 
+// Wie das Feld während des Ziehens zu seiner Größe kommt. Nur Textfelder kennen
+// mehr als die feste Größe.
+let sizingWhileResizing: TextSizing = 'fixed'
+
 // Moveable liest die Startgröße aus dem Stil des Elements, rechnet mm dabei aber
 // falsch um (Fehler der Library: 96 / 254 statt 96 / 25.4) und startet mit einem
-// Zehntel der Größe. Deshalb geben wir sie selbst in px vor.
+// Zehntel der Größe. Deshalb geben wir sie selbst in px vor – gemessen, weil eine
+// automatische Seite nicht in den Daten steht.
 function setResizeStartSize(event: OnResizeStart) {
   const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
   if (!element) return
 
-  event.set([millimetersToPixels(element.data.width), millimetersToPixels(element.data.height)])
+  sizingWhileResizing = textSizingForResize(element, event.direction[1] === 0)
+  const size = measureInMillimeters(event.target as HTMLElement)
+  event.set([millimetersToPixels(size.width), millimetersToPixels(size.height)])
+  // Wächst die Höhe mit dem Text, bleibt die Oberkante liegen statt der Mitte.
+  if (sizingWhileResizing === 'autoHeight') event.setFixedDirection([-event.direction[0], -1])
 }
 
 // Während des Ziehens gehen Größe und Verschiebung als px direkt aufs Element:
 // Moveable misst gleich nach diesem Aufruf nach, Vue zeichnet aber erst später.
 // Ändert sich dazwischen die Lage, rechnet Moveable die Größe falsch.
+// Der Modus wechselt erst mit der ersten Bewegung – ein bloßer Klick ändert nichts.
 function applyResize(event: OnResize) {
+  const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
+  if (element) switchTextSizing(element, sizingWhileResizing)
+
   event.target.style.width = `${event.width}px`
-  event.target.style.height = `${event.height}px`
+  if (sizingWhileResizing === 'fixed') event.target.style.height = `${event.height}px`
   event.target.style.transform = event.drag.transform
 }
 
 // Erst am Ende kommen Größe und Verschiebung in mm ins Element. Vue zeichnet es
 // dann neu und ersetzt dabei die px von oben. Ohne letztes Ereignis wurde nur
 // geklickt. beforeDist ist die Verschiebung von links/oben seit dem Start.
+// Eine automatische Höhe bleibt, wie sie in den Daten steht.
 function finishResize(event: OnResizeEnd) {
   const lastResize: OnResize | undefined = event.lastEvent
   if (!lastResize || !selectedElementId.value) return
 
   const [moveX, moveY] = lastResize.drag.beforeDist
-  resizeElement(
-    selectedElementId.value,
-    pixelsToMillimeters(lastResize.width),
-    pixelsToMillimeters(lastResize.height),
-  )
+  const width = pixelsToMillimeters(lastResize.width)
+  if (sizingWhileResizing === 'fixed') {
+    resizeElement(selectedElementId.value, width, pixelsToMillimeters(lastResize.height))
+  } else {
+    resizeElementSide(selectedElementId.value, 'width', width, false)
+  }
   moveElementBy(selectedElementId.value, pixelsToMillimeters(moveX), pixelsToMillimeters(moveY))
   measureElementAgain()
   saveElement(selectedElementId.value)
