@@ -65,13 +65,6 @@ export function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
   )
 }
 
-/** Wie in Figma: Seitlich ziehen lässt die Höhe weiter mitwachsen – aus
-    Auto-Breite wird Auto-Höhe. Oben, unten oder an der Ecke wird die Größe fest. */
-export function textSizingForResize(element: CardSetElement, isSideHandle: boolean): TextSizing {
-  if (textSizingOf(element) === 'fixed') return 'fixed'
-  return isSideHandle ? 'autoHeight' : 'fixed'
-}
-
 // Der Modus lebt nur lokal – gespeichert wird nur eine geänderte Größe.
 function saveIfResized(element: CardSetElement, change: () => void) {
   const { width, height } = element.data
