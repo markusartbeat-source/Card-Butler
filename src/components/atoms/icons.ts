@@ -3,6 +3,12 @@
 // <CbIcon name="..." />.
 import Add2 from '~icons/material-symbols/add-2-rounded'
 import AddComment from '~icons/material-symbols/add-comment-outline-rounded'
+import AlignHorizontalCenter from '~icons/material-symbols/align-horizontal-center-rounded'
+import AlignHorizontalLeft from '~icons/material-symbols/align-horizontal-left-rounded'
+import AlignHorizontalRight from '~icons/material-symbols/align-horizontal-right-rounded'
+import AlignVerticalBottom from '~icons/material-symbols/align-vertical-bottom-rounded'
+import AlignVerticalCenter from '~icons/material-symbols/align-vertical-center-rounded'
+import AlignVerticalTop from '~icons/material-symbols/align-vertical-top-rounded'
 import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-rounded'
 import ArtTrack from '~icons/material-symbols/art-track-outline-rounded'
 import Check from '~icons/material-symbols/check-rounded'
@@ -60,6 +66,12 @@ import West from '~icons/material-symbols/west-rounded'
 export const icons = {
   add_2: Add2,
   add_comment: AddComment,
+  align_horizontal_center: AlignHorizontalCenter,
+  align_horizontal_left: AlignHorizontalLeft,
+  align_horizontal_right: AlignHorizontalRight,
+  align_vertical_bottom: AlignVerticalBottom,
+  align_vertical_center: AlignVerticalCenter,
+  align_vertical_top: AlignVerticalTop,
   arrow_circle_up: ArrowCircleUp,
   art_track: ArtTrack,
   check: Check,

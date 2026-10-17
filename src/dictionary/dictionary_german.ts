@@ -169,6 +169,14 @@ export const dictionaryGerman = {
     positionGroup: 'Position',
     positionX: 'X',
     positionY: 'Y',
+    alignHorizontally: 'Horizontal ausrichten',
+    alignVertically: 'Vertikal ausrichten',
+    alignLeft: 'Links ausrichten',
+    alignHorizontalCenter: 'Horizontal zentrieren',
+    alignRight: 'Rechts ausrichten',
+    alignTop: 'Oben ausrichten',
+    alignVerticalCenter: 'Vertikal zentrieren',
+    alignBottom: 'Unten ausrichten',
   },
   // The overlay for looking at a single picture.
   imageViewer: {

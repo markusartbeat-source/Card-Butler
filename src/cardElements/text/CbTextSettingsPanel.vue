@@ -1,5 +1,6 @@
 <template>
-  <!-- Die Texteinstellungen kommen später. -->
+  <!-- Name und Position bringt der Rahmen mit, die eigentlichen
+       Texteinstellungen kommen später. -->
   <CbElementSettingsPanel :element-id="elementId" :title="dictionary.cardEditor.textSettings" />
 </template>
 
