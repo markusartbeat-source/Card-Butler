@@ -1,3 +1,5 @@
+import { millimetersToPixels } from '../../card/millimeters'
+
 // A PNG knows no millimetres, only pixels. How large the picture is meant to be
 // printed lives in one small extra chunk called "pHYs". Programs like Affinity
 // or InDesign read it and place the picture at its real size; without it they
@@ -10,7 +12,7 @@ const pngSignatureLength = 8
 const headerChunkLength = 4 + 4 + 13 + 4
 
 const chunkName = 'pHYs'
-const metresPerInch = 0.0254
+const millimetersPerMetre = 1000
 // The unit the chunk counts in: 1 stands for one metre.
 const metreUnit = 1
 
@@ -29,7 +31,7 @@ function chunkChecksum(bytes: Uint8Array) {
 // The finished pHYs chunk: how many pixels of the picture make up one metre,
 // the same in both directions so nothing gets stretched.
 function resolutionChunk(dpi: number) {
-  const pixelsPerMetre = Math.round(dpi / metresPerInch)
+  const pixelsPerMetre = Math.round(millimetersToPixels(millimetersPerMetre, dpi))
 
   const chunk = new Uint8Array(4 + 4 + 9 + 4)
   const numbers = new DataView(chunk.buffer)

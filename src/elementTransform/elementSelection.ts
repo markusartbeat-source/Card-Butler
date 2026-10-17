@@ -5,6 +5,10 @@ import { ref } from 'vue'
 // close, so a click somewhere else can never leave a stale selection behind.
 export const selectedElementId = ref<string | null>(null)
 
+// Das ausgewählte Element auf der offenen Karte (nicht in der Übersicht). Die
+// Anfasser suchen es heraus – wer seine sichtbare Größe braucht, misst es hier.
+export const selectedElementNode = ref<HTMLElement | null>(null)
+
 // Ob im ausgewählten Feld gerade getippt wird (Tippmodus). Jede neue Auswahl
 // beendet ihn.
 export const isTypingInSelectedElement = ref(false)

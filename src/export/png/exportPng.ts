@@ -1,8 +1,7 @@
 import { snapdom } from '@zumer/snapdom'
 import { cardFormat } from '../../card/cardFormat'
+import { millimetersToPixels } from '../../card/millimeters'
 import { withPngResolution } from './pngResolution'
-
-const millimetresPerInch = 25.4
 
 // The resolution the export starts with: what a print shop asks for.
 export const defaultExportDpi = 300
@@ -12,8 +11,8 @@ export const defaultExportDpi = 300
 export function cardPixelSize(dpi: number) {
   const { width, height } = cardFormat.value
   return {
-    width: Math.round((width / millimetresPerInch) * dpi),
-    height: Math.round((height / millimetresPerInch) * dpi),
+    width: Math.round(millimetersToPixels(width, dpi)),
+    height: Math.round(millimetersToPixels(height, dpi)),
   }
 }
 

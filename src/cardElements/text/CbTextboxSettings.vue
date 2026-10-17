@@ -45,7 +45,7 @@ import CbToggle from '../../components/atoms/CbToggle.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
 import { findCardSetElement } from '../cardElements'
 import { formatMillimeters } from '../formatMillimeters'
-import { setTextSizing, textSizingOf } from './textSizing'
+import { changeTextSizing, textSizingOf } from './textSizing'
 
 const props = defineProps<{ elementId: string }>()
 
@@ -72,7 +72,7 @@ const sizing = computed(() => textSizingOf(element.value))
 
 const sizingIndex = computed({
   get: () => sizings.value.findIndex((item) => item.sizing === sizing.value),
-  set: (index) => setTextSizing(props.elementId, sizings.value[index].sizing),
+  set: (index) => changeTextSizing(props.elementId, sizings.value[index].sizing),
 })
 
 const data = computed(() => element.value?.data)

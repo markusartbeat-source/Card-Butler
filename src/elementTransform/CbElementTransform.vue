@@ -9,10 +9,10 @@
        use-resize-observer: Wächst das Feld mit seinem Text (z.B. beim Tippen),
        misst Moveable neu – außer während es selbst zieht. -->
   <Moveable
-    v-if="targetElement"
+    v-if="selectedElementNode"
     ref="moveable"
     class-name="cb-element-transform"
-    :target="targetElement"
+    :target="selectedElementNode"
     :root-container="card"
     :check-input="true"
     :draggable="true"
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, useTemplateRef, watch } from 'vue'
+import { nextTick, useTemplateRef, watch } from 'vue'
 import Moveable, {
   type OnDrag,
   type OnDragEnd,
@@ -42,7 +42,8 @@ import Moveable, {
   type OnResizeStart,
   type OnRotate,
 } from 'vue3-moveable'
-import { selectedElementId } from './elementSelection'
+import { selectedElementId, selectedElementNode } from './elementSelection'
+import { millimetersToPixels, pixelsToMillimeters } from '../card/millimeters'
 import {
   findCardSetElement,
   moveElementBy,
@@ -56,24 +57,20 @@ import { saveElement } from '../cardElements/saveElement'
 const props = defineProps<{ card: HTMLElement | null }>()
 
 const moveable = useTemplateRef<InstanceType<typeof Moveable>>('moveable')
-const targetElement = ref<HTMLElement | null>(null)
 
 // Wait a tick, so the element is really in the page before we look for it.
 watch(
   [selectedElementId, () => props.card],
   async ([id, card]) => {
     await nextTick()
-    targetElement.value =
+    selectedElementNode.value =
       id && card ? card.querySelector<HTMLElement>(`[data-element-id="${id}"]`) : null
   },
   { immediate: true },
 )
 
 // Moveable already counts the card's zoom out of its numbers — they arrive in
-// the element's own pixels, just like the width it hands us on resize. CSS says
-// one inch is 96 pixels, so one millimetre is always this many of them.
-const pixelsPerMillimeter = 96 / 25.4
-
+// the element's own pixels, just like the width it hands us on resize.
 // Moveable never changes the element itself — it hands us the new values and we
 // write them onto the element. The position does not go onto the element as
 // pixels though: it belongs to the element's placement, in millimetres, so it
@@ -83,8 +80,8 @@ function applyDrag(event: OnDrag) {
 
   moveElementBy(
     selectedElementId.value,
-    event.delta[0] / pixelsPerMillimeter,
-    event.delta[1] / pixelsPerMillimeter,
+    pixelsToMillimeters(event.delta[0]),
+    pixelsToMillimeters(event.delta[1]),
   )
 }
 
@@ -118,7 +115,7 @@ function setResizeStartSize(event: OnResizeStart) {
   const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
   if (!element) return
 
-  event.set([element.data.width * pixelsPerMillimeter, element.data.height * pixelsPerMillimeter])
+  event.set([millimetersToPixels(element.data.width), millimetersToPixels(element.data.height)])
 }
 
 // Während des Ziehens gehen Größe und Verschiebung als px direkt aufs Element:
@@ -140,10 +137,10 @@ function finishResize(event: OnResizeEnd) {
   const [moveX, moveY] = lastResize.drag.beforeDist
   resizeElement(
     selectedElementId.value,
-    lastResize.width / pixelsPerMillimeter,
-    lastResize.height / pixelsPerMillimeter,
+    pixelsToMillimeters(lastResize.width),
+    pixelsToMillimeters(lastResize.height),
   )
-  moveElementBy(selectedElementId.value, moveX / pixelsPerMillimeter, moveY / pixelsPerMillimeter)
+  moveElementBy(selectedElementId.value, pixelsToMillimeters(moveX), pixelsToMillimeters(moveY))
   measureElementAgain()
   saveElement(selectedElementId.value)
 }
