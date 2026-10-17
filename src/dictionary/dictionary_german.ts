@@ -138,6 +138,7 @@ export const dictionaryGerman = {
     comment: 'Kommentar',
     textElementName: 'Textfeld',
     cardSettings: 'Karteneinstellungen',
+    textSettings: 'Texteinstellungen',
     settingsTab: 'Einstellungen',
     layersTab: 'Ebenen',
     printGroup: 'Druck',

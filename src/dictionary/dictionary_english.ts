@@ -117,6 +117,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     comment: 'Comment',
     textElementName: 'Text field',
     cardSettings: 'Card settings',
+    textSettings: 'Text settings',
     settingsTab: 'Settings',
     layersTab: 'Layers',
     printGroup: 'Print',

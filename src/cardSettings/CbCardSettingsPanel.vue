@@ -1,12 +1,5 @@
 <template>
-  <div class="bg-surface rounded-2xl p-6">
-    <!-- Title framed by a short golden stroke on each side. -->
-    <div class="flex items-center justify-center gap-3">
-      <span class="bg-gold h-px w-4.5"></span>
-      <h2 class="text-xl text-white">{{ dictionary.cardEditor.cardSettings }}</h2>
-      <span class="bg-gold h-px w-4.5"></span>
-    </div>
-
+  <CbPanel :title="dictionary.cardEditor.cardSettings">
     <CbTabs v-model="activeTab" class="mt-6" :items="tabs">
       <template #settings>
         <!-- The key rebuilds the whole block whenever another set of groups is
@@ -123,7 +116,7 @@
         </div>
       </template>
     </CbTabs>
-  </div>
+  </CbPanel>
 </template>
 
 <script setup lang="ts">
@@ -133,6 +126,7 @@ import CbColorPicker from '../components/atoms/CbColorPicker.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInput from '../components/atoms/CbInput.vue'
+import CbPanel from '../components/atoms/CbPanel.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSlideSwap from '../components/atoms/CbSlideSwap.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'

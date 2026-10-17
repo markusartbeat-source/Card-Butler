@@ -74,11 +74,12 @@
       </CbButton>
     </div>
 
-    <CbCardSettingsPanel
-      class="absolute top-8 right-8 bottom-8 w-80 transition-opacity"
-      :class="fadeInClasses"
-      :is-visible="areControlsVisible"
-    />
+    <!-- Ist ein Feld ausgewählt, zeigt das Panel dessen Einstellungen statt der
+         Karte. -->
+    <div class="absolute top-8 right-8 bottom-8 w-80 transition-opacity" :class="fadeInClasses">
+      <CbTextSettingsPanel v-if="selectedElementId" class="h-full" />
+      <CbCardSettingsPanel v-else class="h-full" :is-visible="areControlsVisible" />
+    </div>
 
     <!-- TEMPORÄR (Plan „Textfeld bearbeiten“, Aufräumschritt): Backend-Antwort
          der letzten Text-Speicherung samt Kartenversion vorher/nachher. -->
@@ -111,6 +112,7 @@ import { cardFormat, editorZoom } from '../../card/cardFormat'
 import { setElementValue } from '../../cardElements/cardElements'
 import { createElement } from '../../cardElements/createElement'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
+import CbTextSettingsPanel from '../../cardElements/text/CbTextSettingsPanel.vue'
 import {
   lastCardTextSave,
   saveCardTextAfterPause,
@@ -122,6 +124,7 @@ import {
   clearElementSelection,
   clearSelectionOnMiss,
   isTypingInSelectedElement,
+  selectedElementId,
   selectElement,
   stepBackElementSelection,
 } from '../../elementTransform/elementSelection'

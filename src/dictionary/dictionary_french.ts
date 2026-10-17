@@ -117,6 +117,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     comment: 'Commentaire',
     textElementName: 'Champ de texte',
     cardSettings: 'Réglages de la carte',
+    textSettings: 'Réglages du texte',
     settingsTab: 'Réglages',
     layersTab: 'Calques',
     printGroup: 'Impression',
