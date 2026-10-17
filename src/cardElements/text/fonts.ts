@@ -6,6 +6,14 @@ export const fontFamilyItems = ['Arial', 'Helvetica', 'Georgia', 'Times New Roma
   (name) => ({ value: name, label: name }),
 )
 
+/** Die Schriften zur Auswahl, dazu die gegebene, falls sie fehlt – z.B. eine,
+    die eine KI eingetragen hat. */
+export function fontFamilyItemsIncluding(fontFamily: string) {
+  return fontFamilyItems.some((item) => item.value === fontFamily)
+    ? fontFamilyItems
+    : [...fontFamilyItems, { value: fontFamily, label: fontFamily }]
+}
+
 export const fontWeightItems = computed(() => [
   { value: 'regular', label: dictionary.cardEditor.fontWeightRegular },
   { value: 'bold', label: dictionary.cardEditor.fontWeightBold },

@@ -20,6 +20,7 @@
         :wraps-lines="element.width !== null"
         :horizontal-alignment="element.horizontalAlignment"
         :vertical-alignment="element.verticalAlignment"
+        :font-family="element.fontFamily"
         :style="elementStyle(element)"
         @update:content="emit('changeElementValue', element.id, $event)"
       />

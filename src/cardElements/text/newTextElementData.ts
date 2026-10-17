@@ -1,4 +1,5 @@
 import type { ElementData } from '../../api/elements/elementsApi'
+import { textAppearanceDefaults } from './textAppearance'
 
 // Größe eines neuen Textfelds in mm.
 const width = 40
@@ -14,5 +15,6 @@ export function newTextElementData(centerX: number, centerY: number): ElementDat
     height,
     alignment: { horizontal: 'LEFT', vertical: 'TOP' },
     position: { x: centerX - width / 2, y: centerY - height / 2 },
+    ...textAppearanceDefaults,
   }
 }

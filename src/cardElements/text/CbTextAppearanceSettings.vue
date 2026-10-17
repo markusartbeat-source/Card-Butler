@@ -8,7 +8,7 @@
       variant="field"
       hide-label
       :label="dictionary.cardEditor.fontFamily"
-      :items="fontFamilyItems"
+      :items="fontFamilyItemsIncluding(fontFamily)"
     />
     <CbSelect
       v-model="fontWeight"
@@ -64,13 +64,24 @@ import CbSelect from '../../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
 import { findCardSetElement } from '../cardElements'
-import { fontFamilyItems, fontSizeItems, fontWeightItems } from './fonts'
-import { alignTextHorizontally, alignTextVertically } from './textAppearance'
+import { fontFamilyItemsIncluding, fontSizeItems, fontWeightItems } from './fonts'
+import {
+  alignTextHorizontally,
+  alignTextVertically,
+  changeFontFamily,
+  textAppearanceOf,
+} from './textAppearance'
 
 const props = defineProps<{ elementId: string }>()
 
+const element = computed(() => findCardSetElement(props.elementId))
+
+const fontFamily = computed({
+  get: () => textAppearanceOf(element.value?.data).fontFamily,
+  set: (value) => changeFontFamily(props.elementId, value),
+})
+
 // Diese Werte leben vorerst nur hier und wirken noch nicht auf den Text.
-const fontFamily = ref('Arial')
 const fontWeight = ref('regular')
 const fontSize = ref('14')
 const lineHeight = ref('20')
@@ -94,8 +105,6 @@ const horizontalAlignments = computed(() => [
     icon: 'align_horizontal_right' as const,
   },
 ])
-
-const element = computed(() => findCardSetElement(props.elementId))
 
 const horizontalAlignmentIndex = computed({
   get: () =>

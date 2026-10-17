@@ -1,5 +1,6 @@
 import type { ElementPlacement } from '../elementTransform/elementPlacement'
 import { cardSets, type Card, type CardSetElement } from '../cardSets/cardSets'
+import { textAppearanceOf } from './text/textAppearance'
 import type { TextElement } from './text/textElement'
 import { textSizingOf } from './text/textSizing'
 
@@ -46,6 +47,7 @@ export function cardElementFromCardSetElement(element: CardSetElement): CardElem
     opacity: data.opacity,
     horizontalAlignment: data.alignment.horizontal,
     verticalAlignment: data.alignment.vertical,
+    ...textAppearanceOf(data),
   }
 }
 
