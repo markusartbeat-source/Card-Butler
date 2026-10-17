@@ -51,7 +51,11 @@
         :items="verticalAlignments"
       />
     </div>
-    <CbColorPicker v-model="color" :label="dictionary.cardEditor.textColor" />
+    <CbColorPicker
+      v-model="color"
+      :label="dictionary.cardEditor.textColor"
+      @change="(value) => changeTextColor(elementId, value)"
+    />
   </div>
 </template>
 
@@ -70,6 +74,8 @@ import {
   alignTextVertically,
   changeFontFamily,
   changeFontSize,
+  changeTextColor,
+  previewTextColor,
   textAppearanceOf,
 } from './textAppearance'
 
@@ -87,11 +93,16 @@ const fontSize = computed({
   set: (millimeters) => changeFontSize(props.elementId, millimeters),
 })
 
+// Beim Ziehen nur zeigen, gespeichert wird bei change.
+const color = computed({
+  get: () => textAppearanceOf(element.value?.data).color,
+  set: (value) => previewTextColor(props.elementId, value),
+})
+
 // Diese Werte leben vorerst nur hier und wirken noch nicht auf den Text.
 const fontWeight = ref('regular')
 const lineHeight = ref('20')
 const letterSpacing = ref('0%')
-const color = ref('#ffffff')
 
 const horizontalAlignments = computed(() => [
   {

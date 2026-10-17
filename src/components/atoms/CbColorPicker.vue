@@ -6,6 +6,8 @@
     :model-value="pickedColor"
     :positioning="{ sameWidth: true }"
     @value-change="(details) => pickColor(details.value)"
+    @value-change-end="(details) => emit('change', toHex(details.value))"
+    @open-change="(details) => details.open || emit('change', toHex(pickedColor))"
   >
     <ColorPicker.Control>
       <ColorPicker.Trigger
@@ -90,8 +92,11 @@ function toHex(color: Color) {
   return color.getChannelValue('alpha') < 1 ? color.toString('hexa') : color.toString('hex')
 }
 
+// update:modelValue kommt laufend, auch beim Ziehen. change meldet das Ende einer
+// Auswahl: Loslassen, Eintippen, Pipette – und das Schließen, weil Ark bei
+// Pfeiltasten kein Ende meldet. change kann auch ohne neue Farbe kommen.
 const props = defineProps<{ modelValue: string; label: string }>()
-const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string]; change: [value: string] }>()
 
 // Black and grey have no hue and no saturation in hex, so reading the colour
 // back from the string would drop them and make the thumbs jump into a corner.

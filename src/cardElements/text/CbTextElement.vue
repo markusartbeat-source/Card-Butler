@@ -8,7 +8,7 @@
   <span
     ref="field"
     v-ripple
-    class="text-background overflow-hidden rounded"
+    class="overflow-hidden rounded"
     :class="[
       horizontalAlignmentClasses[horizontalAlignment],
       verticalAlignmentClasses[verticalAlignment],
@@ -16,7 +16,7 @@
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
     ]"
-    :style="{ fontFamily, fontSize: `${fontSize}mm` }"
+    :style="{ fontFamily, fontSize: `${fontSize}mm`, color }"
     :data-element-id="id"
     :tabindex="editable ? 0 : undefined"
     :role="isButton ? 'button' : undefined"
@@ -85,6 +85,7 @@ const props = withDefaults(
     fontFamily: string
     /** In mm. */
     fontSize: number
+    color: string
     content?: string
     highlightSearch?: boolean
     placeholder?: string

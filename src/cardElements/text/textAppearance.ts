@@ -9,14 +9,16 @@ import { saveElement } from '../saveElement'
 // Wie der Text aussieht. Gilt auf allen Karten des Sets.
 
 /** Gelten, solange das Backend keinen Wert hat. Neue Textfelder bekommen sie
-    gleich mit – die Namen sind die aus ElementData. Schriftgröße in mm. */
-export const textAppearanceDefaults = { fontFamily: 'Arial', fontSize: 4 }
+    gleich mit – die Namen sind die aus ElementData. Schriftgröße in mm, Farbe
+    als Hex-Wert (Daten, kein Styling). */
+export const textAppearanceDefaults = { fontFamily: 'Arial', fontSize: 4, color: '#000000' }
 
 /** Die Darstellung des Texts, fehlende Werte durch die Startwerte ersetzt. */
 export function textAppearanceOf(data: ElementData | undefined) {
   return {
     fontFamily: data?.fontFamily ?? textAppearanceDefaults.fontFamily,
     fontSize: data?.fontSize ?? textAppearanceDefaults.fontSize,
+    color: data?.color ?? textAppearanceDefaults.color,
   }
 }
 
@@ -39,6 +41,31 @@ export function changeFontSize(id: string, millimeters: number) {
 
   element.data.fontSize = millimeters
   saveElement(id)
+}
+
+// Die gespeicherte Farbe je Element, solange eine Vorschau läuft.
+const colorsBeforePreview = new Map<string, string>()
+
+/** Zeigt die Textfarbe sofort auf allen Karten, speichert aber nicht – z.B.
+    beim Ziehen im Farbwähler. changeTextColor speichert danach einmal. */
+export function previewTextColor(id: string, color: string) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  if (!colorsBeforePreview.has(id)) colorsBeforePreview.set(id, textAppearanceOf(element.data).color)
+  element.data.color = color
+}
+
+/** Wie changeFontFamily – für die Textfarbe. Verglichen wird mit der Farbe vor
+    einer Vorschau. */
+export function changeTextColor(id: string, color: string) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  const savedColor = colorsBeforePreview.get(id) ?? textAppearanceOf(element.data).color
+  colorsBeforePreview.delete(id)
+  element.data.color = color
+  if (savedColor !== color) saveElement(id)
 }
 
 /** Richtet den Text in seiner Box links, mittig oder rechts aus und speichert.

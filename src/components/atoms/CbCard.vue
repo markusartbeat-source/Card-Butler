@@ -22,6 +22,7 @@
         :vertical-alignment="element.verticalAlignment"
         :font-family="element.fontFamily"
         :font-size="element.fontSize"
+        :color="element.color"
         :style="elementStyle(element)"
         @update:content="emit('changeElementValue', element.id, $event)"
       />
