@@ -16,17 +16,23 @@ export function showDangerToast(title: string, description?: string) {
 }
 
 /** Ein Toast mit einem Button. `onClose` läuft, sobald der Toast verschwunden
-    ist – egal, ob über den Button, das Kreuz oder von selbst. */
+    ist – egal, ob über den Button, das Kreuz oder von selbst. Liefert die id
+    des Toasts. */
 export function showActionToast(
   title: string,
   action: { label: string; onClick: () => void },
   onClose?: () => void,
 ) {
-  toaster.create({
+  return toaster.create({
     title,
     action,
     onStatusChange: ({ status }) => {
       if (status === 'unmounted') onClose?.()
     },
   })
+}
+
+/** Schließt einen Toast, als hätte man aufs Kreuz geklickt. */
+export function dismissToast(id: string) {
+  toaster.dismiss(id)
 }
