@@ -1,7 +1,7 @@
 <template>
   <!-- Die Abschnitte in der Reihenfolge aus Figma. -->
   <CbElementSettingsPanel :element-id="elementId" :title="dictionary.cardEditor.textSettings">
-    <CbTextboxSettings />
+    <CbTextboxSettings :element-id="elementId" />
     <CbDivider />
     <CbElementPositionSettings :element-id="elementId" />
   </CbElementSettingsPanel>

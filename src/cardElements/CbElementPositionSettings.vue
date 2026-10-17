@@ -41,9 +41,9 @@ import { computed, ref, watch } from 'vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
 import CbButtonGroup from '../components/molecules/CbButtonGroup.vue'
-import { currentLanguage } from '../dictionary/dictionary'
 import { alignElementHorizontally, alignElementVertically } from './alignElement'
 import { findCardSetElement, moveElementTo } from './cardElements'
+import { formatMillimeters } from './formatMillimeters'
 import { saveElement } from './saveElement'
 
 const props = defineProps<{ elementId: string }>()
@@ -95,11 +95,6 @@ function alignVertically(index: number) {
 }
 
 const texts = ref({ x: '', y: '' })
-
-// Eine Nachkommastelle, mit dem Dezimalzeichen der gewählten Sprache.
-function formatMillimeters(value: number | undefined) {
-  return value?.toLocaleString(currentLanguage.value, { maximumFractionDigits: 1 }) ?? ''
-}
 
 function showStoredPosition() {
   texts.value = { x: formatMillimeters(position.value?.x), y: formatMillimeters(position.value?.y) }
