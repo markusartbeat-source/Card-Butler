@@ -14,6 +14,7 @@
         "
         :title="showNames ? undefined : element.name"
         @click="emit('select', index)"
+        @pointerdown="emit('press', index, $event)"
       >
         <CbIcon :name="element.icon" />
         <span v-if="showNames">{{ element.name }}</span>
@@ -30,8 +31,9 @@ import type { ToolbarElement } from './toolbarElement'
 
 defineProps<{ elements: ToolbarElement[]; showNames?: boolean; activeIndex?: number | null }>()
 
-// Meldet nur, welcher Eintrag geklickt wurde – was er bewirkt, entscheidet der Aufrufer.
-const emit = defineEmits<{ select: [index: number] }>()
+// Meldet nur, welcher Eintrag geklickt bzw. gedrückt wurde – was er bewirkt (z.B.
+// Ziehen), entscheidet der Aufrufer.
+const emit = defineEmits<{ select: [index: number]; press: [index: number, event: PointerEvent] }>()
 
 const barElement = useTemplateRef<HTMLElement>('bar')
 

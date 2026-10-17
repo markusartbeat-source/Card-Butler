@@ -20,6 +20,7 @@
         class="transition-opacity"
         :class="fadeInClasses"
         @select="addElementFromToolbar"
+        @press="startDragFromToolbar"
       />
 
       <!-- The ring is placed next to the flying wrapper, so it stays put while
@@ -83,6 +84,14 @@
       class="bg-surface absolute top-8 left-8 max-w-80 rounded-lg p-4 text-xs whitespace-pre-wrap text-white"
       >{{ JSON.stringify(createdElement, null, 2) }}</pre
     >
+
+    <!-- Nur Größe und Name zählen, die Lage gibt der Zeiger vor. -->
+    <CbNewElementPreview
+      v-if="dragPosition"
+      :x="dragPosition.x"
+      :y="dragPosition.y"
+      :element="newTextElementData(0, 0)"
+    />
   </div>
 </template>
 
@@ -99,10 +108,13 @@ import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
 import { createElement } from '../../cardElements/createElement'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
+import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
+import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
 import type { ElementResource } from '../../api/elements/elementsApi'
 import {
   clearElementSelection,
   clearSelectionOnMiss,
+  selectElement,
 } from '../../elementTransform/elementSelection'
 import CbPrintCountOverlay from '../../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../../printCount/changePrintCountByWheel'
@@ -138,12 +150,27 @@ const isClosing = ref(false)
 // TEMPORÄR: Antwort des Backends zum zuletzt angelegten Feld für den Kasten.
 const createdElement = ref<ElementResource | null>(null)
 
+// Legt ein Textfeld mit der Mitte auf diesem Punkt der Karte (mm) an und wählt
+// es gleich aus.
+async function addTextElementAt(centerX: number, centerY: number) {
+  createdElement.value = await createElement(props.cardSet, newTextElementData(centerX, centerY))
+  if (createdElement.value) selectElement(createdElement.value.id)
+}
+
 // Ein Klick auf „Text“ legt das Feld in der Kartenmitte an. Die anderen
 // Einträge haben noch keine Funktion.
-async function addElementFromToolbar(index: number) {
-  if (cardTools[index] !== 'text') return
-  const data = newTextElementData(cardFormat.value.width / 2, cardFormat.value.height / 2)
-  createdElement.value = await createElement(props.cardSet, data)
+function addElementFromToolbar(index: number) {
+  if (cardTools[index] === 'text') {
+    addTextElementAt(cardFormat.value.width / 2, cardFormat.value.height / 2)
+  }
+}
+
+// Ablegen legt das Feld dort an – die Feldmitte liegt unter dem Zeiger.
+const { dragPosition, startDrag } = useNewElementDrag(cardWrapper, addTextElementAt)
+
+// Ziehen geht bisher nur mit „Text“.
+function startDragFromToolbar(index: number, event: PointerEvent) {
+  if (cardTools[index] === 'text') startDrag(event)
 }
 
 // Keeps the closing flight, so an early unmount can drop its finish handler.
