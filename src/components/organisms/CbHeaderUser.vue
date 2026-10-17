@@ -31,7 +31,7 @@ import { postOffice } from '../../api/postOffice/postOffice'
 import { signOut, useCurrentUser } from '../../composables/useCurrentUser'
 import { useIsBelowBreakpoint } from '../../composables/useIsBelowBreakpoint'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
-import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
+import { collaborationPages, headerPageAt, headerPageRoute, imagePages } from './headerPages'
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
 
@@ -95,7 +95,7 @@ const activeProfileItem = computed(() => {
   )
   if (ownPage) return ownPage
   if (isBelowLaptop.value && route.path === upgradePath) return 'upgrade'
-  if (isBelowDesktop.value) return headerPageAt(route.path)
+  if (isBelowDesktop.value) return headerPageAt(route.name)
 })
 
 function goToUpgrade() {
@@ -103,9 +103,9 @@ function goToUpgrade() {
 }
 
 function runProfileAction(value: string) {
-  const path =
-    pageByProfileItem[value] ?? (value === 'upgrade' ? upgradePath : headerPagePath(value))
-  if (path) router.push(path)
+  const pageRoute =
+    pageByProfileItem[value] ?? (value === 'upgrade' ? upgradePath : headerPageRoute(value))
+  if (pageRoute) router.push(pageRoute)
   else if (value === 'signIn') postOffice.user.signInWithGoogle()
   else if (value === 'signOut') signOut()
   // The search entry only closes the menu for now.

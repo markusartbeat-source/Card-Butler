@@ -23,19 +23,28 @@ export async function openProject(projectId: string) {
   try {
     currentProject.value = await postOffice.projects.loadProject(projectId)
   } catch {
-    currentProject.value = null
-    cardSets.value = null
+    closeProject()
     return false
   }
 
   // Erst danach: Fehlt das Projekt, käme sonst ein zweiter Fehler-Toast. Schon
   // geladene Sets bleiben, sonst ginge beim Seitenwechsel die lokale
   // Reihenfolge der Karten verloren.
-  if (cardSets.value === null && !(await loadCardSets(projectId))) return false
+  if (cardSets.value === null && !(await loadCardSets(projectId))) {
+    closeProject()
+    return false
+  }
 
   // Ein Projekt ohne Kartenset bekommt gleich eins mit einer Karte – so steht
   // der „Neue Karte“-Button immer bereit. Klappt das nicht, bleibt das Projekt
   // trotzdem offen.
   if (cardSets.value?.length === 0) await createCardSet(projectId)
   return true
+}
+
+// Ganz zu, damit der Projekt-Rahmen es beim nächsten Mal neu lädt statt ein
+// halb geöffnetes Projekt für offen zu halten.
+function closeProject() {
+  currentProject.value = null
+  cardSets.value = null
 }

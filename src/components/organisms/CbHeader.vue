@@ -137,7 +137,7 @@ import { visibleCardSetId } from '../../cardSets/visibleCardSet'
 import { currentProject } from '../../project/currentProject'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
-import { collaborationPages, headerPageAt, headerPagePath, imagePages } from './headerPages'
+import { collaborationPages, headerPageAt, headerPageRoute, imagePages } from './headerPages'
 
 withDefaults(
   defineProps<{
@@ -159,11 +159,11 @@ const emit = defineEmits<{ action: [key: string] }>()
 const router = useRouter()
 const route = useRoute()
 
-// The entry whose page is open right now. Only one menu holds it at a time, so
-// the user always sees where they are. On the project page that is the set
-// the user is looking at.
-const activeMenuItem = computed(() =>
-  route.params.projectId ? visibleCardSetId.value : headerPageAt(route.path),
+// Der Eintrag der offenen Seite. Ihn hat immer nur ein Menü, so ist stets klar,
+// wo man ist. Auf den Kartensets des Projekts ist es das Set, das gerade zu
+// sehen ist.
+const activeMenuItem = computed(
+  () => headerPageAt(route.name) ?? (route.params.projectId ? visibleCardSetId.value : undefined),
 )
 
 function activeItemOf(menuItems: { value: string }[]) {
@@ -183,8 +183,8 @@ function runMenuAction(value: string) {
     return
   }
 
-  const path = headerPagePath(value)
-  if (path) router.push(path)
+  const pageRoute = headerPageRoute(value)
+  if (pageRoute) router.push(pageRoute)
   else emit('action', value)
 }
 
