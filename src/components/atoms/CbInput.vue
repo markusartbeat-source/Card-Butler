@@ -3,7 +3,7 @@
        The label is the grey word inside the dark box, left of the value. -->
   <Field.Root
     v-ripple
-    class="cb-hover relative flex min-h-8 items-center gap-1.5 overflow-hidden rounded-md bg-surface-light"
+    class="cb-hover group relative flex min-h-8 items-center gap-1.5 overflow-hidden rounded-md bg-surface-light"
     :class="variantClasses[variant].root"
   >
     <!-- With an icon or hideLabel the word itself stays hidden, but screen
@@ -11,12 +11,18 @@
     <Field.Label class="text-label" :class="hideLabel && 'sr-only'">
       <CbIcon v-if="icon" :name="icon" />
       <span :class="icon && 'sr-only'">{{ label }}</span>
+      <!-- Platzhalter nur fürs Auge, der Screenreader hört stattdessen den
+           gesprochenen. Im Label, damit ein Klick darauf ins Feld führt. -->
+      <template v-if="spokenPlaceholder && !modelValue">
+        <span aria-hidden="true" class="ml-1.5 group-focus-within:hidden">{{ placeholder }}</span>
+        <span class="sr-only">{{ spokenPlaceholder }}</span>
+      </template>
     </Field.Label>
     <Field.Input
       class="min-w-0 cursor-text bg-transparent text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
       :class="variantClasses[variant].input"
       :value="modelValue"
-      :placeholder="placeholder"
+      :placeholder="spokenPlaceholder ? undefined : placeholder"
       :autofocus="autofocus"
       :maxlength="maxLength"
       @input="(event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
@@ -44,6 +50,8 @@ withDefaults(
     variant?: 'default' | 'title'
     icon?: IconName
     placeholder?: string
+    /** Hört der Screenreader statt des Platzhalters, z.B. „automatisch“ statt „-“. */
+    spokenPlaceholder?: string
     hideLabel?: boolean
     maxLength?: number
     /** In einem Dialog bekommt dieses Feld beim Öffnen den Fokus. */

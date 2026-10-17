@@ -113,6 +113,7 @@ import { deleteElementWithUndo } from '../../cardElements/deleteElementWithUndo'
 import { undoLastDeletion } from '../../deletion/showDeletionToast'
 import { isInInputField } from '../../keyboard/isInInputField'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
+import { setTextSizing } from '../../cardElements/text/textSizing'
 import CbTextSettingsPanel from '../../cardElements/text/CbTextSettingsPanel.vue'
 import { saveCardTextAfterPause, saveWaitingCardTexts } from '../../cardElements/text/saveCardText'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
@@ -169,10 +170,12 @@ watch(isTypingInSelectedElement, (isTyping) => {
 })
 
 // Legt ein Textfeld mit der Mitte auf diesem Punkt der Karte (mm) an und wählt
-// es gleich aus.
+// es gleich aus. Es wächst mit seinem Text nach unten.
 async function addTextElementAt(centerX: number, centerY: number) {
   const createdElement = await createElement(props.cardSet, newTextElementData(centerX, centerY))
-  if (createdElement) selectElement(createdElement.id)
+  if (!createdElement) return
+  setTextSizing(createdElement.id, 'autoHeight')
+  selectElement(createdElement.id)
 }
 
 // Ein Klick auf „Text“ legt das Feld in der Kartenmitte an. Die anderen

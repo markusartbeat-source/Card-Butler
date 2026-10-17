@@ -4,6 +4,7 @@ import type { CardResource } from '../api/cards/cardsApi'
 import type { ElementData, ElementResource } from '../api/elements/elementsApi'
 import { newerFirst, olderFirst } from '../api/postOffice/resource'
 import type { CardElementValues } from '../cardElements/cardElements'
+import type { TextSizing } from '../cardElements/text/textSizing'
 
 export type Card = {
   id: string
@@ -16,9 +17,16 @@ export type Card = {
 }
 
 // Ein Element des Sets mit seinen vollständigen Backend-Daten. Die Version geht
-// beim Ändern als If-Match mit. Die Drehung (Grad) kennt das Backend nicht – sie
-// lebt nur hier und geht beim Neuladen verloren.
-export type CardSetElement = { id: string; version: number; data: ElementData; rotation: number }
+// beim Ändern als If-Match mit. Die Drehung (Grad) und wie ein Textfeld zu seiner
+// Größe kommt, kennt das Backend nicht – beides lebt nur hier und geht beim
+// Neuladen verloren.
+export type CardSetElement = {
+  id: string
+  version: number
+  data: ElementData
+  rotation: number
+  textSizing?: TextSizing
+}
 
 // A project has many card sets, each with its own cards. Header, project page
 // and the sets panel all read from this one list.

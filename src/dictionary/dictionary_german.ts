@@ -182,6 +182,8 @@ export const dictionaryGerman = {
     autoWidth: 'Automatische Breite',
     autoHeight: 'Automatische Höhe',
     fixedSize: 'Feste Größe',
+    automaticSizeMark: '-',
+    automaticSize: 'automatisch',
   },
   // The overlay for looking at a single picture.
   imageViewer: {

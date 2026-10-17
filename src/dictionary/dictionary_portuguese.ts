@@ -161,6 +161,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     autoWidth: 'Largura automática',
     autoHeight: 'Altura automática',
     fixedSize: 'Tamanho fixo',
+    automaticSizeMark: '-',
+    automaticSize: 'automática',
   },
   imageViewer: {
     imageSettings: 'Definições da imagem',
