@@ -15,7 +15,9 @@
         :content="elementValues[element.id]"
         :placeholder="markEmptyElements ? element.name : undefined"
         :highlight-search="highlightSearch"
+        :editable="editableElements"
         :style="elementStyle(element)"
+        @update:content="emit('changeElementValue', element.id, $event)"
       />
     </template>
     <!-- On top of the card, e.g. the cursors of other people. -->
@@ -42,7 +44,8 @@ import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 // highlightSearch marks the search hits in the texts — only the overview wants that.
 // side says which face of the card this is — only that side's elements show.
 // markEmptyElements zeigt leere Elemente mit Rahmen und Namen – nur der Editor
-// will das, damit man sie sieht und anklicken kann.
+// will das, damit man sie sieht und anklicken kann. editableElements lässt in
+// die Felder tippen, changeElementValue meldet dann den neuen Inhalt.
 const props = withDefaults(
   defineProps<{
     id: string
@@ -53,6 +56,7 @@ const props = withDefaults(
     highlightSearch?: boolean
     side?: CardSide
     markEmptyElements?: boolean
+    editableElements?: boolean
   }>(),
   {
     zoom: gridZoom,
@@ -60,8 +64,11 @@ const props = withDefaults(
     highlightSearch: false,
     side: 'front',
     markEmptyElements: false,
+    editableElements: false,
   },
 )
+
+const emit = defineEmits<{ changeElementValue: [elementId: string, value: string] }>()
 
 const elementsOnThisSide = computed(() =>
   props.elements

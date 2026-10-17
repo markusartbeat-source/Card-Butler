@@ -10,10 +10,10 @@
 
     <!-- Padding matches the settings panel, so the card sits in the middle of
          the space left of it instead of the middle of the screen.
-         A click that misses an element drops the selection again. -->
+         A press that misses an element drops the selection again. -->
     <div
       class="relative flex flex-col items-center gap-6 pr-88"
-      @click="clearSelectionOnMiss"
+      @pointerdown="clearSelectionOnMiss"
     >
       <CbToolbar
         :elements="cardToolbarElements"
@@ -39,6 +39,8 @@
             :element-values="card.elementValues"
             :zoom="editorZoom"
             mark-empty-elements
+            editable-elements
+            @change-element-value="(elementId, value) => setElementValue(card, elementId, value)"
           >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
@@ -78,13 +80,6 @@
       :is-visible="areControlsVisible"
     />
 
-    <!-- TEMPORÄR: zeigt die Antwort des Backends zum neuen Feld. -->
-    <pre
-      v-if="createdElement"
-      class="bg-surface absolute top-8 left-8 max-w-80 rounded-lg p-4 text-xs whitespace-pre-wrap text-white"
-      >{{ JSON.stringify(createdElement, null, 2) }}</pre
-    >
-
     <!-- Nur Größe und Name zählen, die Lage gibt der Zeiger vor. -->
     <CbNewElementPreview
       v-if="dragPosition"
@@ -106,11 +101,11 @@ import { cardToolbarElements, cardTools } from '../molecules/cardToolbarElements
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
+import { setElementValue } from '../../cardElements/cardElements'
 import { createElement } from '../../cardElements/createElement'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
-import type { ElementResource } from '../../api/elements/elementsApi'
 import {
   clearElementSelection,
   clearSelectionOnMiss,
@@ -147,14 +142,11 @@ const fadeInClasses = computed(() =>
 
 const isClosing = ref(false)
 
-// TEMPORÄR: Antwort des Backends zum zuletzt angelegten Feld für den Kasten.
-const createdElement = ref<ElementResource | null>(null)
-
 // Legt ein Textfeld mit der Mitte auf diesem Punkt der Karte (mm) an und wählt
 // es gleich aus.
 async function addTextElementAt(centerX: number, centerY: number) {
-  createdElement.value = await createElement(props.cardSet, newTextElementData(centerX, centerY))
-  if (createdElement.value) selectElement(createdElement.value.id)
+  const createdElement = await createElement(props.cardSet, newTextElementData(centerX, centerY))
+  if (createdElement) selectElement(createdElement.id)
 }
 
 // Ein Klick auf „Text“ legt das Feld in der Kartenmitte an. Die anderen

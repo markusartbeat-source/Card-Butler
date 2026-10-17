@@ -1,5 +1,5 @@
 import type { ElementPlacement } from '../elementTransform/elementPlacement'
-import { cardSets, type CardSetElement } from '../cardSets/cardSets'
+import { cardSets, type Card, type CardSetElement } from '../cardSets/cardSets'
 import type { TextElement } from './text/textElement'
 
 // Alle Karten eines Sets sind gleich aufgebaut: Die Elemente gehören zum Set,
@@ -81,3 +81,8 @@ export function rotateElementBy(id: string, turnInDegrees: number) {
 
 // What one card fills into the deck's elements, keyed by element id.
 export type CardElementValues = Record<string, string>
+
+// Der Inhalt eines Elements gilt nur für diese eine Karte.
+export function setElementValue(card: Card, elementId: string, value: string) {
+  card.elementValues[elementId] = value
+}

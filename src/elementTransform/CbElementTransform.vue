@@ -2,13 +2,15 @@
   <!-- The library takes its props as a plain name list, so Vue does not turn a
        bare "draggable" into true — every switch needs an explicit value.
        rootContainer is the card: it is drawn with CSS zoom, and Moveable only
-       counts that zoom into its angles when it knows the zoomed element. -->
+       counts that zoom into its angles when it knows the zoomed element.
+       check-input: Im Tippmodus markiert Ziehen im Text, statt zu verschieben. -->
   <Moveable
     v-if="targetElement"
     ref="moveable"
     class-name="cb-element-transform"
     :target="targetElement"
     :root-container="card"
+    :check-input="true"
     :draggable="true"
     :resizable="true"
     :rotatable="true"
