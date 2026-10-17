@@ -2,13 +2,16 @@
   <!-- data-element-id lets the transform handles find this element on the card.
        The card hands in the position, so no "relative" or "inline-block" here.
        pre-wrap und pre zeigen die Zeilenumbrüche im Text. Im Editor ist das Feld
-       per Tab erreichbar und wie ein Knopf mit Enter oder Leertaste zu bearbeiten. -->
+       per Tab erreichbar und wie ein Knopf mit Enter oder Leertaste zu bearbeiten.
+       content-* rückt den Inhalt in der Box nach oben, in die Mitte oder nach
+       unten – ohne Hülle, die Such-Markierungen bleiben in einer Zeile. -->
   <span
     ref="field"
     v-ripple
     class="text-background overflow-hidden rounded"
     :class="[
-      textAlignClasses[horizontalAlignment],
+      horizontalAlignmentClasses[horizontalAlignment],
+      verticalAlignmentClasses[verticalAlignment],
       wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
@@ -27,7 +30,8 @@
          plaintext-only macht Enter zum Zeilenumbruch und fügt nur reinen Text
          ein. Escape beendet das Tippen hier, damit der Fokus aufs Feld
          zurückgeht – der Editor darf nicht noch eine Stufe weiter zurück.
-         Leer fiele es sonst auf null Höhe zusammen, wenn es mit dem Text wächst. -->
+         Leer fiele es sonst auf null Höhe zusammen, wenn es mit dem Text wächst.
+         Es füllt die Box und richtet seinen Text deshalb selbst senkrecht aus. -->
     <span
       v-if="isTyping"
       ref="editor"
@@ -36,6 +40,7 @@
       aria-multiline="true"
       :aria-label="name"
       class="block size-full min-h-lh px-1 outline-none"
+      :class="verticalAlignmentClasses[verticalAlignment]"
       @input="emitTypedText"
       @keydown.escape.stop="stopTyping"
     />
@@ -53,7 +58,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, useTemplateRef } from 'vue'
-import type { HorizontalAlignment } from '../../api/elements/elementsApi'
+import type { HorizontalAlignment, VerticalAlignment } from '../../api/elements/elementsApi'
 import {
   isTypingInSelectedElement,
   selectElement,
@@ -68,13 +73,14 @@ import { placeCaretAtPoint } from './placeCaretAtPoint'
 // ein leeres Feld als gestrichelter Rahmen mit diesem Text. Mit editable kann
 // man ins Feld tippen – nur im Editor. name ist der Name des Felds für
 // Screenreader. Mit wrapsLines brechen lange Zeilen am Rand um, ohne wird das
-// Feld breiter und nur Enter beginnt eine neue Zeile. horizontalAlignment
-// richtet den Text in der Box aus, auch beim Tippen.
+// Feld breiter und nur Enter beginnt eine neue Zeile. horizontalAlignment und
+// verticalAlignment richten den Text in der Box aus, auch beim Tippen.
 const props = withDefaults(
   defineProps<{
     id: string
     name: string
     horizontalAlignment: HorizontalAlignment
+    verticalAlignment: VerticalAlignment
     content?: string
     highlightSearch?: boolean
     placeholder?: string
@@ -86,7 +92,16 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:content': [content: string] }>()
 
-const textAlignClasses = { LEFT: 'text-left', CENTER: 'text-center', RIGHT: 'text-right' }
+const horizontalAlignmentClasses = {
+  LEFT: 'text-left',
+  CENTER: 'text-center',
+  RIGHT: 'text-right',
+}
+const verticalAlignmentClasses = {
+  TOP: 'content-start',
+  CENTER: 'content-center',
+  BOTTOM: 'content-end',
+}
 
 const field = useTemplateRef<HTMLElement>('field')
 const editor = useTemplateRef<HTMLElement>('editor')

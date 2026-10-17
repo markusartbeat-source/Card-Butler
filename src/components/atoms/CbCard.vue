@@ -19,6 +19,7 @@
         :editable="editableElements"
         :wraps-lines="element.width !== null"
         :horizontal-alignment="element.horizontalAlignment"
+        :vertical-alignment="element.verticalAlignment"
         :style="elementStyle(element)"
         @update:content="emit('changeElementValue', element.id, $event)"
       />

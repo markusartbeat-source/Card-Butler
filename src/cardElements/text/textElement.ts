@@ -1,4 +1,4 @@
-import type { HorizontalAlignment } from '../../api/elements/elementsApi'
+import type { HorizontalAlignment, VerticalAlignment } from '../../api/elements/elementsApi'
 import type { CardElementBase } from '../cardElements'
 
 // Everything about the text element lives in this folder: its shape here, how
@@ -6,4 +6,5 @@ import type { CardElementBase } from '../cardElements'
 export type TextElement = CardElementBase & {
   type: 'text'
   horizontalAlignment: HorizontalAlignment
+  verticalAlignment: VerticalAlignment
 }

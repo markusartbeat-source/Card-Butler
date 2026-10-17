@@ -65,7 +65,7 @@ import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
 import { findCardSetElement } from '../cardElements'
 import { fontFamilyItems, fontSizeItems, fontWeightItems } from './fonts'
-import { alignTextHorizontally } from './textAppearance'
+import { alignTextHorizontally, alignTextVertically } from './textAppearance'
 
 const props = defineProps<{ elementId: string }>()
 
@@ -75,7 +75,6 @@ const fontWeight = ref('regular')
 const fontSize = ref('14')
 const lineHeight = ref('20')
 const letterSpacing = ref('0%')
-const verticalAlignmentIndex = ref(0)
 const color = ref('#ffffff')
 
 const horizontalAlignments = computed(() => [
@@ -108,8 +107,28 @@ const horizontalAlignmentIndex = computed({
 })
 
 const verticalAlignments = computed(() => [
-  { name: dictionary.cardEditor.textAlignTop, icon: 'align_vertical_top' as const },
-  { name: dictionary.cardEditor.textAlignMiddle, icon: 'align_vertical_center' as const },
-  { name: dictionary.cardEditor.textAlignBottom, icon: 'align_vertical_bottom' as const },
+  {
+    alignment: 'TOP' as const,
+    name: dictionary.cardEditor.textAlignTop,
+    icon: 'align_vertical_top' as const,
+  },
+  {
+    alignment: 'CENTER' as const,
+    name: dictionary.cardEditor.textAlignMiddle,
+    icon: 'align_vertical_center' as const,
+  },
+  {
+    alignment: 'BOTTOM' as const,
+    name: dictionary.cardEditor.textAlignBottom,
+    icon: 'align_vertical_bottom' as const,
+  },
 ])
+
+const verticalAlignmentIndex = computed({
+  get: () =>
+    verticalAlignments.value.findIndex(
+      (item) => item.alignment === element.value?.data.alignment.vertical,
+    ),
+  set: (index) => alignTextVertically(props.elementId, verticalAlignments.value[index].alignment),
+})
 </script>
