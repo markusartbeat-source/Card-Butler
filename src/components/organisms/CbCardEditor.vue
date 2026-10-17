@@ -81,13 +81,6 @@
       <CbCardSettingsPanel v-else class="h-full" :is-visible="areControlsVisible" />
     </div>
 
-    <!-- TEMPORÄR (Plan „Textfeld bearbeiten“, Aufräumschritt): Backend-Antwort
-         der letzten Text-Speicherung samt Kartenversion vorher/nachher. -->
-    <pre
-      v-if="lastCardTextSave"
-      class="bg-surface text-label absolute bottom-8 left-8 max-h-96 max-w-96 overflow-auto rounded p-2 text-2xs"
-    >{{ JSON.stringify(lastCardTextSave, null, 2) }}</pre>
-
     <!-- Nur Größe und Name zählen, die Lage gibt der Zeiger vor. -->
     <CbNewElementPreview
       v-if="dragPosition"
@@ -111,13 +104,10 @@ import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
 import { setElementValue } from '../../cardElements/cardElements'
 import { createElement } from '../../cardElements/createElement'
+import { deleteElementWithUndo } from '../../cardElements/deleteElementWithUndo'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
 import CbTextSettingsPanel from '../../cardElements/text/CbTextSettingsPanel.vue'
-import {
-  lastCardTextSave,
-  saveCardTextAfterPause,
-  saveWaitingCardTexts,
-} from '../../cardElements/text/saveCardText'
+import { saveCardTextAfterPause, saveWaitingCardTexts } from '../../cardElements/text/saveCardText'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
 import {
@@ -252,6 +242,19 @@ function stepBackOnEscape(event: KeyboardEvent) {
   if (event.key === 'Escape' && !stepBackElementSelection()) startClosing()
 }
 
+// Entf/Rücktaste löscht das ausgewählte Feld – nicht beim Tippen und nicht, wenn
+// ein Eingabefeld die Taste braucht.
+function deleteSelectedElementOnKey(event: KeyboardEvent) {
+  if (!['Delete', 'Backspace'].includes(event.key)) return
+  const elementId = selectedElementId.value
+  const isInInputField = (event.target as HTMLElement).closest('input, textarea, [contenteditable]')
+  if (!elementId || isTypingInSelectedElement.value || isInInputField) return
+
+  event.preventDefault()
+  clearElementSelection()
+  deleteElementWithUndo(props.cardSet, elementId)
+}
+
 onMounted(() => {
   // A click in the grid also runs through an element, so we start clean.
   clearElementSelection()
@@ -263,11 +266,13 @@ onMounted(() => {
   else areControlsVisible.value = true
 
   window.addEventListener('keydown', stepBackOnEscape)
+  window.addEventListener('keydown', deleteSelectedElementOnKey)
 })
 
 onUnmounted(() => {
   // A card picked mid-close replaces us — that close must not fire any more.
   if (closingFlight) closingFlight.onfinish = null
   window.removeEventListener('keydown', stepBackOnEscape)
+  window.removeEventListener('keydown', deleteSelectedElementOnKey)
 })
 </script>

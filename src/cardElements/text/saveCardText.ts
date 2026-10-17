@@ -1,7 +1,6 @@
-import { ref } from 'vue'
 import { ApiError } from '../../api/postOffice/apiError'
 import { postOffice } from '../../api/postOffice/postOffice'
-import type { ValueResource } from '../../api/values/valuesApi'
+import { queueCardChange } from '../../cardSets/cardChangeQueue'
 import { cardSets } from '../../cardSets/cardSets'
 import { reloadCardSet } from '../../cardSets/loadCardSets'
 
@@ -11,18 +10,6 @@ const typingPauseInMilliseconds = 1000
 // Speicherungen, die noch auf die Tipp-Pause warten – je Karte und Feld eine.
 const waitingSaves = new Map<string, { timer: ReturnType<typeof setTimeout>; save: () => void }>()
 
-// Je Karte die zuletzt angestoßene Speicherung. Jede neue wartet sie ab, denn
-// jeder Text erhöht die Version der Karte – zwei gleichzeitig gäben 412.
-const latestSaveByCardId = new Map<string, Promise<unknown>>()
-
-// TEMPORÄR (Plan „Textfeld bearbeiten“, Aufräumschritt): letzte Speicherung für
-// den Kasten im Editor.
-export const lastCardTextSave = ref<{
-  cardVersionBefore: number
-  cardVersionAfter: number
-  response: ValueResource
-} | null>(null)
-
 /** Speichert den Text eines Textfelds auf einer Karte, sobald eine Tipp-Pause
  *  eintritt. Jeder weitere Aufruf für dasselbe Feld schiebt das hinaus. */
 export function saveCardTextAfterPause(cardId: string, elementId: string) {
@@ -31,8 +18,7 @@ export function saveCardTextAfterPause(cardId: string, elementId: string) {
 
   const save = () => {
     waitingSaves.delete(key)
-    const previousSave = latestSaveByCardId.get(cardId) ?? Promise.resolve()
-    latestSaveByCardId.set(cardId, previousSave.then(() => saveCardText(cardId, elementId)))
+    queueCardChange([cardId], () => saveCardText(cardId, elementId))
   }
   waitingSaves.set(key, { timer: setTimeout(save, typingPauseInMilliseconds), save })
 }
@@ -56,11 +42,9 @@ async function saveCardText(cardId: string, elementId: string) {
   if (!cardSet || !card || text === undefined) return false
 
   try {
-    const cardVersionBefore = card.version
-    const response = await postOffice.values.setText(cardId, elementId, text, card.version)
+    await postOffice.values.setText(cardId, elementId, text, card.version)
     // Um wie viel die Version gestiegen ist, sagt die Antwort nicht – darum nachladen.
     card.version = (await postOffice.cards.loadCard(cardId)).version
-    lastCardTextSave.value = { cardVersionBefore, cardVersionAfter: card.version, response } // TEMPORÄR
     return true
   } catch (error) {
     // Jemand anderes hat die Karte oder das Feld inzwischen geändert oder gelöscht.

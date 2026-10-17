@@ -48,5 +48,15 @@ function updateElement(elementId: string, data: ElementData, version: number) {
   })
 }
 
+/** Löscht ein Element samt den Werten aller Karten dazu – deren Versionen
+ *  steigen dadurch. `version` ist der Stand des Elements, den der Aufrufer kennt
+ *  – ist er veraltet, antwortet das Backend mit 412. */
+function deleteElement(elementId: string, version: number) {
+  return postOffice.request<void>(`/api/elements/${encodeURIComponent(elementId)}`, {
+    method: 'DELETE',
+    version,
+  })
+}
+
 /** Fach `elements` der Poststelle, Aufruf als `postOffice.elements.…()`. */
-export const elementsApi = { createElement, updateElement }
+export const elementsApi = { createElement, updateElement, deleteElement }

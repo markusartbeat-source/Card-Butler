@@ -1,6 +1,6 @@
-import { showActionToast } from '../components/atoms/toaster'
 import type { CardSet } from '../cardSets/cardSets'
 import { deleteCard } from '../cardSets/deleteCard'
+import { showDeletionToast } from '../deletion/showDeletionToast'
 import { releaseCardDrag } from './cardDragState'
 import { playCardShredding } from './shredCard'
 
@@ -19,18 +19,9 @@ export async function deleteDroppedCard(
   await playCardShredding(cardElement)
   releaseCardDrag()
 
-  let isUndone = false
-  showActionToast(
+  showDeletionToast(
     dictionary.cardDrag.cardDeleted,
-    {
-      label: dictionary.general.undo,
-      onClick: () => {
-        isUndone = true
-        cardSet.cards.splice(cardIndex, 0, deletedCard)
-      },
-    },
-    () => {
-      if (!isUndone) deleteCard(cardSet, deletedCard)
-    },
+    () => cardSet.cards.splice(cardIndex, 0, deletedCard),
+    () => deleteCard(cardSet, deletedCard),
   )
 }

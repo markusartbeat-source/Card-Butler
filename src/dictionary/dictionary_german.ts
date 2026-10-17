@@ -137,6 +137,7 @@ export const dictionaryGerman = {
     image: 'Bild',
     comment: 'Kommentar',
     textElementName: 'Textfeld',
+    textElementDeleted: 'Textfeld gelöscht',
     cardSettings: 'Karteneinstellungen',
     textSettings: 'Texteinstellungen',
     settingsTab: 'Einstellungen',

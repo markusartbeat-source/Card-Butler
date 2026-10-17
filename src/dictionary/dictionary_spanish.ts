@@ -116,6 +116,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     image: 'Imagen',
     comment: 'Comentario',
     textElementName: 'Campo de texto',
+    textElementDeleted: 'Campo de texto eliminado',
     cardSettings: 'Ajustes de la carta',
     textSettings: 'Ajustes del texto',
     settingsTab: 'Ajustes',
