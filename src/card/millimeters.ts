@@ -1,3 +1,5 @@
+import { currentLanguage } from '../dictionary/dictionary'
+
 // Die einzige Stelle, die zwischen Millimetern und Pixeln umrechnet. Ein Zoll
 // sind 25,4 mm. CSS rechnet immer mit 96 Pixeln je Zoll, ein Export mit seiner
 // eigenen Auflösung (dpi).
@@ -20,4 +22,16 @@ export function measureInMillimeters(element: HTMLElement) {
     width: pixelsToMillimeters(parseFloat(width)),
     height: pixelsToMillimeters(parseFloat(height)),
   }
+}
+
+// Millimeter fürs Panel: eine Nachkommastelle, mit dem Dezimalzeichen der
+// gewählten Sprache.
+export function formatMillimeters(value: number | undefined) {
+  return value?.toLocaleString(currentLanguage.value, { maximumFractionDigits: 1 }) ?? ''
+}
+
+// Eingetippte Millimeter: Komma und Punkt gehen beide. Leer oder ungültig → undefined.
+export function parseMillimeters(text: string) {
+  const value = Number(text.replace(',', '.'))
+  return text.trim() && Number.isFinite(value) ? value : undefined
 }

@@ -43,7 +43,7 @@ import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
 import CbButtonGroup from '../components/molecules/CbButtonGroup.vue'
 import { alignElementHorizontally, alignElementVertically } from './alignElement'
 import { findCardSetElement, moveElementTo } from './cardElements'
-import { formatMillimeters } from './formatMillimeters'
+import { formatMillimeters, parseMillimeters } from '../card/millimeters'
 import { saveElement } from './saveElement'
 
 const props = defineProps<{ elementId: string }>()
@@ -109,8 +109,8 @@ function applyText(axis: 'x' | 'y') {
   const text = texts.value[axis].trim()
   if (!position.value || text === formatMillimeters(position.value[axis])) return
 
-  const value = Number(text.replace(',', '.'))
-  if (!text || !Number.isFinite(value)) return showStoredPosition()
+  const value = parseMillimeters(text)
+  if (value === undefined) return showStoredPosition()
 
   const { x, y } = { ...position.value, [axis]: value }
   moveElementTo(props.elementId, x, y)

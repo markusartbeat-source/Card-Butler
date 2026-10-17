@@ -11,8 +11,7 @@
         :items="sizings"
       />
     </div>
-    <!-- Vorerst nur zum Ansehen: Eintippen und Verknüpfen wirken noch nicht.
-         Eine automatische Seite zeigt „-“. -->
+    <!-- Eine automatische Seite zeigt „-“. Verknüpfen wirkt noch nicht. -->
     <div class="flex items-center gap-3">
       <CbInput
         v-model="texts.width"
@@ -20,6 +19,7 @@
         :label="dictionary.cardEditor.width"
         :placeholder="dictionary.cardEditor.automaticSizeMark"
         :spoken-placeholder="dictionary.cardEditor.automaticSize"
+        @change="applyText('width')"
       />
       <CbToggle
         v-model="areSizesLinked"
@@ -32,6 +32,7 @@
         :label="dictionary.cardEditor.height"
         :placeholder="dictionary.cardEditor.automaticSizeMark"
         :spoken-placeholder="dictionary.cardEditor.automaticSize"
+        @change="applyText('height')"
       />
     </div>
   </div>
@@ -44,8 +45,8 @@ import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbToggle from '../../components/atoms/CbToggle.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
 import { findCardSetElement } from '../cardElements'
-import { formatMillimeters } from '../formatMillimeters'
-import { changeTextSizing, textSizingOf } from './textSizing'
+import { formatMillimeters, parseMillimeters } from '../../card/millimeters'
+import { changeTextSize, changeTextSizing, textSizingOf } from './textSizing'
 
 const props = defineProps<{ elementId: string }>()
 
@@ -76,19 +77,28 @@ const sizingIndex = computed({
 })
 
 const data = computed(() => element.value?.data)
-const texts = ref({ width: '', height: '' })
 const areSizesLinked = ref(false)
 
+// Automatisch: Feld leer, es zeigt dann „-“.
+const storedTexts = computed(() => ({
+  width: sizing.value === 'autoWidth' ? '' : formatMillimeters(data.value?.width),
+  height: sizing.value === 'fixed' ? formatMillimeters(data.value?.height) : '',
+}))
+const texts = ref({ ...storedTexts.value })
+
 // Ziehen an den Anfassern ändert die Größe erst am Ende – dann stehen hier die
-// neuen Werte. Automatisch: Feld leer, es zeigt dann „-“.
-watch(
-  () => [data.value?.width, data.value?.height, sizing.value],
-  () => {
-    texts.value = {
-      width: sizing.value === 'autoWidth' ? '' : formatMillimeters(data.value?.width),
-      height: sizing.value === 'fixed' ? formatMillimeters(data.value?.height) : '',
-    }
-  },
-  { immediate: true },
-)
+// neuen Werte.
+watch(storedTexts, (stored) => (texts.value = { ...stored }))
+
+// Wie bei der Position: Gilt bei Enter bzw. beim Verlassen des Felds,
+// unveränderter Text zählt nicht. Ungültiges oder ≤ 0 zeigt wieder den
+// gespeicherten Wert bzw. „-“.
+function applyText(side: 'width' | 'height') {
+  const text = texts.value[side].trim()
+  const value = parseMillimeters(text)
+  if (text !== storedTexts.value[side] && value !== undefined && value > 0) {
+    changeTextSize(props.elementId, side, value)
+  }
+  texts.value = { ...storedTexts.value }
+}
 </script>

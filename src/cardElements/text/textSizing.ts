@@ -27,27 +27,51 @@ function roundUp(millimeters: number) {
   return Math.ceil(millimeters * 10) / 10
 }
 
-/** Stellt um, wie das ausgewählte Textfeld zu seiner Größe kommt. Wird eine
-    automatische Seite fest, behält sie die Größe, die sie gerade auf der offenen
-    Karte hat – auf anderen Karten ist der Text ja anders lang. Gespeichert wird
-    nur eine geänderte Größe. */
-export function changeTextSizing(id: string, sizing: TextSizing) {
-  const element = findCardSetElement(id)
-  if (!element) return
-
+// Wird eine automatische Seite fest, behält sie die Größe, die sie gerade auf
+// der offenen Karte hat – auf anderen Karten ist der Text ja anders lang.
+// Messen geht nur am ausgewählten Feld.
+function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
   const previousSizing = textSizingOf(element)
-  setTextSizing(id, sizing)
+  setTextSizing(element.id, sizing)
   const node = selectedElementNode.value
-  if (node?.dataset.elementId !== id) return
+  if (node?.dataset.elementId !== element.id) return
 
   const size = measureInMillimeters(node)
   const { width, height } = element.data
   const isWidthFixedNow = previousSizing === 'autoWidth' && sizing !== 'autoWidth'
   const isHeightFixedNow = previousSizing !== 'fixed' && sizing === 'fixed'
-  const newWidth = isWidthFixedNow ? roundUp(size.width) : width
-  const newHeight = isHeightFixedNow ? roundUp(size.height) : height
-  if (newWidth === width && newHeight === height) return
+  resizeElement(
+    element.id,
+    isWidthFixedNow ? roundUp(size.width) : width,
+    isHeightFixedNow ? roundUp(size.height) : height,
+  )
+}
 
-  resizeElement(id, newWidth, newHeight)
-  saveElement(id)
+// Der Modus lebt nur lokal – gespeichert wird nur eine geänderte Größe.
+function saveIfResized(element: CardSetElement, change: () => void) {
+  const { width, height } = element.data
+  change()
+  if (element.data.width !== width || element.data.height !== height) saveElement(element.id)
+}
+
+/** Stellt um, wie das ausgewählte Textfeld zu seiner Größe kommt. */
+export function changeTextSizing(id: string, sizing: TextSizing) {
+  const element = findCardSetElement(id)
+  if (element) saveIfResized(element, () => switchTextSizing(element, sizing))
+}
+
+/** Eine eingetippte Breite oder Höhe in mm. Ist die Seite gerade automatisch,
+    wird sie fest: die Breite bei Auto-Breite (die Höhe wächst dann weiter mit),
+    die Höhe immer zur festen Größe. */
+export function changeTextSize(id: string, side: 'width' | 'height', millimeters: number) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  const sizing = textSizingOf(element)
+  saveIfResized(element, () => {
+    if (side === 'width' && sizing === 'autoWidth') switchTextSizing(element, 'autoHeight')
+    if (side === 'height' && sizing !== 'fixed') switchTextSizing(element, 'fixed')
+    const size = { ...element.data, [side]: millimeters }
+    resizeElement(element.id, size.width, size.height)
+  })
 }
