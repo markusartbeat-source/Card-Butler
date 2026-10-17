@@ -92,6 +92,15 @@ async function measureElementAgain() {
   moveable.value?.updateRect()
 }
 
+// Kommt die neue Lage von außen (z.B. aus dem Einstellungs-Panel), bliebe der
+// Rahmen sonst an der alten Stelle. Beim Ziehen misst Moveable selbst.
+watch(
+  () => selectedElementId.value && findCardSetElement(selectedElementId.value)?.data.position,
+  () => {
+    if (!moveable.value?.isDragging()) measureElementAgain()
+  },
+)
+
 // Gespeichert wird erst am Ende, nicht bei jedem Schritt. Ein bloßer Klick aufs
 // Feld endet auch hier – dann hat es sich nicht bewegt.
 function finishDrag(event: OnDragEnd) {

@@ -66,6 +66,14 @@ export function moveElementBy(id: string, moveXInMillimeters: number, moveYInMil
   }
 }
 
+// Setzt die linke obere Ecke des Elements auf diesen Punkt der Karte (mm).
+export function moveElementTo(id: string, xInMillimeters: number, yInMillimeters: number) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  element.data.position = { ...element.data.position, x: xInMillimeters, y: yInMillimeters }
+}
+
 export function resizeElement(id: string, widthInMillimeters: number, heightInMillimeters: number) {
   const element = findCardSetElement(id)
   if (!element) return
