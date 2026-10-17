@@ -17,10 +17,10 @@
       >
         <!-- Next to the flying picture, so the ring stays put while it moves. -->
         <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
+        <!-- TEMPORÄR (bis Schritt 8): fester Farbverlauf statt des echten Bildes. -->
         <div
           ref="picture"
-          class="w-full rounded-lg bg-gradient-to-br"
-          :class="image.gradientClasses"
+          class="w-full rounded-lg bg-gradient-to-br from-gold-dark to-gold-lighter"
           :style="{ aspectRatio: ratio }"
         />
       </div>
@@ -37,11 +37,13 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import CbCardOrnament from '../components/atoms/CbCardOrnament.vue'
 import CbDimLayer from '../components/atoms/CbDimLayer.vue'
+import type { ImageResource } from '../api/images/imagesApi'
 import CbImageSettingsPanel from './CbImageSettingsPanel.vue'
-import type { DummyImage } from './dummyImages'
 
 const props = defineProps<{
-  image: DummyImage
+  image: ImageResource
+  /** Seitenverhältnis (Breite / Höhe) wie im Raster. */
+  ratio: number
   /* Where the clicked tile sits in the grid — the flight starts and ends there. */
   startRect: DOMRect
 }>()
@@ -49,13 +51,11 @@ const emit = defineEmits<{ close: [] }>()
 
 const flightDurationInMilliseconds = 350
 
-const ratio = props.image.ratioWidth / props.image.ratioHeight
-
 // The ring is drawn for the editor's card (381 × 532 px, a diagonal of about
 // 650 px). A picture with the same diagonal fills the ring the same way, so
 // its width follows from the diagonal and its aspect ratio.
 const diagonalInsideRing = 650
-const widthInsideRing = Math.round((diagonalInsideRing * ratio) / Math.hypot(ratio, 1))
+const widthInsideRing = Math.round((diagonalInsideRing * props.ratio) / Math.hypot(props.ratio, 1))
 
 const picture = useTemplateRef<HTMLElement>('picture')
 const backdrop = useTemplateRef<InstanceType<typeof CbDimLayer>>('backdrop')

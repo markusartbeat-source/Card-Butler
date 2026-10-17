@@ -1,9 +1,10 @@
 <template>
   <CbImageViewer
-    v-if="openedImage && openedImageRect"
-    :key="openedImage.id"
-    :image="openedImage"
-    :start-rect="openedImageRect"
+    v-if="openedImage"
+    :key="openedImage.image.id"
+    :image="openedImage.image"
+    :ratio="openedImage.ratio"
+    :start-rect="openedImage.tileRect"
     @close="openedImage = null"
   />
 
@@ -16,8 +17,8 @@
     </div>
     <CbImageGrid
       class="mt-6"
-      :images="dummyImages"
-      :opened-image-id="openedImage?.id"
+      :images="projectImages ?? []"
+      :opened-image-id="openedImage?.image.id"
       @open="openImage"
     >
       <!-- Hochkant wie eine Karte, so hoch wie die Bilder. -->
@@ -51,7 +52,7 @@ import CbFolder from '../components/atoms/CbFolder.vue'
 import { showDangerToast } from '../components/atoms/toaster'
 import CbImageGrid from '../images/CbImageGrid.vue'
 import CbImageViewer from '../images/CbImageViewer.vue'
-import { dummyImages, type DummyImage } from '../images/dummyImages'
+import type { ImageResource } from '../api/images/imagesApi'
 import { loadProjectImages, projectImages } from '../images/projectImages'
 import { uploadImages } from '../images/uploadImages'
 import { useHeader } from '../components/organisms/headerState'
@@ -81,12 +82,11 @@ function showRejectedImage(file: File, reason: FileRejectionReason) {
   )
 }
 
-const openedImage = ref<DummyImage | null>(null)
-// Where the clicked tile sits in the grid — the viewer starts its flight there.
-const openedImageRect = ref<DOMRect | null>(null)
+// Das geöffnete Bild samt Seitenverhältnis und dem Platz seiner Kachel im
+// Raster, dort startet der Flug des Betrachters.
+const openedImage = ref<{ image: ImageResource; tileRect: DOMRect; ratio: number } | null>(null)
 
-function openImage(image: DummyImage, tileRect: DOMRect) {
-  openedImageRect.value = tileRect
-  openedImage.value = image
+function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
+  openedImage.value = { image, tileRect, ratio }
 }
 </script>
