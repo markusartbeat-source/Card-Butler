@@ -17,6 +17,8 @@ export const dictionaryGerman = {
     notAvailableTitle: 'Nicht verfügbar',
     notAvailableText: 'Diese Funktion gibt es noch nicht.',
     support: 'Support',
+    // Pfeil an einem Feld, das eine Liste mit Vorschlägen aufklappt.
+    showSuggestions: 'Vorschläge anzeigen',
   },
   // The bar at the top of every page.
   header: {

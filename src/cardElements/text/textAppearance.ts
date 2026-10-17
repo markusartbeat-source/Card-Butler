@@ -9,12 +9,15 @@ import { saveElement } from '../saveElement'
 // Wie der Text aussieht. Gilt auf allen Karten des Sets.
 
 /** Gelten, solange das Backend keinen Wert hat. Neue Textfelder bekommen sie
-    gleich mit – die Namen sind die aus ElementData. */
-export const textAppearanceDefaults = { fontFamily: 'Arial' }
+    gleich mit – die Namen sind die aus ElementData. Schriftgröße in mm. */
+export const textAppearanceDefaults = { fontFamily: 'Arial', fontSize: 4 }
 
 /** Die Darstellung des Texts, fehlende Werte durch die Startwerte ersetzt. */
 export function textAppearanceOf(data: ElementData | undefined) {
-  return { fontFamily: data?.fontFamily ?? textAppearanceDefaults.fontFamily }
+  return {
+    fontFamily: data?.fontFamily ?? textAppearanceDefaults.fontFamily,
+    fontSize: data?.fontSize ?? textAppearanceDefaults.fontSize,
+  }
 }
 
 export type TextAppearance = ReturnType<typeof textAppearanceOf>
@@ -26,6 +29,15 @@ export function changeFontFamily(id: string, fontFamily: string) {
   if (!element || textAppearanceOf(element.data).fontFamily === fontFamily) return
 
   element.data.fontFamily = fontFamily
+  saveElement(id)
+}
+
+/** Wie changeFontFamily – für die Schriftgröße in mm. */
+export function changeFontSize(id: string, millimeters: number) {
+  const element = findCardSetElement(id)
+  if (!element || textAppearanceOf(element.data).fontSize === millimeters) return
+
+  element.data.fontSize = millimeters
   saveElement(id)
 }
 

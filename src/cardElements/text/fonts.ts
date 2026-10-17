@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 
-// Schriften zur Auswahl für Textfelder. Der Beispieltext unter „Icons im Text“
-// bietet dieselben an.
+// Schriften, Schnitte und Größen zur Auswahl für Textfelder. Der Beispieltext
+// unter „Icons im Text“ bietet dieselben an.
 export const fontFamilyItems = ['Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Courier New'].map(
   (name) => ({ value: name, label: name }),
 )
@@ -19,6 +19,5 @@ export const fontWeightItems = computed(() => [
   { value: 'bold', label: dictionary.cardEditor.fontWeightBold },
 ])
 
-export const fontSizeItems = ['12', '14', '16', '18', '20', '24', '28', '32', '40', '48'].map(
-  (size) => ({ value: size, label: size }),
-)
+// Schriftgrößen in mm.
+export const fontSizeItems = [2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 12]

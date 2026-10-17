@@ -31,32 +31,16 @@
          (a row with a ripple) cannot cut the open list off. -->
     <Teleport to="body">
       <Select.Positioner>
-      <!-- The open menu has to stay above everything else. Ark copies the
-           z-index of this content onto the positioner, so the class belongs
-           here and not one level up. -->
-      <!-- cb-collapse rolls the list open and shut. The padding sits on the
-           inner list, otherwise it would stay behind as a thin strip. -->
-      <!-- sameWidth on the root makes the list as wide as the closed field. -->
-      <Select.Content
-        class="cb-collapse z-50 overflow-hidden rounded-lg bg-surface-light text-sm text-white shadow-lg"
-      >
-        <!-- The outer box is the one that gets cut off; the list inside keeps
-             its full height, so the entries never squash together. -->
-        <div>
-          <div class="flex flex-col p-1">
-            <Select.Item
-              v-for="item in items"
-              :key="item.value"
-              v-ripple
-              :item="item"
-              class="cb-hover relative flex items-center gap-2 overflow-hidden rounded-md px-2 py-1.5"
-            >
-              <CbIcon v-if="item.icon" :name="item.icon" />
-              <Select.ItemText>{{ item.label }}</Select.ItemText>
+        <!-- sameWidth on the root makes the list as wide as the closed field. -->
+        <Select.Content as-child>
+          <CbPopupList>
+            <Select.Item v-for="item in items" :key="item.value" :item="item" as-child>
+              <CbListItem :icon="item.icon">
+                <Select.ItemText>{{ item.label }}</Select.ItemText>
+              </CbListItem>
             </Select.Item>
-          </div>
-        </div>
-      </Select.Content>
+          </CbPopupList>
+        </Select.Content>
       </Select.Positioner>
     </Teleport>
   </Select.Root>
@@ -66,6 +50,8 @@
 import { computed } from 'vue'
 import { Select, createListCollection, type SelectInteractOutsideEvent } from '@ark-ui/vue'
 import CbIcon from './CbIcon.vue'
+import CbListItem from './CbListItem.vue'
+import CbPopupList from './CbPopupList.vue'
 import type { IconName } from './icons'
 
 const props = defineProps<{

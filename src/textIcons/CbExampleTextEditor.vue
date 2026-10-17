@@ -13,7 +13,13 @@
         <div class="flex gap-3 p-6">
           <CbSelect v-model="fontFamily" class="flex-1" variant="field" :items="fontFamilyItems" />
           <CbSelect v-model="fontWeight" class="flex-1" variant="field" :items="fontWeightItems" />
-          <CbSelect v-model="fontSize" class="flex-1" variant="field" :items="fontSizeItems" />
+          <CbCombobox
+            v-model="fontSize"
+            class="flex-1"
+            hide-label
+            :label="dictionary.cardEditor.fontSize"
+            :items="fontSizeItems"
+          />
         </div>
         <CbDivider />
       </div>
@@ -50,6 +56,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
+import CbCombobox from '../components/atoms/CbCombobox.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import { fontFamilyItems, fontSizeItems, fontWeightItems } from '../cardElements/text/fonts'
 import { exampleText, fontFamily, fontWeight, fontSize } from './exampleText'
@@ -62,7 +69,7 @@ const editing = ref(false)
 const exampleTextStyle = computed(() => ({
   fontFamily: fontFamily.value,
   fontWeight: fontWeight.value === 'bold' ? 'bold' : 'normal',
-  fontSize: `${fontSize.value}px`,
+  fontSize: `${fontSize.value}mm`,
 }))
 
 // The editable area is filled once from the stored text; from then on the
@@ -112,10 +119,12 @@ function pastePlainText(event: ClipboardEvent) {
 
 // A click outside the panel closes it. The open select list lives in the
 // body, so a click on one of its entries must not count as outside.
+// Die Liste der Schriftgröße genauso.
 const panel = useTemplateRef<HTMLElement>('panel')
 function closeOnClickOutside(event: PointerEvent) {
   const target = event.target as HTMLElement
-  if (panel.value?.contains(target) || target.closest('[data-scope="select"]')) return
+  const isInOpenList = target.closest('[data-scope="select"], [data-scope="combobox"]')
+  if (panel.value?.contains(target) || isInOpenList) return
   if (editing.value) finishEditing()
 }
 onMounted(() => document.addEventListener('pointerdown', closeOnClickOutside))

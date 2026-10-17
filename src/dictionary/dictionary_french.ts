@@ -18,6 +18,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     notAvailableTitle: 'Non disponible',
     notAvailableText: "Cette fonction n'existe pas encore.",
     support: 'Assistance',
+    showSuggestions: 'Afficher les suggestions',
   },
   header: {
     appName: 'Card Butler',

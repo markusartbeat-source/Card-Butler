@@ -5,4 +5,5 @@ import { ref } from 'vue'
 export const exampleText = ref(dictionary.textIcons.exampleText)
 export const fontFamily = ref('Arial')
 export const fontWeight = ref('regular')
-export const fontSize = ref('28')
+// In mm, wie die Textfelder auf der Karte.
+export const fontSize = ref(7)

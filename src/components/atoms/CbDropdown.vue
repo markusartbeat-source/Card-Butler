@@ -36,13 +36,11 @@
 
               <Menu.Item
                 v-else
-                v-ripple
+                as-child
                 :value="item.value"
-                class="cb-hover relative flex items-center gap-2 overflow-hidden rounded-md px-2 py-1.5"
                 :class="{ 'text-gold': item.value === activeItem }"
               >
-                <CbIcon v-if="item.icon" :name="item.icon" />
-                {{ item.label }}
+                <CbListItem :icon="item.icon">{{ item.label }}</CbListItem>
               </Menu.Item>
             </template>
           </div>
@@ -54,7 +52,7 @@
 
 <script setup lang="ts">
 import { Menu } from '@ark-ui/vue'
-import CbIcon from './CbIcon.vue'
+import CbListItem from './CbListItem.vue'
 import type { IconName } from './icons'
 
 // An entry of the list, or the word 'separator' for a thin line between two

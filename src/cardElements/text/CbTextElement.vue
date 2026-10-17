@@ -16,7 +16,7 @@
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
     ]"
-    :style="{ fontFamily }"
+    :style="{ fontFamily, fontSize: `${fontSize}mm` }"
     :data-element-id="id"
     :tabindex="editable ? 0 : undefined"
     :role="isButton ? 'button' : undefined"
@@ -83,6 +83,8 @@ const props = withDefaults(
     horizontalAlignment: HorizontalAlignment
     verticalAlignment: VerticalAlignment
     fontFamily: string
+    /** In mm. */
+    fontSize: number
     content?: string
     highlightSearch?: boolean
     placeholder?: string
