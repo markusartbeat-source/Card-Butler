@@ -82,6 +82,23 @@ export function resizeElement(id: string, widthInMillimeters: number, heightInMi
   element.data.height = heightInMillimeters
 }
 
+// Eine neue Breite oder Höhe in mm. Mit keepsAspectRatio ändert sich die andere
+// Seite im gleichen Verhältnis mit.
+export function resizeElementSide(
+  id: string,
+  side: 'width' | 'height',
+  millimeters: number,
+  keepsAspectRatio: boolean,
+) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  const { width, height } = element.data
+  const factor = keepsAspectRatio ? millimeters / element.data[side] : 1
+  const size = { width: width * factor, height: height * factor, [side]: millimeters }
+  resizeElement(id, size.width, size.height)
+}
+
 export function rotateElementBy(id: string, turnInDegrees: number) {
   const element = findCardSetElement(id)
   if (element) element.rotation += turnInDegrees

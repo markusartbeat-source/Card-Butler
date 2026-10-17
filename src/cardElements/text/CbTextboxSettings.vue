@@ -11,7 +11,8 @@
         :items="sizings"
       />
     </div>
-    <!-- Eine automatische Seite zeigt „-“. Verknüpfen wirkt noch nicht. -->
+    <!-- Eine automatische Seite zeigt „-“. Verknüpfen hält beim Eintippen das
+         Seitenverhältnis, die Anfasser ziehen weiter frei. -->
     <div class="flex items-center gap-3">
       <CbInput
         v-model="texts.width"
@@ -24,6 +25,7 @@
       <CbToggle
         v-model="areSizesLinked"
         icon="link"
+        :disabled="!canLinkSizes"
         :aria-label="dictionary.cardEditor.linkSizes"
       />
       <CbInput
@@ -78,6 +80,8 @@ const sizingIndex = computed({
 
 const data = computed(() => element.value?.data)
 const areSizesLinked = ref(false)
+// Bei „-“ gibt es kein Verhältnis zu halten.
+const canLinkSizes = computed(() => sizing.value === 'fixed')
 
 // Automatisch: Feld leer, es zeigt dann „-“.
 const storedTexts = computed(() => ({
@@ -97,7 +101,7 @@ function applyText(side: 'width' | 'height') {
   const text = texts.value[side].trim()
   const value = parseMillimeters(text)
   if (text !== storedTexts.value[side] && value !== undefined && value > 0) {
-    changeTextSize(props.elementId, side, value)
+    changeTextSize(props.elementId, side, value, areSizesLinked.value && canLinkSizes.value)
   }
   texts.value = { ...storedTexts.value }
 }

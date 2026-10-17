@@ -1,7 +1,7 @@
 import { measureInMillimeters } from '../../card/millimeters'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { selectedElementNode } from '../../elementTransform/elementSelection'
-import { findCardSetElement, resizeElement } from '../cardElements'
+import { findCardSetElement, resizeElement, resizeElementSide } from '../cardElements'
 import { saveElement } from '../saveElement'
 
 // Wie ein Textfeld zu seiner Größe kommt, wie in Figma: Breite und Höhe folgen
@@ -63,7 +63,12 @@ export function changeTextSizing(id: string, sizing: TextSizing) {
 /** Eine eingetippte Breite oder Höhe in mm. Ist die Seite gerade automatisch,
     wird sie fest: die Breite bei Auto-Breite (die Höhe wächst dann weiter mit),
     die Höhe immer zur festen Größe. */
-export function changeTextSize(id: string, side: 'width' | 'height', millimeters: number) {
+export function changeTextSize(
+  id: string,
+  side: 'width' | 'height',
+  millimeters: number,
+  keepsAspectRatio: boolean,
+) {
   const element = findCardSetElement(id)
   if (!element) return
 
@@ -71,7 +76,6 @@ export function changeTextSize(id: string, side: 'width' | 'height', millimeters
   saveIfResized(element, () => {
     if (side === 'width' && sizing === 'autoWidth') switchTextSizing(element, 'autoHeight')
     if (side === 'height' && sizing !== 'fixed') switchTextSizing(element, 'fixed')
-    const size = { ...element.data, [side]: millimeters }
-    resizeElement(element.id, size.width, size.height)
+    resizeElementSide(element.id, side, millimeters, keepsAspectRatio)
   })
 }
