@@ -32,6 +32,17 @@ function uploadImage(projectId: string, file: File) {
   })
 }
 
+/** Benennt ein Bild um oder legt es in einen anderen Ordner. Das Backend
+ *  ersetzt beides, darum immer Name und `folderId`. Ist `version` veraltet,
+ *  antwortet es mit 412. */
+function updateImage(imageId: string, imageData: Pick<ImageInfo, 'name' | 'folderId'>, version: number) {
+  return postOffice.request<ImageResource>(`/api/images/${encodeURIComponent(imageId)}`, {
+    method: 'PUT',
+    body: imageData,
+    version,
+  })
+}
+
 /** Löscht ein Bild. Das Backend lehnt ab, solange es auf einer Karte benutzt
  *  wird (400); ist `version` veraltet, antwortet es mit 412. */
 function deleteImage(imageId: string, version: number) {
@@ -42,4 +53,4 @@ function deleteImage(imageId: string, version: number) {
 }
 
 /** Fach `images` der Poststelle, Aufruf als `postOffice.images.…()`. */
-export const imagesApi = { loadImages, uploadImage, deleteImage }
+export const imagesApi = { loadImages, uploadImage, updateImage, deleteImage }

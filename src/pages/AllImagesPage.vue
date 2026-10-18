@@ -12,6 +12,7 @@
     v-model:open="isNewFolderDialogOpen"
     :title="dictionary.images.newFolder"
     :save="saveNewFolder"
+    @closed="moveImageIntoNewFolder"
   />
 
   <!-- Seitlich Überstehendes wird abgeschnitten: Beim Sortieren gleiten
@@ -22,7 +23,12 @@
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
     <div v-if="projectFolders?.length" class="-mx-2 flex flex-wrap gap-2">
-      <CbFolder v-for="folder in projectFolders" :key="folder.id" :name="folder.data.name" />
+      <CbFolder
+        v-for="folder in projectFolders"
+        :id="folderElementId(folder.id)"
+        :key="folder.id"
+        :name="folder.data.name"
+      />
     </div>
     <CbImageGrid
       :images="projectImages ?? []"
@@ -76,9 +82,11 @@ import { currentProject } from '../project/currentProject'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { endDrag, releaseDrag } from '../dragAndDrop/dragState'
 import { deleteDroppedImage } from '../images/deleteDroppedImage'
+import { moveImage } from '../images/moveImage'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 import { loadProjectFolders, projectFolders } from '../folders/projectFolders'
 import { createFolder } from '../folders/createFolder'
+import { flyIntoFolder, folderElementId } from '../folders/flyIntoFolder'
 
 useHeader(() => ({
   title: currentProject.value?.name,
@@ -117,19 +125,50 @@ function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
 
 // Loslassen über einem Feld der Drop-Leiste sortiert nicht – das Feld
 // entscheidet. Löschen bringt eine Animation mit und gibt den Zieh-Zustand
-// darum selbst frei. „In neuen Ordner“ fragt erst nach dem Namen.
+// darum selbst frei. „In neuen Ordner“ fragt erst nach dem Namen, bis dahin
+// bleibt das Bild an seinem Platz.
 function finishImageDrag() {
   const { droppedOn, index, element } = endDrag()
   if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)
-  if (droppedOn === 'moveIntoNewFolder') isNewFolderDialogOpen.value = true
+  if (droppedOn === 'moveIntoNewFolder') askForNewFolder(index, element)
   releaseDrag()
 }
 
 const isNewFolderDialogOpen = ref(false)
 
-// Das Bild wandert noch nicht mit in den neuen Ordner.
+// Das Bild für den neuen Ordner samt der Liste von jetzt (wird inzwischen eine
+// andere geladen, wird dort nichts entfernt) und seiner Kachel, die in den
+// Ordner fliegt. Die Ordner-ID kommt dazu, sobald der Ordner angelegt ist.
+let imageForNewFolder: {
+  image: ImageResource
+  images: ImageResource[]
+  tileElement: HTMLElement | null
+  folderId: string | null
+} | null = null
+
+function askForNewFolder(imageIndex: number, tileElement: HTMLElement | null) {
+  const images = projectImages.value
+  const image = images?.[imageIndex]
+  if (!images || !image) return
+  imageForNewFolder = { image, images, tileElement, folderId: null }
+  isNewFolderDialogOpen.value = true
+}
+
 async function saveNewFolder(name: string) {
-  return (await createFolder(projectId, name)) !== null
+  const folder = await createFolder(projectId, name)
+  if (!folder) return false
+  if (imageForNewFolder) imageForNewFolder.folderId = folder.id
+  return true
+}
+
+// Erst wenn der Dialog ganz weg ist, damit der Flug zu sehen ist. Abgebrochen
+// gibt es keinen Ordner, das Bild bleibt an seinem Platz.
+async function moveImageIntoNewFolder() {
+  const pendingMove = imageForNewFolder
+  imageForNewFolder = null
+  if (!pendingMove?.folderId) return
+  if (pendingMove.tileElement) await flyIntoFolder(pendingMove.tileElement, pendingMove.folderId)
+  await moveImage(pendingMove.image, pendingMove.folderId, pendingMove.images)
 }
 
 onMounted(() => window.addEventListener('keydown', undoDeletionOnKey))

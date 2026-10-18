@@ -7,6 +7,7 @@
     size-class="w-120"
     panel-class="gap-6"
     @update:open="$emit('update:open', $event)"
+    @closed="$emit('closed')"
   >
     <!-- Das Formular sorgt dafür, dass Enter im Feld speichert. -->
     <form @submit.prevent="submit">
@@ -39,7 +40,11 @@ const props = defineProps<{
    *  der Dialog. */
   save: (name: string) => Promise<boolean>
 }>()
-const emit = defineEmits<{ 'update:open': [open: boolean] }>()
+const emit = defineEmits<{
+  'update:open': [open: boolean]
+  /** Ganz zu, auch das Ausblenden ist vorbei. */
+  closed: []
+}>()
 
 const name = ref('')
 const trimmedName = computed(() => name.value.trim())

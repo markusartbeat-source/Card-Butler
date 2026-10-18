@@ -6,18 +6,20 @@ import type { Directive } from 'vue'
 // the circle would be placed against the page and run over the edges.
 export const ripple: Directive<HTMLElement> = {
   mounted(element) {
-    element.addEventListener('mousedown', (event) => spawnRipple(element, event as MouseEvent))
+    element.addEventListener('mousedown', (event) => playRipple(element, event.clientX, event.clientY))
   },
 }
 
-function spawnRipple(element: HTMLElement, event: MouseEvent) {
+/** Lässt den Kreis an einer Stelle des Bildschirms aus dem Element wachsen –
+ *  auch ohne Klick, z.B. wenn etwas in einem Ordner landet. */
+export function playRipple(element: HTMLElement, clientX: number, clientY: number) {
   const rect = element.getBoundingClientRect()
   const size = Math.max(rect.width, rect.height) * 2
 
   const circle = document.createElement('span')
   circle.className = 'bg-white/40 pointer-events-none absolute rounded-full'
-  circle.style.left = `${event.clientX - rect.left - size / 2}px`
-  circle.style.top = `${event.clientY - rect.top - size / 2}px`
+  circle.style.left = `${clientX - rect.left - size / 2}px`
+  circle.style.top = `${clientY - rect.top - size / 2}px`
   circle.style.width = `${size}px`
   circle.style.height = `${size}px`
 

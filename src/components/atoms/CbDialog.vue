@@ -11,6 +11,7 @@
     :open="open"
     :initial-focus-el="initialFocusElement"
     @update:open="$emit('update:open', $event)"
+    @exit-complete="$emit('closed')"
   >
     <Teleport to="body">
       <Dialog.Backdrop class="cb-fade fixed inset-0 z-50 bg-background/80 backdrop-blur-md" />
@@ -84,7 +85,11 @@ const props = defineProps<{
   sizeClass?: string
   panelClass?: string
 }>()
-defineEmits<{ 'update:open': [open: boolean] }>()
+defineEmits<{
+  'update:open': [open: boolean]
+  /** Ganz zu, auch das Ausblenden ist vorbei. */
+  closed: []
+}>()
 
 // The box around the panel is the one that carries the size and the corners.
 // Whoever opens the dialog can measure it, for example to fly it somewhere.

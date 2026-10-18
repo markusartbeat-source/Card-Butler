@@ -1,6 +1,7 @@
 // Etwas Gezogenes (Karte, Bild), über einem Feld der Drop-Leiste losgelassen:
 // Das Feld zieht es ein, bis nichts mehr übrig ist, und spuckt Schnipsel aus.
 import confetti from 'canvas-confetti'
+import { flyInto } from '../animation/flyInto'
 
 const flightDurationInMilliseconds = 200
 
@@ -30,7 +31,7 @@ export function rememberDropGeometry(dragged: DOMRect | null, field: DOMRect | n
 // Mitte des Felds. Die Kopie trägt eine eigene Klasse, nicht die der gezogenen
 // Kopie – nach der sucht die Leiste noch bei jeder Mausbewegung. Die Größe
 // kommt mit, weil eine Bildkachel ihre Breite sonst nur aus ihrer Reihe hat.
-function flyIntoField(element: HTMLElement, from: DOMRect, into: DOMRect) {
+async function flyIntoField(element: HTMLElement, from: DOMRect, into: DOMRect) {
   const flyingCopy = element.cloneNode(true) as HTMLElement
   flyingCopy.classList.remove('cb-drag-ghost', 'animate-cb-rise')
   flyingCopy.classList.add('cb-flying-copy')
@@ -40,20 +41,8 @@ function flyIntoField(element: HTMLElement, from: DOMRect, into: DOMRect) {
   flyingCopy.style.height = `${from.height}px`
   document.body.append(flyingCopy)
 
-  const moveX = into.left + into.width / 2 - (from.left + from.width / 2)
-  const moveY = into.top + into.height / 2 - (from.top + from.height / 2)
-
-  // "translate" and "scale" instead of "transform" — like everything else that
-  // moves a card in this project.
-  const flight = flyingCopy.animate(
-    [
-      { translate: '0 0', scale: 1 },
-      { translate: `${moveX}px ${moveY}px`, scale: 0 },
-    ],
-    { duration: flightDurationInMilliseconds, easing: 'ease-in' },
-  )
-
-  return flight.finished.then(() => flyingCopy.remove())
+  await flyInto(flyingCopy, into, flightDurationInMilliseconds)
+  flyingCopy.remove()
 }
 
 // The snippets rain out of the middle of the field. They draw on a surface of
