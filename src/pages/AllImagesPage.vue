@@ -22,13 +22,15 @@
     <!-- Each folder carries 8px of padding for its hover layer, so the row
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
-    <!-- Doppelklick führt hinein, ohne dabei den Ordnernamen zu markieren. -->
+    <!-- Doppelklick führt hinein, ohne dabei den Ordnernamen zu markieren. Ein
+         Bild darauf gezogen landet darin, die Reihe bleibt dabei hell. -->
     <div v-if="projectFolders?.length" class="-mx-2 flex flex-wrap gap-2 select-none">
       <CbFolder
         v-for="folder in projectFolders"
         :id="folderElementId(folder.id)"
         :key="folder.id"
         :name="folder.data.name"
+        v-bind="pageDropTargetAttributes(folder.id)"
         @dblclick="router.push(folderRoute(folder.id))"
       />
     </div>
@@ -83,7 +85,9 @@ import { cardFormat } from '../card/cardFormat'
 import { currentProject } from '../project/currentProject'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { endDrag, releaseDrag } from '../dragAndDrop/dragState'
+import { pageDropTargetAttributes } from '../dragAndDrop/pageDropTarget'
 import { deleteDroppedImage } from '../images/deleteDroppedImage'
+import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 import { projectFolders } from '../folders/projectFolders'
@@ -143,13 +147,14 @@ function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
   openedImage.value = { image, tileRect, ratio }
 }
 
-// Loslassen über einem Feld der Drop-Leiste sortiert nicht – das Feld
-// entscheidet. Löschen bringt eine Animation mit und gibt den Zieh-Zustand
-// darum selbst frei. „In neuen Ordner“ fragt erst nach dem Namen, bis dahin
-// bleibt das Bild an seinem Platz.
+// Loslassen über einem Feld der Drop-Leiste oder einem Ordner sortiert nicht –
+// das Ziel entscheidet. Löschen und Hineinlegen bringen eine Animation mit und
+// geben den Zieh-Zustand darum selbst frei. „In neuen Ordner“ fragt erst nach
+// dem Namen, bis dahin bleibt das Bild an seinem Platz.
 function finishImageDrag() {
-  const { droppedOn, index, element } = endDrag()
+  const { droppedOn, droppedInto, index, element } = endDrag()
   if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)
+  if (droppedInto !== null) return moveDroppedImage(index, element, droppedInto)
   if (droppedOn === 'moveIntoNewFolder') askForNewFolder(index, element)
   releaseDrag()
 }

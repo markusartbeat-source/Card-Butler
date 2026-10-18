@@ -75,7 +75,7 @@ body {
 
 @layer components {
   .cb-hover {
-    @apply cursor-pointer hover:shadow-lg data-dragging:shadow-lg;
+    @apply cursor-pointer hover:shadow-lg data-dragging:shadow-lg data-drop-hovered:shadow-lg;
   }
 
   /* The lightening lies in a layer of its own instead of changing the
@@ -90,10 +90,14 @@ body {
      keys are standing on with data-highlighted. So the keyboard lights an
      entry up exactly like the mouse does. */
   /* Zieht man Dateien über eine Ablagefläche, setzt Ark data-dragging. Sie
-     leuchtet dann wie beim Hovern, das der Browser beim Ziehen nicht zeigt. */
+     leuchtet dann wie beim Hovern, das der Browser beim Ziehen nicht zeigt.
+     Ebenso ein Ziel in der Seite mit data-drop-hovered (z.B. ein Ordner unter
+     einem gezogenen Bild) – auch noch, während es nach dem Loslassen
+     hineinfliegt. */
   .cb-hover:hover::after,
   .cb-hover[data-highlighted]::after,
-  .cb-hover[data-dragging]::after {
+  .cb-hover[data-dragging]::after,
+  .cb-hover[data-drop-hovered]::after {
     @apply bg-white/10;
   }
 
@@ -158,8 +162,8 @@ body {
   }
 
   /* Die Kopie des Gezogenen (Karte, Bild), die in ein Feld der Drop-Leiste
-     gezogen wird. Sie liegt für sich über der Seite, damit die Reihe ihre Lücke
-     schon schließen kann. */
+     oder einen Ordner fliegt. Sie liegt für sich über der Seite, damit die
+     Reihe ihre Lücke schon schließen kann. */
   .cb-flying-copy {
     @apply pointer-events-none fixed z-50;
   }
@@ -220,6 +224,14 @@ body {
   .cb-over-drop-field .cb-dragged .cb-card-face,
   .cb-over-drop-field .cb-dragged .cb-image-face {
     scale: 0.5;
+  }
+
+  /* Ein Ziel in der Seite (z.B. ein Ordner) ist kleiner als ein Feld – das
+     Gezogene schrumpft stärker, damit das Ziel rundherum zu sehen bleibt. Die
+     fliegende Kopie startet genauso klein. */
+  .cb-over-page-drop-target .cb-dragged .cb-image-face,
+  .cb-over-page-drop-target .cb-flying-copy .cb-image-face {
+    scale: 0.25;
   }
 
   /* The two faces of a card in the grid. Each hides its own back, the back

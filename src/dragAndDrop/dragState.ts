@@ -1,5 +1,6 @@
 import { computed, ref, watch } from 'vue'
 import { hoveredDropField, type DragKind } from './dropField'
+import { hoveredPageDropTarget } from './pageDropTarget'
 
 /** Was gerade gezogen wird – sonst null. Geteilt, damit der Rest der
     Oberfläche zurücktritt, solange es dauert, auch während der Animation eines
@@ -7,6 +8,12 @@ import { hoveredDropField, type DragKind } from './dropField'
 export const draggedKind = ref<DragKind | null>(null)
 
 export const isDragging = computed(() => draggedKind.value !== null)
+
+/** Ob das Gezogene über einem Feld der Leiste oder einem Ziel in der Seite
+    hängt – dann gehört es dorthin und keine Reihe sortiert. */
+export const isOverDropTarget = computed(
+  () => hoveredDropField.value !== null || hoveredPageDropTarget.value !== null,
+)
 
 // Woher das Gezogene kam, damit die Reihe wieder so hergestellt werden kann.
 let draggedElement: HTMLElement | null = null
@@ -22,12 +29,17 @@ export function startDrag(kind: DragKind, event: { item: HTMLElement; oldDraggab
   draggedKind.value = kind
 }
 
-/** Über welchem Feld losgelassen wurde – null, wenn einfach einsortiert –,
-    dazu wo das Gezogene stand und welches Element es ist, damit ein Feld noch
-    damit animieren kann. Der Zieh-Zustand bleibt, bis der Aufrufer ihn mit
-    releaseDrag freigibt. */
+/** Über welchem Feld bzw. welchem Ziel in der Seite (z.B. Ordner) losgelassen
+    wurde – beides null, wenn einfach einsortiert –, dazu wo das Gezogene stand
+    und welches Element es ist, damit ein Ziel noch damit animieren kann. Der
+    Zieh-Zustand bleibt, bis der Aufrufer ihn mit releaseDrag freigibt. */
 export function endDrag() {
-  return { droppedOn: hoveredDropField.value, index: draggedFromIndex, element: draggedElement }
+  return {
+    droppedOn: hoveredDropField.value,
+    droppedInto: hoveredPageDropTarget.value,
+    index: draggedFromIndex,
+    element: draggedElement,
+  }
 }
 
 /** Gibt die Oberfläche zurück: Die Leiste fährt weg, alles wird wieder hell.
@@ -35,6 +47,7 @@ export function endDrag() {
     bleibt der Zustand bis nach diesem Klick bestehen. */
 export function releaseDrag() {
   hoveredDropField.value = null
+  hoveredPageDropTarget.value = null
   draggedElement = null
   elementAfterDragged = null
   setTimeout(() => {
@@ -42,12 +55,12 @@ export function releaseDrag() {
   }, 0)
 }
 
-// Über der Leiste gehört das Gezogene nirgends mehr in die Reihe. Die Reihe
-// zeigt aber noch den letzten Platz auf dem Weg nach oben, darum kommt die
-// Lücke zurück an den Ursprung – Ablegen auf einem Feld lässt die Reihenfolge
-// dann unverändert. Nur das Gezogene wandert in der Reihe, sein ursprünglicher
-// Nachfolger steht also noch da.
-watch(hoveredDropField, (field) => {
-  if (field === null || !draggedElement) return
+// Über der Leiste oder einem Ziel in der Seite gehört das Gezogene nirgends
+// mehr in die Reihe. Die Reihe zeigt aber noch den letzten Platz auf dem Weg
+// dorthin, darum kommt die Lücke zurück an den Ursprung – Ablegen auf dem Ziel
+// lässt die Reihenfolge dann unverändert. Nur das Gezogene wandert in der
+// Reihe, sein ursprünglicher Nachfolger steht also noch da.
+watch(isOverDropTarget, (isOver) => {
+  if (!isOver || !draggedElement) return
   draggedElement.parentElement?.insertBefore(draggedElement, elementAfterDragged)
 })

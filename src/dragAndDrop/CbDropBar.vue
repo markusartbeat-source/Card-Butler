@@ -22,7 +22,9 @@ import CbToolbar from '../components/molecules/CbToolbar.vue'
 import type { ToolbarElement } from '../components/molecules/toolbarElement'
 import { draggedKind } from './dragState'
 import { dropFieldsByKind, hoveredDropField, type DropField } from './dropField'
-import { rememberDropGeometry } from './shredding'
+import { rememberDraggedRect } from './draggedCopyFlight'
+import { hoveredPageDropTarget, pageDropTargetAt } from './pageDropTarget'
+import { rememberHoveredFieldRect } from './shredding'
 
 // Die Felder für das, was gerade gezogen wird.
 const fields = computed<readonly DropField[]>(() =>
@@ -48,21 +50,22 @@ const hoveredFieldIndex = computed(() =>
 // Die Leiste lässt die Maus durch, dort oben kann also nichts von selbst
 // reagieren. Gemessen wird stattdessen die gezogene Kopie, die die Bibliothek
 // bewegt. Sie ist breiter als ein Feld, darum gewinnt das am meisten bedeckte.
-function updateDropTarget() {
-  // Ohne gezogene Kopie ist die Maus schon losgelassen. Das Feld behält dann
+// Hängt es über keinem Feld, zählt das Ziel in der Seite unter dem Mauszeiger,
+// z.B. ein Ordner – wie überall, wo man etwas auf etwas zieht.
+function updateDropTarget(event: MouseEvent) {
+  // Ohne gezogene Kopie ist die Maus schon losgelassen. Das Ziel behält dann
   // sein Leuchten, damit das Gezogene noch hineinfliegen kann.
   const draggedRect = document.querySelector('.cb-dragged')?.getBoundingClientRect()
   if (!draggedRect) return
 
   const index = toolbar.value?.indexOverlapping(draggedRect) ?? null
   hoveredDropField.value = index === null ? null : (fields.value[index] ?? null)
+  hoveredPageDropTarget.value = index === null ? pageDropTargetAt(event.clientX, event.clientY) : null
 
   // Das Ablegen meldet die Bibliothek erst, wenn die Kopie schon weg ist – was
-  // eine Animation über dem Feld braucht, wird darum hier gemessen.
-  rememberDropGeometry(
-    draggedRect,
-    index === null ? null : (toolbar.value?.rectOfEntry(index) ?? null),
-  )
+  // eine Animation danach braucht, wird darum hier gemessen.
+  rememberDraggedRect(draggedRect)
+  rememberHoveredFieldRect(index === null ? null : (toolbar.value?.rectOfEntry(index) ?? null))
 }
 
 onMounted(() => window.addEventListener('mousemove', updateDropTarget))

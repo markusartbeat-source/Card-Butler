@@ -1,8 +1,12 @@
 import { flyInto } from '../animation/flyInto'
 import { playRipple } from '../directives/ripple'
+import { flyDraggedCopy } from '../dragAndDrop/draggedCopyFlight'
 
 // Der Weg in einen Ordner ist meist weiter als der in ein Feld der Drop-Leiste.
 const flightDurationInMilliseconds = 400
+
+// Über dem Ordner Losgelassenes hängt schon dort, sein Weg ist kurz.
+const droppedFlightDurationInMilliseconds = 200
 
 /** Die id, die jeder Ordner auf der Seite trägt, damit etwas in ihn fliegen kann. */
 export function folderElementId(folderId: string) {
@@ -16,6 +20,16 @@ export async function flyIntoFolder(element: HTMLElement, folderId: string) {
   const folderElement = document.getElementById(folderElementId(folderId))
   if (!folderElement || !element.isConnected) return
   await flyInto(element, folderElement.getBoundingClientRect(), flightDurationInMilliseconds)
+  showArrival(folderElement)
+}
+
+/** Wie flyIntoFolder, aber für etwas über dem Ordner Losgelassenes: Statt des
+ *  Elements fliegt eine Kopie von dort hinein, wo die gezogene Kopie zuletzt
+ *  hing. Das Element selbst steht dann noch an seinem alten Platz. */
+export async function flyDraggedIntoFolder(element: HTMLElement, folderId: string) {
+  const folderElement = document.getElementById(folderElementId(folderId))
+  if (!folderElement) return
+  await flyDraggedCopy(element, folderElement.getBoundingClientRect(), droppedFlightDurationInMilliseconds)
   showArrival(folderElement)
 }
 
