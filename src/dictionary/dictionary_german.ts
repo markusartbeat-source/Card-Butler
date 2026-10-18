@@ -61,11 +61,14 @@ export const dictionaryGerman = {
   search: {
     noResults: 'Keine Karte gefunden',
   },
-  // The bar that drops down while a card is being dragged.
-  cardDrag: {
+  // Die Leiste, die beim Ziehen (Karte, Bild) von oben herunterfährt, und was
+  // ihre Felder danach melden.
+  dropBar: {
     deleteCard: 'Karte löschen',
     flipAllCards: 'Alle Karten umdrehen',
     cardDeleted: 'Karte gelöscht',
+    deleteImage: 'Bild löschen',
+    moveIntoNewFolder: 'In neuen Ordner',
   },
   // The page with the picture library.
   images: {

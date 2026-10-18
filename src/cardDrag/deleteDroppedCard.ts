@@ -1,7 +1,7 @@
 import type { CardSet } from '../cardSets/cardSets'
 import { deleteCard } from '../cardSets/deleteCard'
 import { showDeletionToast } from '../deletion/showDeletionToast'
-import { releaseCardDrag } from './cardDragState'
+import { releaseDrag } from '../dragAndDrop/dragState'
 import { playCardShredding } from './shredCard'
 
 /** The card leaves the row at once and is shredded in the drop field. Only when
@@ -14,13 +14,13 @@ export async function deleteDroppedCard(
   cardElement: HTMLElement | null,
 ) {
   const [deletedCard] = cardSet.cards.splice(cardIndex, 1)
-  if (!deletedCard) return releaseCardDrag()
+  if (!deletedCard) return releaseDrag()
 
   await playCardShredding(cardElement)
-  releaseCardDrag()
+  releaseDrag()
 
   showDeletionToast(
-    dictionary.cardDrag.cardDeleted,
+    dictionary.dropBar.cardDeleted,
     () => cardSet.cards.splice(cardIndex, 0, deletedCard),
     () => deleteCard(cardSet, deletedCard),
   )

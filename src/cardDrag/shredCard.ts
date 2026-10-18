@@ -31,7 +31,7 @@ export function rememberDropGeometry(cardRect: DOMRect | null, fieldRect: DOMRec
 // card, which the drop bar is still looking for on every mouse move.
 function flyIntoField(cardElement: HTMLElement, from: DOMRect, into: DOMRect) {
   const flyingCard = cardElement.cloneNode(true) as HTMLElement
-  flyingCard.classList.remove('cb-card-ghost', 'animate-cb-rise')
+  flyingCard.classList.remove('cb-drag-ghost', 'animate-cb-rise')
   flyingCard.classList.add('cb-flying-card')
   flyingCard.style.left = `${from.left}px`
   flyingCard.style.top = `${from.top}px`

@@ -52,10 +52,12 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   search: {
     noResults: 'Nenhuma carta encontrada',
   },
-  cardDrag: {
+  dropBar: {
     deleteCard: 'Excluir carta',
     flipAllCards: 'Virar todas as cartas',
     cardDeleted: 'Carta excluída',
+    deleteImage: 'Excluir imagem',
+    moveIntoNewFolder: 'Para uma nova pasta',
   },
   images: {
     title: 'Imagens',

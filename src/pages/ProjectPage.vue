@@ -34,10 +34,11 @@
             :id="cardSetElementId(cardSet.id)"
             :key="cardSet.id"
             v-model="cardSet.cards"
-            v-bind="cardDragOptions"
+            v-bind="dragOptions"
+            draggable=".cb-card"
             :disabled="isSearching"
             class="cb-card-set-section flex flex-wrap content-start justify-center gap-6 py-32 select-none tablet:px-16"
-            @start="startCardDrag"
+            @start="startDrag('card', $event)"
             @end="finishCardDrag(cardSet)"
           >
             <!-- The button stands in front of the row. It is not a ".cb-card", so the
@@ -180,14 +181,9 @@ import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import CbPrintCountOverlay from '../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../printCount/changePrintCountByWheel'
 import { printCountOverlayCardId } from '../printCount/printCountOverlayState'
-import { cardDragOptions } from '../cardDrag/cardDragOptions'
-import {
-  endCardDrag,
-  isDraggingCard,
-  releaseCardDrag,
-  startCardDrag,
-} from '../cardDrag/cardDragState'
-import { dimWhileDraggingClasses } from '../cardDrag/dimWhileDragging'
+import { dragOptions } from '../dragAndDrop/dragOptions'
+import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
+import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { deleteDroppedCard } from '../cardDrag/deleteDroppedCard'
 import {
   cardTurnEnded,
@@ -306,7 +302,7 @@ const selectedCardSet = computed(() =>
 const selectedCardRect = ref<DOMRect | null>(null)
 
 function selectCard(id: string, event: MouseEvent) {
-  if (isDraggingCard.value) return
+  if (isDragging.value) return
   selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
   selectedCardId.value = id
 }
@@ -315,13 +311,13 @@ function selectCard(id: string, event: MouseEvent) {
 // was, and the field decides what happens to the card. Deleting brings its own
 // animation along, which is why it gives the drag state back itself.
 function finishCardDrag(cardSet: CardSet) {
-  const { droppedOn, cardIndex, cardElement } = endCardDrag()
+  const { droppedOn, index, element } = endDrag()
   if (droppedOn === 'deleteCard') {
-    return deleteDroppedCard(cardSet, cardIndex, cardElement)
+    return deleteDroppedCard(cardSet, index, element)
   }
 
   if (droppedOn === 'flipAllCards') flipAllCards()
-  releaseCardDrag()
+  releaseDrag()
 }
 
 // The page area (the page wrapper in App.vue) scrolls, not the page itself.

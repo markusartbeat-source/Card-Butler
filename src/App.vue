@@ -8,8 +8,7 @@
     <!-- The header sits above the animated area, so a page change only moves
          the content below it. Each page says what it should show. -->
     <div class="relative z-10 flex flex-1 flex-col overflow-hidden">
-      <!-- While a card is dragged, the header steps back and only the cards
-           stay bright. -->
+      <!-- Beim Ziehen (Karte, Bild) tritt der Header zurück. -->
       <CbHeader
         :class="dimWhileDraggingClasses"
         :logo="headerSettings.logo"
@@ -39,7 +38,7 @@
     </div>
     <!-- Stands here and not on the page, because the page area moves during a
          page change and a fixed bar inside it would move with it. -->
-    <CbCardDropBar />
+    <CbDropBar />
     <CbToaster />
   </div>
 </template>
@@ -49,8 +48,8 @@ import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
 import CbHomeScene from './home/CbHomeScene.vue'
-import CbCardDropBar from './cardDrag/CbCardDropBar.vue'
-import { dimWhileDraggingClasses } from './cardDrag/dimWhileDragging'
+import CbDropBar from './dragAndDrop/CbDropBar.vue'
+import { dimWhileDraggingClasses } from './dragAndDrop/dimWhileDragging'
 </script>
 
 <style scoped>

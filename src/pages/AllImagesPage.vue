@@ -42,6 +42,7 @@
             :label="isUploadingImages ? dictionary.images.uploadingImages : dictionary.images.uploadImages"
             :aria-busy="isUploadingImages"
             class="rounded-lg data-disabled:cursor-progress"
+            :class="dimWhileDraggingClasses"
             :style="tileStyle(cardFormat.width / cardFormat.height)"
           />
         </CbFileUpload>
@@ -65,6 +66,7 @@ import { isUploadingImages, uploadImages } from '../images/uploadImages'
 import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
 import { currentProject } from '../project/currentProject'
+import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 
 useHeader(() => ({
   title: currentProject.value?.name,

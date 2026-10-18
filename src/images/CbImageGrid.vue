@@ -3,13 +3,16 @@
        Breite und Höhe mit, bis die Zeile voll ist. Die Zeilen werden dadurch
        unterschiedlich hoch, aber kein Bild wird abgeschnitten. -->
   <!-- Ziehen sortiert die Bilder um, nur lokal: Das Backend kennt keine
-       Reihenfolge. -->
+       Reihenfolge. Nur die Bildkacheln sind ziehbar: Die Kachel vorn und der
+       Füller am Ende bleiben stehen, ein Bild landet immer zwischen anderen. -->
+  <!-- Die Felder der Drop-Leiste haben noch keine Wirkung. -->
   <VueDraggable
     v-model="images"
     v-bind="dragOptions"
+    draggable=".cb-image-tile"
     class="flex flex-wrap gap-3 select-none"
-    @start="startDrag"
-    @end="endDrag"
+    @start="startDrag('image', $event)"
+    @end="releaseDrag"
   >
     <!-- Platz für eine Kachel vor den Bildern, z.B. „Bilder hochladen“. -->
     <slot name="leading" :tile-style="tileStyle" />
@@ -52,42 +55,17 @@ import { VueDraggable } from 'vue-draggable-plus'
 import type { ImageResource } from '../api/images/imagesApi'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
+import { dragOptions } from '../dragAndDrop/dragOptions'
+import { isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 
 const images = defineModel<ImageResource[]>('images', { required: true })
 defineProps<{ openedImageId?: string }>()
 const emit = defineEmits<{ open: [image: ImageResource, tileRect: DOMRect, ratio: number] }>()
 
-// Wie bei den Karten (cardDragOptions). Nur die Bildkacheln sind ziehbar: Die
-// Kachel vorn und der Füller am Ende bleiben stehen, ein Bild landet immer
-// zwischen anderen Bildern.
-const dragOptions = {
-  animation: 200,
-  draggable: '.cb-image-tile',
-  forceFallback: true,
-  fallbackTolerance: 8,
-  ghostClass: 'cb-image-ghost',
-  dragClass: 'cb-image-dragged',
-}
-
-// Ein beendetes Ziehen löst danach noch einen Klick auf die Kachel aus. Der
-// soll den Betrachter nicht öffnen, darum bleibt das Ziehen bis nach dem
-// Klick bestehen.
-let isDragging = false
-
-function startDrag() {
-  isDragging = true
-}
-
-function endDrag() {
-  setTimeout(() => {
-    isDragging = false
-  }, 0)
-}
-
 // Passes on where the clicked tile sits on the screen — the viewer starts its
-// flight there.
+// flight there. Der Klick nach einem beendeten Ziehen öffnet nichts.
 function openImage(image: ImageResource, event: MouseEvent) {
-  if (isDragging) return
+  if (isDragging.value) return
   emit('open', image, (event.currentTarget as HTMLElement).getBoundingClientRect(), ratioOf(image))
 }
 

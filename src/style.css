@@ -184,56 +184,40 @@ body {
     );
   }
 
-  /* Placeholder that shows where the dragged card will land. */
-  .cb-card-ghost {
+  /* Platzhalter, der zeigt, wo das Gezogene (Karte, Bild) landen wird. */
+  .cb-drag-ghost {
     @apply opacity-20;
   }
 
   /* The box that follows the cursor while dragging. The library writes opacity
      0.8 into its style attribute, and only !important beats an inline style. */
-  .cb-card-dragged {
+  .cb-dragged {
     opacity: 1 !important;
   }
 
   /* Only one card is in the hand: the stack behind a multi-copy card stays in
      the grid, the dragged copy does not bring it along. */
-  .cb-card-dragged .cb-card-backdrops {
+  .cb-dragged .cb-card-backdrops {
     display: none;
   }
 
-  /* The tilt belongs on the card inside the box, not on the box itself: the
-     library moves the box with "transform", and a "scale" or "rotate" on the
-     same element would stretch and turn that movement — the card would drift
-     away from the cursor. */
-  .cb-card-dragged .cb-card-face {
+  /* Gekippt wird das Gezeigte in der Kiste (Karte, Bild-Knopf), nicht die
+     Kiste selbst: Die Bibliothek bewegt die Kiste per „transform“, ein „scale“
+     oder „rotate“ daran würde diese Bewegung strecken und drehen – das
+     Gezogene liefe dem Mauszeiger davon. */
+  .cb-dragged .cb-card-face,
+  .cb-dragged .cb-image-face {
     scale: 1.05;
     rotate: 3deg;
     transition: scale 350ms ease;
     @apply shadow-2xl;
   }
 
-  /* Over a field of the drop bar the card shrinks, so the field underneath
-     stays readable and it is clear that the drop would count. */
-  .cb-over-drop-field .cb-card-dragged .cb-card-face {
+  /* Über einem Feld der Drop-Leiste schrumpft das Gezogene, damit das Feld
+     darunter lesbar bleibt und klar ist, dass das Ablegen dort zählt. */
+  .cb-over-drop-field .cb-dragged .cb-card-face,
+  .cb-over-drop-field .cb-dragged .cb-image-face {
     scale: 0.5;
-  }
-
-  /* Bilder ziehen wie Karten: blasser Platzhalter an der neuen Stelle, die
-     gezogene Kopie voll deckend, gekippt und mit Schatten. Gekippt wird der
-     Knopf in der Kachel, nicht die Kachel selbst (Grund wie bei
-     .cb-card-dragged .cb-card-face). */
-  .cb-image-ghost {
-    @apply opacity-20;
-  }
-
-  .cb-image-dragged {
-    opacity: 1 !important;
-  }
-
-  .cb-image-dragged .cb-image-face {
-    scale: 1.05;
-    rotate: 3deg;
-    @apply shadow-2xl;
   }
 
   /* The two faces of a card in the grid. Each hides its own back, the back
@@ -485,8 +469,8 @@ body {
      the entrance animation again: its keyframes write `transform` — the very
      property the drag uses to follow the mouse — so the copy would sit offset
      and pale next to the cursor. */
-  .cb-card-dragged.animate-cb-rise,
-  .cb-card-ghost.animate-cb-rise {
+  .cb-dragged.animate-cb-rise,
+  .cb-drag-ghost.animate-cb-rise {
     animation: none;
   }
 
