@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { postOffice } from '../api/postOffice/postOffice'
 import { showSuccessToast } from '../components/atoms/toaster'
-import { currentProject } from '../project/currentProject'
+import { isLevelShown } from '../folders/currentFolder'
 import { projectImages } from './projectImages'
 
 // Das Backend sperrt beim Hochladen das ganze Projekt. Gleichzeitige Uploads
@@ -15,20 +15,20 @@ const unfinishedSelections = ref(0)
 
 export const isUploadingImages = computed(() => unfinishedSelections.value > 0)
 
-/** Lädt Dateien nacheinander als Bilder ins Projekt hoch. Jedes fertige Bild
- *  kommt sofort vorn in die Bildliste. Scheitert eines, meldet die Poststelle
- *  das per Toast, und die übrigen laufen weiter. Am Ende meldet ein Toast, wie
- *  viele es geschafft haben. */
-export function uploadImages(projectId: string, files: File[]) {
+/** Lädt Dateien nacheinander als Bilder in eine Ebene (null = oberste) des
+ *  Projekts hoch. Jedes fertige Bild kommt sofort vorn in die Bildliste.
+ *  Scheitert eines, meldet die Poststelle das per Toast, und die übrigen laufen
+ *  weiter. Am Ende meldet ein Toast, wie viele es geschafft haben. */
+export function uploadImages(projectId: string, folderId: string | null, files: File[]) {
   unfinishedSelections.value++
   previousUploads = previousUploads.then(async () => {
     let uploadedCount = 0
     for (const file of files) {
       try {
-        const imageResource = await postOffice.images.uploadImage(projectId, file)
+        const imageResource = await postOffice.images.uploadImage(projectId, folderId, file)
         uploadedCount++
-        // Inzwischen ein anderes Projekt offen: Dessen Liste bleibt unberührt.
-        if (currentProject.value?.id === projectId) projectImages.value?.unshift(imageResource)
+        // Inzwischen eine andere Ebene offen: Deren Liste bleibt unberührt.
+        if (isLevelShown(projectId, folderId)) projectImages.value?.unshift(imageResource)
       } catch {
         // Weiter mit der nächsten Datei.
       }

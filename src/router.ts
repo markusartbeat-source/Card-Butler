@@ -28,7 +28,8 @@ const router = createRouter({
       props: true,
       children: [
         { path: '', component: ProjectPage },
-        { path: 'images/all', name: 'all-images', component: AllImagesPage },
+        // Ohne Ordner-ID die oberste Ebene der Bilder.
+        { path: 'images/all/:folderId?', name: 'all-images', component: AllImagesPage },
         { path: 'images/icons-in-text', name: 'icons-in-text', component: IconsInTextPage },
         { path: 'collaboration/share', name: 'share-project', component: ShareProjectPage },
         { path: 'collaboration/users', name: 'user-management', component: UserManagementPage },

@@ -1,6 +1,5 @@
 import type { ImageResource } from '../api/images/imagesApi'
 import { postOffice } from '../api/postOffice/postOffice'
-import { currentProject } from '../project/currentProject'
 import { loadProjectImages } from './projectImages'
 
 /** Nimmt ein Bild sofort aus der Liste, in der es stand, und legt es danach im
@@ -13,9 +12,9 @@ export async function moveImage(image: ImageResource, folderId: string | null, i
   try {
     return await postOffice.images.updateImage(image.id, { name: image.data.name, folderId }, image.version)
   } catch {
-    // Inzwischen geändert oder schon weg: Die Liste zeigt wieder, was das
-    // Backend hat – außer, es ist schon ein anderes Projekt offen.
-    if (currentProject.value?.id === image.projectId) await loadProjectImages(image.projectId)
+    // Inzwischen geändert oder schon weg: Die Ebene, aus der es kam, zeigt
+    // wieder, was das Backend hat – sofern sie noch zu sehen ist.
+    await loadProjectImages(image.projectId, image.data.folderId)
     return null
   }
 }

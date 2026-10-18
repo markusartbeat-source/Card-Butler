@@ -11,9 +11,15 @@ export type FolderData = {
 
 export type FolderResource = Resource<FolderData>
 
-/** Lädt die Ordner der obersten Ebene eines Projekts – in keiner festen Reihenfolge. */
-function loadFolders(projectId: string) {
-  return postOffice.request<FolderResource[]>(`/api/projects/${encodeURIComponent(projectId)}/folders`)
+/** Lädt die Ordner einer Ebene (null = oberste) – in keiner festen Reihenfolge. */
+function loadFolders(projectId: string, parentId: string | null) {
+  const query = parentId ? `?parentId=${encodeURIComponent(parentId)}` : ''
+  return postOffice.request<FolderResource[]>(`/api/projects/${encodeURIComponent(projectId)}/folders${query}`)
+}
+
+/** Lädt einen einzelnen Ordner, z.B. für den Pfad nach oben. */
+function loadFolder(folderId: string) {
+  return postOffice.request<FolderResource>(`/api/folders/${encodeURIComponent(folderId)}`)
 }
 
 /** Legt im Projekt einen Ordner an. */
@@ -43,4 +49,4 @@ function deleteFolder(folderId: string, version: number) {
 }
 
 /** Fach `folders` der Poststelle, Aufruf als `postOffice.folders.…()`. */
-export const foldersApi = { loadFolders, createFolder, updateFolder, deleteFolder }
+export const foldersApi = { loadFolders, loadFolder, createFolder, updateFolder, deleteFolder }

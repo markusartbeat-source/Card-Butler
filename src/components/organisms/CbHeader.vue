@@ -35,11 +35,12 @@
         >
           <CbIcon name="west" />
         </router-link>
-        <!-- Groß der Titel, klein darunter die zweite Zeile. Beide enden lang
-             in „…“. -->
+        <!-- Groß der Titel, klein darunter die zweite Zeile: der Pfad oder
+             ein Text. Alles endet lang in „…“. -->
         <div class="flex min-w-0 flex-col">
           <h1 class="truncate text-xl text-white">{{ title }}</h1>
-          <p v-if="subtitle" class="text-label truncate text-sm">{{ subtitle }}</p>
+          <CbBreadcrumbs v-if="path" :entries="path" :label="dictionary.header.path" class="text-label text-sm" />
+          <p v-else-if="subtitle" class="text-label truncate text-sm">{{ subtitle }}</p>
         </div>
       </template>
     </div>
@@ -142,6 +143,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
+import CbBreadcrumbs, { type BreadcrumbEntry } from '../molecules/CbBreadcrumbs.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
 import { createCardSet } from '../../cardSets/createCardSet'
@@ -158,6 +160,7 @@ withDefaults(
     goldLine?: boolean
     title?: string
     subtitle?: string
+    path?: BreadcrumbEntry[]
     searchbar?: boolean
     buttons?: HeaderButton[]
   }>(),

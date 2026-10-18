@@ -19,6 +19,8 @@ export const dictionaryGerman = {
     support: 'Support',
     // Pfeil an einem Feld, das eine Liste mit Vorschlägen aufklappt.
     showSuggestions: 'Vorschläge anzeigen',
+    // Trenner zwischen den Einträgen eines Pfads, z.B. „Alle Bilder / Ordner“.
+    pathSeparator: '/',
   },
   // The bar at the top of every page.
   header: {
@@ -39,6 +41,8 @@ export const dictionaryGerman = {
     search: 'Suche',
     // Vorlesetext des Zurück-Pfeils links neben dem Titel.
     backToHome: 'Zurück zur Startseite',
+    // Vorlesename des Pfads unter dem Titel, z.B. „Alle Bilder / Ordner“.
+    path: 'Pfad',
   },
   // The search over all cards, started in the header pill.
   home: {

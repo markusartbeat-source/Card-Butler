@@ -22,12 +22,14 @@
     <!-- Each folder carries 8px of padding for its hover layer, so the row
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
-    <div v-if="projectFolders?.length" class="-mx-2 flex flex-wrap gap-2">
+    <!-- Doppelklick führt hinein, ohne dabei den Ordnernamen zu markieren. -->
+    <div v-if="projectFolders?.length" class="-mx-2 flex flex-wrap gap-2 select-none">
       <CbFolder
         v-for="folder in projectFolders"
         :id="folderElementId(folder.id)"
         :key="folder.id"
         :name="folder.data.name"
+        @dblclick="router.push(folderRoute(folder.id))"
       />
     </div>
     <CbImageGrid
@@ -46,7 +48,7 @@
           :accept="acceptedImageTypes"
           :max-file-size="maximumImageMegabytes * 1024 * 1024"
           :disabled="isUploadingImages"
-          @accept="uploadImages(projectId, $event)"
+          @accept="uploadImages(projectId, folderId, $event)"
           @reject="showRejectedImage"
         >
           <CbAddTile
@@ -65,7 +67,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFileUpload.vue'
 import CbFolder from '../components/atoms/CbFolder.vue'
@@ -74,7 +76,7 @@ import CbNameDialog from '../components/organisms/CbNameDialog.vue'
 import CbImageGrid from '../images/CbImageGrid.vue'
 import CbImageViewer from '../images/CbImageViewer.vue'
 import type { ImageResource } from '../api/images/imagesApi'
-import { loadProjectImages, projectImages } from '../images/projectImages'
+import { projectImages } from '../images/projectImages'
 import { isUploadingImages, uploadImages } from '../images/uploadImages'
 import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
@@ -84,23 +86,41 @@ import { endDrag, releaseDrag } from '../dragAndDrop/dragState'
 import { deleteDroppedImage } from '../images/deleteDroppedImage'
 import { moveImage } from '../images/moveImage'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
-import { loadProjectFolders, projectFolders } from '../folders/projectFolders'
+import { projectFolders } from '../folders/projectFolders'
 import { createFolder } from '../folders/createFolder'
 import { flyIntoFolder, folderElementId } from '../folders/flyIntoFolder'
+import { folderPath } from '../folders/currentFolder'
+import { showFolder } from '../folders/showFolder'
 
+// Die Seite wird je Projekt und je Ordner neu eingehängt (App.vue schlüsselt
+// nach der Adresse), die IDs bleiben also fest. Ohne Ordner die oberste Ebene.
+const route = useRoute()
+const router = useRouter()
+const projectId = String(route.params.projectId)
+const folderId = route.params.folderId ? String(route.params.folderId) : null
+
+// Adresse einer Ebene dieser Seite, null = oberste.
+function folderRoute(targetFolderId: string | null) {
+  return { name: 'all-images', params: { projectId, folderId: targetFolderId } }
+}
+
+// Die zweite Zeile ist der Pfad von „Alle Bilder“ bis zur gezeigten Ebene.
 useHeader(() => ({
   title: currentProject.value?.name,
-  subtitle: dictionary.header.allImages,
+  path: [
+    { label: dictionary.header.allImages, to: folderRoute(null) },
+    ...folderPath.value.map((folder) => ({ label: folder.data.name, to: folderRoute(folder.id) })),
+  ],
   searchbar: false,
 }))
 
-// Die Seite wird je Projekt neu eingehängt, die ID bleibt also fest.
-const projectId = String(useRoute().params.projectId)
-
 // Bei jedem Öffnen der Seite frisch, so erscheinen auch Bilder und Ordner der
-// anderen im Projekt.
-loadProjectImages(projectId)
-loadProjectFolders(projectId)
+// anderen im Projekt. Einen unbekannten Ordner meldet schon die Poststelle,
+// dann geht es auf die oberste Ebene – "replace", damit „Zurück“ nicht wieder
+// hierher führt.
+showFolder(projectId, folderId).then((isFolderFound) => {
+  if (!isFolderFound) router.replace(folderRoute(null))
+})
 
 // Was das Backend an Bildern annimmt (10 MB wie in Spring: 10 · 1024 · 1024 Byte).
 const acceptedImageTypes = ['image/png', 'image/jpeg', 'image/gif']
@@ -155,7 +175,7 @@ function askForNewFolder(imageIndex: number, tileElement: HTMLElement | null) {
 }
 
 async function saveNewFolder(name: string) {
-  const folder = await createFolder(projectId, name)
+  const folder = await createFolder(projectId, folderId, name)
   if (!folder) return false
   if (imageForNewFolder) imageForNewFolder.folderId = folder.id
   return true

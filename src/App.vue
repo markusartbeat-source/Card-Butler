@@ -16,6 +16,7 @@
         :gold-line="headerSettings.goldLine"
         :title="headerSettings.title"
         :subtitle="headerSettings.subtitle"
+        :path="headerSettings.path"
         :searchbar="headerSettings.searchbar"
         :buttons="headerSettings.buttons"
         @action="headerSettings.onAction?.($event)"

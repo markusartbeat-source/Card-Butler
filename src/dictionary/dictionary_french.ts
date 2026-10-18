@@ -19,6 +19,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     notAvailableText: "Cette fonction n'existe pas encore.",
     support: 'Assistance',
     showSuggestions: 'Afficher les suggestions',
+    pathSeparator: '/',
   },
   header: {
     appName: 'Card Butler',
@@ -33,6 +34,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     newCardSet: 'Nouveau jeu de cartes',
     search: 'Recherche',
     backToHome: 'Retour à l’accueil',
+    path: 'Chemin',
   },
   home: {
     titleCards: 'Tes cartes.',

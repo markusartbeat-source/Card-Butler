@@ -19,6 +19,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     notAvailableText: 'Esta función todavía no existe.',
     support: 'Soporte',
     showSuggestions: 'Mostrar sugerencias',
+    pathSeparator: '/',
   },
   header: {
     appName: 'Card Butler',
@@ -33,6 +34,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     newCardSet: 'Nuevo conjunto de cartas',
     search: 'Buscar',
     backToHome: 'Volver al inicio',
+    path: 'Ruta',
   },
   home: {
     titleCards: 'Tus cartas.',

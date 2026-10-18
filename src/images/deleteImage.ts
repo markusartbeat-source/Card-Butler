@@ -1,6 +1,5 @@
 import type { ImageResource } from '../api/images/imagesApi'
 import { postOffice } from '../api/postOffice/postOffice'
-import { currentProject } from '../project/currentProject'
 import { loadProjectImages } from './projectImages'
 
 /** Löscht ein Bild im Backend – aus der Liste ist es da schon raus.
@@ -11,9 +10,9 @@ export async function deleteImage(image: ImageResource) {
     return true
   } catch {
     // Noch auf einer Karte benutzt, inzwischen geändert oder schon weg: Die
-    // Liste zeigt wieder, was das Backend hat – außer, es ist schon ein anderes
-    // Projekt offen.
-    if (currentProject.value?.id === image.projectId) await loadProjectImages(image.projectId)
+    // Ebene des Bildes zeigt wieder, was das Backend hat – sofern sie noch zu
+    // sehen ist.
+    await loadProjectImages(image.projectId, image.data.folderId)
     return false
   }
 }

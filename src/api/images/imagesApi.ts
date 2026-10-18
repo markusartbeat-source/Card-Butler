@@ -17,16 +17,22 @@ export type ImageInfo = {
 
 export type ImageResource = Resource<ImageInfo>
 
-/** Lädt die Bilder der obersten Ebene eines Projekts, also ohne Ordner. */
-function loadImages(projectId: string) {
-  return postOffice.request<ImageResource[]>(`/api/projects/${encodeURIComponent(projectId)}/images`)
+// Die Bilder einer Ebene, ohne Ordner die oberste.
+function imagesPath(projectId: string, folderId: string | null) {
+  const query = folderId ? `?folderId=${encodeURIComponent(folderId)}` : ''
+  return `/api/projects/${encodeURIComponent(projectId)}/images${query}`
 }
 
-/** Lädt eine Datei vom PC als Bild in die oberste Ebene eines Projekts hoch. */
-function uploadImage(projectId: string, file: File) {
+/** Lädt die Bilder einer Ebene (null = oberste) eines Projekts. */
+function loadImages(projectId: string, folderId: string | null) {
+  return postOffice.request<ImageResource[]>(imagesPath(projectId, folderId))
+}
+
+/** Lädt eine Datei vom PC als Bild in eine Ebene (null = oberste) eines Projekts hoch. */
+function uploadImage(projectId: string, folderId: string | null, file: File) {
   const formData = new FormData()
   formData.append('file', file)
-  return postOffice.request<ImageResource>(`/api/projects/${encodeURIComponent(projectId)}/images`, {
+  return postOffice.request<ImageResource>(imagesPath(projectId, folderId), {
     method: 'POST',
     body: formData,
   })
