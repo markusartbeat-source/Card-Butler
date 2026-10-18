@@ -32,6 +32,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     cards: 'Cartes',
     newCardSet: 'Nouveau jeu de cartes',
     search: 'Recherche',
+    backToHome: 'Retour à l’accueil',
   },
   home: {
     titleCards: 'Tes cartes.',

@@ -25,9 +25,16 @@
            the heading shrink below its text width, which flex items refuse
            to do by default. -->
       <template v-else-if="title">
-        <CbButton variant="icon" @click="router.back()">
+        <!-- Zurück führt immer zur Startseite, darum ein Link statt Button.
+             Sieht aus wie CbButton variant="icon". -->
+        <router-link
+          v-ripple
+          to="/home"
+          :aria-label="dictionary.header.backToHome"
+          class="cb-hover relative flex items-center overflow-hidden rounded-full p-2 text-white"
+        >
           <CbIcon name="west" />
-        </CbButton>
+        </router-link>
         <h1 class="min-w-0 truncate text-xl text-white">{{ title }}</h1>
       </template>
     </div>

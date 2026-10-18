@@ -37,6 +37,8 @@ export const dictionaryGerman = {
     newCardSet: 'Neues Kartenset',
     // The search entry of the profile menu on narrow screens.
     search: 'Suche',
+    // Vorlesetext des Zurück-Pfeils links neben dem Titel.
+    backToHome: 'Zurück zur Startseite',
   },
   // The search over all cards, started in the header pill.
   home: {
