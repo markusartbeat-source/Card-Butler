@@ -57,6 +57,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     flipAllCards: 'Retourner toutes les cartes',
     cardDeleted: 'Carte supprimée',
     deleteImage: "Supprimer l'image",
+    imageDeleted: 'Image supprimée',
     moveIntoNewFolder: 'Dans un nouveau dossier',
   },
   images: {

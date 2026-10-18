@@ -157,15 +157,17 @@ body {
     @apply pointer-events-none fixed inset-0 z-50 h-full w-full;
   }
 
-  /* The copy of a card that is pulled into a drop field. It lies over the page
-     on its own, so the row it left can already close its gap. */
-  .cb-flying-card {
+  /* Die Kopie des Gezogenen (Karte, Bild), die in ein Feld der Drop-Leiste
+     gezogen wird. Sie liegt für sich über der Seite, damit die Reihe ihre Lücke
+     schon schließen kann. */
+  .cb-flying-copy {
     @apply pointer-events-none fixed z-50;
   }
 
-  /* It takes over from the dragged card, so it has to start out exactly as
-     small and as tilted as that one was over the field. */
-  .cb-flying-card .cb-card-face {
+  /* Sie löst das Gezogene ab, muss also genauso klein und gekippt starten, wie
+     es über dem Feld war. */
+  .cb-flying-copy .cb-card-face,
+  .cb-flying-copy .cb-image-face {
     scale: 0.5;
     rotate: 3deg;
     @apply shadow-2xl;

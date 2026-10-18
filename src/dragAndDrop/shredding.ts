@@ -1,11 +1,11 @@
-// A card let go over a field of the drop bar: it is pulled into the field until
-// nothing is left of it, and the field spits its snippets back out.
+// Etwas Gezogenes (Karte, Bild), über einem Feld der Drop-Leiste losgelassen:
+// Das Feld zieht es ein, bis nichts mehr übrig ist, und spuckt Schnipsel aus.
 import confetti from 'canvas-confetti'
 
 const flightDurationInMilliseconds = 200
 
 // Small paper snippets, thrown straight down and barely at all, so they read as
-// the leftovers of a shredded card and not as a firework.
+// the leftovers of something shredded and not as a firework.
 const snippetCount = 40
 const snippetSize = 0.5
 const snippetSpread = 90
@@ -15,34 +15,37 @@ const snippetGravity = 2
 const snippetLifetime = 90
 const snippetColorNames = ['gold-light', 'gold', 'gold-lighter']
 
-// What the drop bar last measured while a card hung over one of its fields. The
-// drag library takes the dragged copy off the page before it reports the drop,
-// so this is everything the animation ever gets to see.
-let draggedCardRect: DOMRect | null = null
+// Was die Leiste zuletzt gemessen hat, während das Gezogene über einem ihrer
+// Felder hing. Die Zieh-Bibliothek nimmt die gezogene Kopie weg, bevor sie das
+// Ablegen meldet – mehr bekommt die Animation also nie zu sehen.
+let draggedRect: DOMRect | null = null
 let hoveredFieldRect: DOMRect | null = null
 
-export function rememberDropGeometry(cardRect: DOMRect | null, fieldRect: DOMRect | null) {
-  draggedCardRect = cardRect
-  hoveredFieldRect = fieldRect
+export function rememberDropGeometry(dragged: DOMRect | null, field: DOMRect | null) {
+  draggedRect = dragged
+  hoveredFieldRect = field
 }
 
-// Draws a copy of the card where it last hung and pulls it into the middle of
-// the field. The copy wears a class of its own, not the one of the dragged
-// card, which the drop bar is still looking for on every mouse move.
-function flyIntoField(cardElement: HTMLElement, from: DOMRect, into: DOMRect) {
-  const flyingCard = cardElement.cloneNode(true) as HTMLElement
-  flyingCard.classList.remove('cb-drag-ghost', 'animate-cb-rise')
-  flyingCard.classList.add('cb-flying-card')
-  flyingCard.style.left = `${from.left}px`
-  flyingCard.style.top = `${from.top}px`
-  document.body.append(flyingCard)
+// Zeichnet eine Kopie dort, wo das Gezogene zuletzt hing, und zieht sie in die
+// Mitte des Felds. Die Kopie trägt eine eigene Klasse, nicht die der gezogenen
+// Kopie – nach der sucht die Leiste noch bei jeder Mausbewegung. Die Größe
+// kommt mit, weil eine Bildkachel ihre Breite sonst nur aus ihrer Reihe hat.
+function flyIntoField(element: HTMLElement, from: DOMRect, into: DOMRect) {
+  const flyingCopy = element.cloneNode(true) as HTMLElement
+  flyingCopy.classList.remove('cb-drag-ghost', 'animate-cb-rise')
+  flyingCopy.classList.add('cb-flying-copy')
+  flyingCopy.style.left = `${from.left}px`
+  flyingCopy.style.top = `${from.top}px`
+  flyingCopy.style.width = `${from.width}px`
+  flyingCopy.style.height = `${from.height}px`
+  document.body.append(flyingCopy)
 
   const moveX = into.left + into.width / 2 - (from.left + from.width / 2)
   const moveY = into.top + into.height / 2 - (from.top + from.height / 2)
 
   // "translate" and "scale" instead of "transform" — like everything else that
   // moves a card in this project.
-  const flight = flyingCard.animate(
+  const flight = flyingCopy.animate(
     [
       { translate: '0 0', scale: 1 },
       { translate: `${moveX}px ${moveY}px`, scale: 0 },
@@ -50,7 +53,7 @@ function flyIntoField(cardElement: HTMLElement, from: DOMRect, into: DOMRect) {
     { duration: flightDurationInMilliseconds, easing: 'ease-in' },
   )
 
-  return flight.finished.then(() => flyingCard.remove())
+  return flight.finished.then(() => flyingCopy.remove())
 }
 
 // The snippets rain out of the middle of the field. They draw on a surface of
@@ -85,13 +88,13 @@ function rainSnippets(fieldRect: DOMRect) {
   })
 }
 
-/** Card in, snippets out. Resolves as soon as the snippets start falling — they
-    keep raining while the page goes on. */
-export async function playCardShredding(cardElement: HTMLElement | null) {
-  const from = draggedCardRect
+/** Gezogenes rein, Schnipsel raus. Fertig, sobald die Schnipsel fallen – sie
+    regnen weiter, während die Seite weitermacht. */
+export async function playShredding(element: HTMLElement | null) {
+  const from = draggedRect
   const into = hoveredFieldRect
   if (!into) return
 
-  if (cardElement && from) await flyIntoField(cardElement, from, into)
+  if (element && from) await flyIntoField(element, from, into)
   rainSnippets(into)
 }

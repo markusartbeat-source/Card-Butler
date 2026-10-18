@@ -32,5 +32,14 @@ function uploadImage(projectId: string, file: File) {
   })
 }
 
+/** Löscht ein Bild. Das Backend lehnt ab, solange es auf einer Karte benutzt
+ *  wird (400); ist `version` veraltet, antwortet es mit 412. */
+function deleteImage(imageId: string, version: number) {
+  return postOffice.request<void>(`/api/images/${encodeURIComponent(imageId)}`, {
+    method: 'DELETE',
+    version,
+  })
+}
+
 /** Fach `images` der Poststelle, Aufruf als `postOffice.images.…()`. */
-export const imagesApi = { loadImages, uploadImage }
+export const imagesApi = { loadImages, uploadImage, deleteImage }

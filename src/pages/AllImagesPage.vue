@@ -24,6 +24,7 @@
       @update:images="projectImages = $event"
       :opened-image-id="openedImage?.image.id"
       @open="openImage"
+      @drag-end="finishImageDrag"
     >
       <!-- Hochkant wie eine Karte, wächst mit der Zeile wie die Bilder. -->
       <template #leading="{ tileStyle }">
@@ -52,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFileUpload.vue'
@@ -67,6 +68,9 @@ import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
 import { currentProject } from '../project/currentProject'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
+import { endDrag, releaseDrag } from '../dragAndDrop/dragState'
+import { deleteDroppedImage } from '../images/deleteDroppedImage'
+import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 
 useHeader(() => ({
   title: currentProject.value?.name,
@@ -103,4 +107,16 @@ const openedImage = ref<{ image: ImageResource; tileRect: DOMRect; ratio: number
 function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
   openedImage.value = { image, tileRect, ratio }
 }
+
+// Loslassen über einem Feld der Drop-Leiste sortiert nicht – das Feld
+// entscheidet. Löschen bringt eine Animation mit und gibt den Zieh-Zustand
+// darum selbst frei. „In neuen Ordner“ hat noch keine Wirkung.
+function finishImageDrag() {
+  const { droppedOn, index, element } = endDrag()
+  if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)
+  releaseDrag()
+}
+
+onMounted(() => window.addEventListener('keydown', undoDeletionOnKey))
+onUnmounted(() => window.removeEventListener('keydown', undoDeletionOnKey))
 </script>

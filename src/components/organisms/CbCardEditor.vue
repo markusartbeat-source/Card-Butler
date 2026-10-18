@@ -110,7 +110,7 @@ import { cardFormat, editorZoom } from '../../card/cardFormat'
 import { setElementValue } from '../../cardElements/cardElements'
 import { createElement } from '../../cardElements/createElement'
 import { deleteElementWithUndo } from '../../cardElements/deleteElementWithUndo'
-import { undoLastDeletion } from '../../deletion/showDeletionToast'
+import { undoDeletionOnKey } from '../../deletion/undoDeletionOnKey'
 import { isInInputField } from '../../keyboard/isInInputField'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
 import { setTextSizing } from '../../cardElements/text/textSizing'
@@ -262,14 +262,6 @@ function deleteSelectedElementOnKey(event: KeyboardEvent) {
   event.preventDefault()
   clearElementSelection()
   deleteElementWithUndo(props.cardSet, elementId)
-}
-
-// Strg+Z (Mac: Cmd+Z) holt das zuletzt gelöschte Feld zurück, solange sein Toast
-// steht. In Eingabefeldern bleibt es das Rückgängig des Browsers.
-function undoDeletionOnKey(event: KeyboardEvent) {
-  const isUndoKey = (event.ctrlKey || event.metaKey) && !event.shiftKey && event.key.toLowerCase() === 'z'
-  if (!isUndoKey || isInInputField(event)) return
-  if (undoLastDeletion()) event.preventDefault()
 }
 
 onMounted(() => {

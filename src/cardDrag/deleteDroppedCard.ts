@@ -2,7 +2,7 @@ import type { CardSet } from '../cardSets/cardSets'
 import { deleteCard } from '../cardSets/deleteCard'
 import { showDeletionToast } from '../deletion/showDeletionToast'
 import { releaseDrag } from '../dragAndDrop/dragState'
-import { playCardShredding } from './shredCard'
+import { playShredding } from '../dragAndDrop/shredding'
 
 /** The card leaves the row at once and is shredded in the drop field. Only when
     its snippets start falling does the surface come back and the toast offer to
@@ -16,7 +16,7 @@ export async function deleteDroppedCard(
   const [deletedCard] = cardSet.cards.splice(cardIndex, 1)
   if (!deletedCard) return releaseDrag()
 
-  await playCardShredding(cardElement)
+  await playShredding(cardElement)
   releaseDrag()
 
   showDeletionToast(

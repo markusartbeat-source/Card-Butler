@@ -68,6 +68,7 @@ export const dictionaryGerman = {
     flipAllCards: 'Alle Karten umdrehen',
     cardDeleted: 'Karte gelöscht',
     deleteImage: 'Bild löschen',
+    imageDeleted: 'Bild gelöscht',
     moveIntoNewFolder: 'In neuen Ordner',
   },
   // The page with the picture library.

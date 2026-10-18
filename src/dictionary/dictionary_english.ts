@@ -57,6 +57,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     flipAllCards: 'Flip all cards',
     cardDeleted: 'Card deleted',
     deleteImage: 'Delete image',
+    imageDeleted: 'Image deleted',
     moveIntoNewFolder: 'Into new folder',
   },
   images: {

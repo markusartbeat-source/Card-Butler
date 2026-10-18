@@ -5,14 +5,13 @@
   <!-- Ziehen sortiert die Bilder um, nur lokal: Das Backend kennt keine
        Reihenfolge. Nur die Bildkacheln sind ziehbar: Die Kachel vorn und der
        Füller am Ende bleiben stehen, ein Bild landet immer zwischen anderen. -->
-  <!-- Die Felder der Drop-Leiste haben noch keine Wirkung. -->
   <VueDraggable
     v-model="images"
     v-bind="dragOptions"
     draggable=".cb-image-tile"
     class="flex flex-wrap gap-3 select-none"
     @start="startDrag('image', $event)"
-    @end="releaseDrag"
+    @end="emit('dragEnd')"
   >
     <!-- Platz für eine Kachel vor den Bildern, z.B. „Bilder hochladen“. -->
     <slot name="leading" :tile-style="tileStyle" />
@@ -56,11 +55,16 @@ import type { ImageResource } from '../api/images/imagesApi'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
 import { dragOptions } from '../dragAndDrop/dragOptions'
-import { isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
+import { isDragging, startDrag } from '../dragAndDrop/dragState'
 
 const images = defineModel<ImageResource[]>('images', { required: true })
 defineProps<{ openedImageId?: string }>()
-const emit = defineEmits<{ open: [image: ImageResource, tileRect: DOMRect, ratio: number] }>()
+const emit = defineEmits<{
+  open: [image: ImageResource, tileRect: DOMRect, ratio: number]
+  /** Losgelassen. Was das Ablegen bedeutet, liest die Seite per endDrag ab,
+      danach gibt sie den Zieh-Zustand mit releaseDrag frei. */
+  dragEnd: []
+}>()
 
 // Passes on where the clicked tile sits on the screen — the viewer starts its
 // flight there. Der Klick nach einem beendeten Ziehen öffnet nichts.

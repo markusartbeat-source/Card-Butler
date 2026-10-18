@@ -20,9 +20,9 @@
 import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue'
 import CbToolbar from '../components/molecules/CbToolbar.vue'
 import type { ToolbarElement } from '../components/molecules/toolbarElement'
-import { rememberDropGeometry } from '../cardDrag/shredCard'
 import { draggedKind } from './dragState'
 import { dropFieldsByKind, hoveredDropField, type DropField } from './dropField'
+import { rememberDropGeometry } from './shredding'
 
 // Die Felder für das, was gerade gezogen wird.
 const fields = computed<readonly DropField[]>(() =>
