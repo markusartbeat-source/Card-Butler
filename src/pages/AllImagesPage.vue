@@ -43,8 +43,6 @@
         </CbFileUpload>
       </template>
     </CbImageGrid>
-    <!-- TEMPORÄR (Schritt 5): Bildliste des Projekts als JSON, fliegt beim Aufräumen raus. -->
-    <pre class="mt-6 text-xs break-all whitespace-pre-wrap">{{ JSON.stringify(projectImages, null, 2) }}</pre>
   </div>
 </template>
 

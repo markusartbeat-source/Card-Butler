@@ -59,11 +59,12 @@ function rememberRatio(image: ImageResource, event: Event) {
   ratioByImageId.value[image.id] = element.naturalWidth / element.naturalHeight
 }
 
-// Mindesthöhe einer Zeile, 302px aus dem Design. Auf kleineren Bildschirmen
-// niedriger, damit noch ein zweites Bild daneben passt.
+// Mindesthöhe einer Zeile, bewusst kleiner als die 302px aus dem Design, damit
+// mehr Bilder auf einen Blick passen. Auf kleineren Bildschirmen niedriger,
+// damit noch ein zweites Bild daneben passt.
 const isBelowTablet = useIsBelowBreakpoint('tablet')
 const isBelowLaptop = useIsBelowBreakpoint('laptop')
-const rowHeight = computed(() => (isBelowTablet.value ? 160 : isBelowLaptop.value ? 220 : 302))
+const rowHeight = computed(() => (isBelowTablet.value ? 120 : isBelowLaptop.value ? 160 : 180))
 
 // Wachstum im Verhältnis zur Breite: Alle Kacheln einer Zeile werden um
 // denselben Faktor größer und behalten ihr Seitenverhältnis.
