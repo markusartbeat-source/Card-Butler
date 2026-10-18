@@ -8,18 +8,23 @@
     @close="openedImage = null"
   />
 
+  <CbNameDialog
+    v-model:open="isNewFolderDialogOpen"
+    :title="dictionary.images.newFolder"
+    :save="saveNewFolder"
+  />
+
   <!-- Seitlich Überstehendes wird abgeschnitten: Beim Sortieren gleiten
        Kacheln kurz von ihrem alten Platz herüber und würden sonst für einen
        Moment einen waagrechten Scrollbalken bringen. -->
-  <div class="mx-auto max-w-315 overflow-x-clip px-4 tablet:px-6">
+  <div class="mx-auto flex max-w-315 flex-col gap-6 overflow-x-clip px-4 tablet:px-6">
     <!-- Each folder carries 8px of padding for its hover layer, so the row
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
-    <div class="-mx-2 flex gap-2">
-      <CbFolder v-for="folder in folders" :key="folder" :name="dictionary.images.placeholderFolderName" />
+    <div v-if="projectFolders?.length" class="-mx-2 flex flex-wrap gap-2">
+      <CbFolder v-for="folder in projectFolders" :key="folder.id" :name="folder.data.name" />
     </div>
     <CbImageGrid
-      class="mt-6"
       :images="projectImages ?? []"
       @update:images="projectImages = $event"
       :opened-image-id="openedImage?.image.id"
@@ -59,6 +64,7 @@ import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFileUpload.vue'
 import CbFolder from '../components/atoms/CbFolder.vue'
 import { showDangerToast } from '../components/atoms/toaster'
+import CbNameDialog from '../components/organisms/CbNameDialog.vue'
 import CbImageGrid from '../images/CbImageGrid.vue'
 import CbImageViewer from '../images/CbImageViewer.vue'
 import type { ImageResource } from '../api/images/imagesApi'
@@ -71,6 +77,8 @@ import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { endDrag, releaseDrag } from '../dragAndDrop/dragState'
 import { deleteDroppedImage } from '../images/deleteDroppedImage'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
+import { loadProjectFolders, projectFolders } from '../folders/projectFolders'
+import { createFolder } from '../folders/createFolder'
 
 useHeader(() => ({
   title: currentProject.value?.name,
@@ -78,14 +86,13 @@ useHeader(() => ({
   searchbar: false,
 }))
 
-const folders = [1, 2, 3]
-
 // Die Seite wird je Projekt neu eingehängt, die ID bleibt also fest.
 const projectId = String(useRoute().params.projectId)
 
-// Bei jedem Öffnen der Seite frisch, so erscheinen auch Bilder der anderen im
-// Projekt.
+// Bei jedem Öffnen der Seite frisch, so erscheinen auch Bilder und Ordner der
+// anderen im Projekt.
 loadProjectImages(projectId)
+loadProjectFolders(projectId)
 
 // Was das Backend an Bildern annimmt (10 MB wie in Spring: 10 · 1024 · 1024 Byte).
 const acceptedImageTypes = ['image/png', 'image/jpeg', 'image/gif']
@@ -110,11 +117,19 @@ function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
 
 // Loslassen über einem Feld der Drop-Leiste sortiert nicht – das Feld
 // entscheidet. Löschen bringt eine Animation mit und gibt den Zieh-Zustand
-// darum selbst frei. „In neuen Ordner“ hat noch keine Wirkung.
+// darum selbst frei. „In neuen Ordner“ fragt erst nach dem Namen.
 function finishImageDrag() {
   const { droppedOn, index, element } = endDrag()
   if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)
+  if (droppedOn === 'moveIntoNewFolder') isNewFolderDialogOpen.value = true
   releaseDrag()
+}
+
+const isNewFolderDialogOpen = ref(false)
+
+// Das Bild wandert noch nicht mit in den neuen Ordner.
+async function saveNewFolder(name: string) {
+  return (await createFolder(projectId, name)) !== null
 }
 
 onMounted(() => window.addEventListener('keydown', undoDeletionOnKey))

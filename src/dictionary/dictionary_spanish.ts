@@ -46,7 +46,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     renameProject: 'Cambiar el nombre del proyecto',
     renameProjectLabel: (name: string) => `Cambiar el nombre del proyecto «${name}»`,
   },
-  projectNameDialog: {
+  nameDialog: {
     name: 'Nombre',
   },
   search: {
@@ -68,7 +68,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     imageTooLarge: (megabytes: number) => `Una imagen puede ocupar como máximo ${megabytes} MB.`,
     uploadingImages: 'Subiendo…',
     imagesUploaded: (count: number) => (count === 1 ? '1 imagen subida' : `${count} imágenes subidas`),
-    placeholderFolderName: 'Mi primer proyecto',
+    newFolder: 'Nueva carpeta',
   },
   project: {
     share: 'Compartir',

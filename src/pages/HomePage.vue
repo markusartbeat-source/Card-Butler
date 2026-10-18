@@ -35,13 +35,13 @@
         <CbIcon name="add_2" />
         {{ dictionary.home.newProject }}
       </CbButton>
-      <CbProjectNameDialog
+      <CbNameDialog
         v-model:open="isNewProjectDialogOpen"
         :title="dictionary.home.newProject"
         :save="createProject"
       />
       <!-- Der Dialog meldet nur das Schließen, daher immer zurück auf null. -->
-      <CbProjectNameDialog
+      <CbNameDialog
         :open="projectToRename !== null"
         :title="dictionary.home.renameProject"
         :initial-name="projectToRename?.name"
@@ -58,7 +58,7 @@ import type { Project } from '../api/projects/projectsApi'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbProjectListItem from '../components/molecules/CbProjectListItem.vue'
-import CbProjectNameDialog from '../components/organisms/CbProjectNameDialog.vue'
+import CbNameDialog from '../components/organisms/CbNameDialog.vue'
 import { useHeader } from '../components/organisms/headerState'
 import { useCurrentUser } from '../composables/useCurrentUser'
 import { createProject, loadProjects, projects } from '../project/projects'

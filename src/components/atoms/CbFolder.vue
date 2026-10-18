@@ -39,7 +39,8 @@
         :filter="`url(#${id}-inset)`"
       />
     </svg>
-    <span class="text-2xs text-center text-white">{{ name }}</span>
+    <!-- Lange Wörter brechen um, statt über die Kachel hinauszuragen. -->
+    <span class="text-2xs w-full text-center wrap-break-word text-white">{{ name }}</span>
   </CbInteractive>
 </template>
 

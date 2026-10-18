@@ -1,5 +1,6 @@
 <template>
-  <!-- Fragt nach dem Namen eines Projekts – beim Anlegen und beim Umbenennen. -->
+  <!-- Fragt nach einem Namen, z.B. beim Anlegen und Umbenennen eines Projekts
+       oder beim Anlegen eines Ordners. -->
   <CbDialog
     :open="open"
     :title="title"
@@ -9,7 +10,7 @@
   >
     <!-- Das Formular sorgt dafür, dass Enter im Feld speichert. -->
     <form @submit.prevent="submit">
-      <CbInput v-model="name" :label="dictionary.projectNameDialog.name" autofocus />
+      <CbInput v-model="name" :label="dictionary.nameDialog.name" autofocus />
     </form>
 
     <template #footer>
@@ -42,7 +43,7 @@ const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 
 const name = ref('')
 const trimmedName = computed(() => name.value.trim())
-// Verhindert, dass doppeltes Enter zwei Projekte anlegt.
+// Verhindert, dass doppeltes Enter zweimal speichert.
 const isSaving = ref(false)
 
 // Bei jedem Öffnen mit dem Startwert beginnen.

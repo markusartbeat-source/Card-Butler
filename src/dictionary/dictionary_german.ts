@@ -54,8 +54,8 @@ export const dictionaryGerman = {
     // Für den Stift-Button: Mit Namen, damit Screenreader die Buttons unterscheiden.
     renameProjectLabel: (name: string) => `Projekt „${name}“ umbenennen`,
   },
-  // Der Dialog zum Benennen eines Projekts (Anlegen und Umbenennen).
-  projectNameDialog: {
+  // Der Dialog zum Benennen, z.B. eines Projekts oder Ordners.
+  nameDialog: {
     name: 'Name',
   },
   search: {
@@ -82,7 +82,8 @@ export const dictionaryGerman = {
     // Text der Kachel, solange hochgeladen wird, und Toast danach.
     uploadingImages: 'Wird hochgeladen …',
     imagesUploaded: (count: number) => (count === 1 ? '1 Bild hochgeladen' : `${count} Bilder hochgeladen`),
-    placeholderFolderName: 'Mein erstes Projekt',
+    // Titel des Namens-Dialogs beim Anlegen eines Ordners.
+    newFolder: 'Neuer Ordner',
   },
   // The page with the card grid.
   project: {

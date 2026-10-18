@@ -4,6 +4,7 @@ import type { Project } from '../api/projects/projectsApi'
 import { cardSets } from '../cardSets/cardSets'
 import { createCardSet } from '../cardSets/createCardSet'
 import { loadCardSets } from '../cardSets/loadCardSets'
+import { projectFolders } from '../folders/projectFolders'
 import { projectImages } from '../images/projectImages'
 import { projects } from './projects'
 
@@ -15,11 +16,13 @@ export const currentProject = ref<Project | null>(null)
  *  Poststelle per Toast. */
 export async function openProject(projectId: string) {
   // Aus der Liste ist der Name schon bekannt, so steht er sofort im Header. Die
-  // Kartensets und Bilder des vorigen Projekts sollen dabei nicht aufblitzen.
+  // Kartensets, Bilder und Ordner des vorigen Projekts sollen dabei nicht
+  // aufblitzen.
   if (currentProject.value?.id !== projectId) {
     currentProject.value = projects.value?.find((project) => project.id === projectId) ?? null
     cardSets.value = null
     projectImages.value = null
+    projectFolders.value = null
   }
 
   try {
@@ -50,4 +53,5 @@ function closeProject() {
   currentProject.value = null
   cardSets.value = null
   projectImages.value = null
+  projectFolders.value = null
 }

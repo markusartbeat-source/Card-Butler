@@ -4,6 +4,7 @@
 import { cardSetsApi } from '../cardSets/cardSetsApi'
 import { cardsApi } from '../cards/cardsApi'
 import { elementsApi } from '../elements/elementsApi'
+import { foldersApi } from '../folders/foldersApi'
 import { imagesApi } from '../images/imagesApi'
 import { projectsApi } from '../projects/projectsApi'
 import { userApi } from '../user/userApi'
@@ -17,4 +18,5 @@ export const postOffice = {
   elements: elementsApi,
   values: valuesApi,
   images: imagesApi,
+  folders: foldersApi,
 }
