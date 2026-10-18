@@ -30,9 +30,14 @@ import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import { useHeader } from '../components/organisms/headerState'
+import { currentProject } from '../project/currentProject'
 import CbExampleTextEditor from '../textIcons/CbExampleTextEditor.vue'
 import CbTextIconSettings from '../textIcons/CbTextIconSettings.vue'
 import CbTextIconTiles from '../textIcons/CbTextIconTiles.vue'
 
-useHeader(() => ({ title: dictionary.header.iconsInText, searchbar: false }))
+useHeader(() => ({
+  title: currentProject.value?.name,
+  subtitle: dictionary.header.iconsInText,
+  searchbar: false,
+}))
 </script>

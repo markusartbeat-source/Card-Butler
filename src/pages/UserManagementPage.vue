@@ -89,8 +89,13 @@ import {
   type Permission,
   type ProjectMember,
 } from '../userManagement/projectMembers'
+import { currentProject } from '../project/currentProject'
 
-useHeader(() => ({ title: dictionary.header.userManagement, searchbar: false }))
+useHeader(() => ({
+  title: currentProject.value?.name,
+  subtitle: dictionary.header.userManagement,
+  searchbar: false,
+}))
 
 // The same three steps a person can be invited with on the share page.
 const permissions = computed(() => [

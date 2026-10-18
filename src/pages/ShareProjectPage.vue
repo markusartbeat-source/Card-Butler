@@ -81,8 +81,13 @@ import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import { useHeader } from '../components/organisms/headerState'
 import { showSuccessToast } from '../components/atoms/toaster'
+import { currentProject } from '../project/currentProject'
 
-useHeader(() => ({ title: dictionary.header.shareProject, searchbar: false }))
+useHeader(() => ({
+  title: currentProject.value?.name,
+  subtitle: dictionary.header.shareProject,
+  searchbar: false,
+}))
 
 // A made-up link until the project has a real one to share.
 const shareLink = ref('https://abc.de')

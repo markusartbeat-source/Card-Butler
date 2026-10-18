@@ -60,8 +60,13 @@ import { loadProjectImages, projectImages } from '../images/projectImages'
 import { isUploadingImages, uploadImages } from '../images/uploadImages'
 import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
+import { currentProject } from '../project/currentProject'
 
-useHeader(() => ({ title: dictionary.header.allImages, searchbar: false }))
+useHeader(() => ({
+  title: currentProject.value?.name,
+  subtitle: dictionary.header.allImages,
+  searchbar: false,
+}))
 
 const folders = [1, 2, 3]
 

@@ -35,7 +35,12 @@
         >
           <CbIcon name="west" />
         </router-link>
-        <h1 class="min-w-0 truncate text-xl text-white">{{ title }}</h1>
+        <!-- Groß der Titel, klein darunter die zweite Zeile. Beide enden lang
+             in „…“. -->
+        <div class="flex min-w-0 flex-col">
+          <h1 class="truncate text-xl text-white">{{ title }}</h1>
+          <p v-if="subtitle" class="text-label truncate text-sm">{{ subtitle }}</p>
+        </div>
       </template>
     </div>
 
@@ -152,6 +157,7 @@ withDefaults(
     menus?: boolean
     goldLine?: boolean
     title?: string
+    subtitle?: string
     searchbar?: boolean
     buttons?: HeaderButton[]
   }>(),

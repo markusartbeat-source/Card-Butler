@@ -7,6 +7,8 @@ export type HeaderSettings = {
   menus?: boolean
   goldLine?: boolean
   title?: string
+  // Kleine zweite Zeile unter dem Titel, z.B. der Bereich im Projekt.
+  subtitle?: string
   searchbar?: boolean
   buttons?: HeaderButton[]
   onAction?: (key: string) => void

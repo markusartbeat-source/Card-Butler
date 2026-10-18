@@ -206,6 +206,7 @@ const isExportDialogOpen = ref(false)
 
 useHeader(() => ({
   title: currentProject.value?.name,
+  subtitle: dictionary.header.cards,
   // Every entry of the header menus is still a placeholder.
   onAction: () =>
     showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
