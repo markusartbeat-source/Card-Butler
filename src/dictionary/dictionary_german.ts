@@ -66,7 +66,8 @@ export const dictionaryGerman = {
     noResults: 'Keine Karte gefunden',
   },
   // Die Leiste, die beim Ziehen (Karte, Bild, Ordner) von oben herunterfährt,
-  // und was ihre Felder danach melden.
+  // und was ihre Felder danach melden. Die Knöpfe in den Einstellungen von Bild
+  // und Ordner tun dasselbe und heißen darum genauso.
   dropBar: {
     deleteCard: 'Karte löschen',
     flipAllCards: 'Alle Karten umdrehen',

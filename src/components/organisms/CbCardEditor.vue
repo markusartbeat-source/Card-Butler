@@ -109,7 +109,8 @@ import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
 import { setElementValue } from '../../cardElements/cardElements'
 import { createElement } from '../../cardElements/createElement'
-import { deleteElementWithUndo } from '../../cardElements/deleteElementWithUndo'
+import { deleteElement } from '../../cardElements/deleteElement'
+import { deleteWithUndo } from '../../deletion/deleteWithUndo'
 import { undoDeletionOnKey } from '../../deletion/undoDeletionOnKey'
 import { isInInputField } from '../../keyboard/isInInputField'
 import { newTextElementData } from '../../cardElements/text/newTextElementData'
@@ -253,7 +254,9 @@ function stepBackOnEscape(event: KeyboardEvent) {
 }
 
 // Entf/Rücktaste löscht das ausgewählte Feld – nicht beim Tippen und nicht, wenn
-// ein Eingabefeld die Taste braucht.
+// ein Eingabefeld die Taste braucht. Es verschwindet aus dem Set und damit von
+// allen Karten, „Rückgängig“ setzt es an seine alte Stelle in der
+// Stapelreihenfolge.
 function deleteSelectedElementOnKey(event: KeyboardEvent) {
   if (!['Delete', 'Backspace'].includes(event.key)) return
   const elementId = selectedElementId.value
@@ -261,7 +264,12 @@ function deleteSelectedElementOnKey(event: KeyboardEvent) {
 
   event.preventDefault()
   clearElementSelection()
-  deleteElementWithUndo(props.cardSet, elementId)
+  const { cardSet } = props
+  const selectedElement = cardSet.elements.find((element) => element.id === elementId)
+  if (!selectedElement) return
+  deleteWithUndo(cardSet.elements, selectedElement, dictionary.cardEditor.textElementDeleted, (element) =>
+    deleteElement(cardSet, element),
+  )
 }
 
 onMounted(() => {

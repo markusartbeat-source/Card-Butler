@@ -15,7 +15,11 @@
       class="size-full rounded-lg object-cover"
     />
     <template #panel>
-      <CbImageSettingsPanel class="h-full" />
+      <CbImageSettingsPanel
+        class="h-full"
+        @move-into-new-folder="moveOpenedImageIntoNewFolder"
+        @delete-image="deleteOpenedImage"
+      />
     </template>
   </CbViewer>
 
@@ -29,7 +33,12 @@
   >
     <CbFolder :name="openedFolder.folder.data.name" graphic-only />
     <template #panel>
-      <CbFolderSettingsPanel class="h-full" @open-folder="enterOpenedFolder" />
+      <CbFolderSettingsPanel
+        class="h-full"
+        @open-folder="enterOpenedFolder"
+        @move-into-new-folder="moveOpenedFolderIntoNewFolder"
+        @delete-folder="deleteOpenedFolder"
+      />
     </template>
   </CbViewer>
 
@@ -134,6 +143,7 @@ import { edgeSortingDragOptions } from '../dragAndDrop/dragOptions'
 import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { pageDropTargetAttributes } from '../dragAndDrop/pageDropTarget'
 import { deleteDroppedItem } from '../dragAndDrop/deleteDroppedItem'
+import { deleteWithUndo } from '../deletion/deleteWithUndo'
 import { deleteImage } from '../images/deleteImage'
 import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
@@ -241,6 +251,43 @@ function enterOpenedFolder() {
   if (!folder) return
   openedFolder.value = null
   router.push(folderRoute(folder.id))
+}
+
+// Die übrigen Knöpfe im Betrachter tun dasselbe wie die Felder der Drop-Leiste,
+// nur ohne Schredder. Auch hier verschwindet der Betrachter sofort: Was er
+// zeigt, verlässt gleich die Reihe bzw. fliegt nach dem Benennen von seiner
+// Kachel in den neuen Ordner.
+function moveOpenedImageIntoNewFolder() {
+  const image = openedImage.value?.image
+  openedImage.value = null
+  if (!image) return
+  const images = projectImages.value
+  askForNewFolder(images, images?.indexOf(image) ?? -1, document.getElementById(image.id), moveImage)
+}
+
+function deleteOpenedImage() {
+  const image = openedImage.value?.image
+  openedImage.value = null
+  if (image && projectImages.value) {
+    deleteWithUndo(projectImages.value, image, dictionary.dropBar.imageDeleted, deleteImage)
+  }
+}
+
+function moveOpenedFolderIntoNewFolder() {
+  const folder = openedFolder.value?.folder
+  openedFolder.value = null
+  if (!folder) return
+  const folders = projectFolders.value
+  const tileElement = document.getElementById(folderElementId(folder.id))
+  askForNewFolder(folders, folders?.indexOf(folder) ?? -1, tileElement, moveFolder)
+}
+
+function deleteOpenedFolder() {
+  const folder = openedFolder.value?.folder
+  openedFolder.value = null
+  if (folder && projectFolders.value) {
+    deleteWithUndo(projectFolders.value, folder, dictionary.dropBar.folderDeleted, deleteFolder)
+  }
 }
 
 // Losgelassen über einem Feld der Drop-Leiste, einem Ordner oder einem Eintrag
