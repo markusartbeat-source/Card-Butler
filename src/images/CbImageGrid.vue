@@ -22,18 +22,23 @@
          „transform“. Kippen und Schatten liegen darum am Knopf darin (siehe
          style.css). -->
     <div
-      v-for="image in images"
+      v-for="(image, index) in images"
       :key="image.id"
       class="cb-image-tile grid"
       :class="[{ invisible: image.id === openedImageId }, dimWhileDraggingOtherThan('image')]"
       :style="tileStyle(ratioOf(image))"
     >
       <!-- Der Bildname im alt ist zugleich der Name des Buttons für Screenreader. -->
-      <!-- Alt+←/→ sortiert per Tastatur. -->
+      <!-- Alt+←/→ sortiert per Tastatur, Strg+C/X kopiert bzw. schneidet aus
+           (abgefangen von der Seite). Ausgeschnitten ist das Bild halb
+           durchsichtig. Position und „ausgeschnitten“ stehen für Screenreader
+           in der aria-description. -->
       <CbInteractive
         :id="image.id"
         class="cb-image-face cursor-grab rounded-lg active:cursor-grabbing"
-        :aria-keyshortcuts="sortingKeyShortcuts"
+        :class="{ 'opacity-50': isCutImage(image) }"
+        :aria-keyshortcuts="`${sortingKeyShortcuts} ${clipboardKeyShortcuts}`"
+        :aria-description="tileDescription(image, index)"
         @click="openImage(image, $event)"
         @keydown="sortWithAltArrow($event, images, image)"
       >
@@ -61,6 +66,7 @@ import { dimWhileDraggingOtherThan } from '../dragAndDrop/dimWhileDragging'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { isDragging, startDrag } from '../dragAndDrop/dragState'
 import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
+import { clipboardKeyShortcuts, isCutImage } from './imageClipboard'
 
 const images = defineModel<ImageResource[]>('images', { required: true })
 defineProps<{ openedImageId?: string }>()
@@ -81,6 +87,11 @@ function openImage(image: ImageResource, event: MouseEvent) {
 // Seitenverhältnis (Breite / Höhe) je Bild. Das Backend kennt keine Pixelmaße,
 // darum kommt es aus dem geladenen Bild. Bis dahin ist die Kachel quadratisch.
 const ratioByImageId = ref<Record<string, number>>({})
+
+function tileDescription(image: ImageResource, index: number) {
+  const position = dictionary.general.positionOf(index + 1, images.value.length)
+  return isCutImage(image) ? `${dictionary.images.markedAsCut}, ${position}` : position
+}
 
 function ratioOf(image: ImageResource) {
   return ratioByImageId.value[image.id] ?? 1

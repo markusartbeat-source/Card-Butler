@@ -21,7 +21,7 @@ export const dictionaryGerman = {
     showSuggestions: 'Vorschläge anzeigen',
     // Trenner zwischen den Einträgen eines Pfads, z.B. „Alle Bilder / Ordner“.
     pathSeparator: '/',
-    // Ansage nach dem Sortieren per Tastatur.
+    // aria-description einer sortierbaren Kachel.
     positionOf: (position: number, count: number) => `Position ${position} von ${count}`,
   },
   // The bar at the top of every page.
@@ -93,6 +93,10 @@ export const dictionaryGerman = {
     imagesUploaded: (count: number) => (count === 1 ? '1 Bild hochgeladen' : `${count} Bilder hochgeladen`),
     // Titel des Namens-Dialogs beim Anlegen eines Ordners.
     newFolder: 'Neuer Ordner',
+    // Toasts nach Strg+C / Strg+X und aria-description des ausgeschnittenen Bildes.
+    imageCopied: 'Bild kopiert',
+    imageCut: 'Bild ausgeschnitten',
+    markedAsCut: 'ausgeschnitten',
   },
   // The page with the card grid.
   project: {

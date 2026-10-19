@@ -65,7 +65,7 @@
          Backend kennt keine Reihenfolge. Über der Mitte eines Ordners landet der
          gezogene darin. Die Bibliothek bewegt die Kiste per „transform“,
          gekippt wird der Ordner darin (siehe style.css). Per Tastatur sortiert
-         Alt+←/→. -->
+         Alt+←/→, die Position steht für Screenreader in der aria-description. -->
     <VueDraggable
       v-if="projectFolders?.length"
       v-model="projectFolders"
@@ -75,7 +75,7 @@
       @start="startDrag('folder', $event)"
       @end="finishFolderDrag"
     >
-      <div v-for="folder in projectFolders" :key="folder.id" class="cb-folder-tile">
+      <div v-for="(folder, index) in projectFolders" :key="folder.id" class="cb-folder-tile">
         <CbFolder
           :id="folderElementId(folder.id)"
           :name="folder.data.name"
@@ -83,6 +83,7 @@
           :class="{ invisible: folder.id === openedFolder?.folder.id }"
           v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
           :aria-keyshortcuts="sortingKeyShortcuts"
+          :aria-description="dictionary.general.positionOf(index + 1, projectFolders.length)"
           @click="(event, graphicRect) => clickFolder(folder, event, graphicRect)"
           @keydown="sortWithAltArrow($event, projectFolders ?? [], folder)"
         />
@@ -150,6 +151,7 @@ import { deleteWithUndo } from '../deletion/deleteWithUndo'
 import { deleteImage } from '../images/deleteImage'
 import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
+import { copyOrCutImageOnKey } from '../images/imageClipboard'
 import { deleteFolder } from '../folders/deleteFolder'
 import { moveDroppedFolder } from '../folders/moveDroppedFolder'
 import { moveFolder } from '../folders/moveFolder'
@@ -361,6 +363,20 @@ async function moveItemIntoNewFolder() {
   await pendingMove.moveInto(pendingMove.folderId)
 }
 
-onMounted(() => window.addEventListener('keydown', undoDeletionOnKey))
-onUnmounted(() => window.removeEventListener('keydown', undoDeletionOnKey))
+// Strg+C/X gilt dem Bild im Betrachter, sonst dem mit Fokus im Raster – dessen
+// Kachel trägt die ID des Bildes.
+function copyOrCutImage(event: KeyboardEvent) {
+  const focusedId = (event.target as HTMLElement).id
+  const image = openedImage.value?.image ?? projectImages.value?.find((projectImage) => projectImage.id === focusedId)
+  copyOrCutImageOnKey(event, image)
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', undoDeletionOnKey)
+  window.addEventListener('keydown', copyOrCutImage)
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', undoDeletionOnKey)
+  window.removeEventListener('keydown', copyOrCutImage)
+})
 </script>

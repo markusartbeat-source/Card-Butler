@@ -74,6 +74,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     uploadingImages: 'Uploading…',
     imagesUploaded: (count: number) => (count === 1 ? '1 image uploaded' : `${count} images uploaded`),
     newFolder: 'New folder',
+    imageCopied: 'Image copied',
+    imageCut: 'Image cut',
+    markedAsCut: 'cut',
   },
   project: {
     share: 'Share',
