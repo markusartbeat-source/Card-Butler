@@ -65,8 +65,8 @@ export const dictionaryGerman = {
   search: {
     noResults: 'Keine Karte gefunden',
   },
-  // Die Leiste, die beim Ziehen (Karte, Bild) von oben herunterfährt, und was
-  // ihre Felder danach melden.
+  // Die Leiste, die beim Ziehen (Karte, Bild, Ordner) von oben herunterfährt,
+  // und was ihre Felder danach melden.
   dropBar: {
     deleteCard: 'Karte löschen',
     flipAllCards: 'Alle Karten umdrehen',
@@ -75,6 +75,7 @@ export const dictionaryGerman = {
     imageDeleted: 'Bild gelöscht',
     moveIntoNewFolder: 'In neuen Ordner',
     deleteFolder: 'Ordner löschen',
+    folderDeleted: 'Ordner gelöscht',
   },
   // The page with the picture library.
   images: {

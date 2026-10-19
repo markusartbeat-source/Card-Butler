@@ -184,7 +184,8 @@ import { printCountOverlayCardId } from '../printCount/printCountOverlayState'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
-import { deleteDroppedCard } from '../cardDrag/deleteDroppedCard'
+import { deleteDroppedItem } from '../dragAndDrop/deleteDroppedItem'
+import { deleteCard } from '../cardSets/deleteCard'
 import {
   cardTurnEnded,
   flipAllCards,
@@ -313,7 +314,9 @@ function selectCard(id: string, event: MouseEvent) {
 function finishCardDrag(cardSet: CardSet, event: { newDraggableIndex?: number }) {
   const { droppedOn, index, element } = endDrag(event)
   if (droppedOn === 'deleteCard') {
-    return deleteDroppedCard(cardSet, index, element)
+    return deleteDroppedItem(cardSet.cards, index, element, dictionary.dropBar.cardDeleted, (card) =>
+      deleteCard(cardSet, card),
+    )
   }
 
   if (droppedOn === 'flipAllCards') flipAllCards()

@@ -133,9 +133,11 @@ import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { edgeSortingDragOptions } from '../dragAndDrop/dragOptions'
 import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { pageDropTargetAttributes } from '../dragAndDrop/pageDropTarget'
-import { deleteDroppedImage } from '../images/deleteDroppedImage'
+import { deleteDroppedItem } from '../dragAndDrop/deleteDroppedItem'
+import { deleteImage } from '../images/deleteImage'
 import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
+import { deleteFolder } from '../folders/deleteFolder'
 import { moveDroppedFolder } from '../folders/moveDroppedFolder'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 import { projectFolders } from '../folders/projectFolders'
@@ -246,16 +248,22 @@ function enterOpenedFolder() {
 // erst nach dem Namen, bis dahin bleibt das Bild an seinem Platz.
 function finishImageDrag(event: { newDraggableIndex?: number }) {
   const { droppedOn, droppedInto, index, element } = endDrag(event)
-  if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)
+  if (droppedOn === 'deleteImage') {
+    return deleteDroppedItem(projectImages.value ?? [], index, element, dictionary.dropBar.imageDeleted, deleteImage)
+  }
   if (droppedInto !== null) return moveDroppedImage(index, element, droppedInto)
   if (droppedOn === 'moveIntoNewFolder') askForNewFolder(index, element)
   releaseDrag()
 }
 
-// Wie beim Bild: Ein Ordner oder ein Eintrag im Pfad nimmt den Ordner auf. Die
-// Felder der Leiste tun noch nichts, der Ordner bleibt an seinem Platz.
+// Wie beim Bild: Ein Ordner oder ein Eintrag im Pfad nimmt den Ordner auf,
+// Löschen nimmt seinen Inhalt mit. „In neuen Ordner“ tut noch nichts, der
+// Ordner bleibt an seinem Platz.
 function finishFolderDrag(event: { newDraggableIndex?: number }) {
-  const { droppedInto, index, element } = endDrag(event)
+  const { droppedOn, droppedInto, index, element } = endDrag(event)
+  if (droppedOn === 'deleteFolder') {
+    return deleteDroppedItem(projectFolders.value ?? [], index, element, dictionary.dropBar.folderDeleted, deleteFolder)
+  }
   if (droppedInto !== null) return moveDroppedFolder(index, element, droppedInto)
   releaseDrag()
 }

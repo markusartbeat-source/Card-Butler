@@ -1,4 +1,4 @@
-// Etwas Gezogenes (Karte, Bild), über einem Feld der Drop-Leiste losgelassen:
+// Etwas Gezogenes (Karte, Bild, Ordner), über einem Feld der Drop-Leiste losgelassen:
 // Das Feld zieht es ein, bis nichts mehr übrig ist, und spuckt Schnipsel aus.
 import confetti from 'canvas-confetti'
 import { flyDraggedCopy } from './draggedCopyFlight'

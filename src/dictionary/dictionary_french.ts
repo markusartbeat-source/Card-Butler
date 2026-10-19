@@ -62,6 +62,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     imageDeleted: 'Image supprimée',
     moveIntoNewFolder: 'Dans un nouveau dossier',
     deleteFolder: 'Supprimer le dossier',
+    folderDeleted: 'Dossier supprimé',
   },
   images: {
     title: 'Images',
