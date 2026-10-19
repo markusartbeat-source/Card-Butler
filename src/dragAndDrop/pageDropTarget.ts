@@ -20,11 +20,27 @@ export function pageDropTargetAttributes(value: string) {
   }
 }
 
+/** Anteil der Breite, den jeder Rand eines Ziels in der Reihe des Gezogenen
+    dem Sortieren lässt (siehe edgeSortingDragOptions). */
+export const sortingEdgeShare = 0.25
+
 /** Das Ziel unter einem Punkt, z.B. dem Mauszeiger. Die gezogene Kopie lässt
-    die Maus durch, sie steht also nicht im Weg. */
+    die Maus durch, sie steht also nicht im Weg. Steht das Ziel in derselben
+    Reihe wie das Gezogene (Ordner zwischen Ordnern), zählt nur seine Mitte –
+    über den Rändern wird sortiert. Der Platzhalter des Gezogenen ist kein Ziel,
+    nichts lässt sich in sich selbst legen. */
 export function pageDropTargetAt(x: number, y: number) {
   const target = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-drop-target]')
-  return target?.dataset.dropTarget ?? null
+  if (!target) return null
+
+  const placeholder = document.querySelector('.cb-drag-ghost')
+  if (placeholder?.contains(target)) return null
+  if (placeholder?.parentElement?.contains(target)) {
+    const rect = target.getBoundingClientRect()
+    const edgeWidth = rect.width * sortingEdgeShare
+    if (x < rect.left + edgeWidth || x > rect.right - edgeWidth) return null
+  }
+  return target.dataset.dropTarget ?? null
 }
 
 /** Lässt eine Kopie des Gezogenen von dort, wo es zuletzt hing, in das Ziel

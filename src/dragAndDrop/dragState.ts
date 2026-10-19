@@ -15,29 +15,30 @@ export const isOverDropTarget = computed(
   () => hoveredDropField.value !== null || hoveredPageDropTarget.value !== null,
 )
 
-// Woher das Gezogene kam, damit die Reihe wieder so hergestellt werden kann.
+// Das Gezogene und sein ursprünglicher Nachfolger, damit die Lücke an ihren
+// Platz zurückkann.
 let draggedElement: HTMLElement | null = null
-let draggedFromIndex = 0
 let elementAfterDragged: Element | null = null
 
-// „oldDraggableIndex“ zählt nur ziehbare Kacheln, „oldIndex“ auch die Kachel
-// davor (z.B. „Neue Karte“) – der wäre um eins verschoben.
-export function startDrag(kind: DragKind, event: { item: HTMLElement; oldDraggableIndex?: number }) {
+export function startDrag(kind: DragKind, event: { item: HTMLElement }) {
   draggedElement = event.item
-  draggedFromIndex = event.oldDraggableIndex ?? 0
   elementAfterDragged = event.item.nextElementSibling
   draggedKind.value = kind
 }
 
 /** Über welchem Feld bzw. welchem Ziel in der Seite (z.B. Ordner) losgelassen
-    wurde – beides null, wenn einfach einsortiert –, dazu wo das Gezogene stand
-    und welches Element es ist, damit ein Ziel noch damit animieren kann. Der
-    Zieh-Zustand bleibt, bis der Aufrufer ihn mit releaseDrag freigibt. */
-export function endDrag() {
+    wurde – beides null, wenn einfach einsortiert –, dazu wo das Gezogene jetzt
+    in seiner Liste steht und welches Element es ist, damit ein Ziel noch damit
+    animieren kann. Der Zieh-Zustand bleibt, bis der Aufrufer ihn mit
+    releaseDrag freigibt. */
+export function endDrag(event: { newDraggableIndex?: number }) {
   return {
     droppedOn: hoveredDropField.value,
     droppedInto: hoveredPageDropTarget.value,
-    index: draggedFromIndex,
+    // Die Bibliothek hat die Liste schon umsortiert. „newDraggableIndex“ zählt
+    // nur ziehbare Kacheln, „newIndex“ auch die Kachel davor (z.B. „Neue
+    // Karte“) – der wäre um eins verschoben.
+    index: event.newDraggableIndex ?? 0,
     element: draggedElement,
   }
 }
@@ -55,12 +56,14 @@ export function releaseDrag() {
   }, 0)
 }
 
-// Über der Leiste oder einem Ziel in der Seite gehört das Gezogene nirgends
-// mehr in die Reihe. Die Reihe zeigt aber noch den letzten Platz auf dem Weg
-// dorthin, darum kommt die Lücke zurück an den Ursprung – Ablegen auf dem Ziel
-// lässt die Reihenfolge dann unverändert. Nur das Gezogene wandert in der
-// Reihe, sein ursprünglicher Nachfolger steht also noch da.
-watch(isOverDropTarget, (isOver) => {
-  if (!isOver || !draggedElement) return
+// Über der Leiste gehört das Gezogene nirgends mehr in die Reihe. Die Reihe
+// zeigt aber noch den letzten Platz auf dem Weg dorthin, darum kommt die Lücke
+// zurück an den Ursprung – ein Feld, das nichts entfernt (z.B. „Alle Karten
+// umdrehen“), lässt die Reihenfolge dann unverändert. Nur das Gezogene wandert
+// in der Reihe, sein ursprünglicher Nachfolger steht also noch da. Über einem
+// Ziel in der Seite bleibt die Lücke: Das Gezogene verlässt die Reihe ohnehin,
+// und in der eigenen Reihe (Ordner auf Ordner) rückte sonst das Ziel weg.
+watch(hoveredDropField, (field) => {
+  if (field === null || !draggedElement) return
   draggedElement.parentElement?.insertBefore(draggedElement, elementAfterDragged)
 })

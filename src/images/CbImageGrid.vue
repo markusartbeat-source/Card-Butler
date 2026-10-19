@@ -11,7 +11,7 @@
     draggable=".cb-image-tile"
     class="flex flex-wrap gap-3 select-none"
     @start="startDrag('image', $event)"
-    @end="emit('dragEnd')"
+    @end="emit('dragEnd', $event)"
   >
     <!-- Platz für eine Kachel vor den Bildern, z.B. „Bilder hochladen“. -->
     <slot name="leading" :tile-style="tileStyle" />
@@ -64,7 +64,7 @@ const emit = defineEmits<{
   open: [image: ImageResource, tileRect: DOMRect, ratio: number]
   /** Losgelassen. Was das Ablegen bedeutet, liest die Seite per endDrag ab,
       danach gibt sie den Zieh-Zustand mit releaseDrag frei. */
-  dragEnd: []
+  dragEnd: [event: { newDraggableIndex?: number }]
 }>()
 
 // Passes on where the clicked tile sits on the screen — the viewer starts its

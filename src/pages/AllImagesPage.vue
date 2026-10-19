@@ -52,18 +52,18 @@
          dem Handy die Seite vergrößert. Ein Bild darauf gezogen landet darin,
          die Reihe bleibt dabei hell. Der geöffnete Ordner bleibt an seinem
          Platz, nur unsichtbar – von dort fliegt er hoch und zurück. -->
-    <!-- Ziehen sortiert die Ordner um, nur lokal: Das Backend kennt keine
-         Reihenfolge. Die Bibliothek bewegt die Kiste per „transform“, gekippt
-         wird der Ordner darin (siehe style.css). Losgelassen über der Leiste
-         oder dem Pfad passiert noch nichts, der Ordner bleibt an seinem Platz. -->
+    <!-- Ziehen über die Ränder der anderen Ordner sortiert um, nur lokal: Das
+         Backend kennt keine Reihenfolge. Über der Mitte eines Ordners landet der
+         gezogene darin. Die Bibliothek bewegt die Kiste per „transform“,
+         gekippt wird der Ordner darin (siehe style.css). -->
     <VueDraggable
       v-if="projectFolders?.length"
       v-model="projectFolders"
-      v-bind="dragOptions"
+      v-bind="edgeSortingDragOptions"
       draggable=".cb-folder-tile"
       class="-mx-2 flex touch-manipulation flex-wrap gap-2 select-none"
       @start="startDrag('folder', $event)"
-      @end="releaseDrag"
+      @end="finishFolderDrag"
     >
       <div v-for="folder in projectFolders" :key="folder.id" class="cb-folder-tile">
         <CbFolder
@@ -71,7 +71,7 @@
           :name="folder.data.name"
           class="cb-folder-face cursor-grab active:cursor-grabbing"
           :class="{ invisible: folder.id === openedFolder?.folder.id }"
-          v-bind="folderDropTargetAttributes(folder)"
+          v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
           @click="(event, graphicRect) => clickFolder(folder, event, graphicRect)"
         />
       </div>
@@ -130,12 +130,13 @@ import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
 import { currentProject } from '../project/currentProject'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
-import { dragOptions } from '../dragAndDrop/dragOptions'
-import { draggedKind, endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
+import { edgeSortingDragOptions } from '../dragAndDrop/dragOptions'
+import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { pageDropTargetAttributes } from '../dragAndDrop/pageDropTarget'
 import { deleteDroppedImage } from '../images/deleteDroppedImage'
 import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
+import { moveDroppedFolder } from '../folders/moveDroppedFolder'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 import { projectFolders } from '../folders/projectFolders'
 import { createFolder } from '../folders/createFolder'
@@ -204,12 +205,6 @@ function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
 // der Flug des Betrachters.
 const openedFolder = ref<{ folder: FolderResource; graphicRect: DOMRect } | null>(null)
 
-// Ein gezogenes Bild landet im Ordner unter dem Mauszeiger. Ein gezogener
-// Ordner wird nur zwischen die anderen einsortiert.
-function folderDropTargetAttributes(folder: FolderResource) {
-  return draggedKind.value === 'folder' ? {} : pageDropTargetAttributes(levelDropTarget(folder.id))
-}
-
 // Ein Klick wartet kurz, ob ein zweiter auf denselben Ordner folgt – dann geht
 // es hinein, sonst öffnet der Betrachter. Selbst gezählt statt per dblclick,
 // damit auch Doppeltippen auf dem Handy ankommt. Per Tastatur (Enter,
@@ -245,15 +240,23 @@ function enterOpenedFolder() {
   router.push(folderRoute(folder.id))
 }
 
-// Loslassen über einem Feld der Drop-Leiste, einem Ordner oder einem Eintrag im
-// Pfad sortiert nicht – das Ziel entscheidet. Löschen und Hineinlegen bringen
-// eine Animation mit und geben den Zieh-Zustand darum selbst frei. „In neuen
-// Ordner“ fragt erst nach dem Namen, bis dahin bleibt das Bild an seinem Platz.
-function finishImageDrag() {
-  const { droppedOn, droppedInto, index, element } = endDrag()
+// Losgelassen über einem Feld der Drop-Leiste, einem Ordner oder einem Eintrag
+// im Pfad entscheidet das Ziel. Löschen und Hineinlegen bringen eine Animation
+// mit und geben den Zieh-Zustand darum selbst frei. „In neuen Ordner“ fragt
+// erst nach dem Namen, bis dahin bleibt das Bild an seinem Platz.
+function finishImageDrag(event: { newDraggableIndex?: number }) {
+  const { droppedOn, droppedInto, index, element } = endDrag(event)
   if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)
   if (droppedInto !== null) return moveDroppedImage(index, element, droppedInto)
   if (droppedOn === 'moveIntoNewFolder') askForNewFolder(index, element)
+  releaseDrag()
+}
+
+// Wie beim Bild: Ein Ordner oder ein Eintrag im Pfad nimmt den Ordner auf. Die
+// Felder der Leiste tun noch nichts, der Ordner bleibt an seinem Platz.
+function finishFolderDrag(event: { newDraggableIndex?: number }) {
+  const { droppedInto, index, element } = endDrag(event)
+  if (droppedInto !== null) return moveDroppedFolder(index, element, droppedInto)
   releaseDrag()
 }
 

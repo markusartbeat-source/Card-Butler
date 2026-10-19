@@ -1,4 +1,5 @@
 import { isOverDropTarget } from './dragState'
+import { sortingEdgeShare } from './pageDropTarget'
 
 /** Wie eine Reihe ihre Kacheln an die Zieh-Bibliothek gibt – für Karten wie
     Bilder. Welche Kacheln ziehbar sind, sagt die Reihe selbst („draggable“).
@@ -14,4 +15,13 @@ export const dragOptions = {
   fallbackTolerance: 8,
   ghostClass: 'cb-drag-ghost',
   dragClass: 'cb-dragged',
+}
+
+/** Für eine Reihe, deren Kacheln selbst Ziele sind (z.B. Ordner): Sortiert wird
+    nur über den Rändern einer Kachel, ihre Mitte nimmt das Gezogene auf (siehe
+    pageDropTargetAt). Die Bibliothek zählt beide Ränder zusammen. */
+export const edgeSortingDragOptions = {
+  ...dragOptions,
+  invertSwap: true,
+  invertedSwapThreshold: 2 * sortingEdgeShare,
 }

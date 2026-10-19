@@ -161,8 +161,8 @@ body {
     @apply pointer-events-none fixed inset-0 z-50 h-full w-full;
   }
 
-  /* Die Kopie des Gezogenen (Karte, Bild), die in ein Feld der Drop-Leiste
-     oder einen Ordner fliegt. Sie liegt für sich über der Seite, damit die
+  /* Die Kopie des Gezogenen (Karte, Bild, Ordner), die in ein Feld der
+     Drop-Leiste oder einen Ordner fliegt. Sie liegt für sich über der Seite, damit die
      Reihe ihre Lücke schon schließen kann. */
   .cb-flying-copy {
     @apply pointer-events-none fixed z-50;
@@ -171,7 +171,8 @@ body {
   /* Sie löst das Gezogene ab, muss also genauso klein und gekippt starten, wie
      es über dem Feld war. */
   .cb-flying-copy .cb-card-face,
-  .cb-flying-copy .cb-image-face {
+  .cb-flying-copy .cb-image-face,
+  .cb-flying-copy .cb-folder-face {
     scale: 0.5;
     rotate: 3deg;
     @apply shadow-2xl;
@@ -233,7 +234,8 @@ body {
      fliegende Kopie startet genauso klein. */
   .cb-over-page-drop-target .cb-dragged .cb-image-face,
   .cb-over-page-drop-target .cb-dragged .cb-folder-face,
-  .cb-over-page-drop-target .cb-flying-copy .cb-image-face {
+  .cb-over-page-drop-target .cb-flying-copy .cb-image-face,
+  .cb-over-page-drop-target .cb-flying-copy .cb-folder-face {
     scale: 0.25;
   }
 

@@ -39,7 +39,7 @@
             :disabled="isSearching"
             class="cb-card-set-section flex flex-wrap content-start justify-center gap-6 py-32 select-none tablet:px-16"
             @start="startDrag('card', $event)"
-            @end="finishCardDrag(cardSet)"
+            @end="finishCardDrag(cardSet, $event)"
           >
             <!-- The button stands in front of the row. It is not a ".cb-card", so the
                  drag library skips it: a card is only ever put before or after another
@@ -310,8 +310,8 @@ function selectCard(id: string, event: MouseEvent) {
 // Letting go over a field of the drop bar is not a sort — the row stays as it
 // was, and the field decides what happens to the card. Deleting brings its own
 // animation along, which is why it gives the drag state back itself.
-function finishCardDrag(cardSet: CardSet) {
-  const { droppedOn, index, element } = endDrag()
+function finishCardDrag(cardSet: CardSet, event: { newDraggableIndex?: number }) {
+  const { droppedOn, index, element } = endDrag(event)
   if (droppedOn === 'deleteCard') {
     return deleteDroppedCard(cardSet, index, element)
   }
