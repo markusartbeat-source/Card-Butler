@@ -9,7 +9,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     signInWithGoogle: 'Se connecter avec Google',
     signOut: 'Se déconnecter',
     upgrade: 'Améliorer',
-    more: 'Plus',
     save: 'Enregistrer',
     close: 'Fermer',
     cancel: 'Annuler',
@@ -80,7 +79,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     markedAsCut: 'coupée',
   },
   project: {
-    share: 'Partager',
     export: 'Exporter',
     printExport: 'Impression / export',
     newCard: 'Nouvelle carte',

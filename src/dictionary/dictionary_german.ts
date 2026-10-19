@@ -8,7 +8,6 @@ export const dictionaryGerman = {
     signInWithGoogle: 'Mit Google anmelden',
     signOut: 'Abmelden',
     upgrade: 'Upgrade',
-    more: 'Mehr',
     save: 'Speichern',
     close: 'Schließen',
     cancel: 'Abbrechen',
@@ -102,7 +101,6 @@ export const dictionaryGerman = {
   },
   // The page with the card grid.
   project: {
-    share: 'Teilen',
     export: 'Exportieren',
     printExport: 'Druck / Export',
     newCard: 'Neue Karte',
