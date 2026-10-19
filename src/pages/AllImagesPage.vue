@@ -151,7 +151,7 @@ import { deleteWithUndo } from '../deletion/deleteWithUndo'
 import { deleteImage } from '../images/deleteImage'
 import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
-import { copyOrCutImageOnKey } from '../images/imageClipboard'
+import { copyOrCutImageOnKey, pasteImageOnKey } from '../images/imageClipboard'
 import { deleteFolder } from '../folders/deleteFolder'
 import { moveDroppedFolder } from '../folders/moveDroppedFolder'
 import { moveFolder } from '../folders/moveFolder'
@@ -371,12 +371,19 @@ function copyOrCutImage(event: KeyboardEvent) {
   copyOrCutImageOnKey(event, image)
 }
 
+// Strg+V fügt in die gezeigte Ebene ein, egal wo der Fokus steht.
+function pasteImage(event: KeyboardEvent) {
+  pasteImageOnKey(event, projectId, folderId)
+}
+
 onMounted(() => {
   window.addEventListener('keydown', undoDeletionOnKey)
   window.addEventListener('keydown', copyOrCutImage)
+  window.addEventListener('keydown', pasteImage)
 })
 onUnmounted(() => {
   window.removeEventListener('keydown', undoDeletionOnKey)
   window.removeEventListener('keydown', copyOrCutImage)
+  window.removeEventListener('keydown', pasteImage)
 })
 </script>

@@ -93,9 +93,11 @@ export const dictionaryGerman = {
     imagesUploaded: (count: number) => (count === 1 ? '1 Bild hochgeladen' : `${count} Bilder hochgeladen`),
     // Titel des Namens-Dialogs beim Anlegen eines Ordners.
     newFolder: 'Neuer Ordner',
-    // Toasts nach Strg+C / Strg+X und aria-description des ausgeschnittenen Bildes.
+    // Toasts nach Strg+C / Strg+X / Strg+V (Ausgeschnittenes) und aria-description
+    // des ausgeschnittenen Bildes.
     imageCopied: 'Bild kopiert',
     imageCut: 'Bild ausgeschnitten',
+    imagePasted: 'Bild eingefügt',
     markedAsCut: 'ausgeschnitten',
   },
   // The page with the card grid.

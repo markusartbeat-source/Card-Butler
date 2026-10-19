@@ -38,6 +38,11 @@ function uploadImage(projectId: string, folderId: string | null, file: File) {
   })
 }
 
+/** Lädt die Bilddatei selbst, z.B. um sie als Kopie erneut hochzuladen. */
+function loadImageContent(imageId: string) {
+  return postOffice.request<Blob>(`/api/images/${encodeURIComponent(imageId)}/content`, { responseType: 'blob' })
+}
+
 /** Benennt ein Bild um oder legt es in einen anderen Ordner. Das Backend
  *  ersetzt beides, darum immer Name und `folderId`. Ist `version` veraltet,
  *  antwortet es mit 412. */
@@ -59,4 +64,4 @@ function deleteImage(imageId: string, version: number) {
 }
 
 /** Fach `images` der Poststelle, Aufruf als `postOffice.images.…()`. */
-export const imagesApi = { loadImages, uploadImage, updateImage, deleteImage }
+export const imagesApi = { loadImages, uploadImage, loadImageContent, updateImage, deleteImage }

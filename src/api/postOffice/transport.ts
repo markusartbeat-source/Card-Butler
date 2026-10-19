@@ -14,6 +14,8 @@ export type PostOfficeRequestOptions = {
   /** Status, mit denen der Aufrufer rechnet: Geworfen wird trotzdem, aber
    *  ohne Toast und Konsole (z.B. 401 bei /api/me = niemand angemeldet). */
   expectedStatuses?: number[]
+  /** Antwort als Datei (`Blob`, z.B. ein Bild) statt als JSON. */
+  responseType?: 'json' | 'blob'
 }
 
 type CsrfToken = { headerName: string; token: string }
@@ -23,14 +25,17 @@ type CsrfToken = { headerName: string; token: string }
 let csrfToken: CsrfToken | null = null
 
 /** Schickt einen Aufruf ans Backend (relativer Pfad, Sitzungs-Cookie dabei)
- *  und liefert die Antwort als JSON. Wirft bei Fehlern nur `ApiError`. */
+ *  und liefert die Antwort als JSON oder Datei. Wirft bei Fehlern nur `ApiError`. */
 async function request<ResponseBody>(
   path: string,
-  { method = 'GET', body, version, expectedStatuses = [] }: PostOfficeRequestOptions = {},
+  { method = 'GET', body, version, expectedStatuses = [], responseType = 'json' }: PostOfficeRequestOptions = {},
 ): Promise<ResponseBody> {
   // Kennzeichnet den Aufruf, damit er sich in Protokollen wiederfinden lässt.
   const requestId = crypto.randomUUID()
-  const headers: Record<string, string> = { Accept: 'application/json', 'X-Request-Id': requestId }
+  const headers: Record<string, string> = {
+    Accept: responseType === 'blob' ? '*/*' : 'application/json',
+    'X-Request-Id': requestId,
+  }
   // Bei FormData setzt der Browser den Content-Type selbst, samt Trenner
   // zwischen den Teilen.
   const requestBody = body instanceof FormData || body === undefined ? body : JSON.stringify(body)
@@ -73,6 +78,8 @@ async function request<ResponseBody>(
     const problem = await response.json().catch(() => null)
     throw fail(response.status, problem?.detail ?? null)
   }
+
+  if (responseType === 'blob') return (await response.blob()) as ResponseBody
 
   // Manche Antworten (z.B. 204) haben keinen Inhalt.
   const responseText = await response.text()

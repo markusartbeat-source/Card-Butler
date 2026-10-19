@@ -76,6 +76,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     newFolder: 'New folder',
     imageCopied: 'Image copied',
     imageCut: 'Image cut',
+    imagePasted: 'Image pasted',
     markedAsCut: 'cut',
   },
   project: {
