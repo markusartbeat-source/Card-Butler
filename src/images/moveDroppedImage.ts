@@ -1,18 +1,19 @@
+import { flyDraggedIntoPageDropTarget } from '../dragAndDrop/pageDropTarget'
 import { releaseDrag } from '../dragAndDrop/dragState'
-import { flyDraggedIntoFolder } from '../folders/flyIntoFolder'
+import { levelOfDropTarget } from '../folders/levelDropTarget'
 import { moveImage } from './moveImage'
 import { projectImages } from './projectImages'
 
-/** Das über einem Ordner losgelassene Bild verlässt die Ebene sofort und fliegt
-    hinein. Das Backend erfährt es gleich, die Oberfläche wartet nur auf den
-    Flug. */
-export async function moveDroppedImage(imageIndex: number, imageElement: HTMLElement | null, folderId: string) {
+/** Das über einer Ebene (Ordner oder Eintrag im Pfad) losgelassene Bild verlässt
+    die gezeigte Ebene sofort und fliegt hinein. Das Backend erfährt es gleich,
+    die Oberfläche wartet nur auf den Flug. */
+export async function moveDroppedImage(imageIndex: number, imageElement: HTMLElement | null, dropTarget: string) {
   const images = projectImages.value
   const image = images?.[imageIndex]
   if (!images || !image) return releaseDrag()
 
   // Fehler meldet moveImage selbst und lädt die Ebene neu.
-  moveImage(image, folderId, images)
-  if (imageElement) await flyDraggedIntoFolder(imageElement, folderId)
+  moveImage(image, levelOfDropTarget(dropTarget), images)
+  if (imageElement) await flyDraggedIntoPageDropTarget(imageElement, dropTarget)
   releaseDrag()
 }

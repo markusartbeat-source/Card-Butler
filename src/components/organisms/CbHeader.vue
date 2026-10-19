@@ -2,6 +2,8 @@
   <!-- Height and side spacing come from the design: 100px tall, 24px inset. -->
   <!-- Außen deckend, in der Mitte durchscheinend und verschwommen. Die Unschärfe
        macht den Header zu einer eigenen Ebene; z-20 hält seine Menüs über der Seite. -->
+  <!-- Beim Ziehen (Karte, Bild) tritt der Header zurück – bis auf den Pfad, auf
+       den sich Gezogenes legen lässt. Darum wird jeder Teil für sich blass. -->
   <div
     class="from-background via-background/20 to-background relative z-20 flex h-25 w-full shrink-0 items-center gap-2.5 bg-linear-to-r px-6 backdrop-blur-lg"
   >
@@ -10,14 +12,15 @@
     <div
       v-if="goldLine"
       class="from-gold-dark to-gold-dark absolute inset-x-0 bottom-0 h-px bg-linear-to-r via-transparent via-56%"
+      :class="dimWhileDraggingClasses"
       aria-hidden="true"
     />
 
     <!-- Left side is as wide as the right side, so the search stays centered. -->
     <div class="flex min-w-0 flex-1 items-center gap-2.5">
       <template v-if="logo">
-        <img src="../../assets/logos/logo.svg" alt="" class="size-12" />
-        <span class="text-xl text-white">{{ dictionary.header.appName }}</span>
+        <img src="../../assets/logos/logo.svg" alt="" class="size-12" :class="dimWhileDraggingClasses" />
+        <span class="text-xl text-white" :class="dimWhileDraggingClasses">{{ dictionary.header.appName }}</span>
       </template>
 
       <!-- The back button belongs to the heading, so it only shows with one.
@@ -32,15 +35,18 @@
           to="/home"
           :aria-label="dictionary.header.backToHome"
           class="cb-hover relative flex items-center overflow-hidden rounded-full p-2 text-white"
+          :class="dimWhileDraggingClasses"
         >
           <CbIcon name="west" />
         </router-link>
         <!-- Groß der Titel, klein darunter die zweite Zeile: der Pfad oder
              ein Text. Alles endet lang in „…“. -->
         <div class="flex min-w-0 flex-col">
-          <h1 class="truncate text-xl text-white">{{ title }}</h1>
+          <h1 class="truncate text-xl text-white" :class="dimWhileDraggingClasses">{{ title }}</h1>
           <CbBreadcrumbs v-if="path" :entries="path" :label="dictionary.header.path" class="text-label text-sm" />
-          <p v-else-if="subtitle" class="text-label truncate text-sm">{{ subtitle }}</p>
+          <p v-else-if="subtitle" class="text-label truncate text-sm" :class="dimWhileDraggingClasses">
+            {{ subtitle }}
+          </p>
         </div>
       </template>
     </div>
@@ -50,6 +56,7 @@
     <div
       v-if="searchbar"
       class="bg-surface hidden w-96 items-center rounded-full text-white shadow-lg laptop:flex"
+      :class="dimWhileDraggingClasses"
     >
       <!-- The typing happens here, the icons next to it only switch the mode.
            The label carries hover and ripple, because those need a child
@@ -88,7 +95,7 @@
     <!-- Only from laptop width both sides are equal (that centers the search).
          Below, the right side is as wide as its content, so the title keeps
          its room. -->
-    <div class="flex items-center justify-end gap-3 laptop:flex-1">
+    <div class="flex items-center justify-end gap-3 laptop:flex-1" :class="dimWhileDraggingClasses">
       <!-- The three menus of the design. They open the same list as every other
            menu in the header, the one of the profile included. Below desktop
            width only the cards menu stays, the others move into the profile
@@ -149,6 +156,7 @@ import { cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
 import { createCardSet } from '../../cardSets/createCardSet'
 import { visibleCardSetId } from '../../cardSets/visibleCardSet'
 import { currentProject } from '../../project/currentProject'
+import { dimWhileDraggingClasses } from '../../dragAndDrop/dimWhileDragging'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
 import { collaborationPages, headerPageAt, headerPageRoute, imagePages } from './headerPages'

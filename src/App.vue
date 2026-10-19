@@ -8,9 +8,7 @@
     <!-- The header sits above the animated area, so a page change only moves
          the content below it. Each page says what it should show. -->
     <div class="relative z-10 flex flex-1 flex-col overflow-hidden">
-      <!-- Beim Ziehen (Karte, Bild) tritt der Header zurück. -->
       <CbHeader
-        :class="dimWhileDraggingClasses"
         :logo="headerSettings.logo"
         :menus="headerSettings.menus"
         :gold-line="headerSettings.goldLine"
@@ -50,7 +48,6 @@ import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
 import CbHomeScene from './home/CbHomeScene.vue'
 import CbDropBar from './dragAndDrop/CbDropBar.vue'
-import { dimWhileDraggingClasses } from './dragAndDrop/dimWhileDragging'
 </script>
 
 <style scoped>

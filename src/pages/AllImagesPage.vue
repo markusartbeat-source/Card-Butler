@@ -30,7 +30,7 @@
         :id="folderElementId(folder.id)"
         :key="folder.id"
         :name="folder.data.name"
-        v-bind="pageDropTargetAttributes(folder.id)"
+        v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
         @dblclick="router.push(folderRoute(folder.id))"
       />
     </div>
@@ -95,6 +95,7 @@ import { createFolder } from '../folders/createFolder'
 import { flyIntoFolder, folderElementId } from '../folders/flyIntoFolder'
 import { folderPath } from '../folders/currentFolder'
 import { showFolder } from '../folders/showFolder'
+import { levelDropTarget } from '../folders/levelDropTarget'
 
 // Die Seite wird je Projekt und je Ordner neu eingehängt (App.vue schlüsselt
 // nach der Adresse), die IDs bleiben also fest. Ohne Ordner die oberste Ebene.
@@ -108,12 +109,17 @@ function folderRoute(targetFolderId: string | null) {
   return { name: 'all-images', params: { projectId, folderId: targetFolderId } }
 }
 
-// Die zweite Zeile ist der Pfad von „Alle Bilder“ bis zur gezeigten Ebene.
+// Die zweite Zeile ist der Pfad von „Alle Bilder“ bis zur gezeigten Ebene. Auf
+// jeden Eintrag lässt sich ein Bild ziehen, es landet in dessen Ebene.
+function pathEntry(label: string, targetFolderId: string | null) {
+  return { label, to: folderRoute(targetFolderId), dropTarget: levelDropTarget(targetFolderId) }
+}
+
 useHeader(() => ({
   title: currentProject.value?.name,
   path: [
-    { label: dictionary.header.allImages, to: folderRoute(null) },
-    ...folderPath.value.map((folder) => ({ label: folder.data.name, to: folderRoute(folder.id) })),
+    pathEntry(dictionary.header.allImages, null),
+    ...folderPath.value.map((folder) => pathEntry(folder.data.name, folder.id)),
   ],
   searchbar: false,
 }))
@@ -147,10 +153,10 @@ function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
   openedImage.value = { image, tileRect, ratio }
 }
 
-// Loslassen über einem Feld der Drop-Leiste oder einem Ordner sortiert nicht –
-// das Ziel entscheidet. Löschen und Hineinlegen bringen eine Animation mit und
-// geben den Zieh-Zustand darum selbst frei. „In neuen Ordner“ fragt erst nach
-// dem Namen, bis dahin bleibt das Bild an seinem Platz.
+// Loslassen über einem Feld der Drop-Leiste, einem Ordner oder einem Eintrag im
+// Pfad sortiert nicht – das Ziel entscheidet. Löschen und Hineinlegen bringen
+// eine Animation mit und geben den Zieh-Zustand darum selbst frei. „In neuen
+// Ordner“ fragt erst nach dem Namen, bis dahin bleibt das Bild an seinem Platz.
 function finishImageDrag() {
   const { droppedOn, droppedInto, index, element } = endDrag()
   if (droppedOn === 'deleteImage') return deleteDroppedImage(index, element)

@@ -47,20 +47,28 @@ const hoveredFieldIndex = computed(() =>
   hoveredDropField.value === null ? null : fields.value.indexOf(hoveredDropField.value),
 )
 
+function fieldIndexCovering(rect: DOMRect) {
+  return toolbar.value?.indexOverlapping(rect) ?? null
+}
+
 // Die Leiste lässt die Maus durch, dort oben kann also nichts von selbst
 // reagieren. Gemessen wird stattdessen die gezogene Kopie, die die Bibliothek
 // bewegt. Sie ist breiter als ein Feld, darum gewinnt das am meisten bedeckte.
-// Hängt es über keinem Feld, zählt das Ziel in der Seite unter dem Mauszeiger,
-// z.B. ein Ordner – wie überall, wo man etwas auf etwas zieht.
+// Vorher zählt das Ziel in der Seite unter dem Mauszeiger, z.B. ein Ordner oder
+// ein Eintrag im Pfad neben der Leiste – wie überall, wo man etwas auf etwas
+// zieht. Nur wo der Zeiger auf einem Feld steht, gilt das Feld: Ein Ziel
+// darunter ist verdeckt.
 function updateDropTarget(event: MouseEvent) {
   // Ohne gezogene Kopie ist die Maus schon losgelassen. Das Ziel behält dann
   // sein Leuchten, damit das Gezogene noch hineinfliegen kann.
   const draggedRect = document.querySelector('.cb-dragged')?.getBoundingClientRect()
   if (!draggedRect) return
 
-  const index = toolbar.value?.indexOverlapping(draggedRect) ?? null
+  const isPointerOnField = fieldIndexCovering(new DOMRect(event.clientX, event.clientY, 1, 1)) !== null
+  const pageDropTarget = isPointerOnField ? null : pageDropTargetAt(event.clientX, event.clientY)
+  const index = pageDropTarget === null ? fieldIndexCovering(draggedRect) : null
   hoveredDropField.value = index === null ? null : (fields.value[index] ?? null)
-  hoveredPageDropTarget.value = index === null ? pageDropTargetAt(event.clientX, event.clientY) : null
+  hoveredPageDropTarget.value = pageDropTarget
 
   // Das Ablegen meldet die Bibliothek erst, wenn die Kopie schon weg ist – was
   // eine Animation danach braucht, wird darum hier gemessen.
