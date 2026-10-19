@@ -21,6 +21,8 @@ export const dictionaryGerman = {
     showSuggestions: 'Vorschläge anzeigen',
     // Trenner zwischen den Einträgen eines Pfads, z.B. „Alle Bilder / Ordner“.
     pathSeparator: '/',
+    // Ansage nach dem Sortieren per Tastatur.
+    positionOf: (position: number, count: number) => `Position ${position} von ${count}`,
   },
   // The bar at the top of every page.
   header: {

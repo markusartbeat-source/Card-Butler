@@ -20,6 +20,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     support: 'Soporte',
     showSuggestions: 'Mostrar sugerencias',
     pathSeparator: '/',
+    positionOf: (position: number, count: number) => `Posición ${position} de ${count}`,
   },
   header: {
     appName: 'Card Butler',

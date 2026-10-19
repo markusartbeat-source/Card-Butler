@@ -64,7 +64,8 @@
     <!-- Ziehen über die Ränder der anderen Ordner sortiert um, nur lokal: Das
          Backend kennt keine Reihenfolge. Über der Mitte eines Ordners landet der
          gezogene darin. Die Bibliothek bewegt die Kiste per „transform“,
-         gekippt wird der Ordner darin (siehe style.css). -->
+         gekippt wird der Ordner darin (siehe style.css). Per Tastatur sortiert
+         Alt+←/→. -->
     <VueDraggable
       v-if="projectFolders?.length"
       v-model="projectFolders"
@@ -81,7 +82,9 @@
           class="cb-folder-face cursor-grab active:cursor-grabbing"
           :class="{ invisible: folder.id === openedFolder?.folder.id }"
           v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
+          :aria-keyshortcuts="sortingKeyShortcuts"
           @click="(event, graphicRect) => clickFolder(folder, event, graphicRect)"
+          @keydown="sortWithAltArrow($event, projectFolders ?? [], folder)"
         />
       </div>
     </VueDraggable>
@@ -151,6 +154,7 @@ import { deleteFolder } from '../folders/deleteFolder'
 import { moveDroppedFolder } from '../folders/moveDroppedFolder'
 import { moveFolder } from '../folders/moveFolder'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
+import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
 import { projectFolders } from '../folders/projectFolders'
 import { createFolder } from '../folders/createFolder'
 import { flyIntoFolder, folderElementId } from '../folders/flyIntoFolder'

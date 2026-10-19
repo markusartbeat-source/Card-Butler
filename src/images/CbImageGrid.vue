@@ -29,10 +29,13 @@
       :style="tileStyle(ratioOf(image))"
     >
       <!-- Der Bildname im alt ist zugleich der Name des Buttons für Screenreader. -->
+      <!-- Alt+←/→ sortiert per Tastatur. -->
       <CbInteractive
         :id="image.id"
         class="cb-image-face cursor-grab rounded-lg active:cursor-grabbing"
+        :aria-keyshortcuts="sortingKeyShortcuts"
         @click="openImage(image, $event)"
+        @keydown="sortWithAltArrow($event, images, image)"
       >
         <img
           :src="image.data.location"
@@ -57,6 +60,7 @@ import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
 import { dimWhileDraggingOtherThan } from '../dragAndDrop/dimWhileDragging'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { isDragging, startDrag } from '../dragAndDrop/dragState'
+import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
 
 const images = defineModel<ImageResource[]>('images', { required: true })
 defineProps<{ openedImageId?: string }>()

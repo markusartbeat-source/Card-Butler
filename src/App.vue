@@ -39,6 +39,7 @@
          page change and a fixed bar inside it would move with it. -->
     <CbDropBar />
     <CbToaster />
+    <CbAnnouncer />
   </div>
 </template>
 
@@ -46,6 +47,7 @@
 import CbHeader from './components/organisms/CbHeader.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
+import CbAnnouncer from './components/atoms/CbAnnouncer.vue'
 import CbHomeScene from './home/CbHomeScene.vue'
 import CbDropBar from './dragAndDrop/CbDropBar.vue'
 </script>
