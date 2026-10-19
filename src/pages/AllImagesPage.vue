@@ -52,17 +52,30 @@
          dem Handy die Seite vergrößert. Ein Bild darauf gezogen landet darin,
          die Reihe bleibt dabei hell. Der geöffnete Ordner bleibt an seinem
          Platz, nur unsichtbar – von dort fliegt er hoch und zurück. -->
-    <div v-if="projectFolders?.length" class="-mx-2 flex touch-manipulation flex-wrap gap-2 select-none">
-      <CbFolder
-        v-for="folder in projectFolders"
-        :id="folderElementId(folder.id)"
-        :key="folder.id"
-        :name="folder.data.name"
-        :class="{ invisible: folder.id === openedFolder?.folder.id }"
-        v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
-        @click="(event, graphicRect) => clickFolder(folder, event, graphicRect)"
-      />
-    </div>
+    <!-- Ziehen sortiert die Ordner um, nur lokal: Das Backend kennt keine
+         Reihenfolge. Die Bibliothek bewegt die Kiste per „transform“, gekippt
+         wird der Ordner darin (siehe style.css). Losgelassen über der Leiste
+         oder dem Pfad passiert noch nichts, der Ordner bleibt an seinem Platz. -->
+    <VueDraggable
+      v-if="projectFolders?.length"
+      v-model="projectFolders"
+      v-bind="dragOptions"
+      draggable=".cb-folder-tile"
+      class="-mx-2 flex touch-manipulation flex-wrap gap-2 select-none"
+      @start="startDrag('folder', $event)"
+      @end="releaseDrag"
+    >
+      <div v-for="folder in projectFolders" :key="folder.id" class="cb-folder-tile">
+        <CbFolder
+          :id="folderElementId(folder.id)"
+          :name="folder.data.name"
+          class="cb-folder-face cursor-grab active:cursor-grabbing"
+          :class="{ invisible: folder.id === openedFolder?.folder.id }"
+          v-bind="folderDropTargetAttributes(folder)"
+          @click="(event, graphicRect) => clickFolder(folder, event, graphicRect)"
+        />
+      </div>
+    </VueDraggable>
     <CbImageGrid
       :images="projectImages ?? []"
       @update:images="projectImages = $event"
@@ -99,6 +112,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { VueDraggable } from 'vue-draggable-plus'
 import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFileUpload.vue'
 import CbFolder, { folderGraphicRatio } from '../components/atoms/CbFolder.vue'
@@ -116,7 +130,8 @@ import { useHeader } from '../components/organisms/headerState'
 import { cardFormat } from '../card/cardFormat'
 import { currentProject } from '../project/currentProject'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
-import { endDrag, releaseDrag } from '../dragAndDrop/dragState'
+import { dragOptions } from '../dragAndDrop/dragOptions'
+import { draggedKind, endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { pageDropTargetAttributes } from '../dragAndDrop/pageDropTarget'
 import { deleteDroppedImage } from '../images/deleteDroppedImage'
 import { moveDroppedImage } from '../images/moveDroppedImage'
@@ -189,14 +204,23 @@ function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
 // der Flug des Betrachters.
 const openedFolder = ref<{ folder: FolderResource; graphicRect: DOMRect } | null>(null)
 
+// Ein gezogenes Bild landet im Ordner unter dem Mauszeiger. Ein gezogener
+// Ordner wird nur zwischen die anderen einsortiert.
+function folderDropTargetAttributes(folder: FolderResource) {
+  return draggedKind.value === 'folder' ? {} : pageDropTargetAttributes(levelDropTarget(folder.id))
+}
+
 // Ein Klick wartet kurz, ob ein zweiter auf denselben Ordner folgt – dann geht
 // es hinein, sonst öffnet der Betrachter. Selbst gezählt statt per dblclick,
 // damit auch Doppeltippen auf dem Handy ankommt. Per Tastatur (Enter,
 // Leertaste) zählt der Browser keine Klicks (detail 0), dann öffnet er sofort.
+// Der Klick nach einem beendeten Ziehen zählt nicht, und wer nach einem Klick
+// gleich zieht, bekommt keinen Betrachter.
 const doubleClickWindowInMilliseconds = 250
 let pendingFolderClick: { folderId: string; timer: ReturnType<typeof setTimeout> } | null = null
 
 function clickFolder(folder: FolderResource, event: MouseEvent, graphicRect: DOMRect) {
+  if (isDragging.value) return
   const isSecondClick = pendingFolderClick?.folderId === folder.id
   clearTimeout(pendingFolderClick?.timer)
   pendingFolderClick = null
@@ -207,7 +231,7 @@ function clickFolder(folder: FolderResource, event: MouseEvent, graphicRect: DOM
 
   const timer = setTimeout(() => {
     pendingFolderClick = null
-    openFolderViewer()
+    if (!isDragging.value) openFolderViewer()
   }, doubleClickWindowInMilliseconds)
   pendingFolderClick = { folderId: folder.id, timer }
 }

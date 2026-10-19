@@ -25,7 +25,7 @@
       v-for="image in images"
       :key="image.id"
       class="cb-image-tile grid"
-      :class="{ invisible: image.id === openedImageId }"
+      :class="[{ invisible: image.id === openedImageId }, dimWhileDraggingOtherThan('image')]"
       :style="tileStyle(ratioOf(image))"
     >
       <!-- Der Bildname im alt ist zugleich der Name des Buttons für Screenreader. -->
@@ -54,6 +54,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import type { ImageResource } from '../api/images/imagesApi'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
 import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
+import { dimWhileDraggingOtherThan } from '../dragAndDrop/dimWhileDragging'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { isDragging, startDrag } from '../dragAndDrop/dragState'
 

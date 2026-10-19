@@ -4,6 +4,7 @@ import { ref, watch } from 'vue'
 export const dropFieldsByKind = {
   card: ['deleteCard', 'flipAllCards'],
   image: ['deleteImage', 'moveIntoNewFolder'],
+  folder: ['deleteFolder', 'moveIntoNewFolder'],
 } as const
 
 export type DragKind = keyof typeof dropFieldsByKind

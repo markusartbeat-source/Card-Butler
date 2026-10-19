@@ -74,6 +74,7 @@ export const dictionaryGerman = {
     deleteImage: 'Bild löschen',
     imageDeleted: 'Bild gelöscht',
     moveIntoNewFolder: 'In neuen Ordner',
+    deleteFolder: 'Ordner löschen',
   },
   // The page with the picture library.
   images: {

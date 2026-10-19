@@ -61,6 +61,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     deleteImage: 'Excluir imagem',
     imageDeleted: 'Imagem excluída',
     moveIntoNewFolder: 'Para uma nova pasta',
+    deleteFolder: 'Excluir pasta',
   },
   images: {
     title: 'Imagens',

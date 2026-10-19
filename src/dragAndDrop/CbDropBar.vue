@@ -37,6 +37,7 @@ const fieldElementByField = computed<Record<DropField, ToolbarElement>>(() => ({
   flipAllCards: { name: dictionary.dropBar.flipAllCards, icon: 'rotate_360' },
   deleteImage: { name: dictionary.dropBar.deleteImage, icon: 'delete' },
   moveIntoNewFolder: { name: dictionary.dropBar.moveIntoNewFolder, icon: 'create_new_folder' },
+  deleteFolder: { name: dictionary.dropBar.deleteFolder, icon: 'delete' },
 }))
 
 const fieldElements = computed(() => fields.value.map((field) => fieldElementByField.value[field]))

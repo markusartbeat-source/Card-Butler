@@ -190,7 +190,7 @@ body {
     );
   }
 
-  /* Platzhalter, der zeigt, wo das Gezogene (Karte, Bild) landen wird. */
+  /* Platzhalter, der zeigt, wo das Gezogene (Karte, Bild, Ordner) landen wird. */
   .cb-drag-ghost {
     @apply opacity-20;
   }
@@ -207,12 +207,13 @@ body {
     display: none;
   }
 
-  /* Gekippt wird das Gezeigte in der Kiste (Karte, Bild-Knopf), nicht die
-     Kiste selbst: Die Bibliothek bewegt die Kiste per „transform“, ein „scale“
-     oder „rotate“ daran würde diese Bewegung strecken und drehen – das
+  /* Gekippt wird das Gezeigte in der Kiste (Karte, Bild-Knopf, Ordner), nicht
+     die Kiste selbst: Die Bibliothek bewegt die Kiste per „transform“, ein
+     „scale“ oder „rotate“ daran würde diese Bewegung strecken und drehen – das
      Gezogene liefe dem Mauszeiger davon. */
   .cb-dragged .cb-card-face,
-  .cb-dragged .cb-image-face {
+  .cb-dragged .cb-image-face,
+  .cb-dragged .cb-folder-face {
     scale: 1.05;
     rotate: 3deg;
     transition: scale 350ms ease;
@@ -222,7 +223,8 @@ body {
   /* Über einem Feld der Drop-Leiste schrumpft das Gezogene, damit das Feld
      darunter lesbar bleibt und klar ist, dass das Ablegen dort zählt. */
   .cb-over-drop-field .cb-dragged .cb-card-face,
-  .cb-over-drop-field .cb-dragged .cb-image-face {
+  .cb-over-drop-field .cb-dragged .cb-image-face,
+  .cb-over-drop-field .cb-dragged .cb-folder-face {
     scale: 0.5;
   }
 
@@ -230,6 +232,7 @@ body {
      Gezogene schrumpft stärker, damit das Ziel rundherum zu sehen bleibt. Die
      fliegende Kopie startet genauso klein. */
   .cb-over-page-drop-target .cb-dragged .cb-image-face,
+  .cb-over-page-drop-target .cb-dragged .cb-folder-face,
   .cb-over-page-drop-target .cb-flying-copy .cb-image-face {
     scale: 0.25;
   }
