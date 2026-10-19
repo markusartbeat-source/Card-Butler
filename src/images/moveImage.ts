@@ -1,5 +1,6 @@
 import type { ImageResource } from '../api/images/imagesApi'
 import { postOffice } from '../api/postOffice/postOffice'
+import { loadFolderPicture } from '../folders/folderPictures'
 import { loadProjectImages } from './projectImages'
 
 /** Nimmt ein Bild sofort aus der Liste, in der es stand, und legt es danach im
@@ -10,7 +11,11 @@ export async function moveImage(image: ImageResource, folderId: string | null, i
   const index = images.indexOf(image)
   if (index >= 0) images.splice(index, 1)
   try {
-    return await postOffice.images.updateImage(image.id, { name: image.data.name, folderId }, image.version)
+    const movedImage = await postOffice.images.updateImage(image.id, { name: image.data.name, folderId }, image.version)
+    // Der alte und der neue Ordner zeigen danach vielleicht ein anderes Bild.
+    loadFolderPicture(image.projectId, image.data.folderId)
+    loadFolderPicture(image.projectId, folderId)
+    return movedImage
   } catch {
     // Inzwischen geändert oder schon weg: Die Ebene, aus der es kam, zeigt
     // wieder, was das Backend hat – sofern sie noch zu sehen ist.

@@ -31,7 +31,7 @@
     :start-rect="openedFolder.graphicRect"
     @close="openedFolder = null"
   >
-    <CbFolder :name="openedFolder.folder.data.name" graphic-only />
+    <CbFolder :name="openedFolder.folder.data.name" :picture="folderPictures[openedFolder.folder.id]" graphic-only />
     <template #panel>
       <CbFolderSettingsPanel
         class="h-full"
@@ -79,6 +79,7 @@
         <CbFolder
           :id="folderElementId(folder.id)"
           :name="folder.data.name"
+          :picture="folderPictures[folder.id]"
           class="cb-folder-face cursor-grab active:cursor-grabbing"
           :class="{ invisible: folder.id === openedFolder?.folder.id }"
           v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
@@ -158,6 +159,7 @@ import { moveFolder } from '../folders/moveFolder'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
 import { projectFolders } from '../folders/projectFolders'
+import { folderPictures } from '../folders/folderPictures'
 import { createFolder } from '../folders/createFolder'
 import { flyIntoFolder, folderElementId } from '../folders/flyIntoFolder'
 import { folderPath } from '../folders/currentFolder'
