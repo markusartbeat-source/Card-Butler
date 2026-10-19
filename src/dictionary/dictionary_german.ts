@@ -226,6 +226,11 @@ export const dictionaryGerman = {
   imageViewer: {
     imageSettings: 'Bildeinstellungen',
   },
+  // Das Overlay für einen einzelnen Ordner.
+  folderViewer: {
+    folderSettings: 'Ordnereinstellungen',
+    openFolder: 'Ordner öffnen',
+  },
   // The page with the small pictures that can sit inside a text.
   textIcons: {
     exampleText:

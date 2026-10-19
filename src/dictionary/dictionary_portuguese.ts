@@ -196,6 +196,10 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   imageViewer: {
     imageSettings: 'Definições da imagem',
   },
+  folderViewer: {
+    folderSettings: 'Definições da pasta',
+    openFolder: 'Abrir pasta',
+  },
   textIcons: {
     exampleText:
       'Clica aqui e altera o texto de exemplo à vontade. Aqui está um ícone de exemplo no texto: +4Gold',

@@ -30,6 +30,7 @@ import FlagDe from '~icons/flag/de-4x3'
 import FlagEs from '~icons/flag/es-4x3'
 import FlagFr from '~icons/flag/fr-4x3'
 import FlagGb from '~icons/flag/gb-4x3'
+import FolderOpen from '~icons/material-symbols/folder-open-outline-rounded'
 import FormatLetterSpacingWider from '~icons/material-symbols/format-letter-spacing-wider-rounded'
 // Eigenes Icon (Zeilenhöhe) aus src/assets/custom_icons.
 import FormatLineHeight from '~icons/card-butler/format-line-height'
@@ -98,6 +99,7 @@ export const icons = {
   flag_es: FlagEs,
   flag_fr: FlagFr,
   flag_gb: FlagGb,
+  folder_open: FolderOpen,
   format_letter_spacing_wider: FormatLetterSpacingWider,
   format_line_height: FormatLineHeight,
   forum: Forum,

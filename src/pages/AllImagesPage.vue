@@ -1,12 +1,37 @@
 <template>
-  <CbImageViewer
+  <CbViewer
     v-if="openedImage"
     :key="openedImage.image.id"
-    :image="openedImage.image"
+    :label="openedImage.image.data.name"
     :ratio="openedImage.ratio"
     :start-rect="openedImage.tileRect"
     @close="openedImage = null"
-  />
+  >
+    <!-- Zugeschnitten wie im Raster, falls dort das Seitenverhältnis noch
+         nicht bekannt war (1:1). -->
+    <img
+      :src="openedImage.image.data.location"
+      :alt="openedImage.image.data.name"
+      class="size-full rounded-lg object-cover"
+    />
+    <template #panel>
+      <CbImageSettingsPanel class="h-full" />
+    </template>
+  </CbViewer>
+
+  <CbViewer
+    v-if="openedFolder"
+    :key="openedFolder.folder.id"
+    :label="openedFolder.folder.data.name"
+    :ratio="folderGraphicRatio"
+    :start-rect="openedFolder.graphicRect"
+    @close="openedFolder = null"
+  >
+    <CbFolder :name="openedFolder.folder.data.name" graphic-only />
+    <template #panel>
+      <CbFolderSettingsPanel class="h-full" @open-folder="enterOpenedFolder" />
+    </template>
+  </CbViewer>
 
   <CbNameDialog
     v-model:open="isNewFolderDialogOpen"
@@ -22,16 +47,20 @@
     <!-- Each folder carries 8px of padding for its hover layer, so the row
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
-    <!-- Doppelklick führt hinein, ohne dabei den Ordnernamen zu markieren. Ein
-         Bild darauf gezogen landet darin, die Reihe bleibt dabei hell. -->
-    <div v-if="projectFolders?.length" class="-mx-2 flex flex-wrap gap-2 select-none">
+    <!-- Ein Klick zeigt den Ordner im Betrachter, ein Doppelklick führt hinein,
+         ohne dabei den Ordnernamen zu markieren und ohne dass Doppeltippen auf
+         dem Handy die Seite vergrößert. Ein Bild darauf gezogen landet darin,
+         die Reihe bleibt dabei hell. Der geöffnete Ordner bleibt an seinem
+         Platz, nur unsichtbar – von dort fliegt er hoch und zurück. -->
+    <div v-if="projectFolders?.length" class="-mx-2 flex touch-manipulation flex-wrap gap-2 select-none">
       <CbFolder
         v-for="folder in projectFolders"
         :id="folderElementId(folder.id)"
         :key="folder.id"
         :name="folder.data.name"
+        :class="{ invisible: folder.id === openedFolder?.folder.id }"
         v-bind="pageDropTargetAttributes(levelDropTarget(folder.id))"
-        @dblclick="router.push(folderRoute(folder.id))"
+        @click="(event, graphicRect) => clickFolder(folder, event, graphicRect)"
       />
     </div>
     <CbImageGrid
@@ -72,12 +101,15 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFileUpload.vue'
-import CbFolder from '../components/atoms/CbFolder.vue'
+import CbFolder, { folderGraphicRatio } from '../components/atoms/CbFolder.vue'
 import { showDangerToast } from '../components/atoms/toaster'
 import CbNameDialog from '../components/organisms/CbNameDialog.vue'
+import CbViewer from '../components/organisms/CbViewer.vue'
 import CbImageGrid from '../images/CbImageGrid.vue'
-import CbImageViewer from '../images/CbImageViewer.vue'
+import CbImageSettingsPanel from '../images/CbImageSettingsPanel.vue'
+import CbFolderSettingsPanel from '../folders/CbFolderSettingsPanel.vue'
 import type { ImageResource } from '../api/images/imagesApi'
+import type { FolderResource } from '../api/folders/foldersApi'
 import { projectImages } from '../images/projectImages'
 import { isUploadingImages, uploadImages } from '../images/uploadImages'
 import { useHeader } from '../components/organisms/headerState'
@@ -151,6 +183,42 @@ const openedImage = ref<{ image: ImageResource; tileRect: DOMRect; ratio: number
 
 function openImage(image: ImageResource, tileRect: DOMRect, ratio: number) {
   openedImage.value = { image, tileRect, ratio }
+}
+
+// Der geöffnete Ordner samt dem Platz seiner Grafik in der Reihe, dort startet
+// der Flug des Betrachters.
+const openedFolder = ref<{ folder: FolderResource; graphicRect: DOMRect } | null>(null)
+
+// Ein Klick wartet kurz, ob ein zweiter auf denselben Ordner folgt – dann geht
+// es hinein, sonst öffnet der Betrachter. Selbst gezählt statt per dblclick,
+// damit auch Doppeltippen auf dem Handy ankommt. Per Tastatur (Enter,
+// Leertaste) zählt der Browser keine Klicks (detail 0), dann öffnet er sofort.
+const doubleClickWindowInMilliseconds = 250
+let pendingFolderClick: { folderId: string; timer: ReturnType<typeof setTimeout> } | null = null
+
+function clickFolder(folder: FolderResource, event: MouseEvent, graphicRect: DOMRect) {
+  const isSecondClick = pendingFolderClick?.folderId === folder.id
+  clearTimeout(pendingFolderClick?.timer)
+  pendingFolderClick = null
+
+  const openFolderViewer = () => (openedFolder.value = { folder, graphicRect })
+  if (event.detail === 0) return openFolderViewer()
+  if (isSecondClick) return router.push(folderRoute(folder.id))
+
+  const timer = setTimeout(() => {
+    pendingFolderClick = null
+    openFolderViewer()
+  }, doubleClickWindowInMilliseconds)
+  pendingFolderClick = { folderId: folder.id, timer }
+}
+
+// Der Betrachter verschwindet sofort, sonst stünde er beim Seitenwechsel noch
+// über der neuen Ebene.
+function enterOpenedFolder() {
+  const folder = openedFolder.value?.folder
+  if (!folder) return
+  openedFolder.value = null
+  router.push(folderRoute(folder.id))
 }
 
 // Loslassen über einem Feld der Drop-Leiste, einem Ordner oder einem Eintrag im
