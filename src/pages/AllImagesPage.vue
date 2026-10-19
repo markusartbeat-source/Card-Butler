@@ -37,7 +37,7 @@
     v-model:open="isNewFolderDialogOpen"
     :title="dictionary.images.newFolder"
     :save="saveNewFolder"
-    @closed="moveImageIntoNewFolder"
+    @closed="moveItemIntoNewFolder"
   />
 
   <!-- Seitlich Überstehendes wird abgeschnitten: Beim Sortieren gleiten
@@ -139,6 +139,7 @@ import { moveDroppedImage } from '../images/moveDroppedImage'
 import { moveImage } from '../images/moveImage'
 import { deleteFolder } from '../folders/deleteFolder'
 import { moveDroppedFolder } from '../folders/moveDroppedFolder'
+import { moveFolder } from '../folders/moveFolder'
 import { undoDeletionOnKey } from '../deletion/undoDeletionOnKey'
 import { projectFolders } from '../folders/projectFolders'
 import { createFolder } from '../folders/createFolder'
@@ -252,57 +253,61 @@ function finishImageDrag(event: { newDraggableIndex?: number }) {
     return deleteDroppedItem(projectImages.value ?? [], index, element, dictionary.dropBar.imageDeleted, deleteImage)
   }
   if (droppedInto !== null) return moveDroppedImage(index, element, droppedInto)
-  if (droppedOn === 'moveIntoNewFolder') askForNewFolder(index, element)
+  if (droppedOn === 'moveIntoNewFolder') askForNewFolder(projectImages.value, index, element, moveImage)
   releaseDrag()
 }
 
 // Wie beim Bild: Ein Ordner oder ein Eintrag im Pfad nimmt den Ordner auf,
-// Löschen nimmt seinen Inhalt mit. „In neuen Ordner“ tut noch nichts, der
-// Ordner bleibt an seinem Platz.
+// Löschen nimmt seinen Inhalt mit, „In neuen Ordner“ fragt erst nach dem Namen.
 function finishFolderDrag(event: { newDraggableIndex?: number }) {
   const { droppedOn, droppedInto, index, element } = endDrag(event)
   if (droppedOn === 'deleteFolder') {
     return deleteDroppedItem(projectFolders.value ?? [], index, element, dictionary.dropBar.folderDeleted, deleteFolder)
   }
   if (droppedInto !== null) return moveDroppedFolder(index, element, droppedInto)
+  if (droppedOn === 'moveIntoNewFolder') askForNewFolder(projectFolders.value, index, element, moveFolder)
   releaseDrag()
 }
 
 const isNewFolderDialogOpen = ref(false)
 
-// Das Bild für den neuen Ordner samt der Liste von jetzt (wird inzwischen eine
-// andere geladen, wird dort nichts entfernt) und seiner Kachel, die in den
-// Ordner fliegt. Die Ordner-ID kommt dazu, sobald der Ordner angelegt ist.
-let imageForNewFolder: {
-  image: ImageResource
-  images: ImageResource[]
+// Was in den neuen Ordner soll (Bild oder Ordner), festgelegt samt der Liste von
+// jetzt (wird inzwischen eine andere geladen, wird dort nichts entfernt), und
+// seine Kachel, die in den Ordner fliegt. Die Ordner-ID kommt dazu, sobald der
+// Ordner angelegt ist.
+let itemForNewFolder: {
+  moveInto: (newFolderId: string) => unknown
   tileElement: HTMLElement | null
   folderId: string | null
 } | null = null
 
-function askForNewFolder(imageIndex: number, tileElement: HTMLElement | null) {
-  const images = projectImages.value
-  const image = images?.[imageIndex]
-  if (!images || !image) return
-  imageForNewFolder = { image, images, tileElement, folderId: null }
+function askForNewFolder<Item>(
+  items: Item[] | null,
+  index: number,
+  tileElement: HTMLElement | null,
+  move: (item: Item, newFolderId: string, items: Item[]) => unknown,
+) {
+  const item = items?.[index]
+  if (!items || !item) return
+  itemForNewFolder = { moveInto: (newFolderId) => move(item, newFolderId, items), tileElement, folderId: null }
   isNewFolderDialogOpen.value = true
 }
 
 async function saveNewFolder(name: string) {
   const folder = await createFolder(projectId, folderId, name)
   if (!folder) return false
-  if (imageForNewFolder) imageForNewFolder.folderId = folder.id
+  if (itemForNewFolder) itemForNewFolder.folderId = folder.id
   return true
 }
 
 // Erst wenn der Dialog ganz weg ist, damit der Flug zu sehen ist. Abgebrochen
-// gibt es keinen Ordner, das Bild bleibt an seinem Platz.
-async function moveImageIntoNewFolder() {
-  const pendingMove = imageForNewFolder
-  imageForNewFolder = null
+// gibt es keinen Ordner, Bild bzw. Ordner bleibt an seinem Platz.
+async function moveItemIntoNewFolder() {
+  const pendingMove = itemForNewFolder
+  itemForNewFolder = null
   if (!pendingMove?.folderId) return
   if (pendingMove.tileElement) await flyIntoFolder(pendingMove.tileElement, pendingMove.folderId)
-  await moveImage(pendingMove.image, pendingMove.folderId, pendingMove.images)
+  await pendingMove.moveInto(pendingMove.folderId)
 }
 
 onMounted(() => window.addEventListener('keydown', undoDeletionOnKey))
