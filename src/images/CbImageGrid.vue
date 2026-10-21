@@ -29,7 +29,7 @@
       :style="tileStyle(ratioOf(image))"
     >
       <!-- Der Bildname im alt ist zugleich der Name des Buttons für Screenreader. -->
-      <!-- Alt+←/→ sortiert per Tastatur, Strg+C/X kopiert bzw. schneidet aus
+      <!-- Alt+Pfeil sortiert per Tastatur, Strg+C/X kopiert bzw. schneidet aus
            (abgefangen von der Seite). Ausgeschnitten ist das Bild halb
            durchsichtig. Position und „ausgeschnitten“ stehen für Screenreader
            in der aria-description. -->

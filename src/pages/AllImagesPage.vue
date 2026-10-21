@@ -65,7 +65,7 @@
          Backend kennt keine Reihenfolge. Über der Mitte eines Ordners landet der
          gezogene darin. Die Bibliothek bewegt die Kiste per „transform“,
          gekippt wird der Ordner darin (siehe style.css). Per Tastatur sortiert
-         Alt+←/→, die Position steht für Screenreader in der aria-description. -->
+         Alt+Pfeil, die Position steht für Screenreader in der aria-description. -->
     <VueDraggable
       v-if="projectFolders?.length"
       v-model="projectFolders"

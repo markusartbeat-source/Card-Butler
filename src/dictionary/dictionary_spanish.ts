@@ -148,6 +148,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     settingsTab: 'Ajustes',
     layersTab: 'Capas',
     layersHint: 'Cuanto más abajo esté una capa, más fácil es que otras cosas la tapen.',
+    layerPosition: (position: number, count: number) => `Capa ${position} de ${count}`,
     printGroup: 'Impresión',
     printCount: 'Cantidad',
     printInfo: 'Cuántas veces se incluye esta carta al imprimir y exportar.',

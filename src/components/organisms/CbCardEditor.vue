@@ -96,6 +96,7 @@
         v-else
         class="h-full"
         :is-visible="areControlsVisible"
+        :card="card"
         :card-set="cardSet"
       />
     </div>

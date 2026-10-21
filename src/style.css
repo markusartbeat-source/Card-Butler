@@ -208,13 +208,14 @@ body {
     display: none;
   }
 
-  /* Gekippt wird das Gezeigte in der Kiste (Karte, Bild-Knopf, Ordner), nicht
-     die Kiste selbst: Die Bibliothek bewegt die Kiste per „transform“, ein
+  /* Gekippt wird das Gezeigte in der Kiste (Karte, Bild-Knopf, Ordner, Ebene),
+     nicht die Kiste selbst: Die Bibliothek bewegt die Kiste per „transform“, ein
      „scale“ oder „rotate“ daran würde diese Bewegung strecken und drehen – das
      Gezogene liefe dem Mauszeiger davon. */
   .cb-dragged .cb-card-face,
   .cb-dragged .cb-image-face,
-  .cb-dragged .cb-folder-face {
+  .cb-dragged .cb-folder-face,
+  .cb-dragged .cb-layer-face {
     scale: 1.05;
     rotate: 3deg;
     transition: scale 350ms ease;

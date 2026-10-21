@@ -7,34 +7,18 @@
     :style="{ ...cardFormatStyle(cardFormat), zoom, outlineColor: highlightColor }"
     :data-card-id="id"
   >
-    <!-- Every element type brings its own component from its folder. -->
-    <template v-for="element in elementsOnThisSide" :key="element.id">
-      <CbTextElement
-        v-if="element.data.type === 'TEXT'"
-        :element="element"
-        :content="values[element.id]?.text ?? ''"
-        :placeholder="markEmptyElements ? element.data.name : undefined"
-        :highlight-search="highlightSearch"
-        :editable="editableElements"
-        :style="elementStyle(element)"
-        @update:content="emit('changeElementValue', element.id, $event)"
-      />
-      <CbPictureElement
-        v-else-if="element.data.type === 'PICTURE'"
-        :element="element"
-        :picture="pictureOnThisCard(element.id)"
-        :crop="pictureCropOnThisCard(element.id)"
-        :mark-if-empty="markEmptyElements"
-        :editable="editableElements"
-        :style="elementStyle(element)"
-      />
-      <CbShapeElement
-        v-else
-        :element="element"
-        :editable="editableElements"
-        :style="elementStyle(element)"
-      />
-    </template>
+    <CbCardElement
+      v-for="element in elementsOnThisSide"
+      :key="element.id"
+      :element="element"
+      :card-id="id"
+      :values="values"
+      :mark-if-empty="markEmptyElements"
+      :editable="editableElements"
+      :highlight-search="highlightSearch"
+      :style="placementStyle(element)"
+      @change-value="emit('changeElementValue', element.id, $event)"
+    />
     <!-- On top of the card, e.g. the cursors of other people. -->
     <slot />
   </div>
@@ -45,12 +29,7 @@ import { computed } from 'vue'
 import type { CardElementValues } from '../../cardElements/cardValues'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
-import { knownImages } from '../../images/knownImages'
-import CbPictureElement from '../../cardElements/picture/CbPictureElement.vue'
-import { pictureCropOf } from '../../cardElements/picture/pictureCrops'
-import CbShapeElement from '../../cardElements/shape/CbShapeElement.vue'
-import CbTextElement from '../../cardElements/text/CbTextElement.vue'
-import { textSizingOf } from '../../cardElements/text/textSizing'
+import CbCardElement from '../../cardElements/CbCardElement.vue'
 
 // The card is always its real size — zoom is the only thing a view decides.
 // highlightColor draws a thin frame in the colour of the person standing here.
@@ -95,34 +74,15 @@ const elementsOnThisSide = computed(() =>
   props.side === 'back' ? [] : props.elements.filter(isDrawn),
 )
 
-// Das Bild, das diese Karte in einem Bild-Element zeigt, und sein Ausschnitt hier.
-function pictureOnThisCard(elementId: string) {
-  const imageId = props.values[elementId]?.imageId
-  return imageId ? knownImages.value[imageId]?.location : undefined
-}
-
-function pictureCropOnThisCard(elementId: string) {
-  const imageId = props.values[elementId]?.imageId
-  return imageId ? pictureCropOf(props.id, elementId, imageId) : undefined
-}
-
-// Lage, Größe (mm), Drehung und Deckkraft eines Elements. Die Drehung geht über
-// „transform“: Moveable liest es, um seinen Rahmen im selben Winkel zu zeichnen.
-// Eine automatische Seite eines Textfelds bleibt offen und wächst mit dem
-// Inhalt – undefined löscht dabei auch die px, die die Anfasser beim Ziehen
-// setzen. Bilder und Formen haben immer eine feste Größe. Beim Bild gilt die
-// Deckkraft nur dem Bild im Rahmen, das setzt es selbst.
-function elementStyle(element: CardSetElement) {
-  const { data, rotation } = element
-  const sizing = textSizingOf(element)
+// Lage (mm) und Drehung eines Elements, Größe und Deckkraft setzt es selbst. Die
+// Drehung geht über „transform“: Moveable liest es, um seinen Rahmen im selben
+// Winkel zu zeichnen.
+function placementStyle({ data, rotation }: CardSetElement) {
   return {
     position: 'absolute' as const,
     left: `${data.position.x}mm`,
     top: `${data.position.y}mm`,
     transform: `rotate(${rotation}deg)`,
-    width: sizing === 'autoWidth' ? undefined : `${data.width}mm`,
-    height: sizing === 'fixed' ? `${data.height}mm` : undefined,
-    opacity: data.type === 'PICTURE' ? undefined : data.opacity,
   }
 }
 </script>
