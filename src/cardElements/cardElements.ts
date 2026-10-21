@@ -1,5 +1,6 @@
 import type { ElementPlacement } from '../elementTransform/elementPlacement'
 import { cardSets, type Card, type CardSetElement } from '../cardSets/cardSets'
+import { cornerRadiiOfElement } from './elementCornerRadii'
 import type { PictureElement } from './picture/pictureElement'
 import { textAppearanceOf } from './text/textAppearance'
 import type { TextElement } from './text/textElement'
@@ -45,7 +46,13 @@ export function cardElementFromCardSetElement(element: CardSetElement): CardElem
     opacity: data.opacity,
   }
   if (data.type === 'PICTURE') {
-    return { ...base, type: 'picture', width: data.width, height: data.height }
+    return {
+      ...base,
+      type: 'picture',
+      width: data.width,
+      height: data.height,
+      cornerRadii: cornerRadiiOfElement(id, data.radius),
+    }
   }
   if (data.type !== 'TEXT') return null
 

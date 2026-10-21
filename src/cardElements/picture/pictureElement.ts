@@ -1,3 +1,4 @@
+import type { CornerRadii } from '../../card/cornerRadii'
 import type { CardElementBase } from '../cardElements'
 
 // Alles, was nur das Bild-Element betrifft, liegt in diesem Ordner. Welches Bild
@@ -6,4 +7,5 @@ export type PictureElement = CardElementBase & {
   type: 'picture'
   width: number
   height: number
+  cornerRadii: CornerRadii
 }

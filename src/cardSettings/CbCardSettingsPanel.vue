@@ -46,38 +46,7 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(2)">
             <CbSettingsHeading>{{ dictionary.cardEditor.cornersGroup }}</CbSettingsHeading>
-            <div class="flex items-center gap-3">
-              <!-- One field for all corners, or one field per corner. -->
-              <CbSlideSwap class="grow" :show-second="areCornersSeparate">
-                <template #first>
-                  <CbInput
-                    v-model="cornerRadius"
-                    icon="crop_free"
-                    :label="dictionary.cardEditor.cornerRadius"
-                  />
-                </template>
-                <!-- Two rows of two, each field takes the same share of the row. -->
-                <template #second>
-                  <div class="flex flex-col gap-3">
-                    <div v-for="(row, index) in cornerRows" :key="index" class="flex gap-3">
-                      <CbInput
-                        v-for="corner in row"
-                        :key="corner.key"
-                        v-model="corners[corner.key]"
-                        class="flex-1"
-                        :icon="corner.icon"
-                        :label="corner.label"
-                      />
-                    </div>
-                  </div>
-                </template>
-              </CbSlideSwap>
-              <CbToggle
-                v-model="areCornersSeparate"
-                icon="crop_free"
-                :aria-label="dictionary.cardEditor.separateCorners"
-              />
-            </div>
+            <CbCornerRadiusFields :radii="cornerRadii" @change="(radii) => (cornerRadii = radii)" />
           </div>
 
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(3)" />
@@ -118,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbColorPicker from '../components/atoms/CbColorPicker.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
@@ -127,12 +96,12 @@ import CbInput from '../components/atoms/CbInput.vue'
 import CbPanel from '../components/atoms/CbPanel.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
-import CbSlideSwap from '../components/atoms/CbSlideSwap.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'
-import CbToggle from '../components/atoms/CbToggle.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
+import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.vue'
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
 import { cardFormat } from '../card/cardFormat'
+import { uniformCornerRadii } from '../card/cornerRadii'
 
 // The panel is already on the page while the card is still flying in. The
 // groups are only built once it is really on screen, otherwise their entrance
@@ -152,58 +121,9 @@ const printCount = ref('1')
 // Startet beim echten Kartenformat in mm, ändert es aber noch nicht.
 const size = ref({ width: cardFormat.value.width, height: cardFormat.value.height })
 const unit = ref('mm')
-const cornerRadius = ref('20')
-const areCornersSeparate = ref(false)
-const corners = ref({ topLeft: '20', topRight: '20', bottomLeft: '20', bottomRight: '20' })
+const cornerRadii = ref(uniformCornerRadii(20))
 const color = ref('#ffffff')
 const bleed = ref({ width: 3, height: 3 })
-
-// The single field can hold all four values separated by commas. A missing
-// value falls back to the first one, so "20" fills every corner.
-watch(areCornersSeparate, (separate) => {
-  if (separate) {
-    const values = cornerRadius.value.split(',').map((value) => value.trim())
-    corners.value = {
-      topLeft: values[0],
-      topRight: values[1] ?? values[0],
-      bottomLeft: values[2] ?? values[0],
-      bottomRight: values[3] ?? values[0],
-    }
-    return
-  }
-
-  const { topLeft, topRight, bottomLeft, bottomRight } = corners.value
-  const values = [topLeft, topRight, bottomLeft, bottomRight]
-  const areAllTheSame = values.every((value) => value === values[0])
-  cornerRadius.value = areAllTheSame ? values[0] : values.join(', ')
-})
-
-const cornerRows = computed(() => [
-  [
-    {
-      key: 'topLeft' as const,
-      icon: 'north_west' as const,
-      label: dictionary.cardEditor.cornerTopLeft,
-    },
-    {
-      key: 'topRight' as const,
-      icon: 'north_east' as const,
-      label: dictionary.cardEditor.cornerTopRight,
-    },
-  ],
-  [
-    {
-      key: 'bottomLeft' as const,
-      icon: 'south_west' as const,
-      label: dictionary.cardEditor.cornerBottomLeft,
-    },
-    {
-      key: 'bottomRight' as const,
-      icon: 'south_east' as const,
-      label: dictionary.cardEditor.cornerBottomRight,
-    },
-  ],
-])
 
 const units = computed(() => [
   { value: 'cm', label: dictionary.cardEditor.unitCentimeters },

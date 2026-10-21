@@ -31,6 +31,7 @@
         :id="element.id"
         :name="element.name"
         :opacity="element.opacity"
+        :corner-radii="element.cornerRadii"
         :mark-if-empty="markEmptyElements"
         :editable="editableElements"
         :style="elementStyle(element)"
