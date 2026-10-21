@@ -5,6 +5,9 @@
        millimetres. fixed left-full parks it just outside the window: the browser
        still lays it out, but nobody sees it and no scroll bar appears. -->
   <div ref="stageElement" class="pointer-events-none fixed top-0 left-full" aria-hidden="true">
+    <!-- Bewusst ohne Anschnitt (showBleed bleibt aus): PNG & Co. sind digital.
+         Nur der Druck-Export als PDF (gibt es noch nicht) zeichnet mit
+         Anschnitt – eckig, ohne Schnittlinie. -->
     <CbCard
       v-for="card in cards"
       :key="card.id"

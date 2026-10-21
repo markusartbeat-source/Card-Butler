@@ -92,8 +92,6 @@
                   changeCardSetBleed(cardSet, side, millimeters, keepsAspectRatio)
               "
             />
-            <!-- TEMPORÄR: Set-Version zum Prüfen, ob Speichern sie hochzählt. -->
-            <p class="text-sm text-white">{{ cardSet.version }}</p>
           </div>
         </div>
       </template>
