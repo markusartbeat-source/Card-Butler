@@ -6,7 +6,8 @@
        Bild-Icon.
        Ausgewählt startet ein weiterer Klick (bzw. Enter) das Zuschneiden wie in
        Figma: Der Rahmen bleibt fest und golden umrandet, das ganze Bild
-       erscheint – außerhalb des Rahmens halb durchsichtig. -->
+       erscheint – außerhalb des Rahmens halb durchsichtig. Die Tasten dafür
+       nennt die aria-description. -->
   <div
     ref="frame"
     class="flex items-center justify-center"
@@ -20,6 +21,7 @@
     :tabindex="editable ? 0 : undefined"
     :role="editable ? 'button' : undefined"
     :aria-label="editable ? name : undefined"
+    :aria-description="isCropping ? dictionary.cardEditor.croppingKeys : undefined"
     @click="selectOrStartCropping"
     @focus="selectOnKeyboardFocus"
     @keydown.enter.self.prevent="selectOrStartCropping"
@@ -142,8 +144,11 @@ function selectOrStartCropping() {
 }
 
 // Per Tastatur angesprungen wählt sich das Bild aus. Ein Mausklick fokussiert es
-// auch, wählt aber erst mit dem Klick aus.
+// auch, wählt aber erst mit dem Klick aus. Ist es schon ausgewählt, bleibt es
+// dabei – sonst endete das Zuschneiden, sobald der Rahmen den Fokus bekommt.
 function selectOnKeyboardFocus() {
-  if (frame.value?.matches(':focus-visible')) selectElement(props.id)
+  if (selectedElementId.value !== props.id && frame.value?.matches(':focus-visible')) {
+    selectElement(props.id)
+  }
 }
 </script>

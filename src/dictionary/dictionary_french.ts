@@ -193,6 +193,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     defaultFolder: 'Par défaut',
     defaultFolderLabel: (name: string) => `Par défaut : le choix d’image commence dans le dossier « ${name} »`,
     adjustCrop: 'Ajuster le cadrage',
+    croppingKeys:
+      "Ajuster le cadrage : les flèches déplacent l'image, plus loin avec Maj. Plus et moins zooment. Échap termine.",
     opacity: 'Opacité',
     // Im Französischen steht vor dem Prozentzeichen ein geschütztes Leerzeichen.
     opacityValue: (percent: number) => `${percent} %`,

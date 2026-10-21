@@ -226,6 +226,8 @@ export const dictionaryGerman = {
     defaultFolder: 'Standard',
     defaultFolderLabel: (name: string) => `Standard: Bildwahl beginnt im Ordner „${name}“`,
     adjustCrop: 'Ausschnitt anpassen',
+    croppingKeys:
+      'Ausschnitt anpassen: Pfeiltasten verschieben das Bild, mit Umschalt weiter. Plus und Minus zoomen. Escape beendet.',
     opacity: 'Sichtbarkeit',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Schriftart',

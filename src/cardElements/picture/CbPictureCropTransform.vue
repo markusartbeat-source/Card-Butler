@@ -1,9 +1,11 @@
 <template>
   <!-- Die Anfasser des Bildes beim Zuschneiden, der Rahmen bleibt, wo er ist:
        Ziehen verschiebt, die Ecken zoomen um die Mitte, ohne das
-       Seitenverhältnis zu ändern, der Griff dreht. Jede Änderung landet sofort
-       im Ausschnitt dieser Karte. Wie bei den Element-Anfassern ist rootContainer
-       die Karte, die Werte kommen dann ohne ihren Zoom. -->
+       Seitenverhältnis zu ändern, der Griff dreht. Ohne Maus: Der Rahmen bekommt
+       den Fokus, Pfeiltasten verschieben, Plus und Minus zoomen. Das Mausrad über
+       der Karte zoomt auch. Jede Änderung landet sofort im Ausschnitt dieser
+       Karte. Wie bei den Element-Anfassern ist rootContainer die Karte, die Werte
+       kommen dann ohne ihren Zoom. -->
   <Moveable
     v-if="pictureNode"
     ref="moveable"
@@ -27,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, shallowRef, useTemplateRef } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, shallowRef, useTemplateRef } from 'vue'
 import Moveable, { type OnDrag, type OnResize, type OnResizeStart, type OnRotate } from 'vue3-moveable'
 import { measureInMillimeters, millimetersToPixels } from '../../card/millimeters'
 import type { Card } from '../../cardSets/cardSets'
@@ -40,15 +42,24 @@ const props = defineProps<{ card: Card; cardNode: HTMLElement | null; elementId:
 
 const moveable = useTemplateRef<InstanceType<typeof Moveable>>('moveable')
 
-// Das ganze Bild, das das Element beim Zuschneiden zeigt – erst einen Tick
-// später auf der Karte.
+// Der Rahmen und das ganze Bild, das er beim Zuschneiden zeigt – erst einen Tick
+// später auf der Karte. Der Rahmen bekommt den Fokus, so gehen die Tasten auch
+// nach dem Knopf im Panel gleich.
+const frameNode = shallowRef<HTMLElement | null>(null)
 const pictureNode = shallowRef<HTMLImageElement | null>(null)
 onMounted(async () => {
   await nextTick()
-  pictureNode.value =
-    props.cardNode?.querySelector<HTMLImageElement>(
-      `[data-element-id="${props.elementId}"] [data-crop-picture]`,
-    ) ?? null
+  frameNode.value =
+    props.cardNode?.querySelector<HTMLElement>(`[data-element-id="${props.elementId}"]`) ?? null
+  pictureNode.value = frameNode.value?.querySelector<HTMLImageElement>('[data-crop-picture]') ?? null
+  frameNode.value?.addEventListener('keydown', changeCropOnKey)
+  frameNode.value?.focus()
+  props.cardNode?.addEventListener('wheel', zoomOnWheel, { passive: false })
+})
+
+onUnmounted(() => {
+  frameNode.value?.removeEventListener('keydown', changeCropOnKey)
+  props.cardNode?.removeEventListener('wheel', zoomOnWheel)
 })
 
 const imageId = computed(() => props.card.elementImageIds[props.elementId])
@@ -70,14 +81,59 @@ function changeCrop(change: (crop: PictureCrop) => Partial<PictureCrop>) {
   setPictureCrop(props.card.id, props.elementId, imageId.value, { ...crop, ...change(crop) })
 }
 
-// delta ist die Änderung von left/top, also schon im Rahmen gemessen – auch wenn
-// er gedreht ist.
-function applyDrag({ delta: [moveX, moveY] }: OnDrag) {
+// Verschiebt das Bild um px im Rahmen – entlang seiner Kanten, auch wenn er
+// gedreht ist.
+function movePictureBy(moveX: number, moveY: number) {
   const frame = frameSize()
   changeCrop((crop) => ({
     centerX: crop.centerX + moveX / frame.width,
     centerY: crop.centerY + moveY / frame.height,
   }))
+}
+
+// Zoomt um die Mitte des Bildes, factor > 1 vergrößert.
+function zoomPictureBy(factor: number) {
+  changeCrop((crop) => ({ width: crop.width * factor }))
+}
+
+// delta ist die Änderung von left/top, also schon im Rahmen gemessen.
+function applyDrag({ delta: [moveX, moveY] }: OnDrag) {
+  movePictureBy(moveX, moveY)
+}
+
+const directionByArrowKey: Record<string, [number, number]> = {
+  ArrowLeft: [-1, 0],
+  ArrowRight: [1, 0],
+  ArrowUp: [0, -1],
+  ArrowDown: [0, 1],
+}
+
+const zoomFactorByKey: Record<string, number> = { '+': 1.1, '-': 1 / 1.1 }
+
+// Pfeiltasten verschieben um 1 mm, mit Umschalt um 10 mm. Plus und Minus zoomen
+// um 10 %. Mit Strg, Alt oder Cmd gehören die Tasten dem Browser (z.B. Seiten-Zoom).
+function changeCropOnKey(event: KeyboardEvent) {
+  if (event.ctrlKey || event.altKey || event.metaKey) return
+  const direction = directionByArrowKey[event.key]
+  const zoomFactor = zoomFactorByKey[event.key]
+  if (!direction && !zoomFactor) return
+
+  event.preventDefault()
+  if (direction) {
+    const step = millimetersToPixels(event.shiftKey ? 10 : 1)
+    movePictureBy(direction[0] * step, direction[1] * step)
+  } else {
+    zoomPictureBy(zoomFactor)
+  }
+  measurePictureAgain()
+}
+
+// Ein Schritt einer Maus (deltaY 100) zoomt um etwa 20 %, ein Touchpad mit seinen
+// kleinen Schritten stufenlos. Nach oben vergrößert. Die Seite scrollt nicht mit.
+function zoomOnWheel(event: WheelEvent) {
+  event.preventDefault()
+  zoomPictureBy(Math.exp(-event.deltaY / 500))
+  measurePictureAgain()
 }
 
 // Die Mitte bleibt (fixedDirection 0, 0), translate(-50 %) im Stil hält sie dort

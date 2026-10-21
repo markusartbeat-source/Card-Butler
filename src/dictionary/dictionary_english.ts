@@ -193,6 +193,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     defaultFolder: 'Default',
     defaultFolderLabel: (name: string) => `Default: image choice starts in folder “${name}”`,
     adjustCrop: 'Adjust crop',
+    croppingKeys:
+      'Adjust crop: arrow keys move the picture, further with Shift. Plus and minus zoom. Escape finishes.',
     opacity: 'Opacity',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Font',

@@ -193,6 +193,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     defaultFolder: 'Padrão',
     defaultFolderLabel: (name: string) => `Padrão: a escolha de imagem começa na pasta “${name}”`,
     adjustCrop: 'Ajustar recorte',
+    croppingKeys:
+      'Ajustar recorte: as setas movem a imagem, mais longe com Shift. Mais e menos fazem zoom. Escape termina.',
     opacity: 'Opacidade',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Tipo de letra',

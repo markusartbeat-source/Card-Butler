@@ -28,10 +28,11 @@
       <div class="relative">
         <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
 
+        <!-- Beim Zuschneiden zoomt das Mausrad das Bild statt der Anzahl. -->
         <div
           ref="cardWrapper"
           class="relative"
-          @wheel="changePrintCountByWheel(card, $event)"
+          @wheel="!croppedPictureId && changePrintCountByWheel(card, $event)"
         >
           <CbCard
             :id="card.id"
