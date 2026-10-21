@@ -57,10 +57,10 @@ import { computed, nextTick, useTemplateRef } from 'vue'
 import type { HorizontalAlignment, VerticalAlignment } from '../../api/elements/elementsApi'
 import CbHighlightedText from '../../components/atoms/CbHighlightedText.vue'
 import {
-  isTypingInSelectedElement,
+  isEditingSelectedElement,
   selectElement,
   selectedElementId,
-  startTypingInElement,
+  startEditingElement,
 } from '../../elementTransform/elementSelection'
 import { searchWord } from '../../search/searchWord'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
@@ -108,7 +108,7 @@ const field = useTemplateRef<HTMLElement>('field')
 const editor = useTemplateRef<HTMLElement>('editor')
 
 const isTyping = computed(
-  () => props.editable && isTypingInSelectedElement.value && selectedElementId.value === props.id,
+  () => props.editable && isEditingSelectedElement.value && selectedElementId.value === props.id,
 )
 
 // Beim Tippen ist das Textfeld darin dran, kein Knopf drumherum.
@@ -118,7 +118,7 @@ const isPlaceholderShown = computed(() => !props.content && !!props.placeholder)
 
 // placeCaret setzt den Cursor, sobald das Textfeld da ist.
 async function startTyping(placeCaret: (textField: HTMLElement) => void) {
-  startTypingInElement(props.id)
+  startEditingElement(props.id)
   await nextTick()
   if (!editor.value) return
   editor.value.textContent = props.content

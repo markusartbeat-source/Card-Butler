@@ -62,8 +62,15 @@
         </div>
 
         <!-- Next to the flying wrapper, not inside it: the wrapper is scaled
-             while the card flies, which would squeeze the handles with it. -->
-        <CbElementTransform :card="cardWrapper" />
+             while the card flies, which would squeeze the handles with it.
+             Beim Zuschneiden bleibt der Rahmen fest, nur das Bild hat Anfasser. -->
+        <CbPictureCropTransform
+          v-if="croppedPictureId"
+          :card="card"
+          :card-node="cardWrapper"
+          :element-id="croppedPictureId"
+        />
+        <CbElementTransform v-else :card="cardWrapper" />
       </div>
 
       <CbButton
@@ -128,12 +135,13 @@ import CbTextSettingsPanel from '../../cardElements/text/CbTextSettingsPanel.vue
 import { saveCardTextAfterPause, saveWaitingCardTexts } from '../../cardElements/text/saveCardText'
 import { newPictureElementData } from '../../cardElements/picture/newPictureElementData'
 import CbPictureSettingsPanel from '../../cardElements/picture/CbPictureSettingsPanel.vue'
+import CbPictureCropTransform from '../../cardElements/picture/CbPictureCropTransform.vue'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
 import {
   clearElementSelection,
   clearSelectionOnMiss,
-  isTypingInSelectedElement,
+  isEditingSelectedElement,
   selectedElementId,
   selectElement,
   stepBackElementSelection,
@@ -174,6 +182,13 @@ const selectedElement = computed(() =>
   props.cardSet.elements.find((element) => element.id === selectedElementId.value),
 )
 
+// Das Bild-Element, das gerade zugeschnitten wird (2. Stufe beim Bild), sonst null.
+const croppedPictureId = computed(() =>
+  isEditingSelectedElement.value && selectedElement.value?.data.type === 'PICTURE'
+    ? selectedElement.value.id
+    : null,
+)
+
 // Der Text gilt nur für diese Karte und geht nach einer Tipp-Pause ins Backend.
 function changeElementValue(elementId: string, value: string) {
   setElementValue(props.card, elementId, value)
@@ -182,8 +197,8 @@ function changeElementValue(elementId: string, value: string) {
 
 // Wer das Feld verlässt, wartet nicht auf die Pause. Nicht beim Verlust des
 // Fokus: Ziehen an der Kante nimmt ihn, das Tippen geht aber weiter.
-watch(isTypingInSelectedElement, (isTyping) => {
-  if (!isTyping) saveWaitingCardTexts()
+watch(isEditingSelectedElement, (isEditing) => {
+  if (!isEditing) saveWaitingCardTexts()
 })
 
 // Was die Toolbar schon anlegen kann: je Werkzeug die Daten eines neuen
@@ -283,19 +298,21 @@ function startClosing() {
 }
 
 // Escape nimmt erst die Auswahl schrittweise zurück, zuletzt schließt es den
-// Editor.
+// Editor. Hat schon ein Dialog oder eine Liste von Ark das Escape genommen
+// (defaultPrevented), war das die Stufe – sonst ginge es zwei zurück.
 function stepBackOnEscape(event: KeyboardEvent) {
-  if (event.key === 'Escape' && !stepBackElementSelection()) startClosing()
+  if (event.key !== 'Escape' || event.defaultPrevented) return
+  if (!stepBackElementSelection()) startClosing()
 }
 
-// Entf/Rücktaste löscht das ausgewählte Element – nicht beim Tippen und nicht,
+// Entf/Rücktaste löscht das ausgewählte Element – nicht beim Bearbeiten und nicht,
 // wenn ein Eingabefeld die Taste braucht. Es verschwindet aus dem Set und damit
 // von allen Karten, „Rückgängig“ setzt es an seine alte Stelle in der
 // Stapelreihenfolge. Der Toast nennt, was gelöscht wurde.
 function deleteSelectedElementOnKey(event: KeyboardEvent) {
   if (!['Delete', 'Backspace'].includes(event.key)) return
   const elementToDelete = selectedElement.value
-  if (!elementToDelete || isTypingInSelectedElement.value || isInInputField(event)) return
+  if (!elementToDelete || isEditingSelectedElement.value || isInInputField(event)) return
 
   event.preventDefault()
   clearElementSelection()

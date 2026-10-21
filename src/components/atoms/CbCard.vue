@@ -32,7 +32,9 @@
         :name="element.name"
         :opacity="element.opacity"
         :corner-radii="element.cornerRadii"
+        :frame-aspect-ratio="element.width / element.height"
         :picture="knownImages[elementImageIds[element.id]]?.location"
+        :crop="pictureCropOnThisCard(element.id)"
         :mark-if-empty="markEmptyElements"
         :editable="editableElements"
         :style="elementStyle(element)"
@@ -57,6 +59,7 @@ import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import { placementStyle } from '../../elementTransform/elementPlacement'
 import { knownImages } from '../../images/knownImages'
 import CbPictureElement from '../../cardElements/picture/CbPictureElement.vue'
+import { pictureCropOf } from '../../cardElements/picture/pictureCrops'
 import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 
 // The card is always its real size — zoom is the only thing a view decides.
@@ -99,6 +102,12 @@ const elementsOnThisSide = computed(() =>
     .map(cardElementFromCardSetElement)
     .filter((element): element is CardElement => element?.side === props.side),
 )
+
+// Der Ausschnitt, mit dem diese Karte ihr Bild in einem Bild-Element zeigt.
+function pictureCropOnThisCard(elementId: string) {
+  const imageId = props.elementImageIds[elementId]
+  return imageId ? pictureCropOf(props.id, elementId, imageId) : undefined
+}
 
 // Lage, Größe (mm) und Deckkraft eines Elements. Ohne Breite bzw. Höhe wächst es
 // mit seinem Inhalt – undefined löscht dabei auch die px, die die Anfasser beim

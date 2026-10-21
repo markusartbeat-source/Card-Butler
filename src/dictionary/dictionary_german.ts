@@ -225,6 +225,7 @@ export const dictionaryGerman = {
     noPicturesFound: 'Keine Bilder gefunden',
     defaultFolder: 'Standard',
     defaultFolderLabel: (name: string) => `Standard: Bildwahl beginnt im Ordner „${name}“`,
+    adjustCrop: 'Ausschnitt anpassen',
     opacity: 'Sichtbarkeit',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Schriftart',

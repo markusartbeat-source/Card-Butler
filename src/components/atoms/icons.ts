@@ -19,6 +19,7 @@ import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
 import Colorize from '~icons/material-symbols/colorize-outline-rounded'
 import CreateNewFolder from '~icons/material-symbols/create-new-folder-outline-rounded'
+import Crop from '~icons/material-symbols/crop-rounded'
 import CropFree from '~icons/material-symbols/crop-free-rounded'
 import DarkMode from '~icons/material-symbols/dark-mode-outline-rounded'
 import Delete from '~icons/material-symbols/delete-outline-rounded'
@@ -91,6 +92,7 @@ export const icons = {
   close: Close,
   colorize: Colorize,
   create_new_folder: CreateNewFolder,
+  crop: Crop,
   crop_free: CropFree,
   dark_mode: DarkMode,
   delete: Delete,

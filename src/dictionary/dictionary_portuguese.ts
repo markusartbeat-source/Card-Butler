@@ -192,6 +192,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     noPicturesFound: 'Nenhuma imagem encontrada',
     defaultFolder: 'Padrão',
     defaultFolderLabel: (name: string) => `Padrão: a escolha de imagem começa na pasta “${name}”`,
+    adjustCrop: 'Ajustar recorte',
     opacity: 'Opacidade',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Tipo de letra',

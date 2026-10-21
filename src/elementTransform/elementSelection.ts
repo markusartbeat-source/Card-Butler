@@ -9,29 +9,29 @@ export const selectedElementId = ref<string | null>(null)
 // Anfasser suchen es heraus – wer seine sichtbare Größe braucht, misst es hier.
 export const selectedElementNode = ref<HTMLElement | null>(null)
 
-// Ob im ausgewählten Feld gerade getippt wird (Tippmodus). Jede neue Auswahl
-// beendet ihn.
-export const isTypingInSelectedElement = ref(false)
+// Ob das ausgewählte Element gerade bearbeitet wird – die 2. Stufe der Auswahl:
+// Tippen beim Text, Ausschnitt anpassen beim Bild. Jede neue Auswahl beendet sie.
+export const isEditingSelectedElement = ref(false)
 
 export function selectElement(id: string) {
   selectedElementId.value = id
-  isTypingInSelectedElement.value = false
+  isEditingSelectedElement.value = false
 }
 
-export function startTypingInElement(id: string) {
+export function startEditingElement(id: string) {
   selectedElementId.value = id
-  isTypingInSelectedElement.value = true
+  isEditingSelectedElement.value = true
 }
 
 export function clearElementSelection() {
   selectedElementId.value = null
-  isTypingInSelectedElement.value = false
+  isEditingSelectedElement.value = false
 }
 
-// Eine Stufe zurück: Tippen → ausgewählt → nichts. false, wenn schon nichts
+// Eine Stufe zurück: bearbeiten → ausgewählt → nichts. false, wenn schon nichts
 // mehr ausgewählt war.
 export function stepBackElementSelection() {
-  if (isTypingInSelectedElement.value) isTypingInSelectedElement.value = false
+  if (isEditingSelectedElement.value) isEditingSelectedElement.value = false
   else if (selectedElementId.value) selectedElementId.value = null
   else return false
   return true

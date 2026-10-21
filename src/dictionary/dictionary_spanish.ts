@@ -192,6 +192,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     noPicturesFound: 'No se encontraron imágenes',
     defaultFolder: 'Predeterminada',
     defaultFolderLabel: (name: string) => `Predeterminada: la elección de imagen empieza en la carpeta «${name}»`,
+    adjustCrop: 'Ajustar recorte',
     opacity: 'Opacidad',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Fuente',
