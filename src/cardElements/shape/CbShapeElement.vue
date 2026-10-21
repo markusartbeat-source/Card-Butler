@@ -1,5 +1,5 @@
 <template>
-  <!-- Eine Form, gefüllt mit ihrer Farbe. data-element-id lässt die Anfasser sie
+  <!-- Ein Viereck oder Kreis, gefüllt mit seiner Farbe. data-element-id lässt die Anfasser sie
        auf der Karte finden, Lage, Größe und Deckkraft gibt die Karte vor. Im
        Editor per Tab erreichbar und wie ein Knopf mit Enter oder Leertaste
        auszuwählen – einen 2. Schritt zum Bearbeiten wie beim Text gibt es nicht. -->
@@ -31,8 +31,10 @@ const props = withDefaults(defineProps<{ element: CardSetElement; editable?: boo
   editable: false,
 })
 
+// Der Kreis ist voll gerundet – bei ungleicher Breite und Höhe eine Ellipse.
 const borderRadius = computed(() => {
   const { id, data } = props.element
+  if (data.type === 'CIRCLE') return '50%'
   return cornerRadiiStyle(cornerRadiiOfElement(id, data.radius))
 })
 

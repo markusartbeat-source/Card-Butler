@@ -33,6 +33,13 @@ const newElementDataByTool: Partial<Record<CardTool, () => NewElementDefaults>> 
     radius: 0,
     ...shapeAppearanceDefaults,
   }),
+  circle: () => ({
+    name: dictionary.cardEditor.circle,
+    type: 'CIRCLE',
+    width: 20,
+    height: 20,
+    ...shapeAppearanceDefaults,
+  }),
 }
 
 /** Ein neues Element des Werkzeugs, dessen Mitte auf dem gegebenen Punkt der

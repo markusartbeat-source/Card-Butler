@@ -84,11 +84,11 @@ const props = withDefaults(
 
 const emit = defineEmits<{ changeElementValue: [elementId: string, value: string] }>()
 
-// Gezeichnet werden bisher nur Textfelder, Bilder und Vierecke mit x/y-Position;
-// andere (z.B. von einer KI per MCP angelegt) fehlen noch.
+// Gezeichnet werden bisher nur Textfelder, Bilder, Vierecke und Kreise mit
+// x/y-Position; andere (z.B. von einer KI per MCP angelegt) fehlen noch.
 function isDrawn({ data }: CardSetElement) {
   const { x, y } = data.position
-  return ['TEXT', 'PICTURE', 'SQUARE'].includes(data.type) && x != null && y != null
+  return ['TEXT', 'PICTURE', 'SQUARE', 'CIRCLE'].includes(data.type) && x != null && y != null
 }
 
 const elementsOnThisSide = computed(() =>
