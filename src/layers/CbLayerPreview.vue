@@ -1,11 +1,12 @@
 <template>
-  <!-- Das Element so, wie es die offene Karte zeigt: ungedreht, auf weißem Grund
-       wie die Karte, in die Box eingepasst, leer gestrichelt. Bedienen lässt es
+  <!-- Das Element so, wie es die offene Karte zeigt: ungedreht, auf dem Grund
+       der Karte, in die Box eingepasst, leer gestrichelt. Bedienen lässt es
        sich hier nicht – ein Klick gilt der Zeile. Der Screenreader hört nur den
        Namen der Zeile, nicht den Inhalt des Bilds. -->
   <div
     ref="box"
-    class="pointer-events-none flex h-13 w-13.25 shrink-0 items-center justify-center overflow-hidden rounded bg-white"
+    class="pointer-events-none flex h-13 w-13.25 shrink-0 items-center justify-center overflow-hidden rounded"
+    :style="{ backgroundColor: cardColor }"
     aria-hidden="true"
   >
     <!-- Die Lage gibt wie auf der Karte der Aufrufer vor. relative hält z.B. das
@@ -29,7 +30,8 @@ import CbCardElement from '../cardElements/CbCardElement.vue'
 import type { Card, CardSetElement } from '../cardSets/cardSets'
 
 // card ist die offene Karte, ihre Werte (Text, Bild) zeigt das Element.
-defineProps<{ element: CardSetElement; card: Card }>()
+// cardColor ist die Farbe der Karte (Hex aus dem Backend).
+defineProps<{ element: CardSetElement; card: Card; cardColor: string }>()
 
 const box = useTemplateRef<HTMLElement>('box')
 const drawing = useTemplateRef<HTMLElement>('drawing')

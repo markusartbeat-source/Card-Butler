@@ -6,7 +6,7 @@
   <CbInteractive
     class="cb-layer-face flex h-16 w-full cursor-grab items-center gap-1.5 rounded-md bg-surface-light p-1.5 text-left text-sm active:cursor-grabbing"
   >
-    <CbLayerPreview :element="element" :card="card" />
+    <CbLayerPreview :element="element" :card="card" :card-color="cardColor" />
     <CbIcon :name="elementTypeIcons[element.data.type]" class="mx-1" />
     <span class="truncate">{{ element.data.name }}</span>
   </CbInteractive>
@@ -19,6 +19,7 @@ import { elementTypeIcons } from '../components/molecules/cardToolbarElements'
 import type { Card, CardSetElement } from '../cardSets/cardSets'
 import CbLayerPreview from './CbLayerPreview.vue'
 
-// card ist die offene Karte, ihre Werte zeigt das Vorschaubild.
-defineProps<{ element: CardSetElement; card: Card }>()
+// card ist die offene Karte, ihre Werte zeigt das Vorschaubild auf cardColor,
+// der Farbe der Karte.
+defineProps<{ element: CardSetElement; card: Card; cardColor: string }>()
 </script>

@@ -17,6 +17,7 @@
         <CbLayerRow
           :element="element"
           :card="card"
+          :card-color="cardSet.data.color"
           :aria-keyshortcuts="sortingKeyShortcuts"
           :aria-description="dictionary.cardEditor.layerPosition(index + 1, topLayerFirst.length)"
           @click="shineLayer(element)"

@@ -14,7 +14,11 @@ export async function changeCardSet(cardSet: CardSet, changes: Partial<CardSetDa
   Object.assign(cardSet.data, changes)
   try {
     const { version, data } = await postOffice.cardSets.loadCardSet(cardSet.id)
-    const saved = await postOffice.cardSets.updateCardSet(cardSet.id, { ...data, ...changes }, version)
+    const changedData = { ...data, ...changes }
+    // Steht schon alles so im Backend (z.B. Farbwähler ohne neue Farbe
+    // geschlossen), geht nichts raus – das spart Versionen und 412.
+    if (JSON.stringify(changedData) === JSON.stringify(data)) return true
+    const saved = await postOffice.cardSets.updateCardSet(cardSet.id, changedData, version)
     cardSet.version = saved.version
     return true
   } catch (error) {
@@ -35,6 +39,17 @@ export function changeCardSetSize(
 ) {
   const size = sizeWithChangedSide(cardSet.data, side, millimeters, keepsAspectRatio)
   return changeCardSet(cardSet, { width: size.width, height: size.height })
+}
+
+/** Zeigt die Farbe sofort auf allen Karten des Sets – z.B. beim Ziehen im
+ *  Farbwähler. changeCardSetColor speichert danach einmal. */
+export function previewCardSetColor(cardSet: CardSet, color: string) {
+  cardSet.data.color = color
+}
+
+/** Die Farbe der Karten, auch im Anschnitt. */
+export function changeCardSetColor(cardSet: CardSet, color: string) {
+  return changeCardSet(cardSet, { color })
 }
 
 /** Neuer Anschnitt einer Seite in mm: Breite gilt links und rechts je, Höhe

@@ -56,7 +56,13 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(3)">
             <CbSettingsHeading>{{ dictionary.cardEditor.colorGroup }}</CbSettingsHeading>
-            <CbColorPicker :model-value="cardSet.data.color" :label="dictionary.cardEditor.pickColor" />
+            <!-- Beim Ziehen nur zeigen, gespeichert wird bei change. -->
+            <CbColorPicker
+              :model-value="cardSet.data.color"
+              :label="dictionary.cardEditor.pickColor"
+              @update:model-value="(color) => previewCardSetColor(cardSet, color)"
+              @change="(color) => changeCardSetColor(cardSet, color)"
+            />
           </div>
 
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(4)" />
@@ -120,7 +126,12 @@ import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.v
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
 import { uniformCornerRadii } from '../card/cornerRadii'
 import type { Card, CardSet } from '../cardSets/cardSets'
-import { changeCardSetBleed, changeCardSetSize } from '../cardSets/changeCardSet'
+import {
+  changeCardSetBleed,
+  changeCardSetColor,
+  changeCardSetSize,
+  previewCardSetColor,
+} from '../cardSets/changeCardSet'
 import CbLayerList from '../layers/CbLayerList.vue'
 
 // The panel is already on the page while the card is still flying in. The
