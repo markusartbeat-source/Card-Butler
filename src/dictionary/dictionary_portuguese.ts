@@ -190,6 +190,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     openFolder: (name: string) => `Abrir a pasta “${name}”`,
     searchPictures: 'Pesquisar imagens',
     noPicturesFound: 'Nenhuma imagem encontrada',
+    defaultFolder: 'Padrão',
+    defaultFolderLabel: (name: string) => `Padrão: a escolha de imagem começa na pasta “${name}”`,
     opacity: 'Opacidade',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Tipo de letra',

@@ -77,6 +77,11 @@
                 @keydown.end.stop
               />
             </label>
+            <!-- Kopf über der Liste, z.B. ein Umschalter. Enter und Leertaste
+                 gehören seinen Knöpfen – Ark würde damit einen Eintrag wählen. -->
+            <div v-if="$slots.header" class="mb-1 flex" @keydown.enter.stop @keydown.space.stop>
+              <slot name="header" />
+            </div>
             <!-- Lange Listen rollen in diesem Kasten (relative: Die Einträge messen
                  ihre Lage darin). Im Raster nimmt ein Eintrag ohne Bild (z.B.
                  „zurück“) eine ganze Zeile ein, eine Bildkachel zeigt nur ihr

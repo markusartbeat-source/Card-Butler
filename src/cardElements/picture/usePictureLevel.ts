@@ -4,13 +4,14 @@ import type { ImageResource } from '../../api/images/imagesApi'
 import { postOffice } from '../../api/postOffice/postOffice'
 import { newerFirst } from '../../api/postOffice/resource'
 import { loadFolderPicture } from '../../folders/folderPictures'
+import { loadFolderPath } from '../../folders/loadFolderPath'
 import { rememberImages } from '../../images/knownImages'
 import { currentProject } from '../../project/currentProject'
 
 /** Die Ebene der Projektbilder, die die Bildwahl gerade zeigt: ihre Ordner und
     Bilder (das neueste zuerst) und der Weg von oben bis hierher. Eigenständig –
     die Bilderseite zeigt ihre eigene Ebene. Startet leer, erst
-    showTopLevelOnce lädt etwas – so gehen keine Anfragen raus, solange niemand
+    showStartLevel lädt etwas – so gehen keine Anfragen raus, solange niemand
     die Liste öffnet. */
 export function usePictureLevel() {
   // Die Ordner von oben bis zur gezeigten Ebene, leer = oberste.
@@ -43,20 +44,29 @@ export function usePictureLevel() {
     }
   }
 
-  // Beim ersten Mal die oberste Ebene, danach bleibt die gezeigte.
   let hasShownLevel = false
 
-  function showTopLevelOnce() {
-    if (hasShownLevel) return
+  /** Die Ebene beim Öffnen: der Ordner startFolderId, ohne ihn beim ersten Mal
+      die oberste – danach bleibt die gezeigte. Liefert false, wenn es den Ordner
+      nicht gibt; dann die oberste Ebene. */
+  async function showStartLevel(startFolderId: string | null) {
+    if (hasShownLevel && (!startFolderId || path.value.at(-1)?.id === startFolderId)) return true
     hasShownLevel = true
-    show([])
+
+    try {
+      await show(await loadFolderPath(startFolderId, [...path.value, ...folders.value]))
+      return true
+    } catch {
+      await show([])
+      return false
+    }
   }
 
   return {
     path,
     folders,
     images,
-    showTopLevelOnce,
+    showStartLevel,
     openFolder: (folder: FolderResource) => show([...path.value, folder]),
     leaveFolder: () => show(path.value.slice(0, -1)),
   }

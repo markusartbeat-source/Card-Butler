@@ -223,6 +223,8 @@ export const dictionaryGerman = {
     openFolder: (name: string) => `Ordner „${name}“ öffnen`,
     searchPictures: 'Bilder suchen',
     noPicturesFound: 'Keine Bilder gefunden',
+    defaultFolder: 'Standard',
+    defaultFolderLabel: (name: string) => `Standard: Bildwahl beginnt im Ordner „${name}“`,
     opacity: 'Sichtbarkeit',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Schriftart',

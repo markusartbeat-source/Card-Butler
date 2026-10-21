@@ -1,7 +1,7 @@
 import type { FolderResource } from '../api/folders/foldersApi'
-import { postOffice } from '../api/postOffice/postOffice'
 import { loadProjectImages, projectImages } from '../images/projectImages'
 import { folderPath, isLevelShown, showLevel } from './currentFolder'
+import { loadFolderPath } from './loadFolderPath'
 import { loadProjectFolders, projectFolders } from './projectFolders'
 
 /** Zeigt auf der Bilderseite eine Ebene (null = oberste): erst den Pfad bis
@@ -17,16 +17,9 @@ export async function showFolder(projectId: string, folderId: string | null) {
   projectFolders.value = null
   projectImages.value = null
 
-  const path: FolderResource[] = []
+  let path: FolderResource[]
   try {
-    let nextFolderId = folderId
-    while (nextFolderId) {
-      const folder =
-        knownFolders.find((knownFolder) => knownFolder.id === nextFolderId) ??
-        (await postOffice.folders.loadFolder(nextFolderId))
-      path.unshift(folder)
-      nextFolderId = folder.data.parentId
-    }
+    path = await loadFolderPath(folderId, knownFolders)
   } catch {
     return false
   }
