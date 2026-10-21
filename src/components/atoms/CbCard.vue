@@ -30,6 +30,7 @@
         v-else-if="element.type === 'picture'"
         :id="element.id"
         :name="element.name"
+        :opacity="element.opacity"
         :mark-if-empty="markEmptyElements"
         :editable="editableElements"
         :style="elementStyle(element)"
@@ -94,13 +95,14 @@ const elementsOnThisSide = computed(() =>
 
 // Lage, Größe (mm) und Deckkraft eines Elements. Ohne Breite bzw. Höhe wächst es
 // mit seinem Inhalt – undefined löscht dabei auch die px, die die Anfasser beim
-// Ziehen setzen.
+// Ziehen setzen. Beim Bild gilt die Deckkraft nur dem Bild im Rahmen, das setzt
+// es selbst.
 function elementStyle(element: CardElement) {
   return {
     ...placementStyle(element.placement),
     width: element.width === null ? undefined : `${element.width}mm`,
     height: element.height === null ? undefined : `${element.height}mm`,
-    opacity: element.opacity,
+    opacity: element.type === 'picture' ? undefined : element.opacity,
   }
 }
 </script>

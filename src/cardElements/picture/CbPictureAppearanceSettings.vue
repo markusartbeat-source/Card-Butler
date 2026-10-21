@@ -3,6 +3,7 @@
        Seitenverhältnis, die Anfasser ziehen weiter frei. -->
   <div class="flex flex-col gap-3">
     <CbSettingsHeading>{{ dictionary.cardEditor.appearanceGroup }}</CbSettingsHeading>
+    <CbElementOpacityField :element-id="elementId" />
     <CbSizeFields
       :width="data?.width"
       :height="data?.height"
@@ -21,6 +22,7 @@
 import { computed } from 'vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbSizeFields from '../../components/molecules/CbSizeFields.vue'
+import CbElementOpacityField from '../CbElementOpacityField.vue'
 import { findCardSetElement } from '../cardElements'
 import { changeElementSize } from '../changeElementSize'
 

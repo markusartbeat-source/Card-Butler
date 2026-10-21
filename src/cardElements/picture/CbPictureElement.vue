@@ -2,7 +2,8 @@
   <!-- Der Rahmen des Bilds. data-element-id lässt die Anfasser ihn auf der Karte
        finden, Lage und Größe gibt die Karte vor. Im Editor per Tab erreichbar
        und wie ein Knopf mit Enter oder Leertaste auszuwählen. Mit markIfEmpty
-       zeigt sich das leere Bild als gestrichelter Rahmen mit Bild-Icon. -->
+       zeigt sich das leere Bild als gestrichelter Rahmen mit Bild-Icon.
+       Die Karte setzt den Rahmen per absolute – darin liegt die Bildebene. -->
   <div
     ref="frame"
     v-ripple
@@ -20,6 +21,9 @@
     @keydown.enter.self.prevent="selectElement(id)"
     @keydown.space.self.prevent="selectElement(id)"
   >
+    <!-- Die Bildebene: Nur sie bekommt die Deckkraft, Rahmen und Icon bleiben
+         voll sichtbar. Das Bild selbst kommt später hinein. -->
+    <div class="absolute inset-0" :style="{ opacity }" />
     <CbIcon v-if="markIfEmpty" name="add_photo_alternate" />
   </div>
 </template>
@@ -30,9 +34,15 @@ import CbIcon from '../../components/atoms/CbIcon.vue'
 import { selectElement } from '../../elementTransform/elementSelection'
 
 // name ist der Name des Elements für Screenreader. Mit editable lässt es sich
-// auswählen – nur im Editor.
+// auswählen – nur im Editor. opacity von 0 bis 1.
 const props = withDefaults(
-  defineProps<{ id: string; name: string; markIfEmpty?: boolean; editable?: boolean }>(),
+  defineProps<{
+    id: string
+    name: string
+    opacity: number
+    markIfEmpty?: boolean
+    editable?: boolean
+  }>(),
   { markIfEmpty: false, editable: false },
 )
 

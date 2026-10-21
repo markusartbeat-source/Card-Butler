@@ -217,6 +217,8 @@ export const dictionaryGerman = {
     automaticSizeMark: '-',
     automaticSize: 'automatisch',
     appearanceGroup: 'Darstellung',
+    opacity: 'Sichtbarkeit',
+    opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Schriftart',
     fontWeight: 'Schriftschnitt',
     fontWeightRegular: 'Regular',

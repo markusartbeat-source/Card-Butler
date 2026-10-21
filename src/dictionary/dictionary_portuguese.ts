@@ -184,6 +184,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     automaticSizeMark: '-',
     automaticSize: 'automática',
     appearanceGroup: 'Aparência',
+    opacity: 'Opacidade',
+    opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Tipo de letra',
     fontWeight: 'Estilo do tipo de letra',
     fontWeightRegular: 'Normal',

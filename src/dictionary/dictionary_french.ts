@@ -184,6 +184,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     automaticSizeMark: '-',
     automaticSize: 'automatique',
     appearanceGroup: 'Apparence',
+    opacity: 'Opacité',
+    // Im Französischen steht vor dem Prozentzeichen ein geschütztes Leerzeichen.
+    opacityValue: (percent: number) => `${percent} %`,
     fontFamily: 'Police',
     fontWeight: 'Style de police',
     fontWeightRegular: 'Normal',
