@@ -1,5 +1,6 @@
 import type { ElementData } from '../api/elements/elementsApi'
 import type { CardTool } from '../components/molecules/cardToolbarElements'
+import { shapeAppearanceDefaults } from './shape/shapeAppearance'
 import { textAppearanceDefaults } from './text/textAppearance'
 
 // Deckkraft, Ausrichtung und Lage sind bei allen neuen Elementen gleich.
@@ -23,6 +24,14 @@ const newElementDataByTool: Partial<Record<CardTool, () => NewElementDefaults>> 
     height: 30,
     radius: 0,
     imageId: null,
+  }),
+  square: () => ({
+    name: dictionary.cardEditor.square,
+    type: 'SQUARE',
+    width: 20,
+    height: 20,
+    radius: 0,
+    ...shapeAppearanceDefaults,
   }),
 }
 

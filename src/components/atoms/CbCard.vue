@@ -20,11 +20,17 @@
         @update:content="emit('changeElementValue', element.id, $event)"
       />
       <CbPictureElement
-        v-else
+        v-else-if="element.data.type === 'PICTURE'"
         :element="element"
         :picture="pictureOnThisCard(element.id)"
         :crop="pictureCropOnThisCard(element.id)"
         :mark-if-empty="markEmptyElements"
+        :editable="editableElements"
+        :style="elementStyle(element)"
+      />
+      <CbShapeElement
+        v-else
+        :element="element"
         :editable="editableElements"
         :style="elementStyle(element)"
       />
@@ -42,6 +48,7 @@ import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import { knownImages } from '../../images/knownImages'
 import CbPictureElement from '../../cardElements/picture/CbPictureElement.vue'
 import { pictureCropOf } from '../../cardElements/picture/pictureCrops'
+import CbShapeElement from '../../cardElements/shape/CbShapeElement.vue'
 import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 import { textSizingOf } from '../../cardElements/text/textSizing'
 
@@ -77,11 +84,11 @@ const props = withDefaults(
 
 const emit = defineEmits<{ changeElementValue: [elementId: string, value: string] }>()
 
-// Gezeichnet werden bisher nur Textfelder und Bilder mit x/y-Position; andere
-// (z.B. von einer KI per MCP angelegt) fehlen noch.
+// Gezeichnet werden bisher nur Textfelder, Bilder und Vierecke mit x/y-Position;
+// andere (z.B. von einer KI per MCP angelegt) fehlen noch.
 function isDrawn({ data }: CardSetElement) {
   const { x, y } = data.position
-  return ['TEXT', 'PICTURE'].includes(data.type) && x != null && y != null
+  return ['TEXT', 'PICTURE', 'SQUARE'].includes(data.type) && x != null && y != null
 }
 
 const elementsOnThisSide = computed(() =>
