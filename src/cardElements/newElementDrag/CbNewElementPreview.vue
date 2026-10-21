@@ -1,14 +1,16 @@
 <template>
   <!-- Mitte unter dem Zeiger. Lässt den Zeiger durch, damit das Loslassen die
        Karte darunter trifft. Gold auf dunklem Grund ist über dem abgedunkelten
-       Hintergrund genauso gut zu sehen wie über der weißen Karte. -->
+       Hintergrund genauso gut zu sehen wie über der weißen Karte. Der Kreis ist
+       rund, sein Name steht mittig – in der Ecke würde er abgeschnitten. -->
   <div
     class="pointer-events-none fixed -translate-x-1/2 -translate-y-1/2"
     :style="{ left: `${x}px`, top: `${y}px` }"
     aria-hidden="true"
   >
     <div
-      class="border-gold bg-background/80 text-gold overflow-hidden rounded border border-dashed px-1 shadow-lg"
+      class="border-gold bg-background/80 text-gold overflow-hidden border border-dashed px-1 shadow-lg"
+      :class="element.type === 'CIRCLE' ? 'flex items-center justify-center rounded-full' : 'rounded'"
       :style="{ width: `${element.width}mm`, height: `${element.height}mm`, zoom: editorZoom }"
     >
       {{ element.name }}
