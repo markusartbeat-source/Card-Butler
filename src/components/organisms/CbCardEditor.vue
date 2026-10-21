@@ -292,10 +292,14 @@ function deleteSelectedElementOnKey(event: KeyboardEvent) {
   event.preventDefault()
   clearElementSelection()
   const { cardSet } = props
-  const deletedMessage =
-    elementToDelete.data.type === 'PICTURE'
-      ? dictionary.cardEditor.pictureElementDeleted
-      : dictionary.cardEditor.textElementDeleted
+  // Linien werden nicht gezeichnet, lassen sich also auch nicht auswählen.
+  const deletedMessages: Record<string, string> = {
+    TEXT: dictionary.cardEditor.textElementDeleted,
+    PICTURE: dictionary.cardEditor.pictureElementDeleted,
+    SQUARE: dictionary.cardEditor.squareElementDeleted,
+    CIRCLE: dictionary.cardEditor.circleElementDeleted,
+  }
+  const deletedMessage = deletedMessages[elementToDelete.data.type]
   deleteWithUndo(cardSet.elements, elementToDelete, deletedMessage, (element) =>
     deleteElement(cardSet, element),
   )

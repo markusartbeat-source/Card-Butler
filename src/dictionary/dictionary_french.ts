@@ -136,6 +136,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     textElementDeleted: 'Champ de texte supprimé',
     pictureElementName: 'Image',
     pictureElementDeleted: 'Image supprimée',
+    squareElementDeleted: 'Carré supprimé',
+    circleElementDeleted: 'Cercle supprimé',
     cardSettings: 'Réglages de la carte',
     textSettings: 'Réglages du texte',
     pictureSettings: 'Réglages de l’image',

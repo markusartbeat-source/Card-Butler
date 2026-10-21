@@ -136,6 +136,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     textElementDeleted: 'Text field deleted',
     pictureElementName: 'Image',
     pictureElementDeleted: 'Image deleted',
+    squareElementDeleted: 'Square deleted',
+    circleElementDeleted: 'Circle deleted',
     cardSettings: 'Card settings',
     textSettings: 'Text settings',
     pictureSettings: 'Image settings',

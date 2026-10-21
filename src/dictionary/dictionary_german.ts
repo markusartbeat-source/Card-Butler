@@ -169,6 +169,8 @@ export const dictionaryGerman = {
     textElementDeleted: 'Textfeld gelöscht',
     pictureElementName: 'Bild',
     pictureElementDeleted: 'Bild gelöscht',
+    squareElementDeleted: 'Viereck gelöscht',
+    circleElementDeleted: 'Kreis gelöscht',
     cardSettings: 'Karteneinstellungen',
     textSettings: 'Texteinstellungen',
     pictureSettings: 'Bildeinstellungen',
