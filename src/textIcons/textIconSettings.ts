@@ -2,14 +2,17 @@ import { computed, ref } from 'vue'
 
 // How every icon inside the text is drawn. Dummy data in memory for now.
 // Gilt pro Projekt, später lädt und speichert das Backend sie hier.
-export const iconHeight = ref('20px')
-export const iconWidth = ref('20px')
-export const iconVerticalOffset = ref('0')
+export const iconHeight = ref('100%')
+export const iconWidth = ref('100%')
+export const iconVerticalOffset = ref('0%')
 export const iconSideSpacing = ref('0%')
 
-// A bare number means pixels, anything with a unit is passed on as typed.
+// Eine Zahl, mit oder ohne %, ist ein Anteil der Schriftgröße: 100 % ist so
+// groß wie der Text, so wachsen und schrumpfen die Icons mit ihm. Alles mit
+// anderer Einheit wird übernommen, wie getippt.
 function asCssLength(value: string) {
-  return /^-?\d+(\.\d+)?$/.test(value.trim()) ? `${value.trim()}px` : value
+  const percent = value.trim().match(/^(-?\d+(\.\d+)?)\s*%?$/)
+  return percent ? `${Number(percent[1]) / 100}em` : value
 }
 
 // The settings as CSS variables on the text; every icon picture reads them,
