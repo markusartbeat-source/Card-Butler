@@ -188,6 +188,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     noPictureChosen: 'Ninguna imagen elegida',
     leaveFolder: (name: string) => `Salir de la carpeta «${name}»`,
     openFolder: (name: string) => `Abrir la carpeta «${name}»`,
+    searchPictures: 'Buscar imágenes',
+    noPicturesFound: 'No se encontraron imágenes',
     opacity: 'Opacidad',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Fuente',

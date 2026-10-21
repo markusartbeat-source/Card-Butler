@@ -188,6 +188,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     noPictureChosen: 'No image chosen',
     leaveFolder: (name: string) => `Back out of folder “${name}”`,
     openFolder: (name: string) => `Open folder “${name}”`,
+    searchPictures: 'Search images',
+    noPicturesFound: 'No images found',
     opacity: 'Opacity',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Font',

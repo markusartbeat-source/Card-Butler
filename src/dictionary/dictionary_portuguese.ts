@@ -188,6 +188,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     noPictureChosen: 'Nenhuma imagem escolhida',
     leaveFolder: (name: string) => `Sair da pasta “${name}”`,
     openFolder: (name: string) => `Abrir a pasta “${name}”`,
+    searchPictures: 'Pesquisar imagens',
+    noPicturesFound: 'Nenhuma imagem encontrada',
     opacity: 'Opacidade',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Tipo de letra',

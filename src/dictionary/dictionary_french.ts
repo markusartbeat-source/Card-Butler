@@ -188,6 +188,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     noPictureChosen: 'Aucune image choisie',
     leaveFolder: (name: string) => `Sortir du dossier « ${name} »`,
     openFolder: (name: string) => `Ouvrir le dossier « ${name} »`,
+    searchPictures: 'Rechercher des images',
+    noPicturesFound: 'Aucune image trouvée',
     opacity: 'Opacité',
     // Im Französischen steht vor dem Prozentzeichen ein geschütztes Leerzeichen.
     opacityValue: (percent: number) => `${percent} %`,

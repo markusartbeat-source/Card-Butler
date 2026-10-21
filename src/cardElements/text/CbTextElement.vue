@@ -47,12 +47,7 @@
     />
     <template v-else>
       <span v-if="isPlaceholderShown" class="text-background/70">{{ placeholder }}</span>
-      <span
-        v-for="(part, index) in textParts"
-        :key="index"
-        :class="part.isMatch ? 'bg-gold-light rounded' : ''"
-        >{{ part.text }}</span
-      >
+      <CbHighlightedText :text="content" :search-word="highlightSearch ? searchWord : ''" />
     </template>
   </span>
 </template>
@@ -60,13 +55,14 @@
 <script setup lang="ts">
 import { computed, nextTick, useTemplateRef } from 'vue'
 import type { HorizontalAlignment, VerticalAlignment } from '../../api/elements/elementsApi'
+import CbHighlightedText from '../../components/atoms/CbHighlightedText.vue'
 import {
   isTypingInSelectedElement,
   selectElement,
   selectedElementId,
   startTypingInElement,
 } from '../../elementTransform/elementSelection'
-import { splitBySearchWord } from '../../search/splitBySearchWord'
+import { searchWord } from '../../search/searchWord'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
 
 // The content is the one thing each card fills in itself. Only the card
@@ -119,12 +115,6 @@ const isTyping = computed(
 const isButton = computed(() => props.editable && !isTyping.value)
 
 const isPlaceholderShown = computed(() => !props.content && !!props.placeholder)
-
-const textParts = computed(() =>
-  props.highlightSearch
-    ? splitBySearchWord(props.content)
-    : [{ text: props.content, isMatch: false }],
-)
 
 // placeCaret setzt den Cursor, sobald das Textfeld da ist.
 async function startTyping(placeCaret: (textField: HTMLElement) => void) {

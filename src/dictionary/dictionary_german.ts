@@ -221,6 +221,8 @@ export const dictionaryGerman = {
     noPictureChosen: 'Kein Bild gewählt',
     leaveFolder: (name: string) => `Zurück aus Ordner „${name}“`,
     openFolder: (name: string) => `Ordner „${name}“ öffnen`,
+    searchPictures: 'Bilder suchen',
+    noPicturesFound: 'Keine Bilder gefunden',
     opacity: 'Sichtbarkeit',
     opacityValue: (percent: number) => `${percent}%`,
     fontFamily: 'Schriftart',

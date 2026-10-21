@@ -1,12 +1,10 @@
-import { searchWord } from './searchWord'
-
 export type TextPart = { text: string; isMatch: boolean }
 
 /** Cuts one text into the found spots and the rest around them, so a component
     can give the found spots their own look. Upper and lower case are ignored.
     Without a search word the text stays one single part. */
-export function splitBySearchWord(text: string): TextPart[] {
-  const word = searchWord.value.trim().toLowerCase()
+export function splitBySearchWord(text: string, searchWord: string): TextPart[] {
+  const word = searchWord.trim().toLowerCase()
   if (!word) return [{ text, isMatch: false }]
 
   const lowerText = text.toLowerCase()

@@ -3,7 +3,9 @@
        An entry can carry its own icon, e.g. a flag or a moon. Mit variant
        „pictures“ tragen die Einträge Bilder: Das geschlossene Feld zeigt groß das
        Bild des gewählten, offen stehen die Einträge als Kacheln im Raster. -->
-  <!-- Ark nimmt null als „nichts hervorgehoben“, sein Typ nennt nur string. -->
+  <!-- Ark nimmt null als „nichts hervorgehoben“, sein Typ nennt nur string.
+       Mit Suchfeld ist der Inhalt ein Dialog und die Liste darin die Listbox
+       (composite aus) – ein Eingabefeld darf nicht in einer Listbox stehen. -->
   <Select.Root
     :open="open"
     :highlighted-value="highlightedValue as string"
@@ -11,6 +13,8 @@
     :model-value="selectedValues"
     :positioning="{ sameWidth: true }"
     :scroll-to-index-fn="scrollToItem"
+    :composite="!searchLabel"
+    :ids="ids"
     @update:open="changeOpen"
     @update:highlighted-value="(value) => (highlightedValue = value)"
     @update:model-value="select"
@@ -50,30 +54,62 @@
         <!-- sameWidth on the root makes the list as wide as the closed field. -->
         <Select.Content as-child>
           <CbPopupList>
+            <!-- Das Suchfeld bekommt beim Öffnen den Fokus, die Pfeiltasten wandern
+                 trotzdem durch die Liste. Leertaste, Pos1 und Ende gehören dem
+                 Text – Ark würde damit wählen bzw. springen. -->
+            <label
+              v-if="searchLabel"
+              class="mb-1 flex items-center gap-1.5 rounded-md bg-surface px-1.5 py-1 text-label"
+            >
+              <CbIcon name="search" />
+              <input
+                v-model="search"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="true"
+                :aria-controls="listId"
+                :aria-activedescendant="highlightedValue === null ? undefined : itemId(highlightedValue)"
+                :aria-label="searchLabel"
+                :placeholder="searchLabel"
+                class="min-w-0 grow cursor-text bg-transparent text-white outline-none placeholder:text-label"
+                @keydown.space.stop
+                @keydown.home.stop
+                @keydown.end.stop
+              />
+            </label>
             <!-- Lange Listen rollen in diesem Kasten (relative: Die Einträge messen
                  ihre Lage darin). Im Raster nimmt ein Eintrag ohne Bild (z.B.
-                 „zurück“) eine ganze Zeile ein. -->
-            <div
+                 „zurück“) eine ganze Zeile ein, eine Bildkachel zeigt nur ihr
+                 Bild (den Namen hört der Screenreader). Beim Suchen stehen die
+                 Treffer als Zeilen mit kleinem Bild und Namen untereinander. -->
+            <component
+              :is="searchLabel ? Select.List : 'div'"
+              :id="listId"
               class="relative max-h-80 overflow-y-auto"
-              :class="variant === 'pictures' ? 'grid grid-cols-3 gap-1' : 'flex flex-col'"
+              :class="variant === 'pictures' && !isSearching ? 'grid grid-cols-3 gap-1' : 'flex flex-col'"
             >
               <Select.Item
                 v-for="item in items"
                 :key="item.value"
                 :item="item"
-                :aria-label="item.ariaLabel"
+                :aria-label="item.ariaLabel ?? item.label"
                 as-child
               >
                 <CbListItem
                   :icon="item.icon"
                   :picture="item.picture"
                   :folder="item.isFolder"
+                  :picture-only="!item.isFolder"
+                  :row="isSearching"
                   :class="!item.picture && !item.isFolder && 'col-span-full'"
                 >
-                  <Select.ItemText>{{ item.label }}</Select.ItemText>
+                  <Select.ItemText>
+                    <CbHighlightedText :text="item.label" :search-word="search" />
+                  </Select.ItemText>
                 </CbListItem>
               </Select.Item>
-            </div>
+            </component>
+            <p v-if="isSearching && !items.length" class="px-2 py-1.5 text-label">{{ noResultsText }}</p>
           </CbPopupList>
         </Select.Content>
       </Select.Positioner>
@@ -82,8 +118,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, useId, watch } from 'vue'
 import { Select, createListCollection, type SelectInteractOutsideEvent } from '@ark-ui/vue'
+import CbHighlightedText from './CbHighlightedText.vue'
 import CbIcon from './CbIcon.vue'
 import CbListItem from './CbListItem.vue'
 import CbPopupList from './CbPopupList.vue'
@@ -118,6 +155,12 @@ const props = withDefaults(
     /** Der gewählte Eintrag, wenn er nicht in items steht (z.B. ein Bild aus
         einem anderen Ordner). */
     selectedItem?: Item
+    /** Damit steht oben in der Liste ein Suchfeld (Text per v-model:search),
+        der Text benennt es und steht als Platzhalter darin. Filtern muss der
+        Aufrufer, die Liste markiert nur die Fundstellen. */
+    searchLabel?: string
+    /** Steht da, wenn beim Suchen nichts übrig bleibt. */
+    noResultsText?: string
   }>(),
   { variant: 'default' },
 )
@@ -138,6 +181,15 @@ const triggerClasses = {
 // Whether the list is open. A parent may bind it to open the list from
 // outside (v-model:open); without a binding the select handles it alone.
 const open = defineModel<boolean>('open')
+
+const search = defineModel<string>('search', { default: '' })
+const isSearching = computed(() => search.value.trim() !== '')
+
+// Eigene IDs der Einträge: Das Suchfeld verweist damit auf den hervorgehobenen.
+const id = useId()
+const listId = `${id}-list`
+const itemId = (value: string | number) => `${id}-item-${value}`
+const ids = { item: itemId }
 
 const collection = computed(() => createListCollection({ items: props.items }))
 
@@ -169,6 +221,8 @@ function changeOpen(isOpen: boolean) {
     isKeepingListOpen = false
     return
   }
+  // Jedes Öffnen beginnt ohne Suchtext.
+  if (isOpen) search.value = ''
   open.value = isOpen
 }
 

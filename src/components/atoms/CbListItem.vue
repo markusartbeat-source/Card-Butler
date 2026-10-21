@@ -7,6 +7,8 @@
     <!-- Ein Eintrag einer aufgeklappten Liste, mit Icon davor, wenn er eins hat.
          Mit Bild oder als Ordner wird er zur Kachel im Raster: oben das Bild im
          Seitenverhältnis des großen Auswahlfelds (73×52 px), darunter der Text.
+         Mit pictureOnly zeigt die Kachel nur das Bild. Mit row bleibt er eine
+         Zeile, das Bild steht dann klein davor.
          Ark legt sein Verhalten per as-child darauf, z.B. <Select.Item as-child>.
          Kommentar im Eintrag statt davor – Grund siehe CbPopupList. -->
     <template v-if="isTile">
@@ -14,10 +16,11 @@
         <CbFolder graphic-only :picture="picture" />
       </div>
       <CbThumbnail v-else :picture="picture" class="aspect-73/52 w-full" />
-      <span class="truncate"><slot /></span>
+      <span v-if="!pictureOnly" class="truncate"><slot /></span>
     </template>
     <template v-else>
-      <CbIcon v-if="icon" :name="icon" />
+      <CbThumbnail v-if="picture !== undefined" :picture="picture" class="aspect-73/52 h-6 shrink-0" />
+      <CbIcon v-else-if="icon" :name="icon" />
       <slot />
     </template>
   </div>
@@ -31,7 +34,13 @@ import CbThumbnail from './CbThumbnail.vue'
 import type { IconName } from './icons'
 
 // picture ist die Adresse des Bildes, bei einem Ordner das Bild darin.
-const props = defineProps<{ icon?: IconName; picture?: string; folder?: boolean }>()
+const props = defineProps<{
+  icon?: IconName
+  picture?: string
+  folder?: boolean
+  pictureOnly?: boolean
+  row?: boolean
+}>()
 
-const isTile = computed(() => props.picture !== undefined || props.folder)
+const isTile = computed(() => !props.row && (props.picture !== undefined || props.folder))
 </script>
