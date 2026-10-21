@@ -3,7 +3,7 @@ import type {
   HorizontalAlignment,
   VerticalAlignment,
 } from '../../api/elements/elementsApi'
-import { changeElement, findCardSetElement } from '../cardElements'
+import { changeElement } from '../cardElements'
 
 // Wie der Text aussieht. Gilt auf allen Karten des Sets.
 
@@ -28,17 +28,6 @@ export function changeFontFamily(id: string, fontFamily: string) {
 /** Die Schriftgröße in mm. */
 export function changeFontSize(id: string, millimeters: number) {
   changeElement(id, (data) => (data.fontSize = millimeters))
-}
-
-/** Zeigt die Textfarbe sofort auf allen Karten, speichert aber nicht – z.B.
-    beim Ziehen im Farbwähler. changeTextColor speichert danach einmal. */
-export function previewTextColor(id: string, color: string) {
-  const element = findCardSetElement(id)
-  if (element) element.data.color = color
-}
-
-export function changeTextColor(id: string, color: string) {
-  changeElement(id, (data) => (data.color = color))
 }
 
 /** Richtet den Text in seiner Box links, mittig oder rechts aus. */

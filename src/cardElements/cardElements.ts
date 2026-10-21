@@ -67,6 +67,13 @@ export function rotateElementBy(id: string, turnInDegrees: number) {
   if (element) element.rotation += turnInDegrees
 }
 
+/** Zeigt die Farbe (Text- bzw. Füllfarbe) sofort auf allen Karten – z.B. beim
+    Ziehen im Farbwähler. changeElementColor speichert danach einmal. */
+export function previewElementColor(id: string, color: string) {
+  const element = findCardSetElement(id)
+  if (element) element.data.color = color
+}
+
 // Mit Speichern – eine Aktion im Panel.
 
 /** Ändert die Daten eines Elements und speichert sie. */
@@ -131,4 +138,9 @@ export function changeElementSize(
 /** Die Deckkraft des Elements: 0 = unsichtbar, 1 = voll sichtbar. */
 export function changeElementOpacity(id: string, opacity: number) {
   changeElement(id, (data) => (data.opacity = opacity))
+}
+
+/** Die Farbe des Elements: beim Text die Schrift, bei Formen die Füllung. */
+export function changeElementColor(id: string, color: string) {
+  changeElement(id, (data) => (data.color = color))
 }

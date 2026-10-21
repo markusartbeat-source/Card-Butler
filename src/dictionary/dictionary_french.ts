@@ -218,6 +218,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     textAlignMiddle: 'Au milieu',
     textAlignBottom: 'En bas',
     textColor: 'Couleur du texte',
+    fillColor: 'Couleur de remplissage',
   },
   imageViewer: {
     imageSettings: "Réglages de l'image",

@@ -8,3 +8,9 @@ export const shapeAppearanceDefaults = {
   color: '#D9D9D9',
   border: { color: '#000000', lineType: 'SOLID', width: 0 },
 } satisfies Pick<ElementData, 'color' | 'border'>
+
+/** Die Darstellung der Form, fehlende Werte durch die Startwerte ersetzt – beim
+    Kreis verlangt das Backend keine Farbe. */
+export function shapeAppearanceOf(data: ElementData | undefined) {
+  return { color: data?.color ?? shapeAppearanceDefaults.color }
+}

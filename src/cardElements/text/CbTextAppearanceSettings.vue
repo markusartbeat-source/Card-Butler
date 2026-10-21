@@ -54,7 +54,7 @@
     <CbColorPicker
       v-model="color"
       :label="dictionary.cardEditor.textColor"
-      @change="(value) => changeTextColor(elementId, value)"
+      @change="(value) => changeElementColor(elementId, value)"
     />
   </div>
 </template>
@@ -67,15 +67,13 @@ import CbInput from '../../components/atoms/CbInput.vue'
 import CbSelect from '../../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
-import { findCardSetElement } from '../cardElements'
+import { changeElementColor, findCardSetElement, previewElementColor } from '../cardElements'
 import { fontFamilyItemsIncluding, fontSizeItems, fontWeightItems } from './fonts'
 import {
   alignTextHorizontally,
   alignTextVertically,
   changeFontFamily,
   changeFontSize,
-  changeTextColor,
-  previewTextColor,
   textAppearanceOf,
 } from './textAppearance'
 
@@ -96,7 +94,7 @@ const fontSize = computed({
 // Beim Ziehen nur zeigen, gespeichert wird bei change.
 const color = computed({
   get: () => textAppearanceOf(element.value?.data).color,
-  set: (value) => previewTextColor(props.elementId, value),
+  set: (value) => previewElementColor(props.elementId, value),
 })
 
 // Diese Werte leben vorerst nur hier und wirken noch nicht auf den Text.

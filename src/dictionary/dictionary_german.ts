@@ -250,6 +250,7 @@ export const dictionaryGerman = {
     textAlignMiddle: 'Mittig',
     textAlignBottom: 'Unten',
     textColor: 'Textfarbe',
+    fillColor: 'Füllfarbe',
   },
   // The overlay for looking at a single picture.
   imageViewer: {

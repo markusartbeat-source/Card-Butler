@@ -7,7 +7,7 @@
     v-ripple
     class="overflow-hidden"
     :class="{ 'cursor-pointer': editable }"
-    :style="{ backgroundColor: element.data.color ?? undefined, borderRadius }"
+    :style="{ backgroundColor: shapeAppearanceOf(element.data).color, borderRadius }"
     :data-element-id="element.id"
     :tabindex="editable ? 0 : undefined"
     :role="editable ? 'button' : undefined"
@@ -25,6 +25,7 @@ import { cornerRadiiStyle } from '../../card/cornerRadii'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { selectOnKeyboardFocus, selectOrStartEditing } from '../../elementTransform/elementSelection'
 import { cornerRadiiOfElement } from '../elementCornerRadii'
+import { shapeAppearanceOf } from './shapeAppearance'
 
 // Mit editable lässt sie sich auswählen – nur im Editor.
 const props = withDefaults(defineProps<{ element: CardSetElement; editable?: boolean }>(), {
