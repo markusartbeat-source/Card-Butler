@@ -37,7 +37,7 @@ import CbToggle from '../../components/atoms/CbToggle.vue'
 import type { Card } from '../../cardSets/cardSets'
 import { folderPictures } from '../../folders/folderPictures'
 import { knownImages } from '../../images/knownImages'
-import { chooseCardPicture } from './chooseCardPicture'
+import { chooseCardPicture } from '../cardValues'
 import { defaultFolderIdOf, setDefaultFolder } from './defaultPictureFolders'
 import { usePictureLevel } from './usePictureLevel'
 import { usePictureSearch } from './usePictureSearch'
@@ -86,7 +86,7 @@ function imageItem(image: ImageResource) {
   return { value: image.id, label: image.data.name, picture: image.data.location }
 }
 
-const imageId = computed(() => props.card.elementImageIds[props.elementId])
+const imageId = computed(() => props.card.values[props.elementId]?.imageId ?? undefined)
 
 // Das gewählte Bild liegt oft in einem anderen Ordner als dem gezeigten.
 const selectedItem = computed(() => {
@@ -101,7 +101,7 @@ function changeDefaultFolder(isDefault: boolean) {
 
 // Jedes Öffnen sucht frisch, die Bilder der letzten Suche könnten veraltet sein.
 // Gibt es den Standard-Ordner nicht mehr, ist er keiner mehr.
-async function prepareOpening(isOpen: boolean) {
+async function prepareOpening(isOpen?: boolean) {
   if (!isOpen) return
   forgetImages()
   if (!(await showStartLevel(defaultFolderIdOf(props.elementId)))) setDefaultFolder(props.elementId, null)

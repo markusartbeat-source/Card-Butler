@@ -83,7 +83,7 @@ async function request<ResponseBody>(
 
   // Manche Antworten (z.B. 204) haben keinen Inhalt.
   const responseText = await response.text()
-  return responseText ? JSON.parse(responseText) : undefined
+  return (responseText ? JSON.parse(responseText) : undefined) as ResponseBody
 }
 
 /** Nach dem Abmelden aufrufen: Das Backend macht den Token dann ungültig. */

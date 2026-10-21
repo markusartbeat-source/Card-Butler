@@ -9,7 +9,6 @@
        erscheint – außerhalb des Rahmens halb durchsichtig. Die Tasten dafür
        nennt die aria-description. -->
   <div
-    ref="frame"
     class="flex items-center justify-center"
     :class="{
       'cursor-pointer': editable,
@@ -17,13 +16,13 @@
       'outline-2 outline-gold': isCropping,
     }"
     :style="{ borderRadius }"
-    :data-element-id="id"
+    :data-element-id="element.id"
     :tabindex="editable ? 0 : undefined"
     :role="editable ? 'button' : undefined"
-    :aria-label="editable ? name : undefined"
+    :aria-label="editable ? element.data.name : undefined"
     :aria-description="isCropping ? dictionary.cardEditor.croppingKeys : undefined"
     @click="selectOrStartCropping"
-    @focus="selectOnKeyboardFocus"
+    @focus="selectOnKeyboardFocus(element.id, $event)"
     @keydown.enter.self.prevent="selectOrStartCropping"
     @keydown.space.self.prevent="selectOrStartCropping"
   >
@@ -55,7 +54,7 @@
         draggable="false"
         class="absolute max-w-none"
         :class="{ 'size-full object-cover': !shownCrop }"
-        :style="{ opacity, ...cropStyle }"
+        :style="{ opacity: element.data.opacity, ...cropStyle }"
         @load="rememberPictureAspectRatio"
       />
     </div>
@@ -64,28 +63,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import CbIcon from '../../components/atoms/CbIcon.vue'
-import { cornerRadiiStyle, type CornerRadii } from '../../card/cornerRadii'
+import { cornerRadiiStyle } from '../../card/cornerRadii'
+import type { CardSetElement } from '../../cardSets/cardSets'
 import {
-  isEditingSelectedElement,
-  selectedElementId,
-  selectElement,
+  isEditingElement,
+  selectOnKeyboardFocus,
+  selectOrStartEditing,
   startEditingElement,
 } from '../../elementTransform/elementSelection'
+import { cornerRadiiOfElement } from '../elementCornerRadii'
 import { coverCrop, type PictureCrop } from './pictureCrops'
 
-// name ist der Name des Elements für Screenreader. Mit editable lässt es sich
-// auswählen und zuschneiden – nur im Editor. opacity von 0 bis 1, cornerRadii in
-// mm. picture ist die Adresse des Bildes, das diese Karte zeigt, crop sein
-// Ausschnitt auf dieser Karte. frameAspectRatio ist Breite / Höhe des Rahmens.
+// Mit editable lässt es sich auswählen und zuschneiden – nur im Editor. picture
+// ist die Adresse des Bildes, das diese Karte zeigt, crop sein Ausschnitt auf
+// dieser Karte.
 const props = withDefaults(
   defineProps<{
-    id: string
-    name: string
-    opacity: number
-    cornerRadii: CornerRadii
-    frameAspectRatio: number
+    element: CardSetElement
     picture?: string
     crop?: PictureCrop
     markIfEmpty?: boolean
@@ -96,11 +92,12 @@ const props = withDefaults(
 
 const isMarkedEmpty = computed(() => props.markIfEmpty && !props.picture)
 
-const borderRadius = computed(() => cornerRadiiStyle(props.cornerRadii))
+const borderRadius = computed(() => {
+  const { id, data } = props.element
+  return cornerRadiiStyle(cornerRadiiOfElement(id, data.radius))
+})
 
-const isCropping = computed(
-  () => props.editable && isEditingSelectedElement.value && selectedElementId.value === props.id,
-)
+const isCropping = computed(() => props.editable && isEditingElement(props.element.id))
 
 // Breite / Höhe des Bildes, bekannt sobald es geladen ist.
 const pictureAspectRatio = ref<number>()
@@ -118,7 +115,8 @@ function rememberPictureAspectRatio(event: Event) {
 // füllt – dort erscheint dann auch das ganze Bild.
 const shownCrop = computed(() => {
   if (props.crop || !isCropping.value || !pictureAspectRatio.value) return props.crop
-  return coverCrop(pictureAspectRatio.value, props.frameAspectRatio)
+  const { width, height } = props.element.data
+  return coverCrop(pictureAspectRatio.value, width / height)
 })
 
 // Mitte, Breite und Drehung in Anteilen des Rahmens. Die Höhe folgt dem Bild,
@@ -134,21 +132,10 @@ const cropStyle = computed(() => {
   }
 })
 
-const frame = useTemplateRef<HTMLElement>('frame')
-
-// Der 1. Klick wählt das Bild aus. Ein weiterer startet im Editor das
-// Zuschneiden – nur, wenn diese Karte ein Bild zeigt.
+// Zuschneiden geht nur, wenn diese Karte ein Bild zeigt.
 function selectOrStartCropping() {
-  if (!props.editable || selectedElementId.value !== props.id) return selectElement(props.id)
-  if (props.picture) startEditingElement(props.id)
-}
-
-// Per Tastatur angesprungen wählt sich das Bild aus. Ein Mausklick fokussiert es
-// auch, wählt aber erst mit dem Klick aus. Ist es schon ausgewählt, bleibt es
-// dabei – sonst endete das Zuschneiden, sobald der Rahmen den Fokus bekommt.
-function selectOnKeyboardFocus() {
-  if (selectedElementId.value !== props.id && frame.value?.matches(':focus-visible')) {
-    selectElement(props.id)
-  }
+  selectOrStartEditing(props.element.id, props.editable, () => {
+    if (props.picture) startEditingElement(props.element.id)
+  })
 }
 </script>

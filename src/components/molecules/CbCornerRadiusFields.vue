@@ -4,24 +4,24 @@
     <CbSlideSwap class="grow" :show-second="areCornersSeparate">
       <template #first>
         <CbInput
-          v-model="texts.allCorners"
+          v-model="allCornersText"
           icon="crop_free"
           :label="dictionary.cardEditor.cornerRadius"
-          @change="applyText('allCorners')"
+          @change="applyAllCornersText"
         />
       </template>
       <!-- Zwei Reihen mit je zwei Feldern, jedes gleich breit. -->
       <template #second>
         <div class="flex flex-col gap-3">
           <div v-for="(row, index) in cornerRows" :key="index" class="flex gap-3">
-            <CbInput
+            <CbNumberInput
               v-for="corner in row"
               :key="corner.key"
-              v-model="texts[corner.key]"
+              :value="radii[corner.key]"
               class="flex-1"
               :icon="corner.icon"
               :label="corner.label"
-              @change="applyText(corner.key)"
+              @commit="(value) => changeCorner(corner.key, value)"
             />
           </div>
         </div>
@@ -47,6 +47,7 @@ import {
   type CornerRadii,
 } from '../../card/cornerRadii'
 import { formatMillimeters, parseMillimeters } from '../../card/millimeters'
+import CbNumberInput from './CbNumberInput.vue'
 
 // Die Rundung jeder Ecke in mm.
 const props = defineProps<{ radii: CornerRadii }>()
@@ -85,36 +86,36 @@ const cornerRows = computed(() => [
   ],
 ])
 
-// Ein Text je Feld. Das eine Feld zeigt bei gleichen Ecken einen Wert, sonst alle
-// vier mit Komma und Leerzeichen dazwischen.
-const storedTexts = computed(() => {
-  const cornerTexts = Object.fromEntries(
-    corners.map((corner) => [corner, formatMillimeters(props.radii[corner])]),
-  ) as Record<Corner, string>
-  const allCorners = areCornerRadiiUniform(props.radii)
-    ? cornerTexts.topLeft
-    : corners.map((corner) => cornerTexts[corner]).join(', ')
-  return { ...cornerTexts, allCorners }
-})
-const texts = ref({ ...storedTexts.value })
+// Unter 0 zeigt das Feld wieder den gespeicherten Wert.
+function changeCorner(corner: Corner, value: number) {
+  if (value >= 0) emit('change', { ...props.radii, [corner]: value })
+}
 
-watch(storedTexts, (stored) => (texts.value = { ...stored }))
+// Das eine Feld zeigt bei gleichen Ecken einen Wert, sonst alle vier mit Komma
+// und Leerzeichen dazwischen.
+const storedAllCornersText = computed(() =>
+  areCornerRadiiUniform(props.radii)
+    ? formatMillimeters(props.radii.topLeft)
+    : corners.map((corner) => formatMillimeters(props.radii[corner])).join(', '),
+)
+const allCornersText = ref(storedAllCornersText.value)
+
+watch(storedAllCornersText, (stored) => (allCornersText.value = stored))
 
 // Unveränderter Text zählt nicht, Ungültiges oder unter 0 zeigt wieder den
-// gespeicherten Wert. Im einen Feld stehen bis zu vier Werte mit Komma und
+// gespeicherten Wert. Im Feld stehen bis zu vier Werte mit Komma und
 // Leerzeichen dazwischen (ein Komma allein ist das Dezimalzeichen). Fehlende
 // nehmen den ersten Wert, „20“ gilt also für alle Ecken.
-function applyText(field: Corner | 'allCorners') {
-  const text = texts.value[field].trim()
-  const values = (field === 'allCorners' ? text.split(/,\s+/) : [text]).map(parseMillimeters)
+function applyAllCornersText() {
+  const text = allCornersText.value.trim()
+  const values = text.split(/,\s+/).map(parseMillimeters)
   const isValid = values.every((value) => value !== undefined && value >= 0)
-  if (text !== storedTexts.value[field] && isValid) {
-    const radii =
-      field === 'allCorners'
-        ? Object.fromEntries(corners.map((corner, index) => [corner, values[index] ?? values[0]]))
-        : { ...props.radii, [field]: values[0] }
+  if (text !== storedAllCornersText.value && isValid) {
+    const radii = Object.fromEntries(
+      corners.map((corner, index) => [corner, values[index] ?? values[0]]),
+    )
     emit('change', radii as CornerRadii)
   }
-  texts.value = { ...storedTexts.value }
+  allCornersText.value = storedAllCornersText.value
 }
 </script>

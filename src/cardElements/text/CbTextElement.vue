@@ -10,19 +10,19 @@
     v-ripple
     class="overflow-hidden rounded"
     :class="[
-      horizontalAlignmentClasses[horizontalAlignment],
-      verticalAlignmentClasses[verticalAlignment],
+      horizontalAlignmentClasses[element.data.alignment.horizontal],
+      verticalAlignmentClasses[element.data.alignment.vertical],
       wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
     ]"
-    :style="{ fontFamily, fontSize: `${fontSize}mm`, color }"
-    :data-element-id="id"
+    :style="textStyle"
+    :data-element-id="element.id"
     :tabindex="editable ? 0 : undefined"
     :role="isButton ? 'button' : undefined"
-    :aria-label="isButton ? name : undefined"
+    :aria-label="isButton ? element.data.name : undefined"
     @click="selectOrStartTyping"
-    @focus="selectOnKeyboardFocus"
+    @focus="selectOnKeyboardFocus(element.id, $event)"
     @keydown.enter.self.prevent="startTypingAtEnd"
     @keydown.space.self.prevent="startTypingAtEnd"
   >
@@ -39,9 +39,9 @@
       contenteditable="plaintext-only"
       role="textbox"
       aria-multiline="true"
-      :aria-label="name"
+      :aria-label="element.data.name"
       class="block size-full min-h-lh px-1 outline-none"
-      :class="verticalAlignmentClasses[verticalAlignment]"
+      :class="verticalAlignmentClasses[element.data.alignment.vertical]"
       @input="emitTypedText"
       @keydown.escape.stop="stopTyping"
     />
@@ -54,41 +54,33 @@
 
 <script setup lang="ts">
 import { computed, nextTick, useTemplateRef } from 'vue'
-import type { HorizontalAlignment, VerticalAlignment } from '../../api/elements/elementsApi'
 import CbHighlightedText from '../../components/atoms/CbHighlightedText.vue'
+import type { CardSetElement } from '../../cardSets/cardSets'
 import {
-  isEditingSelectedElement,
+  isEditingElement,
   selectElement,
-  selectedElementId,
+  selectOnKeyboardFocus,
+  selectOrStartEditing,
   startEditingElement,
 } from '../../elementTransform/elementSelection'
 import { searchWord } from '../../search/searchWord'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
+import { textAppearanceOf } from './textAppearance'
+import { textSizingOf } from './textSizing'
 
 // The content is the one thing each card fills in itself. Only the card
 // overview asks for the found spots to be marked. Mit placeholder zeigt sich
 // ein leeres Feld als gestrichelter Rahmen mit diesem Text. Mit editable kann
-// man ins Feld tippen – nur im Editor. name ist der Name des Felds für
-// Screenreader. Mit wrapsLines brechen lange Zeilen am Rand um, ohne wird das
-// Feld breiter und nur Enter beginnt eine neue Zeile. horizontalAlignment und
-// verticalAlignment richten den Text in der Box aus, auch beim Tippen.
+// man ins Feld tippen – nur im Editor.
 const props = withDefaults(
   defineProps<{
-    id: string
-    name: string
-    horizontalAlignment: HorizontalAlignment
-    verticalAlignment: VerticalAlignment
-    fontFamily: string
-    /** In mm. */
-    fontSize: number
-    color: string
+    element: CardSetElement
     content?: string
     highlightSearch?: boolean
     placeholder?: string
     editable?: boolean
-    wrapsLines?: boolean
   }>(),
-  { content: '', highlightSearch: false, placeholder: '', editable: false, wrapsLines: true },
+  { content: '', highlightSearch: false, placeholder: '', editable: false },
 )
 
 const emit = defineEmits<{ 'update:content': [content: string] }>()
@@ -104,12 +96,20 @@ const verticalAlignmentClasses = {
   BOTTOM: 'content-end',
 }
 
+// Schriftgröße in mm.
+const textStyle = computed(() => {
+  const { fontFamily, fontSize, color } = textAppearanceOf(props.element.data)
+  return { fontFamily, fontSize: `${fontSize}mm`, color }
+})
+
+// Mit automatischer Breite wird das Feld breiter, nur Enter beginnt eine neue
+// Zeile. Sonst brechen lange Zeilen am Rand um.
+const wrapsLines = computed(() => textSizingOf(props.element) !== 'autoWidth')
+
 const field = useTemplateRef<HTMLElement>('field')
 const editor = useTemplateRef<HTMLElement>('editor')
 
-const isTyping = computed(
-  () => props.editable && isEditingSelectedElement.value && selectedElementId.value === props.id,
-)
+const isTyping = computed(() => props.editable && isEditingElement(props.element.id))
 
 // Beim Tippen ist das Textfeld darin dran, kein Knopf drumherum.
 const isButton = computed(() => props.editable && !isTyping.value)
@@ -118,7 +118,7 @@ const isPlaceholderShown = computed(() => !props.content && !!props.placeholder)
 
 // placeCaret setzt den Cursor, sobald das Textfeld da ist.
 async function startTyping(placeCaret: (textField: HTMLElement) => void) {
-  startEditingElement(props.id)
+  startEditingElement(props.element.id)
   await nextTick()
   if (!editor.value) return
   editor.value.textContent = props.content
@@ -126,14 +126,11 @@ async function startTyping(placeCaret: (textField: HTMLElement) => void) {
   placeCaret(editor.value)
 }
 
-// Der 1. Klick wählt das Feld aus. Ein weiterer startet im Editor das Tippen,
-// der Cursor landet an der Klickstelle. Im Tippmodus setzt der Browser den
-// Cursor selbst.
+// Der Cursor landet an der Klickstelle. Im Tippmodus setzt ihn der Browser selbst.
 function selectOrStartTyping(event: MouseEvent) {
-  if (isTyping.value) return
-  if (!props.editable || selectedElementId.value !== props.id) return selectElement(props.id)
-
-  startTyping((textField) => placeCaretAtPoint(textField, event.clientX, event.clientY))
+  selectOrStartEditing(props.element.id, props.editable, () =>
+    startTyping((textField) => placeCaretAtPoint(textField, event.clientX, event.clientY)),
+  )
 }
 
 function startTypingAtEnd() {
@@ -142,14 +139,8 @@ function startTypingAtEnd() {
 
 // Das Feld bleibt ausgewählt und fokussiert.
 function stopTyping() {
-  selectElement(props.id)
+  selectElement(props.element.id)
   field.value?.focus()
-}
-
-// Per Tastatur angesprungen wählt sich das Feld aus. Ein Mausklick fokussiert es
-// auch, wählt aber erst mit dem Klick aus – sonst wäre schon der 1. Klick der 2.
-function selectOnKeyboardFocus() {
-  if (field.value?.matches(':focus-visible')) selectElement(props.id)
 }
 
 // Browser hängen ans Ende oft einen Zeilenumbruch nur als Platzhalter an – der

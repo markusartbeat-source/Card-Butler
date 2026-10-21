@@ -3,6 +3,8 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": ["vite/client", "unplugin-icons/types/vue"],
+    // ES2023 für findLast – können alle Browser, die Vite als Ziel hat.
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "allowArbitraryExtensions": true,
 
     /* Linting */

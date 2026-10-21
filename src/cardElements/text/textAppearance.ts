@@ -3,8 +3,7 @@ import type {
   HorizontalAlignment,
   VerticalAlignment,
 } from '../../api/elements/elementsApi'
-import { findCardSetElement } from '../cardElements'
-import { saveElement } from '../saveElement'
+import { changeElement, findCardSetElement } from '../cardElements'
 
 // Wie der Text aussieht. Gilt auf allen Karten des Sets.
 
@@ -22,68 +21,33 @@ export function textAppearanceOf(data: ElementData | undefined) {
   }
 }
 
-export type TextAppearance = ReturnType<typeof textAppearanceOf>
-
-/** Stellt die Schrift des Texts um und speichert. Ist sie schon eingestellt,
-    wird nichts gespeichert. */
 export function changeFontFamily(id: string, fontFamily: string) {
-  const element = findCardSetElement(id)
-  if (!element || textAppearanceOf(element.data).fontFamily === fontFamily) return
-
-  element.data.fontFamily = fontFamily
-  saveElement(id)
+  changeElement(id, (data) => (data.fontFamily = fontFamily))
 }
 
-/** Wie changeFontFamily – für die Schriftgröße in mm. */
+/** Die Schriftgröße in mm. */
 export function changeFontSize(id: string, millimeters: number) {
-  const element = findCardSetElement(id)
-  if (!element || textAppearanceOf(element.data).fontSize === millimeters) return
-
-  element.data.fontSize = millimeters
-  saveElement(id)
+  changeElement(id, (data) => (data.fontSize = millimeters))
 }
-
-// Die gespeicherte Farbe je Element, solange eine Vorschau läuft.
-const colorsBeforePreview = new Map<string, string>()
 
 /** Zeigt die Textfarbe sofort auf allen Karten, speichert aber nicht – z.B.
     beim Ziehen im Farbwähler. changeTextColor speichert danach einmal. */
 export function previewTextColor(id: string, color: string) {
   const element = findCardSetElement(id)
-  if (!element) return
-
-  if (!colorsBeforePreview.has(id)) colorsBeforePreview.set(id, textAppearanceOf(element.data).color)
-  element.data.color = color
+  if (element) element.data.color = color
 }
 
-/** Wie changeFontFamily – für die Textfarbe. Verglichen wird mit der Farbe vor
-    einer Vorschau. */
 export function changeTextColor(id: string, color: string) {
-  const element = findCardSetElement(id)
-  if (!element) return
-
-  const savedColor = colorsBeforePreview.get(id) ?? textAppearanceOf(element.data).color
-  colorsBeforePreview.delete(id)
-  element.data.color = color
-  if (savedColor !== color) saveElement(id)
+  changeElement(id, (data) => (data.color = color))
 }
 
-/** Richtet den Text in seiner Box links, mittig oder rechts aus und speichert.
-    Steht er schon so, wird nichts gespeichert. */
+/** Richtet den Text in seiner Box links, mittig oder rechts aus. */
 export function alignTextHorizontally(id: string, horizontal: HorizontalAlignment) {
-  const element = findCardSetElement(id)
-  if (!element || element.data.alignment.horizontal === horizontal) return
-
-  element.data.alignment = { ...element.data.alignment, horizontal }
-  saveElement(id)
+  changeElement(id, (data) => (data.alignment = { ...data.alignment, horizontal }))
 }
 
 /** Wie alignTextHorizontally – nur oben, mittig oder unten. Zu sehen nur bei
     fester Höhe, sonst umschließt die Box den Text. */
 export function alignTextVertically(id: string, vertical: VerticalAlignment) {
-  const element = findCardSetElement(id)
-  if (!element || element.data.alignment.vertical === vertical) return
-
-  element.data.alignment = { ...element.data.alignment, vertical }
-  saveElement(id)
+  changeElement(id, (data) => (data.alignment = { ...data.alignment, vertical }))
 }

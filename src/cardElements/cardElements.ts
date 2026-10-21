@@ -1,77 +1,27 @@
-import type { ElementPlacement } from '../elementTransform/elementPlacement'
-import { cardSets, type Card, type CardSetElement } from '../cardSets/cardSets'
-import { cornerRadiiOfElement } from './elementCornerRadii'
-import type { PictureElement } from './picture/pictureElement'
-import { textAppearanceOf } from './text/textAppearance'
-import type { TextElement } from './text/textElement'
-import { textSizingOf } from './text/textSizing'
+import type { ElementData } from '../api/elements/elementsApi'
+import { cardFormat } from '../card/cardFormat'
+import { cardSets } from '../cardSets/cardSets'
+import { saveElement } from './saveElement'
+import { visibleSizeOf } from './text/textSizing'
 
 // Alle Karten eines Sets sind gleich aufgebaut: Die Elemente gehören zum Set,
 // nicht zur einzelnen Karte. Nur ein Wert je Element unterscheidet sich von
-// Karte zu Karte – der Inhalt eines Texts, der Link eines Bilds.
-// Each element type has its own folder next to this file.
+// Karte zu Karte (cardValues.ts). Jeder Elementtyp hat seinen Ordner neben
+// dieser Datei.
 
-// The back of a card is built the same way as the front — each element says
-// which side it sits on. Ids are unique across both sides.
-export type CardSide = 'front' | 'back'
+// Mehr lässt das Backend nicht zu.
+export const maxElementNameLength = 200
 
-// What every element type has, no matter what it shows. Breite und Höhe in mm,
-// ohne sie wächst das Element mit seinem Inhalt.
-export type CardElementBase = {
-  id: string
-  name: string
-  side: CardSide
-  placement: ElementPlacement
-  width: number | null
-  height: number | null
-  opacity: number
-}
-
-export type CardElement = TextElement | PictureElement
-
-/** Macht aus einem Element des Sets eins zum Zeichnen. Das Backend kennt keine
-    Kartenseiten – alles liegt vorn. Gezeichnet werden bisher nur Textfelder und
-    Bilder mit x/y-Position; andere (z.B. von anderen Programmen angelegt) fehlen
-    noch. */
-export function cardElementFromCardSetElement(element: CardSetElement): CardElement | null {
-  const { id, data, rotation } = element
-  const { x, y } = data.position
-  if (x == null || y == null) return null
-
-  const base = {
-    id,
-    name: data.name,
-    side: 'front' as const,
-    placement: { x, y, rotation },
-    opacity: data.opacity,
-  }
-  if (data.type === 'PICTURE') {
-    return {
-      ...base,
-      type: 'picture',
-      width: data.width,
-      height: data.height,
-      cornerRadii: cornerRadiiOfElement(id, data.radius),
-    }
-  }
-  if (data.type !== 'TEXT') return null
-
-  const sizing = textSizingOf(element)
-  return {
-    ...base,
-    type: 'text',
-    width: sizing === 'autoWidth' ? null : data.width,
-    height: sizing === 'fixed' ? data.height : null,
-    horizontalAlignment: data.alignment.horizontal,
-    verticalAlignment: data.alignment.vertical,
-    ...textAppearanceOf(data),
-  }
-}
+export type HorizontalAlignment = 'left' | 'center' | 'right'
+export type VerticalAlignment = 'top' | 'center' | 'bottom'
 
 // Sucht ein Element in allen Sets – die ids sind überall eindeutig.
 export function findCardSetElement(id: string) {
   return cardSets.value?.flatMap((cardSet) => cardSet.elements).find((element) => element.id === id)
 }
+
+// Ohne Speichern – für Zwischenschritte, z.B. beim Ziehen. Gespeichert wird am
+// Ende einmal mit saveElement.
 
 // Dragging an element moves it on every card of the deck — the build-up belongs
 // to the deck, only the contents differ from card to card.
@@ -85,14 +35,6 @@ export function moveElementBy(id: string, moveXInMillimeters: number, moveYInMil
     x: position.x + moveXInMillimeters,
     y: position.y + moveYInMillimeters,
   }
-}
-
-// Setzt die linke obere Ecke des Elements auf diesen Punkt der Karte (mm).
-export function moveElementTo(id: string, xInMillimeters: number, yInMillimeters: number) {
-  const element = findCardSetElement(id)
-  if (!element) return
-
-  element.data.position = { ...element.data.position, x: xInMillimeters, y: yInMillimeters }
 }
 
 export function resizeElement(id: string, widthInMillimeters: number, heightInMillimeters: number) {
@@ -125,14 +67,68 @@ export function rotateElementBy(id: string, turnInDegrees: number) {
   if (element) element.rotation += turnInDegrees
 }
 
-// What one card fills into the deck's elements, keyed by element id.
-export type CardElementValues = Record<string, string>
+// Mit Speichern – eine Aktion im Panel.
 
-// Welches Bild eine Karte in ihren Bild-Elementen zeigt: je Element-id die
-// Bild-id. Getrennt von den Texten, damit die Kartensuche keine ids durchsucht.
-export type CardElementImageIds = Record<string, string>
+/** Ändert die Daten eines Elements und speichert sie. */
+export function changeElement(id: string, change: (data: ElementData) => void) {
+  const element = findCardSetElement(id)
+  if (!element) return
 
-// Der Inhalt eines Elements gilt nur für diese eine Karte.
-export function setElementValue(card: Card, elementId: string, value: string) {
-  card.elementValues[elementId] = value
+  change(element.data)
+  saveElement(id)
+}
+
+/** Ein leerer Name ist nicht erlaubt – dann bleibt der alte. Liefert den Namen,
+ *  den das Element jetzt trägt. */
+export function renameElement(id: string, name: string) {
+  const trimmedName = name.trim()
+  if (trimmedName) changeElement(id, (data) => (data.name = trimmedName))
+  return findCardSetElement(id)?.data.name ?? name
+}
+
+/** Setzt die linke obere Ecke des Elements auf diesen Punkt der Karte (mm). */
+export function changeElementPosition(id: string, xInMillimeters: number, yInMillimeters: number) {
+  changeElement(id, (data) => {
+    data.position = { ...data.position, x: xInMillimeters, y: yInMillimeters }
+  })
+}
+
+/** Wie in Figma: schiebt das Element einmalig an den linken bzw. rechten
+    Kartenrand oder in die Mitte. Danach ist es wieder frei verschiebbar. Eine
+    automatische Größe zählt so, wie sie auf der offenen Karte zu sehen ist. */
+export function alignElementHorizontally(id: string, alignment: HorizontalAlignment) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  const freeSpace = cardFormat.value.width - visibleSizeOf(element).width
+  const x = { left: 0, center: freeSpace / 2, right: freeSpace }[alignment]
+  changeElementPosition(id, x, element.data.position.y)
+}
+
+/** Wie alignElementHorizontally – nur an den oberen bzw. unteren Kartenrand
+    oder in die Mitte. */
+export function alignElementVertically(id: string, alignment: VerticalAlignment) {
+  const element = findCardSetElement(id)
+  if (!element) return
+
+  const freeSpace = cardFormat.value.height - visibleSizeOf(element).height
+  const y = { top: 0, center: freeSpace / 2, bottom: freeSpace }[alignment]
+  changeElementPosition(id, element.data.position.x, y)
+}
+
+/** Eine eingetippte Breite oder Höhe in mm für ein Element mit fester Größe.
+    Mit keepsAspectRatio ändert sich die andere Seite im gleichen Verhältnis mit. */
+export function changeElementSize(
+  id: string,
+  side: 'width' | 'height',
+  millimeters: number,
+  keepsAspectRatio: boolean,
+) {
+  resizeElementSide(id, side, millimeters, keepsAspectRatio)
+  saveElement(id)
+}
+
+/** Die Deckkraft des Elements: 0 = unsichtbar, 1 = voll sichtbar. */
+export function changeElementOpacity(id: string, opacity: number) {
+  changeElement(id, (data) => (data.opacity = opacity))
 }

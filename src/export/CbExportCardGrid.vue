@@ -14,8 +14,7 @@
       :key="card.id"
       :id="card.id"
       :elements="card.elements"
-      :element-values="card.elementValues"
-      :element-image-ids="card.elementImageIds"
+      :values="card.values"
       :zoom="exportZoom"
       class="pointer-events-none"
     />

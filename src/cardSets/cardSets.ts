@@ -3,7 +3,7 @@ import type { CardSetResource, FullCardSet } from '../api/cardSets/cardSetsApi'
 import type { CardResource } from '../api/cards/cardsApi'
 import type { ElementData, ElementResource } from '../api/elements/elementsApi'
 import { newerFirst, olderFirst } from '../api/postOffice/resource'
-import type { CardElementImageIds, CardElementValues } from '../cardElements/cardElements'
+import type { CardElementValues } from '../cardElements/cardValues'
 import type { TextSizing } from '../cardElements/text/textSizing'
 import { rememberImages } from '../images/knownImages'
 
@@ -12,20 +12,22 @@ export type Card = {
   /** Stand der Karte im Backend, wird beim Ändern als If-Match mitgeschickt. */
   version: number
   // What this card fills into the deck's elements.
-  elementValues: CardElementValues
-  elementImageIds: CardElementImageIds
+  values: CardElementValues
   // How many copies of this card get printed. 1 is the normal card.
   printCount: number
 }
 
-// Ein Element des Sets mit seinen vollständigen Backend-Daten. Die Version geht
-// beim Ändern als If-Match mit. Die Drehung (Grad) und wie ein Textfeld zu seiner
-// Größe kommt, kennt das Backend nicht – beides lebt nur hier und geht beim
-// Neuladen verloren.
+// Ein Element des Sets mit seinen vollständigen Backend-Daten – der einzigen
+// Quelle der Wahrheit, gezeichnet wird direkt daraus. Die Version geht beim
+// Ändern als If-Match mit. savedData ist der zuletzt gespeicherte Stand als
+// JSON, so speichert saveElement nur Änderungen. Die Drehung (Grad) und wie ein
+// Textfeld zu seiner Größe kommt, kennt das Backend nicht – beides lebt nur hier
+// und geht beim Neuladen verloren.
 export type CardSetElement = {
   id: string
   version: number
   data: ElementData
+  savedData: string
   rotation: number
   textSizing?: TextSizing
 }
@@ -45,7 +47,7 @@ export function cardSetFromResource(cardSetResource: CardSetResource): CardSet {
 
 /** Macht aus einem Element des Backends eins des Sets. */
 export function cardSetElementFromResource({ id, version, data }: ElementResource): CardSetElement {
-  return { id, version, data, rotation: 0 }
+  return { id, version, data, savedData: JSON.stringify(data), rotation: 0 }
 }
 
 /** Macht aus einer Karte des Backends eine der App. Ihren Namen braucht die App
@@ -55,8 +57,7 @@ export function cardFromResource(cardResource: CardResource): Card {
   return {
     id: cardResource.id,
     version: cardResource.version,
-    elementValues: {},
-    elementImageIds: {},
+    values: {},
     printCount: 1,
   }
 }
@@ -70,9 +71,7 @@ export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
   const cards = fullCardSet.cards.sort(newerFirst).map(cardFromResource)
   for (const { parentId, data } of fullCardSet.values) {
     const card = cards.find((card) => card.id === parentId)
-    const { text, imageId } = data.value
-    if (card && text !== null) card.elementValues[data.elementId] = text
-    if (card && imageId !== null) card.elementImageIds[data.elementId] = imageId
+    if (card) card.values[data.elementId] = data.value
   }
   rememberImages(fullCardSet.images)
   return {

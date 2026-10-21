@@ -101,16 +101,14 @@
               <CbCard
                 :id="card.id"
                 :elements="cardSet.elements"
-                :element-values="card.elementValues"
-                :element-image-ids="card.elementImageIds"
+                :values="card.values"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
               />
               <CbCard
                 :id="card.id"
                 :elements="cardSet.elements"
-                :element-values="card.elementValues"
-                :element-image-ids="card.elementImageIds"
+                :values="card.values"
                 highlight-search
                 side="back"
                 class="cb-card-back col-start-1 row-start-1"
@@ -228,7 +226,7 @@ const selectedCardId = ref<string | null>(null)
 // then: the drag library writes the new order of the shown cards back into the
 // set, which would shuffle the hidden ones.
 function visibleCardsOf(cardSet: CardSet) {
-  return cardSet.cards.filter((card) => cardMatchesSearch(card.elementValues))
+  return cardSet.cards.filter((card) => cardMatchesSearch(card.values))
 }
 const isSearching = computed(() => searchWord.value.trim() !== '')
 

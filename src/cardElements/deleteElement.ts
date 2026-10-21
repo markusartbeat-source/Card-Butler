@@ -9,7 +9,7 @@ import { reloadCardSet } from '../cardSets/loadCardSets'
  *  steigen dadurch. Liefert, ob das geklappt hat – Fehler meldet schon die
  *  Poststelle per Toast. */
 export function deleteElement(cardSet: CardSet, element: CardSetElement) {
-  const hasValue = (card: Card) => element.id in card.elementValues
+  const hasValue = (card: Card) => element.id in card.values
   const cardIdsWithValue = cardSet.cards.filter(hasValue).map((card) => card.id)
 
   // Laufende Speicherungen dieser Karten erst abwarten, spätere warten hierauf.
@@ -20,7 +20,7 @@ export function deleteElement(cardSet: CardSet, element: CardSetElement) {
       // es neue Objekte.
       await Promise.all(
         cardSet.cards.filter(hasValue).map(async (card) => {
-          delete card.elementValues[element.id]
+          delete card.values[element.id]
           // Um wie viel die Version gestiegen ist, sagt die Antwort nicht – darum nachladen.
           card.version = (await postOffice.cards.loadCard(card.id)).version
         }),

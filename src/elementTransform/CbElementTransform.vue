@@ -37,7 +37,6 @@
 import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import Moveable, {
   type OnDrag,
-  type OnDragEnd,
   type OnResize,
   type OnResizeEnd,
   type OnResizeStart,
@@ -104,11 +103,10 @@ watch(
   },
 )
 
-// Gespeichert wird erst am Ende, nicht bei jedem Schritt. Ein bloßer Klick aufs
-// Feld endet auch hier – dann hat es sich nicht bewegt.
-function finishDrag(event: OnDragEnd) {
+// Gespeichert wird erst am Ende, nicht bei jedem Schritt.
+function finishDrag() {
   measureElementAgain()
-  if (event.isDrag && selectedElementId.value) saveElement(selectedElementId.value)
+  if (selectedElementId.value) saveElement(selectedElementId.value)
 }
 
 // Anfasser zum Größe-Ändern, als Himmelsrichtungen wie in Moveable. Eine

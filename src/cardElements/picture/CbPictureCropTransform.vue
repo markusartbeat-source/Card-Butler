@@ -62,7 +62,7 @@ onUnmounted(() => {
   props.cardNode?.removeEventListener('wheel', zoomOnWheel)
 })
 
-const imageId = computed(() => props.card.elementImageIds[props.elementId])
+const imageId = computed(() => props.card.values[props.elementId]?.imageId)
 
 // Der Rahmen in px – auf ihn beziehen sich die Anteile des Ausschnitts.
 function frameSize() {

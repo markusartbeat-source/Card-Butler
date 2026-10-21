@@ -11,30 +11,15 @@ export type ValueData = {
 
 export type ValueResource = Resource<ValueData>
 
-// Der Wert eines Elements auf einer Karte.
-function valuePath(cardId: string, elementId: string) {
-  return `/api/cards/${encodeURIComponent(cardId)}/values/${encodeURIComponent(elementId)}`
-}
-
-/** Setzt den Text eines Textfelds auf einer Karte. `cardVersion` ist der Stand
+/** Setzt den Wert eines Elements auf einer Karte. `cardVersion` ist der Stand
  *  der Karte, den der Aufrufer kennt – ist er veraltet, antwortet das Backend
  *  mit 412. Danach hat die Karte eine neue Version. */
-function setText(cardId: string, elementId: string, text: string, cardVersion: number) {
-  return postOffice.request<ValueResource>(valuePath(cardId, elementId), {
-    method: 'PUT',
-    body: { text, imageId: null },
-    version: cardVersion,
-  })
-}
-
-/** Setzt das Bild eines Bild-Elements auf einer Karte. Version wie bei `setText`. */
-function setImage(cardId: string, elementId: string, imageId: string, cardVersion: number) {
-  return postOffice.request<ValueResource>(valuePath(cardId, elementId), {
-    method: 'PUT',
-    body: { text: null, imageId },
-    version: cardVersion,
-  })
+function setValue(cardId: string, elementId: string, value: ValueData['value'], cardVersion: number) {
+  return postOffice.request<ValueResource>(
+    `/api/cards/${encodeURIComponent(cardId)}/values/${encodeURIComponent(elementId)}`,
+    { method: 'PUT', body: value, version: cardVersion },
+  )
 }
 
 /** Fach `values` der Poststelle, Aufruf als `postOffice.values.…()`. */
-export const valuesApi = { setText, setImage }
+export const valuesApi = { setValue }

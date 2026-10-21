@@ -65,17 +65,14 @@ export function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
   )
 }
 
-// Der Modus lebt nur lokal – gespeichert wird nur eine geänderte Größe.
-function saveIfResized(element: CardSetElement, change: () => void) {
-  const { width, height } = element.data
-  change()
-  if (element.data.width !== width || element.data.height !== height) saveElement(element.id)
-}
-
-/** Stellt um, wie das ausgewählte Textfeld zu seiner Größe kommt. */
+/** Stellt um, wie das ausgewählte Textfeld zu seiner Größe kommt. Der Modus lebt
+    nur lokal – gespeichert wird nur eine geänderte Größe. */
 export function changeTextSizing(id: string, sizing: TextSizing) {
   const element = findCardSetElement(id)
-  if (element) saveIfResized(element, () => switchTextSizing(element, sizing))
+  if (!element) return
+
+  switchTextSizing(element, sizing)
+  saveElement(id)
 }
 
 /** Eine eingetippte Breite oder Höhe in mm. Ist die Seite gerade automatisch,
@@ -91,9 +88,8 @@ export function changeTextSize(
   if (!element) return
 
   const sizing = textSizingOf(element)
-  saveIfResized(element, () => {
-    if (side === 'width' && sizing === 'autoWidth') switchTextSizing(element, 'autoHeight')
-    if (side === 'height' && sizing !== 'fixed') switchTextSizing(element, 'fixed')
-    resizeElementSide(element.id, side, millimeters, keepsAspectRatio)
-  })
+  if (side === 'width' && sizing === 'autoWidth') switchTextSizing(element, 'autoHeight')
+  if (side === 'height' && sizing !== 'fixed') switchTextSizing(element, 'fixed')
+  resizeElementSide(id, side, millimeters, keepsAspectRatio)
+  saveElement(id)
 }

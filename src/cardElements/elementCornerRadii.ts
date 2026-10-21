@@ -1,7 +1,6 @@
 import { refStoredInBrowser } from '../browserStorage/refStoredInBrowser'
 import { areCornerRadiiUniform, uniformCornerRadii, type CornerRadii } from '../card/cornerRadii'
-import { findCardSetElement } from './cardElements'
-import { saveElement } from './saveElement'
+import { changeElement } from './cardElements'
 
 // Das Backend kennt je Element nur einen Radius. Verschiedene Ecken merkt sich
 // deshalb der Browser, je Element-id.
@@ -16,19 +15,14 @@ export function cornerRadiiOfElement(id: string, radius: number | null | undefin
 }
 
 /** Stellt die Rundung der Ecken ein. Gleiche Ecken gehen als ein Radius ins
-    Backend (gespeichert nur bei Änderung), verschiedene nur in den Browser – das
-    Backend behält dann seinen Radius. */
+    Backend, verschiedene nur in den Browser – das Backend behält dann seinen
+    Radius. */
 export function changeElementCornerRadii(id: string, radii: CornerRadii) {
-  const element = findCardSetElement(id)
-  if (!element) return
-
   const isUniform = areCornerRadiiUniform(radii)
   const stored = { ...separateCornerRadii.value }
   if (isUniform) delete stored[id]
   else stored[id] = radii
   separateCornerRadii.value = stored
 
-  if (!isUniform || element.data.radius === radii.topLeft) return
-  element.data.radius = radii.topLeft
-  saveElement(id)
+  if (isUniform) changeElement(id, (data) => (data.radius = radii.topLeft))
 }

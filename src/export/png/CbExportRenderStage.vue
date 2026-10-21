@@ -10,8 +10,7 @@
       :key="card.id"
       :id="card.id"
       :elements="card.elements"
-      :element-values="card.elementValues"
-      :element-image-ids="card.elementImageIds"
+      :values="card.values"
       :zoom="1"
     />
   </div>

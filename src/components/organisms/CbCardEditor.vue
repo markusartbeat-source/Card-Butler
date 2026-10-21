@@ -37,12 +37,11 @@
           <CbCard
             :id="card.id"
             :elements="cardSet.elements"
-            :element-values="card.elementValues"
-            :element-image-ids="card.elementImageIds"
+            :values="card.values"
             :zoom="editorZoom"
             mark-empty-elements
             editable-elements
-            @change-element-value="changeElementValue"
+            @change-element-value="(elementId, text) => changeCardText(card, elementId, text)"
           >
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
@@ -84,19 +83,13 @@
     </div>
 
     <!-- Ist ein Element ausgewählt, zeigt das Panel statt der Karte dessen
-         Einstellungen – jeder Elementtyp hat sein eigenes. -->
+         Einstellungen. -->
     <div class="absolute top-8 right-8 bottom-8 w-80 transition-opacity" :class="fadeInClasses">
-      <CbPictureSettingsPanel
-        v-if="selectedElement?.data.type === 'PICTURE'"
+      <CbElementSettingsPanel
+        v-if="selectedElement"
         :key="selectedElement.id"
         :element-id="selectedElement.id"
         :card="card"
-        class="h-full"
-      />
-      <CbTextSettingsPanel
-        v-else-if="selectedElement"
-        :key="selectedElement.id"
-        :element-id="selectedElement.id"
         class="h-full"
       />
       <CbCardSettingsPanel v-else class="h-full" :is-visible="areControlsVisible" />
@@ -120,22 +113,18 @@ import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbDimLayer from '../atoms/CbDimLayer.vue'
 import CbToolbar from '../molecules/CbToolbar.vue'
 import { cardToolbarElements, cardTools, type CardTool } from '../molecules/cardToolbarElements'
-import type { ElementData } from '../../api/elements/elementsApi'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
-import { setElementValue } from '../../cardElements/cardElements'
+import CbElementSettingsPanel from '../../cardElements/CbElementSettingsPanel.vue'
+import { changeCardText, saveWaitingCardTexts } from '../../cardElements/cardValues'
 import { createElement } from '../../cardElements/createElement'
 import { deleteElement } from '../../cardElements/deleteElement'
+import { newElementData } from '../../cardElements/newElementData'
 import { deleteWithUndo } from '../../deletion/deleteWithUndo'
 import { undoDeletionOnKey } from '../../deletion/undoDeletionOnKey'
 import { isInInputField } from '../../keyboard/isInInputField'
-import { newTextElementData } from '../../cardElements/text/newTextElementData'
 import { setTextSizing } from '../../cardElements/text/textSizing'
-import CbTextSettingsPanel from '../../cardElements/text/CbTextSettingsPanel.vue'
-import { saveCardTextAfterPause, saveWaitingCardTexts } from '../../cardElements/text/saveCardText'
-import { newPictureElementData } from '../../cardElements/picture/newPictureElementData'
-import CbPictureSettingsPanel from '../../cardElements/picture/CbPictureSettingsPanel.vue'
 import CbPictureCropTransform from '../../cardElements/picture/CbPictureCropTransform.vue'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
@@ -190,34 +179,19 @@ const croppedPictureId = computed(() =>
     : null,
 )
 
-// Der Text gilt nur für diese Karte und geht nach einer Tipp-Pause ins Backend.
-function changeElementValue(elementId: string, value: string) {
-  setElementValue(props.card, elementId, value)
-  saveCardTextAfterPause(props.card.id, elementId)
-}
-
 // Wer das Feld verlässt, wartet nicht auf die Pause. Nicht beim Verlust des
 // Fokus: Ziehen an der Kante nimmt ihn, das Tippen geht aber weiter.
 watch(isEditingSelectedElement, (isEditing) => {
   if (!isEditing) saveWaitingCardTexts()
 })
 
-// Was die Toolbar schon anlegen kann: je Werkzeug die Daten eines neuen
-// Elements mit der Mitte auf einem Punkt der Karte (mm). Die anderen Einträge
-// haben noch keine Funktion.
-const newElementDataByTool: Partial<
-  Record<CardTool, (centerX: number, centerY: number) => ElementData>
-> = {
-  text: newTextElementData,
-  image: newPictureElementData,
-}
-
 // Legt das Element des Werkzeugs mit der Mitte auf diesem Punkt der Karte (mm)
 // an und wählt es gleich aus. Ein Textfeld wächst mit seinem Text nach unten.
+// Werkzeuge ohne Element haben noch keine Funktion.
 async function addElementAt(tool: CardTool, centerX: number, centerY: number) {
-  const newElementData = newElementDataByTool[tool]
-  if (!newElementData) return
-  const createdElement = await createElement(props.cardSet, newElementData(centerX, centerY))
+  const data = newElementData(tool, centerX, centerY)
+  if (!data) return
+  const createdElement = await createElement(props.cardSet, data)
   if (!createdElement) return
   if (tool === 'text') setTextSizing(createdElement.id, 'autoHeight')
   selectElement(createdElement.id)
@@ -231,7 +205,7 @@ function addElementFromToolbar(index: number) {
 // Das Werkzeug, das gerade aus der Toolbar gezogen wird.
 const draggedTool = ref<CardTool | null>(null)
 const draggedElementData = computed(
-  () => draggedTool.value && newElementDataByTool[draggedTool.value]?.(0, 0),
+  () => draggedTool.value && newElementData(draggedTool.value, 0, 0),
 )
 
 // Ablegen legt das Element dort an – seine Mitte liegt unter dem Zeiger.
@@ -241,7 +215,7 @@ const { dragPosition, startDrag } = useNewElementDrag(cardWrapper, (centerX, cen
 
 function startDragFromToolbar(index: number, event: PointerEvent) {
   const tool = cardTools[index]
-  if (!newElementDataByTool[tool]) return
+  if (!newElementData(tool, 0, 0)) return
   draggedTool.value = tool
   startDrag(event)
 }

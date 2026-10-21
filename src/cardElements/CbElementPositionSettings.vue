@@ -20,31 +20,33 @@
       />
     </div>
     <div class="flex items-center gap-3">
-      <CbInput
-        v-model="texts.x"
+      <CbNumberInput
+        :value="position?.x"
         class="flex-1"
         :label="dictionary.cardEditor.positionX"
-        @change="applyText('x')"
+        @commit="(x) => position && changeElementPosition(elementId, x, position.y)"
       />
-      <CbInput
-        v-model="texts.y"
+      <CbNumberInput
+        :value="position?.y"
         class="flex-1"
         :label="dictionary.cardEditor.positionY"
-        @change="applyText('y')"
+        @commit="(y) => position && changeElementPosition(elementId, position.x, y)"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import CbInput from '../components/atoms/CbInput.vue'
+import { computed } from 'vue'
 import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
 import CbButtonGroup from '../components/molecules/CbButtonGroup.vue'
-import { alignElementHorizontally, alignElementVertically } from './alignElement'
-import { findCardSetElement, moveElementTo } from './cardElements'
-import { formatMillimeters, parseMillimeters } from '../card/millimeters'
-import { saveElement } from './saveElement'
+import CbNumberInput from '../components/molecules/CbNumberInput.vue'
+import {
+  alignElementHorizontally,
+  alignElementVertically,
+  changeElementPosition,
+  findCardSetElement,
+} from './cardElements'
 
 const props = defineProps<{ elementId: string }>()
 
@@ -92,28 +94,5 @@ const verticalAlignments = computed(() => [
 
 function alignVertically(index: number) {
   alignElementVertically(props.elementId, verticalAlignments.value[index].alignment)
-}
-
-const texts = ref({ x: '', y: '' })
-
-function showStoredPosition() {
-  texts.value = { x: formatMillimeters(position.value?.x), y: formatMillimeters(position.value?.y) }
-}
-
-watch(position, showStoredPosition, { immediate: true })
-
-// Gespeichert wird bei Enter bzw. beim Verlassen des Felds. Unveränderter Text
-// zählt nicht – sonst verschöbe schon das Runden der Anzeige das Element.
-// Komma und Punkt gehen beide, Ungültiges zeigt wieder den gespeicherten Wert.
-function applyText(axis: 'x' | 'y') {
-  const text = texts.value[axis].trim()
-  if (!position.value || text === formatMillimeters(position.value[axis])) return
-
-  const value = parseMillimeters(text)
-  if (value === undefined) return showStoredPosition()
-
-  const { x, y } = { ...position.value, [axis]: value }
-  moveElementTo(props.elementId, x, y)
-  saveElement(props.elementId)
 }
 </script>
