@@ -1,12 +1,14 @@
 import { ref, type Ref } from 'vue'
-import { cardFormat } from '../../card/cardFormat'
+import { findCardSurface } from '../../card/cardSurface'
+import { measureInMillimeters } from '../../card/millimeters'
 
 // Ab so vielen Pixeln Bewegung wird aus dem Drücken ein Ziehen.
 const dragThresholdInPixels = 8
 
 /** Ziehen eines neuen Elements auf die Karte, mit eigenen Pointer-Events.
  *  dragPosition ist die Zeigerposition (px), solange gezogen wird – sonst null.
- *  onDrop bekommt die Ablagestelle auf der Karte (mm); außerhalb passiert nichts. */
+ *  card ist die gezeichnete Karte samt Anschnitt. onDrop bekommt die
+ *  Ablagestelle auf der Karte (mm); außerhalb passiert nichts. */
 export function useNewElementDrag(
   card: Readonly<Ref<HTMLElement | null>>,
   onDrop: (xInMillimeters: number, yInMillimeters: number) => void,
@@ -44,18 +46,23 @@ export function useNewElementDrag(
     window.addEventListener('pointercancel', finish)
   }
 
-  // Zeigerposition auf der Karte in mm, außerhalb null. Über das Verhältnis zur
-  // gezeichneten Größe gerechnet – so spielt der Zoom keine Rolle.
+  // Zeigerposition in mm ab der linken oberen Ecke der Karte, außerhalb null. Im
+  // Anschnitt zählt sie auch – dann ist sie negativ oder größer als die Karte.
+  // Über das Verhältnis zur gezeichneten Größe der Kartenfläche gerechnet – so
+  // spielen Zoom und Anschnitt keine Rolle.
   function positionOnCard({ clientX, clientY }: PointerEvent) {
     const rect = card.value?.getBoundingClientRect()
-    if (!rect) return null
+    const surface = findCardSurface(card.value)
+    if (!rect || !surface) return null
     const isOnCard =
       clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom
     if (!isOnCard) return null
 
+    const surfaceRect = surface.getBoundingClientRect()
+    const surfaceSize = measureInMillimeters(surface)
     return {
-      x: ((clientX - rect.left) / rect.width) * cardFormat.value.width,
-      y: ((clientY - rect.top) / rect.height) * cardFormat.value.height,
+      x: ((clientX - surfaceRect.left) / surfaceRect.width) * surfaceSize.width,
+      y: ((clientY - surfaceRect.top) / surfaceRect.height) * surfaceSize.height,
     }
   }
 

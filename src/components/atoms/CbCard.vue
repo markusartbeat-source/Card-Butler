@@ -1,34 +1,46 @@
 <template>
-  <!-- One element: it is the card. data-card-id lets the cursor logic find out
-       which card the mouse is on. -->
+  <!-- Der Rahmen: die Karte in Kartenfarbe, mit showBleed samt Anschnitt
+       ringsum (Innenabstand). Was darüber hinausragt, schneidet er ab.
+       data-card-id lets the cursor logic find out which card the mouse is on. -->
   <div
-    class="cb-card-face relative bg-white shadow-lg"
+    class="cb-card-face relative box-content overflow-hidden shadow-lg"
     :class="highlightColor ? 'outline-2 outline-offset-2' : ''"
-    :style="{ ...cardFormatStyle(cardFormat), zoom, outlineColor: highlightColor }"
+    :style="frameStyle"
     :data-card-id="id"
   >
-    <CbCardElement
-      v-for="element in elementsOnThisSide"
-      :key="element.id"
-      :element="element"
-      :card-id="id"
-      :values="values"
-      :mark-if-empty="markEmptyElements"
-      :editable="editableElements"
-      :highlight-search="highlightSearch"
-      :style="placementStyle(element)"
-      :class="{ 'cb-shine': editableElements && element.id === shiningElementId }"
-      @change-value="emit('changeElementValue', element.id, $event)"
-      @animationend="endShine"
-    />
-    <!-- On top of the card, e.g. the cursors of other people. -->
-    <slot />
+    <!-- Die eigentliche Karte, um den Anschnitt eingerückt. Sie ist der
+         Nullpunkt der Elemente – der Anschnitt verschiebt also keins. -->
+    <div class="relative size-full" data-card-surface>
+      <CbCardElement
+        v-for="element in elementsOnThisSide"
+        :key="element.id"
+        :element="element"
+        :card-id="id"
+        :values="values"
+        :mark-if-empty="markEmptyElements"
+        :editable="editableElements"
+        :highlight-search="highlightSearch"
+        :style="placementStyle(element)"
+        :class="{ 'cb-shine': editableElements && element.id === shiningElementId }"
+        @change-value="emit('changeElementValue', element.id, $event)"
+        @animationend="endShine"
+      />
+      <!-- Die Schnittlinie zeigt, wo die Karte ausgeschnitten wird – über den
+           Elementen, Klicks gehen durch sie hindurch. -->
+      <div
+        v-if="showCutLine"
+        class="pointer-events-none absolute inset-0 rounded-(--card-corner-radius-mm) border border-gold"
+      />
+      <!-- On top of the card, e.g. the cursors of other people. -->
+      <slot />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { CardElementValues } from '../../cardElements/cardValues'
+import type { CardSetData } from '../../api/cardSets/cardSetsApi'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import CbCardElement from '../../cardElements/CbCardElement.vue'
@@ -43,10 +55,18 @@ import { endShine, shiningElementId } from '../../cardElements/elementShine'
 // will das, damit man sie sieht und anklicken kann. editableElements lässt in
 // die Felder tippen, changeElementValue meldet dann den neuen Inhalt. Nur dann
 // glänzt auch ein Element auf (siehe elementShine).
+// cardSetData sind die Einstellungen des Sets (Farbe, Anschnitt). showBleed
+// zeigt den Anschnitt rund um die Karte, showCutLine die goldene Schnittlinie –
+// beides will bisher nur der Editor. coverBleed verdeckt den Anschnitt, ohne den
+// Rahmen zu verkleinern – so fliegt die Editor-Karte wie die in der Übersicht.
 const props = withDefaults(
   defineProps<{
     id: string
     elements: CardSetElement[]
+    cardSetData: CardSetData
+    showBleed?: boolean
+    showCutLine?: boolean
+    coverBleed?: boolean
     zoom?: number
     highlightColor?: string
     values?: CardElementValues
@@ -56,6 +76,9 @@ const props = withDefaults(
     editableElements?: boolean
   }>(),
   {
+    showBleed: false,
+    showCutLine: false,
+    coverBleed: false,
     zoom: gridZoom,
     values: () => ({}),
     highlightSearch: false,
@@ -66,6 +89,24 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{ changeElementValue: [elementId: string, value: string] }>()
+
+// Die Farbe des Sets füllt auch den Anschnitt. bleedWidth gilt links und rechts
+// je, bleedHeight oben und unten je. Verdeckt schneidet der Rahmen an der
+// Kartenkante ab, mit deren runden Ecken – style.css lässt den Wechsel gleiten.
+const frameStyle = computed(() => {
+  const { color, bleedWidth, bleedHeight } = props.cardSetData
+  const bleed = `${bleedHeight}mm ${bleedWidth}mm`
+  return {
+    ...cardFormatStyle(cardFormat.value),
+    zoom: props.zoom,
+    backgroundColor: color,
+    outlineColor: props.highlightColor,
+    padding: props.showBleed ? bleed : 0,
+    clipPath: props.showBleed
+      ? `inset(${props.coverBleed ? bleed : 0} round var(--card-corner-radius-mm))`
+      : undefined,
+  }
+})
 
 // Gezeichnet werden bisher nur Textfelder, Bilder, Vierecke und Kreise mit
 // x/y-Position; andere (z.B. von einer KI per MCP angelegt) fehlen noch.

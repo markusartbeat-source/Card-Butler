@@ -141,8 +141,9 @@ body {
     height: var(--card-height-mm);
     border-radius: var(--card-corner-radius-mm);
     /* Only the tilt of a dragged card eases in — "transform" stays out of it,
-       so a moved card can never lag behind a transition. */
-    transition-property: scale, rotate;
+       so a moved card can never lag behind a transition. clip-path lässt den
+       Anschnitt im Editor sanft auf- und zugehen (coverBleed in CbCard). */
+    transition-property: scale, rotate, clip-path;
     @apply duration-150;
   }
 

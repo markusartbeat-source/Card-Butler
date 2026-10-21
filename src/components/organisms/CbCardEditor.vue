@@ -28,7 +28,8 @@
       <div class="relative">
         <CbCardOrnament class="transition-opacity" :class="fadeInClasses" />
 
-        <!-- Beim Zuschneiden zoomt das Mausrad das Bild statt der Anzahl. -->
+        <!-- Beim Zuschneiden zoomt das Mausrad das Bild statt der Anzahl.
+             Der Anschnitt geht im Flug auf und beim Rückflug wieder zu. -->
         <div
           ref="cardWrapper"
           class="relative"
@@ -37,8 +38,13 @@
           <CbCard
             :id="card.id"
             :elements="cardSet.elements"
+            :card-set-data="cardSet.data"
             :values="card.values"
             :zoom="editorZoom"
+            show-bleed
+            show-cut-line
+            :cover-bleed="isBleedCovered"
+            :style="bleedTransition"
             mark-empty-elements
             editable-elements
             @change-element-value="(elementId, text) => changeCardText(card, elementId, text)"
@@ -122,6 +128,7 @@ import { cardToolbarElements, cardTools, type CardTool } from '../molecules/card
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
+import { findCardSurface } from '../../card/cardSurface'
 import CbElementSettingsPanel from '../../cardElements/CbElementSettingsPanel.vue'
 import { changeCardText, saveWaitingCardTexts } from '../../cardElements/cardValues'
 import { createElement } from '../../cardElements/createElement'
@@ -158,6 +165,14 @@ const props = defineProps<{
 const emit = defineEmits<{ close: [] }>()
 
 const flightDurationInMilliseconds = 350
+
+// Der Anschnitt ist beim Abflug verdeckt und geht im Gleichschritt mit dem Flug
+// auf und zu – gleich lang, gleich gebremst.
+const isBleedCovered = ref(true)
+const bleedTransition = {
+  transitionDuration: `${flightDurationInMilliseconds}ms`,
+  transitionTimingFunction: 'ease-out',
+}
 
 const cardWrapper = useTemplateRef<HTMLElement>('cardWrapper')
 const backdrop = useTemplateRef<InstanceType<typeof CbDimLayer>>('backdrop')
@@ -242,11 +257,15 @@ function playBackdropFade(direction: 'in' | 'out') {
 }
 
 // Fly the card between its place in the grid and the center of the screen.
+// Gemessen wird die Kartenfläche ohne Anschnitt, so deckt sie sich mit der Karte
+// in der Übersicht. Der Anschnitt ist ringsum gleich breit, ihre Mitte ist also
+// die des Wrappers, um die er sich skaliert.
 function playFlight(direction: 'in' | 'out') {
   const wrapper = cardWrapper.value
-  if (!wrapper) return null
+  const surface = findCardSurface(wrapper)
+  if (!wrapper || !surface) return null
 
-  const target = wrapper.getBoundingClientRect()
+  const target = surface.getBoundingClientRect()
   const start = props.startRect
   const moveX = start.left + start.width / 2 - (target.left + target.width / 2)
   const moveY = start.top + start.height / 2 - (target.top + target.height / 2)
@@ -268,6 +287,7 @@ function startClosing() {
   if (isClosing.value) return
   isClosing.value = true
   areControlsVisible.value = false
+  isBleedCovered.value = true
   // The handles vanish at once, like the other controls, instead of flying
   // back to the grid along with the card.
   clearElementSelection()
@@ -321,6 +341,9 @@ onMounted(() => {
   const animation = playFlight('in')
   if (animation) animation.onfinish = () => (areControlsVisible.value = true)
   else areControlsVisible.value = true
+  // playFlight hat die Karte schon vermessen, der Browser kennt den verdeckten
+  // Anschnitt also schon – darum gleitet er jetzt auf, statt zu springen.
+  isBleedCovered.value = false
 
   window.addEventListener('keydown', stepBackOnEscape)
   window.addEventListener('keydown', deleteSelectedElementOnKey)

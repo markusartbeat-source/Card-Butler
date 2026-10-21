@@ -10,6 +10,7 @@
       :key="card.id"
       :id="card.id"
       :elements="card.elements"
+      :card-set-data="card.cardSetData"
       :values="card.values"
       :zoom="1"
     />

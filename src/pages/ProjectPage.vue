@@ -101,6 +101,7 @@
               <CbCard
                 :id="card.id"
                 :elements="cardSet.elements"
+                :card-set-data="cardSet.data"
                 :values="card.values"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
@@ -108,6 +109,7 @@
               <CbCard
                 :id="card.id"
                 :elements="cardSet.elements"
+                :card-set-data="cardSet.data"
                 :values="card.values"
                 highlight-search
                 side="back"
@@ -214,10 +216,14 @@ const loadedCardSets = computed(() => cardSets.value ?? [])
 
 // The cards of every set in one row — for the editor.
 const allCards = computed(() => loadedCardSets.value.flatMap((cardSet) => cardSet.cards))
-// Für den Export: jede Karte mit den Elementen ihres Sets.
+// Für den Export: jede Karte mit den Elementen und Einstellungen ihres Sets.
 const exportCards = computed(() =>
   loadedCardSets.value.flatMap((cardSet) =>
-    cardSet.cards.map((card) => ({ ...card, elements: cardSet.elements })),
+    cardSet.cards.map((card) => ({
+      ...card,
+      elements: cardSet.elements,
+      cardSetData: cardSet.data,
+    })),
   ),
 )
 const selectedCardId = ref<string | null>(null)
