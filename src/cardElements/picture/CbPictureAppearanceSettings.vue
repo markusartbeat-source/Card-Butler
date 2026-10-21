@@ -15,9 +15,6 @@
       <CbIcon name="crop" />
       {{ dictionary.cardEditor.adjustCrop }}
     </CbButton>
-    <!-- TEMPORÄR (Bild-Plan Schritt 8): gespeicherter Ausschnitt dieser Karte,
-         entfällt im Aufräumschritt. -->
-    <pre v-if="crop" class="text-xs text-label">{{ crop }}</pre>
     <CbElementOpacityField :element-id="elementId" />
     <CbSizeFields
       :width="data?.width"
@@ -45,7 +42,6 @@ import CbElementOpacityField from '../CbElementOpacityField.vue'
 import { findCardSetElement } from '../cardElements'
 import { changeElementSize } from '../changeElementSize'
 import CbPictureSelect from './CbPictureSelect.vue'
-import { pictureCropOf } from './pictureCrops'
 
 // card ist die Karte, die gerade im Editor offen ist.
 const props = defineProps<{ elementId: string; card: Card }>()
@@ -53,9 +49,4 @@ const props = defineProps<{ elementId: string; card: Card }>()
 const data = computed(() => findCardSetElement(props.elementId)?.data)
 
 const imageId = computed(() => props.card.elementImageIds[props.elementId])
-
-// TEMPORÄR (Bild-Plan Schritt 8): nur für die Anzeige oben.
-const crop = computed(() =>
-  imageId.value ? pictureCropOf(props.card.id, props.elementId, imageId.value) : undefined,
-)
 </script>
