@@ -3,6 +3,7 @@
 // <CbIcon name="..." />.
 import Add2 from '~icons/material-symbols/add-2-rounded'
 import AddComment from '~icons/material-symbols/add-comment-outline-rounded'
+import AddPhotoAlternate from '~icons/material-symbols/add-photo-alternate-outline-rounded'
 import AlignHorizontalCenter from '~icons/material-symbols/align-horizontal-center-rounded'
 import AlignHorizontalLeft from '~icons/material-symbols/align-horizontal-left-rounded'
 import AlignHorizontalRight from '~icons/material-symbols/align-horizontal-right-rounded'
@@ -73,6 +74,7 @@ import WrapText from '~icons/material-symbols/wrap-text-rounded'
 export const icons = {
   add_2: Add2,
   add_comment: AddComment,
+  add_photo_alternate: AddPhotoAlternate,
   align_horizontal_center: AlignHorizontalCenter,
   align_horizontal_left: AlignHorizontalLeft,
   align_horizontal_right: AlignHorizontalRight,

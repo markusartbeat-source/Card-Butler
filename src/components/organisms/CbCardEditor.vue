@@ -74,13 +74,19 @@
       </CbButton>
     </div>
 
-    <!-- Ist ein Feld ausgewählt, zeigt das Panel dessen Einstellungen statt der
-         Karte. -->
+    <!-- Ist ein Element ausgewählt, zeigt das Panel statt der Karte dessen
+         Einstellungen – jeder Elementtyp hat sein eigenes. -->
     <div class="absolute top-8 right-8 bottom-8 w-80 transition-opacity" :class="fadeInClasses">
+      <CbPictureSettingsPanel
+        v-if="selectedElement?.data.type === 'PICTURE'"
+        :key="selectedElement.id"
+        :element-id="selectedElement.id"
+        class="h-full"
+      />
       <CbTextSettingsPanel
-        v-if="selectedElementId"
-        :key="selectedElementId"
-        :element-id="selectedElementId"
+        v-else-if="selectedElement"
+        :key="selectedElement.id"
+        :element-id="selectedElement.id"
         class="h-full"
       />
       <CbCardSettingsPanel v-else class="h-full" :is-visible="areControlsVisible" />
@@ -88,10 +94,10 @@
 
     <!-- Nur Größe und Name zählen, die Lage gibt der Zeiger vor. -->
     <CbNewElementPreview
-      v-if="dragPosition"
+      v-if="dragPosition && draggedElementData"
       :x="dragPosition.x"
       :y="dragPosition.y"
-      :element="newTextElementData(0, 0)"
+      :element="draggedElementData"
     />
   </div>
 </template>
@@ -103,7 +109,8 @@ import CbCard from '../atoms/CbCard.vue'
 import CbCardOrnament from '../atoms/CbCardOrnament.vue'
 import CbDimLayer from '../atoms/CbDimLayer.vue'
 import CbToolbar from '../molecules/CbToolbar.vue'
-import { cardToolbarElements, cardTools } from '../molecules/cardToolbarElements'
+import { cardToolbarElements, cardTools, type CardTool } from '../molecules/cardToolbarElements'
+import type { ElementData } from '../../api/elements/elementsApi'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
 import { cardFormat, editorZoom } from '../../card/cardFormat'
@@ -117,6 +124,8 @@ import { newTextElementData } from '../../cardElements/text/newTextElementData'
 import { setTextSizing } from '../../cardElements/text/textSizing'
 import CbTextSettingsPanel from '../../cardElements/text/CbTextSettingsPanel.vue'
 import { saveCardTextAfterPause, saveWaitingCardTexts } from '../../cardElements/text/saveCardText'
+import { newPictureElementData } from '../../cardElements/picture/newPictureElementData'
+import CbPictureSettingsPanel from '../../cardElements/picture/CbPictureSettingsPanel.vue'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
 import {
@@ -158,6 +167,11 @@ const fadeInClasses = computed(() =>
 
 const isClosing = ref(false)
 
+// Das ausgewählte Element dieses Sets.
+const selectedElement = computed(() =>
+  props.cardSet.elements.find((element) => element.id === selectedElementId.value),
+)
+
 // Der Text gilt nur für diese Karte und geht nach einer Tipp-Pause ins Backend.
 function changeElementValue(elementId: string, value: string) {
   setElementValue(props.card, elementId, value)
@@ -170,29 +184,48 @@ watch(isTypingInSelectedElement, (isTyping) => {
   if (!isTyping) saveWaitingCardTexts()
 })
 
-// Legt ein Textfeld mit der Mitte auf diesem Punkt der Karte (mm) an und wählt
-// es gleich aus. Es wächst mit seinem Text nach unten.
-async function addTextElementAt(centerX: number, centerY: number) {
-  const createdElement = await createElement(props.cardSet, newTextElementData(centerX, centerY))
+// Was die Toolbar schon anlegen kann: je Werkzeug die Daten eines neuen
+// Elements mit der Mitte auf einem Punkt der Karte (mm). Die anderen Einträge
+// haben noch keine Funktion.
+const newElementDataByTool: Partial<
+  Record<CardTool, (centerX: number, centerY: number) => ElementData>
+> = {
+  text: newTextElementData,
+  image: newPictureElementData,
+}
+
+// Legt das Element des Werkzeugs mit der Mitte auf diesem Punkt der Karte (mm)
+// an und wählt es gleich aus. Ein Textfeld wächst mit seinem Text nach unten.
+async function addElementAt(tool: CardTool, centerX: number, centerY: number) {
+  const newElementData = newElementDataByTool[tool]
+  if (!newElementData) return
+  const createdElement = await createElement(props.cardSet, newElementData(centerX, centerY))
   if (!createdElement) return
-  setTextSizing(createdElement.id, 'autoHeight')
+  if (tool === 'text') setTextSizing(createdElement.id, 'autoHeight')
   selectElement(createdElement.id)
 }
 
-// Ein Klick auf „Text“ legt das Feld in der Kartenmitte an. Die anderen
-// Einträge haben noch keine Funktion.
+// Ein Klick auf ein Werkzeug legt sein Element in der Kartenmitte an.
 function addElementFromToolbar(index: number) {
-  if (cardTools[index] === 'text') {
-    addTextElementAt(cardFormat.value.width / 2, cardFormat.value.height / 2)
-  }
+  addElementAt(cardTools[index], cardFormat.value.width / 2, cardFormat.value.height / 2)
 }
 
-// Ablegen legt das Feld dort an – die Feldmitte liegt unter dem Zeiger.
-const { dragPosition, startDrag } = useNewElementDrag(cardWrapper, addTextElementAt)
+// Das Werkzeug, das gerade aus der Toolbar gezogen wird.
+const draggedTool = ref<CardTool | null>(null)
+const draggedElementData = computed(
+  () => draggedTool.value && newElementDataByTool[draggedTool.value]?.(0, 0),
+)
 
-// Ziehen geht bisher nur mit „Text“.
+// Ablegen legt das Element dort an – seine Mitte liegt unter dem Zeiger.
+const { dragPosition, startDrag } = useNewElementDrag(cardWrapper, (centerX, centerY) => {
+  if (draggedTool.value) addElementAt(draggedTool.value, centerX, centerY)
+})
+
 function startDragFromToolbar(index: number, event: PointerEvent) {
-  if (cardTools[index] === 'text') startDrag(event)
+  const tool = cardTools[index]
+  if (!newElementDataByTool[tool]) return
+  draggedTool.value = tool
+  startDrag(event)
 }
 
 // Keeps the closing flight, so an early unmount can drop its finish handler.
@@ -253,21 +286,23 @@ function stepBackOnEscape(event: KeyboardEvent) {
   if (event.key === 'Escape' && !stepBackElementSelection()) startClosing()
 }
 
-// Entf/Rücktaste löscht das ausgewählte Feld – nicht beim Tippen und nicht, wenn
-// ein Eingabefeld die Taste braucht. Es verschwindet aus dem Set und damit von
-// allen Karten, „Rückgängig“ setzt es an seine alte Stelle in der
-// Stapelreihenfolge.
+// Entf/Rücktaste löscht das ausgewählte Element – nicht beim Tippen und nicht,
+// wenn ein Eingabefeld die Taste braucht. Es verschwindet aus dem Set und damit
+// von allen Karten, „Rückgängig“ setzt es an seine alte Stelle in der
+// Stapelreihenfolge. Der Toast nennt, was gelöscht wurde.
 function deleteSelectedElementOnKey(event: KeyboardEvent) {
   if (!['Delete', 'Backspace'].includes(event.key)) return
-  const elementId = selectedElementId.value
-  if (!elementId || isTypingInSelectedElement.value || isInInputField(event)) return
+  const elementToDelete = selectedElement.value
+  if (!elementToDelete || isTypingInSelectedElement.value || isInInputField(event)) return
 
   event.preventDefault()
   clearElementSelection()
   const { cardSet } = props
-  const selectedElement = cardSet.elements.find((element) => element.id === elementId)
-  if (!selectedElement) return
-  deleteWithUndo(cardSet.elements, selectedElement, dictionary.cardEditor.textElementDeleted, (element) =>
+  const deletedMessage =
+    elementToDelete.data.type === 'PICTURE'
+      ? dictionary.cardEditor.pictureElementDeleted
+      : dictionary.cardEditor.textElementDeleted
+  deleteWithUndo(cardSet.elements, elementToDelete, deletedMessage, (element) =>
     deleteElement(cardSet, element),
   )
 }

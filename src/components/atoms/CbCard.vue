@@ -26,6 +26,14 @@
         :style="elementStyle(element)"
         @update:content="emit('changeElementValue', element.id, $event)"
       />
+      <CbPictureElement
+        v-else-if="element.type === 'picture'"
+        :id="element.id"
+        :name="element.name"
+        :mark-if-empty="markEmptyElements"
+        :editable="editableElements"
+        :style="elementStyle(element)"
+      />
     </template>
     <!-- On top of the card, e.g. the cursors of other people. -->
     <slot />
@@ -43,6 +51,7 @@ import {
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import { placementStyle } from '../../elementTransform/elementPlacement'
+import CbPictureElement from '../../cardElements/picture/CbPictureElement.vue'
 import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 
 // The card is always its real size — zoom is the only thing a view decides.

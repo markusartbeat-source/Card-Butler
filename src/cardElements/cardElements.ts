@@ -1,5 +1,6 @@
 import type { ElementPlacement } from '../elementTransform/elementPlacement'
 import { cardSets, type Card, type CardSetElement } from '../cardSets/cardSets'
+import type { PictureElement } from './picture/pictureElement'
 import { textAppearanceOf } from './text/textAppearance'
 import type { TextElement } from './text/textElement'
 import { textSizingOf } from './text/textSizing'
@@ -25,26 +26,35 @@ export type CardElementBase = {
   opacity: number
 }
 
-export type CardElement = TextElement
+export type CardElement = TextElement | PictureElement
 
 /** Macht aus einem Element des Sets eins zum Zeichnen. Das Backend kennt keine
-    Kartenseiten – alles liegt vorn. Gezeichnet werden bisher nur Textfelder mit
-    x/y-Position; andere (z.B. von anderen Programmen angelegt) fehlen noch. */
+    Kartenseiten – alles liegt vorn. Gezeichnet werden bisher nur Textfelder und
+    Bilder mit x/y-Position; andere (z.B. von anderen Programmen angelegt) fehlen
+    noch. */
 export function cardElementFromCardSetElement(element: CardSetElement): CardElement | null {
   const { id, data, rotation } = element
   const { x, y } = data.position
-  if (data.type !== 'TEXT' || x == null || y == null) return null
+  if (x == null || y == null) return null
+
+  const base = {
+    id,
+    name: data.name,
+    side: 'front' as const,
+    placement: { x, y, rotation },
+    opacity: data.opacity,
+  }
+  if (data.type === 'PICTURE') {
+    return { ...base, type: 'picture', width: data.width, height: data.height }
+  }
+  if (data.type !== 'TEXT') return null
 
   const sizing = textSizingOf(element)
   return {
-    id,
-    name: data.name,
+    ...base,
     type: 'text',
-    side: 'front',
-    placement: { x, y, rotation },
     width: sizing === 'autoWidth' ? null : data.width,
     height: sizing === 'fixed' ? data.height : null,
-    opacity: data.opacity,
     horizontalAlignment: data.alignment.horizontal,
     verticalAlignment: data.alignment.vertical,
     ...textAppearanceOf(data),
