@@ -147,6 +147,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     backToCardSettings: 'Voltar às definições da carta',
     settingsTab: 'Definições',
     layersTab: 'Camadas',
+    layersHint: 'Quanto mais abaixo estiver uma camada, mais facilmente fica tapada por outras coisas.',
     printGroup: 'Impressão',
     printCount: 'Quantidade',
     printInfo: 'Quantas vezes esta carta é incluída ao imprimir e exportar.',

@@ -82,6 +82,14 @@
           </div>
         </div>
       </template>
+      <template #layers>
+        <CbLayerList
+          v-if="isVisible"
+          :key="activeTab"
+          class="animate-cb-rise mt-6"
+          :elements="cardSet.elements"
+        />
+      </template>
     </CbTabs>
   </CbPanel>
 </template>
@@ -102,11 +110,14 @@ import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.v
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
 import { cardFormat } from '../card/cardFormat'
 import { uniformCornerRadii } from '../card/cornerRadii'
+import type { CardSet } from '../cardSets/cardSets'
+import CbLayerList from '../layers/CbLayerList.vue'
 
 // The panel is already on the page while the card is still flying in. The
 // groups are only built once it is really on screen, otherwise their entrance
 // would already be over by the time anyone can see it.
-defineProps<{ isVisible: boolean }>()
+// cardSet ist das Set der offenen Karte, seine Elemente sind die Ebenen.
+defineProps<{ isVisible: boolean; cardSet: CardSet }>()
 
 const activeTab = ref('settings')
 

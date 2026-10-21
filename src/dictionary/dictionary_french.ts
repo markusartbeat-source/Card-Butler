@@ -147,6 +147,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     backToCardSettings: 'Retour aux réglages de la carte',
     settingsTab: 'Réglages',
     layersTab: 'Calques',
+    layersHint: 'Plus un calque est bas, plus il risque d’être caché par d’autres éléments.',
     printGroup: 'Impression',
     printCount: 'Nombre',
     printInfo: "Combien de fois cette carte est incluse à l'impression et à l'export.",

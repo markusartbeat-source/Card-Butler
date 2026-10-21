@@ -92,7 +92,12 @@
         :card="card"
         class="h-full"
       />
-      <CbCardSettingsPanel v-else class="h-full" :is-visible="areControlsVisible" />
+      <CbCardSettingsPanel
+        v-else
+        class="h-full"
+        :is-visible="areControlsVisible"
+        :card-set="cardSet"
+      />
     </div>
 
     <!-- Nur Größe und Name zählen, die Lage gibt der Zeiger vor. -->

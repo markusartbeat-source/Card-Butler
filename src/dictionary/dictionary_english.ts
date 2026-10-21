@@ -147,6 +147,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     backToCardSettings: 'Back to card settings',
     settingsTab: 'Settings',
     layersTab: 'Layers',
+    layersHint: 'The lower a layer is, the more likely it is to be covered by other things.',
     printGroup: 'Print',
     printCount: 'Count',
     printInfo: 'How many times this card is included when printing and exporting.',

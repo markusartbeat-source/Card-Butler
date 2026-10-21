@@ -1,4 +1,5 @@
 import { computed } from 'vue'
+import type { ElementType } from '../../api/elements/elementsApi'
 import type { IconName } from '../atoms/icons'
 import type { ToolbarElement } from './toolbarElement'
 
@@ -14,6 +15,15 @@ const cardToolIcons: Record<CardTool, IconName> = {
   text: 'title',
   image: 'image',
   comment: 'add_comment',
+}
+
+// Das Icon je Element-Typ – dasselbe wie beim Werkzeug, das ihn anlegt.
+export const elementTypeIcons: Record<ElementType, IconName> = {
+  SQUARE: cardToolIcons.square,
+  CIRCLE: cardToolIcons.circle,
+  LINE: cardToolIcons.line,
+  TEXT: cardToolIcons.text,
+  PICTURE: cardToolIcons.image,
 }
 
 // The elements the card toolbar offers, in toolbar order.
