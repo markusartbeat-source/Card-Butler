@@ -101,6 +101,31 @@ body {
     @apply bg-white/10;
   }
 
+  /* Ein Element auf der Karte glänzt einmal auf wie eine Foil-Sammelkarte: Ein
+     heller, schräger Streifen läuft darüber. Das Bild der Fläche ist dreimal so
+     breit wie das Element, verschoben wird nur dieses Bild. border-radius:
+     inherit lässt den Glanz der Form folgen (runde Ecken, Kreis). Bei
+     reduzierter Bewegung ist die Fläche einfarbig – dann leuchtet das Element
+     nur kurz auf. Wie cb-hover braucht es ein positioniertes Element. */
+  .cb-shine::after {
+    content: '';
+    border-radius: inherit;
+    background-image: linear-gradient(
+      115deg,
+      transparent 40%,
+      var(--color-gold-lighter) 50%,
+      transparent 60%
+    );
+    background-size: 300% 100%;
+    animation: cb-shine 900ms ease-in-out;
+    @apply pointer-events-none absolute inset-0;
+
+    @variant motion-reduce {
+      background-image: none;
+      background-color: var(--color-gold-lighter);
+    }
+  }
+
   .cb-card {
     @apply cursor-grab active:cursor-grabbing;
   }
@@ -384,6 +409,21 @@ body {
   to {
     opacity: 1;
     scale: 1;
+  }
+}
+
+/* Der Glanzstreifen läuft von links nach rechts und blendet dabei ein und aus. */
+@keyframes cb-shine {
+  from {
+    background-position: 100% 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  to {
+    background-position: 0 0;
+    opacity: 0;
   }
 }
 

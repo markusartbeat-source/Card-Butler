@@ -17,7 +17,9 @@
       :editable="editableElements"
       :highlight-search="highlightSearch"
       :style="placementStyle(element)"
+      :class="{ 'cb-shine': editableElements && element.id === shiningElementId }"
       @change-value="emit('changeElementValue', element.id, $event)"
+      @animationend="endShine"
     />
     <!-- On top of the card, e.g. the cursors of other people. -->
     <slot />
@@ -30,6 +32,7 @@ import type { CardElementValues } from '../../cardElements/cardValues'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import CbCardElement from '../../cardElements/CbCardElement.vue'
+import { endShine, shiningElementId } from '../../cardElements/elementShine'
 
 // The card is always its real size — zoom is the only thing a view decides.
 // highlightColor draws a thin frame in the colour of the person standing here.
@@ -38,7 +41,8 @@ import CbCardElement from '../../cardElements/CbCardElement.vue'
 // side ist die Seite der Karte – das Backend kennt keine, alle Elemente liegen vorn.
 // markEmptyElements zeigt leere Elemente mit Rahmen und Namen – nur der Editor
 // will das, damit man sie sieht und anklicken kann. editableElements lässt in
-// die Felder tippen, changeElementValue meldet dann den neuen Inhalt.
+// die Felder tippen, changeElementValue meldet dann den neuen Inhalt. Nur dann
+// glänzt auch ein Element auf (siehe elementShine).
 const props = withDefaults(
   defineProps<{
     id: string

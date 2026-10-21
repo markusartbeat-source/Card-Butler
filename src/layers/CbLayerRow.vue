@@ -1,7 +1,7 @@
 <template>
   <!-- Eine Ebene der Liste: Vorschaubild, Typ-Icon und Name ihres Elements. Das
-       Icon sitzt wie im Design mittig in einem 32-px-Feld. Ein Knopf, damit sie
-       per Tastatur erreichbar ist; sein Name ist der des Elements. Beim Ziehen
+       Icon sitzt wie im Design mittig in einem 32-px-Feld. Ein Knopf – was ein
+       Klick tut, legt die Liste fest; sein Name ist der des Elements. Beim Ziehen
        kippt der Knopf, nicht das Listenelement darum (siehe style.css). -->
   <CbInteractive
     class="cb-layer-face flex h-16 w-full cursor-grab items-center gap-1.5 rounded-md bg-surface-light p-1.5 text-left text-sm active:cursor-grabbing"

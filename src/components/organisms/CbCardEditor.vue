@@ -125,6 +125,7 @@ import { cardFormat, editorZoom } from '../../card/cardFormat'
 import CbElementSettingsPanel from '../../cardElements/CbElementSettingsPanel.vue'
 import { changeCardText, saveWaitingCardTexts } from '../../cardElements/cardValues'
 import { createElement } from '../../cardElements/createElement'
+import { stopShine } from '../../cardElements/elementShine'
 import { deleteElement } from '../../cardElements/deleteElement'
 import { newElementData } from '../../cardElements/newElementData'
 import { deleteWithUndo } from '../../deletion/deleteWithUndo'
@@ -329,6 +330,7 @@ onMounted(() => {
 onUnmounted(() => {
   // A card picked mid-close replaces us — that close must not fire any more.
   if (closingFlight) closingFlight.onfinish = null
+  stopShine()
   window.removeEventListener('keydown', stepBackOnEscape)
   window.removeEventListener('keydown', deleteSelectedElementOnKey)
   window.removeEventListener('keydown', undoDeletionOnKey)
