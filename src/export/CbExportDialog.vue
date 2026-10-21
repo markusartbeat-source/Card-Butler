@@ -192,7 +192,7 @@ async function measureExportSize(dpi: number) {
   const stageCards = Array.from(renderStage.value?.stageElement?.children ?? [])
   if (!stageCards.length) return
 
-  const sampleImage = await cardToPngBlob(stageCards[0], dpi)
+  const sampleImage = await cardToPngBlob(stageCards[0], props.cards[0].cardSetData, dpi)
 
   // Clicking through the resolutions starts a measurement each time; only the
   // one that is still chosen may write its number.
@@ -257,9 +257,11 @@ async function exportCards() {
 // Photographs the cards of the hidden stage one after another, never the small
 // ones from the visible grid, and hands each finished picture straight to the
 // zip. Inside the zip they lie in a folder named after the card set.
+// Die Bühne zeichnet die Karten in derselben Reihenfolge wie props.cards.
 async function* cardZipEntries(stageCards: Element[]) {
   for (const [position, stageCard] of stageCards.entries()) {
-    const cardImage = await cardToPngBlob(stageCard, exportDpi.value)
+    const cardSize = props.cards[position].cardSetData
+    const cardImage = await cardToPngBlob(stageCard, cardSize, exportDpi.value)
     reportExportedCard(position + 1)
 
     // Hand the screen over to drawing once, otherwise the bar would only jump
