@@ -174,6 +174,8 @@ export const dictionaryGerman = {
     cardSettings: 'Karteneinstellungen',
     textSettings: 'Texteinstellungen',
     pictureSettings: 'Bildeinstellungen',
+    squareSettings: 'Viereckeinstellungen',
+    circleSettings: 'Kreiseinstellungen',
     elementName: 'Name',
     backToCardSettings: 'Zurück zu den Karteneinstellungen',
     settingsTab: 'Einstellungen',

@@ -23,7 +23,7 @@
       />
     </template>
     <div class="mt-6 flex flex-col gap-6">
-      <template v-if="isPicture">
+      <template v-if="type === 'PICTURE'">
         <CbPictureAppearanceSettings :element-id="elementId" :card="card" />
         <CbDivider />
         <div class="flex flex-col gap-3">
@@ -33,13 +33,18 @@
             @change="(radii) => changeElementCornerRadii(elementId, radii)"
           />
         </div>
+        <CbDivider />
       </template>
-      <template v-else>
+      <template v-else-if="type === 'TEXT'">
         <CbTextAppearanceSettings :element-id="elementId" />
         <CbDivider />
         <CbTextboxSettings :element-id="elementId" />
+        <CbDivider />
       </template>
-      <CbDivider />
+      <template v-else>
+        <CbShapeAppearanceSettings :element-id="elementId" />
+        <CbDivider />
+      </template>
       <CbElementPositionSettings :element-id="elementId" />
     </div>
   </CbPanel>
@@ -47,6 +52,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
+import type { ElementType } from '../api/elements/elementsApi'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
@@ -60,6 +66,7 @@ import CbElementPositionSettings from './CbElementPositionSettings.vue'
 import { findCardSetElement, maxElementNameLength, renameElement } from './cardElements'
 import { changeElementCornerRadii, cornerRadiiOfElement } from './elementCornerRadii'
 import CbPictureAppearanceSettings from './picture/CbPictureAppearanceSettings.vue'
+import CbShapeAppearanceSettings from './shape/CbShapeAppearanceSettings.vue'
 import CbTextAppearanceSettings from './text/CbTextAppearanceSettings.vue'
 import CbTextboxSettings from './text/CbTextboxSettings.vue'
 
@@ -70,12 +77,18 @@ const props = defineProps<{ elementId: string; card: Card }>()
 
 const element = computed(() => findCardSetElement(props.elementId))
 
-const isPicture = computed(() => element.value?.data.type === 'PICTURE')
+const type = computed(() => element.value?.data.type)
 
 // Nur für Screenreader, sichtbar ist der Name.
-const title = computed(() =>
-  isPicture.value ? dictionary.cardEditor.pictureSettings : dictionary.cardEditor.textSettings,
-)
+const title = computed(() => {
+  const titles: Partial<Record<ElementType, string>> = {
+    TEXT: dictionary.cardEditor.textSettings,
+    PICTURE: dictionary.cardEditor.pictureSettings,
+    SQUARE: dictionary.cardEditor.squareSettings,
+    CIRCLE: dictionary.cardEditor.circleSettings,
+  }
+  return type.value && titles[type.value]
+})
 
 const cornerRadii = computed(() => cornerRadiiOfElement(props.elementId, element.value?.data.radius))
 

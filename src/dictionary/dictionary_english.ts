@@ -141,6 +141,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     cardSettings: 'Card settings',
     textSettings: 'Text settings',
     pictureSettings: 'Image settings',
+    squareSettings: 'Square settings',
+    circleSettings: 'Circle settings',
     elementName: 'Name',
     backToCardSettings: 'Back to card settings',
     settingsTab: 'Settings',
