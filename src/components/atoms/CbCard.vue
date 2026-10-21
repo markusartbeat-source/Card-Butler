@@ -32,6 +32,7 @@
         :name="element.name"
         :opacity="element.opacity"
         :corner-radii="element.cornerRadii"
+        :picture="knownImages[elementImageIds[element.id]]?.location"
         :mark-if-empty="markEmptyElements"
         :editable="editableElements"
         :style="elementStyle(element)"
@@ -47,18 +48,21 @@ import { computed } from 'vue'
 import {
   cardElementFromCardSetElement,
   type CardElement,
+  type CardElementImageIds,
   type CardElementValues,
   type CardSide,
 } from '../../cardElements/cardElements'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import { placementStyle } from '../../elementTransform/elementPlacement'
+import { knownImages } from '../../images/knownImages'
 import CbPictureElement from '../../cardElements/picture/CbPictureElement.vue'
 import CbTextElement from '../../cardElements/text/CbTextElement.vue'
 
 // The card is always its real size — zoom is the only thing a view decides.
 // highlightColor draws a thin frame in the colour of the person standing here.
-// elements sind die Elemente des Sets, elementValues this card's own contents.
+// elements sind die Elemente des Sets, elementValues this card's own contents,
+// elementImageIds die Bilder dieser Karte in ihren Bild-Elementen.
 // highlightSearch marks the search hits in the texts — only the overview wants that.
 // side says which face of the card this is — only that side's elements show.
 // markEmptyElements zeigt leere Elemente mit Rahmen und Namen – nur der Editor
@@ -71,6 +75,7 @@ const props = withDefaults(
     zoom?: number
     highlightColor?: string
     elementValues?: CardElementValues
+    elementImageIds?: CardElementImageIds
     highlightSearch?: boolean
     side?: CardSide
     markEmptyElements?: boolean
@@ -79,6 +84,7 @@ const props = withDefaults(
   {
     zoom: gridZoom,
     elementValues: () => ({}),
+    elementImageIds: () => ({}),
     highlightSearch: false,
     side: 'front',
     markEmptyElements: false,

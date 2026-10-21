@@ -14,6 +14,7 @@ import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-round
 import Article from '~icons/material-symbols/article-outline-rounded'
 import ArtTrack from '~icons/material-symbols/art-track-outline-rounded'
 import Check from '~icons/material-symbols/check-rounded'
+import ChevronLeft from '~icons/material-symbols/chevron-left-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
 import Close from '~icons/material-symbols/close-rounded'
 import Colorize from '~icons/material-symbols/colorize-outline-rounded'
@@ -85,6 +86,7 @@ export const icons = {
   article: Article,
   art_track: ArtTrack,
   check: Check,
+  chevron_left: ChevronLeft,
   circle: Circle,
   close: Close,
   colorize: Colorize,

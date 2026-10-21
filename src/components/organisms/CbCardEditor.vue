@@ -37,6 +37,7 @@
             :id="card.id"
             :elements="cardSet.elements"
             :element-values="card.elementValues"
+            :element-image-ids="card.elementImageIds"
             :zoom="editorZoom"
             mark-empty-elements
             editable-elements
@@ -81,6 +82,7 @@
         v-if="selectedElement?.data.type === 'PICTURE'"
         :key="selectedElement.id"
         :element-id="selectedElement.id"
+        :card="card"
         class="h-full"
       />
       <CbTextSettingsPanel

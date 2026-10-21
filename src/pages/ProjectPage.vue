@@ -102,6 +102,7 @@
                 :id="card.id"
                 :elements="cardSet.elements"
                 :element-values="card.elementValues"
+                :element-image-ids="card.elementImageIds"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
               />
@@ -109,6 +110,7 @@
                 :id="card.id"
                 :elements="cardSet.elements"
                 :element-values="card.elementValues"
+                :element-image-ids="card.elementImageIds"
                 highlight-search
                 side="back"
                 class="cb-card-back col-start-1 row-start-1"

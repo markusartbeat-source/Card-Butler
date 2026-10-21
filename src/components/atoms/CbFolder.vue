@@ -54,8 +54,9 @@ export const folderGraphicRatio = 100 / 83
 import { useId, useTemplateRef } from 'vue'
 import CbInteractive from './CbInteractive.vue'
 
+// Den Namen braucht nur der Ordner mit Namen, nicht die Grafik allein.
 defineProps<{
-  name: string
+  name?: string
   graphicOnly?: boolean
   /** Adresse des Bildes, das im Ordner zu sehen ist, z.B. das erste darin. */
   picture?: string

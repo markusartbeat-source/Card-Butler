@@ -128,6 +128,10 @@ export function rotateElementBy(id: string, turnInDegrees: number) {
 // What one card fills into the deck's elements, keyed by element id.
 export type CardElementValues = Record<string, string>
 
+// Welches Bild eine Karte in ihren Bild-Elementen zeigt: je Element-id die
+// Bild-id. Getrennt von den Texten, damit die Kartensuche keine ids durchsucht.
+export type CardElementImageIds = Record<string, string>
+
 // Der Inhalt eines Elements gilt nur für diese eine Karte.
 export function setElementValue(card: Card, elementId: string, value: string) {
   card.elementValues[elementId] = value

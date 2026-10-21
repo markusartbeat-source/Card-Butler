@@ -1,6 +1,7 @@
 // Alles, was das Backend über Kartensets weiß und mit ihnen macht.
 import type { CardResource } from '../cards/cardsApi'
 import type { ElementResource } from '../elements/elementsApi'
+import type { ImageResource } from '../images/imagesApi'
 import type { Resource } from '../postOffice/resource'
 import { postOffice } from '../postOffice/transport'
 import type { ValueResource } from '../values/valuesApi'
@@ -19,14 +20,16 @@ export type CardSetData = {
 export type CardSetResource = Resource<CardSetData>
 
 // Ein Kartenset mit allem, was dazugehört, auf einem Stand (im Backend
-// „Snapshot“). Das Backend liefert noch mehr (revision, comments, images) –
-// hier steht nur, was die App schon nutzt.
+// „Snapshot“). Das Backend liefert noch mehr (revision, comments) – hier steht
+// nur, was die App schon nutzt.
 export type FullCardSet = {
   set: CardSetResource
   cards: CardResource[]
   elements: ElementResource[]
   /** Die Werte aller Karten des Sets. */
   values: ValueResource[]
+  /** Die Bilder, die Elemente oder Karten des Sets zeigen. */
+  images: ImageResource[]
 }
 
 /** Lädt alle Kartensets eines Projekts – in keiner festen Reihenfolge. */

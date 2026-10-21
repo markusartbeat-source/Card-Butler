@@ -3,8 +3,9 @@ import type { CardSetResource, FullCardSet } from '../api/cardSets/cardSetsApi'
 import type { CardResource } from '../api/cards/cardsApi'
 import type { ElementData, ElementResource } from '../api/elements/elementsApi'
 import { newerFirst, olderFirst } from '../api/postOffice/resource'
-import type { CardElementValues } from '../cardElements/cardElements'
+import type { CardElementImageIds, CardElementValues } from '../cardElements/cardElements'
 import type { TextSizing } from '../cardElements/text/textSizing'
+import { rememberImages } from '../images/knownImages'
 
 export type Card = {
   id: string
@@ -12,6 +13,7 @@ export type Card = {
   version: number
   // What this card fills into the deck's elements.
   elementValues: CardElementValues
+  elementImageIds: CardElementImageIds
   // How many copies of this card get printed. 1 is the normal card.
   printCount: number
 }
@@ -50,20 +52,29 @@ export function cardSetElementFromResource({ id, version, data }: ElementResourc
     nicht, Inhalte kommen eigens dazu, die Druckanzahl kennt das Backend noch
     nicht. */
 export function cardFromResource(cardResource: CardResource): Card {
-  return { id: cardResource.id, version: cardResource.version, elementValues: {}, printCount: 1 }
+  return {
+    id: cardResource.id,
+    version: cardResource.version,
+    elementValues: {},
+    elementImageIds: {},
+    printCount: 1,
+  }
 }
 
 /** Macht aus einem vollständigen Kartenset des Backends eins der App, samt
-    Karten, Elementen und Texten der Karten. Die neueste Karte steht vorn – dort,
-    wo auch neu angelegte hinkommen. Das neueste Element steht hinten, also
-    obenauf. */
+    Karten, Elementen, Texten und Bildern der Karten. Die neueste Karte steht
+    vorn – dort, wo auch neu angelegte hinkommen. Das neueste Element steht
+    hinten, also obenauf. Name und Adresse der Bilder merkt sich die App
+    projektweit. */
 export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
   const cards = fullCardSet.cards.sort(newerFirst).map(cardFromResource)
-  // Bilder (ohne Text) kennt die App noch nicht.
   for (const { parentId, data } of fullCardSet.values) {
     const card = cards.find((card) => card.id === parentId)
-    if (card && data.value.text !== null) card.elementValues[data.elementId] = data.value.text
+    const { text, imageId } = data.value
+    if (card && text !== null) card.elementValues[data.elementId] = text
+    if (card && imageId !== null) card.elementImageIds[data.elementId] = imageId
   }
+  rememberImages(fullCardSet.images)
   return {
     ...cardSetFromResource(fullCardSet.set),
     cards,

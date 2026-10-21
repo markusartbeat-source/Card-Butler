@@ -184,6 +184,10 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     automaticSizeMark: '-',
     automaticSize: 'automatique',
     appearanceGroup: 'Apparence',
+    chosenPicture: 'Image',
+    noPictureChosen: 'Aucune image choisie',
+    leaveFolder: (name: string) => `Sortir du dossier « ${name} »`,
+    openFolder: (name: string) => `Ouvrir le dossier « ${name} »`,
     opacity: 'Opacité',
     // Im Französischen steht vor dem Prozentzeichen ein geschütztes Leerzeichen.
     opacityValue: (percent: number) => `${percent} %`,
