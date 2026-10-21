@@ -4,7 +4,7 @@
       v-if="part.icon"
       :src="part.icon.image"
       :alt="part.icon.name"
-      :class="iconImageClasses"
+      :class="[iconImageClasses, containsSearchWord(part.icon) && 'rounded bg-gold-light']"
       :style="iconImageStyle"
     />
     <CbHighlightedText v-else :text="part.text" :search-word="searchWord" />
@@ -14,6 +14,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import CbHighlightedText from '../components/atoms/CbHighlightedText.vue'
+import { splitBySearchWord } from '../search/splitBySearchWord'
+import type { TextIcon } from './textIconList'
 import { iconImageClasses, iconImageStyle, splitByIconWords } from './textIconWords'
 
 // Ein Text, in dem Icon-Namen als Icon gezeichnet werden – nur Darstellung,
@@ -23,4 +25,10 @@ import { iconImageClasses, iconImageStyle, splitByIconWords } from './textIconWo
 const props = defineProps<{ text: string; searchWord: string }>()
 
 const parts = computed(() => splitByIconWords(props.text))
+
+// Enthält der Icon-Name das Suchwort, ist das Icon ein Treffer – gleiche
+// Regel wie beim Text.
+function containsSearchWord(icon: TextIcon) {
+  return splitBySearchWord(icon.name, props.searchWord).some((part) => part.isMatch)
+}
 </script>
