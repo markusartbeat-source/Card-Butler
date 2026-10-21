@@ -65,6 +65,7 @@ import {
 import { searchWord } from '../../search/searchWord'
 import CbTextWithIcons from '../../textIcons/CbTextWithIcons.vue'
 import { iconStyleVariables } from '../../textIcons/textIconSettings'
+import { nodesToText, textToNodes } from '../../textIcons/textIconWords'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
 import { textAppearanceOf } from './textAppearance'
 import { textSizingOf } from './textSizing'
@@ -117,12 +118,13 @@ const isButton = computed(() => props.editable && !isTyping.value)
 
 const isPlaceholderShown = computed(() => !props.content && !!props.placeholder)
 
-// placeCaret setzt den Cursor, sobald das Textfeld da ist.
+// placeCaret setzt den Cursor, sobald das Textfeld da ist. Icon-Namen stehen
+// darin als Bilder.
 async function startTyping(placeCaret: (textField: HTMLElement) => void) {
   startEditingElement(props.element.id)
   await nextTick()
   if (!editor.value) return
-  editor.value.textContent = props.content
+  editor.value.replaceChildren(...textToNodes(props.content))
   editor.value.focus()
   placeCaret(editor.value)
 }
@@ -145,8 +147,9 @@ function stopTyping() {
 }
 
 // Browser hängen ans Ende oft einen Zeilenumbruch nur als Platzhalter an – der
-// zählt nicht, sonst wäre ein geleertes Feld nie mehr leer.
+// zählt nicht, sonst wäre ein geleertes Feld nie mehr leer. Icon-Bilder werden
+// wieder zu ihren Namen.
 function emitTypedText() {
-  emit('update:content', editor.value?.innerText.replace(/\n$/, '') ?? '')
+  emit('update:content', editor.value ? nodesToText(editor.value).replace(/\n$/, '') : '')
 }
 </script>
