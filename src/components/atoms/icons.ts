@@ -60,6 +60,8 @@ import Print from '~icons/material-symbols/print-outline-rounded'
 // The looping arrow of the material symbol called "360".
 import Rotate360 from '~icons/material-symbols/360-rounded'
 import Search from '~icons/material-symbols/search-rounded'
+// Gestricheltes Viereck, z.B. für eine gestrichelte Kontur.
+import Select from '~icons/material-symbols/select-rounded'
 import SouthEast from '~icons/material-symbols/south-east-rounded'
 import SouthWest from '~icons/material-symbols/south-west-rounded'
 import Settings from '~icons/material-symbols/settings-outline-rounded'
@@ -130,6 +132,7 @@ export const icons = {
   print: Print,
   rotate_360: Rotate360,
   search: Search,
+  select: Select,
   settings: Settings,
   share: Share,
   south_east: SouthEast,

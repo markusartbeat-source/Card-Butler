@@ -222,6 +222,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     borderGroup: 'Contour',
     borderColor: 'Couleur du contour',
     borderWidth: 'Épaisseur du contour',
+    borderLineType: 'Style de trait',
+    borderSolid: 'Trait plein',
+    borderDashed: 'Tirets',
   },
   imageViewer: {
     imageSettings: "Réglages de l'image",

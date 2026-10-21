@@ -10,7 +10,8 @@ export const selectedElementId = ref<string | null>(null)
 export const selectedElementNode = ref<HTMLElement | null>(null)
 
 // Ob das ausgewählte Element gerade bearbeitet wird – die 2. Stufe der Auswahl:
-// Tippen beim Text, Ausschnitt anpassen beim Bild. Jede neue Auswahl beendet sie.
+// Tippen beim Text, Ausschnitt anpassen beim Bild, Formen haben keine. Jede neue
+// Auswahl beendet sie.
 export const isEditingSelectedElement = ref(false)
 
 export function selectElement(id: string) {

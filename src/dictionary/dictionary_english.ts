@@ -221,6 +221,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     borderGroup: 'Stroke',
     borderColor: 'Stroke color',
     borderWidth: 'Stroke width',
+    borderLineType: 'Line style',
+    borderSolid: 'Solid',
+    borderDashed: 'Dashed',
   },
   imageViewer: {
     imageSettings: 'Image settings',

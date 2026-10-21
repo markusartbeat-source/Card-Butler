@@ -41,12 +41,13 @@ const borderRadius = computed(() => {
 })
 
 // Die Kontur liegt wie in Figma innen: Die Box zählt sie zu ihrer Größe
-// (border-box). Stärke in mm.
+// (border-box). Stärke in mm, SOLID/DASHED klein geschrieben sind die
+// CSS-Linienarten.
 const shapeStyle = computed(() => {
   const { color, border } = shapeAppearanceOf(props.element.data)
   return {
     backgroundColor: color,
-    border: `${border.width}mm solid ${border.color}`,
+    border: `${border.width}mm ${border.lineType.toLowerCase()} ${border.color}`,
     borderRadius: borderRadius.value,
   }
 })

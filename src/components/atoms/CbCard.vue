@@ -110,8 +110,8 @@ function pictureCropOnThisCard(elementId: string) {
 // „transform“: Moveable liest es, um seinen Rahmen im selben Winkel zu zeichnen.
 // Eine automatische Seite eines Textfelds bleibt offen und wächst mit dem
 // Inhalt – undefined löscht dabei auch die px, die die Anfasser beim Ziehen
-// setzen. Bilder haben immer eine feste Größe. Beim Bild gilt die Deckkraft nur
-// dem Bild im Rahmen, das setzt es selbst.
+// setzen. Bilder und Formen haben immer eine feste Größe. Beim Bild gilt die
+// Deckkraft nur dem Bild im Rahmen, das setzt es selbst.
 function elementStyle(element: CardSetElement) {
   const { data, rotation } = element
   const sizing = textSizingOf(element)

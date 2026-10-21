@@ -221,6 +221,9 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     borderGroup: 'Contorno',
     borderColor: 'Cor do contorno',
     borderWidth: 'Espessura do contorno',
+    borderLineType: 'Tipo de linha',
+    borderSolid: 'Contínua',
+    borderDashed: 'Tracejada',
   },
   imageViewer: {
     imageSettings: 'Definições da imagem',

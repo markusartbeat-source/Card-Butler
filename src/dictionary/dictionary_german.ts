@@ -254,6 +254,9 @@ export const dictionaryGerman = {
     borderGroup: 'Kontur',
     borderColor: 'Konturfarbe',
     borderWidth: 'Konturstärke',
+    borderLineType: 'Linienart',
+    borderSolid: 'Durchgezogen',
+    borderDashed: 'Gestrichelt',
   },
   // The overlay for looking at a single picture.
   imageViewer: {
