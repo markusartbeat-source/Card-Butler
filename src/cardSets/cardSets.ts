@@ -6,6 +6,7 @@ import { newerFirst, olderFirst } from '../api/postOffice/resource'
 import type { CardElementValues } from '../cardElements/cardValues'
 import type { TextSizing } from '../cardElements/text/textSizing'
 import { rememberImages } from '../images/knownImages'
+import { inRememberedLayerOrder } from '../layers/layerOrder'
 
 export type Card = {
   id: string
@@ -64,9 +65,9 @@ export function cardFromResource(cardResource: CardResource): Card {
 
 /** Macht aus einem vollständigen Kartenset des Backends eins der App, samt
     Karten, Elementen, Texten und Bildern der Karten. Die neueste Karte steht
-    vorn – dort, wo auch neu angelegte hinkommen. Das neueste Element steht
-    hinten, also obenauf. Name und Adresse der Bilder merkt sich die App
-    projektweit. */
+    vorn – dort, wo auch neu angelegte hinkommen. Die Elemente stehen so, wie
+    ihre Ebenen zuletzt sortiert waren, sonst das neueste hinten, also obenauf.
+    Name und Adresse der Bilder merkt sich die App projektweit. */
 export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
   const cards = fullCardSet.cards.sort(newerFirst).map(cardFromResource)
   for (const { parentId, data } of fullCardSet.values) {
@@ -74,10 +75,11 @@ export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
     if (card) card.values[data.elementId] = data.value
   }
   rememberImages(fullCardSet.images)
+  const elements = fullCardSet.elements.sort(olderFirst).map(cardSetElementFromResource)
   return {
     ...cardSetFromResource(fullCardSet.set),
     cards,
-    elements: fullCardSet.elements.sort(olderFirst).map(cardSetElementFromResource),
+    elements: inRememberedLayerOrder(fullCardSet.set.id, elements),
   }
 }
 

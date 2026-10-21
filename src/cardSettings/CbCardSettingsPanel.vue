@@ -87,7 +87,7 @@
           v-if="isVisible"
           :key="activeTab"
           class="animate-cb-rise mt-6"
-          :elements="cardSet.elements"
+          :card-set="cardSet"
           :card="card"
         />
       </template>

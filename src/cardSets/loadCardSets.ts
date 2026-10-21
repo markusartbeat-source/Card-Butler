@@ -23,8 +23,8 @@ export async function loadCardSets(projectId: string) {
 }
 
 /** Holt ein Kartenset samt Karten neu vom Backend, z.B. wenn jemand anderes es
- *  inzwischen geändert hat. Lokale Reihenfolge und Druckanzahl gehen dabei
- *  verloren. Liefert, ob das geklappt hat. */
+ *  inzwischen geändert hat. Lokale Reihenfolge der Karten und Druckanzahl gehen
+ *  dabei verloren, die der Ebenen bleibt. Liefert, ob das geklappt hat. */
 export async function reloadCardSet(cardSet: CardSet) {
   try {
     const fullCardSet = await postOffice.cardSets.loadFullCardSet(cardSet.id)

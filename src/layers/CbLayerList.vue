@@ -31,22 +31,26 @@
 import { computed, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { shiningElementId } from '../cardElements/elementShine'
-import type { Card, CardSetElement } from '../cardSets/cardSets'
+import type { Card, CardSet, CardSetElement } from '../cardSets/cardSets'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
 import CbLayerRow from './CbLayerRow.vue'
+import { rememberLayerOrder } from './layerOrder'
 
-// Die Elemente des Sets – das letzte liegt auf der Karte obenauf. card ist die
-// offene Karte, ihre Werte zeigen die Vorschaubilder.
-const props = defineProps<{ elements: CardSetElement[]; card: Card }>()
+// Die Elemente des Sets sind die Ebenen – das letzte liegt auf der Karte
+// obenauf. card ist die offene Karte, ihre Werte zeigen die Vorschaubilder.
+const props = defineProps<{ cardSet: CardSet; card: Card }>()
 
 // Die oberste Ebene steht oben in der Liste. Eine neue Reihenfolge geht
 // umgedreht zurück ans Set – in dieselbe Liste, nicht als neue: Ein
 // „Rückgängig“ nach dem Löschen eines Elements setzt es in diese Liste zurück.
+// Der Browser merkt sie sich, das Backend kennt keine.
 const topLayerFirst = computed({
-  get: () => [...props.elements].reverse(),
+  get: () => [...props.cardSet.elements].reverse(),
   set: (layers) => {
-    props.elements.splice(0, props.elements.length, ...[...layers].reverse())
+    const { elements } = props.cardSet
+    elements.splice(0, elements.length, ...[...layers].reverse())
+    rememberLayerOrder(props.cardSet)
   },
 })
 
