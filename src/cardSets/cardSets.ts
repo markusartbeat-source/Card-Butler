@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { CardSetResource, FullCardSet } from '../api/cardSets/cardSetsApi'
+import type { CardSetData, CardSetResource, FullCardSet } from '../api/cardSets/cardSetsApi'
 import type { CardResource } from '../api/cards/cardsApi'
 import type { ElementData, ElementResource } from '../api/elements/elementsApi'
 import { newerFirst, olderFirst } from '../api/postOffice/resource'
@@ -35,15 +35,23 @@ export type CardSetElement = {
 
 // A project has many card sets, each with its own cards. Header, project page
 // and the sets panel all read from this one list.
-export type CardSet = { id: string; name: string; cards: Card[]; elements: CardSetElement[] }
+// data sind die Einstellungen des Sets aus dem Backend (Name, Maße, Farbe,
+// Anschnitt), die Version geht beim Ändern als If-Match mit.
+export type CardSet = {
+  id: string
+  version: number
+  data: CardSetData
+  cards: Card[]
+  elements: CardSetElement[]
+}
 
 // Die Kartensets des geöffneten Projekts. null, solange sie nicht geladen sind.
 export const cardSets = ref<CardSet[] | null>(null)
 
 /** Macht aus einem Kartenset des Backends eins der App. Karten und Elemente
     kommen eigens dazu. */
-export function cardSetFromResource(cardSetResource: CardSetResource): CardSet {
-  return { id: cardSetResource.id, name: cardSetResource.data.name, cards: [], elements: [] }
+export function cardSetFromResource({ id, version, data }: CardSetResource): CardSet {
+  return { id, version, data, cards: [], elements: [] }
 }
 
 /** Macht aus einem Element des Backends eins des Sets. */

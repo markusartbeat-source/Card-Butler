@@ -238,7 +238,7 @@ const navigationMenus = computed(() => [
       // Every card set stands here with its own name, the last entry adds one.
       ...(cardSets.value ?? []).map((cardSet) => ({
         value: cardSet.id,
-        label: cardSet.name,
+        label: cardSet.data.name,
         icon: 'playing_cards' as const,
       })),
       { value: 'new-card-set', label: dictionary.header.newCardSet, icon: 'add_2' as const },

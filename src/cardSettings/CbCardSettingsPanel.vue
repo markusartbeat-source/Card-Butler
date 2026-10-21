@@ -26,12 +26,11 @@
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(1)">
             <CbSettingsHeading>{{ dictionary.cardEditor.sizesGroup }}</CbSettingsHeading>
             <CbSizeFields
-              :width="size.width"
-              :height="size.height"
+              :width="cardSet.data.width"
+              :height="cardSet.data.height"
               :width-label="dictionary.cardEditor.width"
               :height-label="dictionary.cardEditor.height"
               :link-label="dictionary.cardEditor.linkSizes"
-              @change="(side, value) => (size[side] = value)"
             />
             <CbSelect
               v-model="unit"
@@ -53,7 +52,7 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(3)">
             <CbSettingsHeading>{{ dictionary.cardEditor.colorGroup }}</CbSettingsHeading>
-            <CbColorPicker v-model="color" :label="dictionary.cardEditor.pickColor" />
+            <CbColorPicker :model-value="cardSet.data.color" :label="dictionary.cardEditor.pickColor" />
           </div>
 
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(4)" />
@@ -72,13 +71,14 @@
               </CbTooltip>
             </div>
             <CbSizeFields
-              :width="bleed.width"
-              :height="bleed.height"
+              :width="cardSet.data.bleedWidth"
+              :height="cardSet.data.bleedHeight"
               :width-label="dictionary.cardEditor.width"
               :height-label="dictionary.cardEditor.height"
               :link-label="dictionary.cardEditor.linkSizes"
-              @change="(side, value) => (bleed[side] = value)"
             />
+            <!-- TEMPORÄR: Set-Version zum Prüfen, ob Speichern sie hochzählt. -->
+            <p class="text-sm text-white">{{ cardSet.version }}</p>
           </div>
         </div>
       </template>
@@ -109,7 +109,6 @@ import CbTabs from '../components/atoms/CbTabs.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.vue'
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
-import { cardFormat } from '../card/cardFormat'
 import { uniformCornerRadii } from '../card/cornerRadii'
 import type { Card, CardSet } from '../cardSets/cardSets'
 import CbLayerList from '../layers/CbLayerList.vue'
@@ -129,14 +128,11 @@ function riseDelay(step: number) {
   return { animationDelay: `${step * 60}ms` }
 }
 
-// The values only live in the panel for now, they do not change the card yet.
+// Größe, Farbe und Anschnitt kommen aus dem Set. Die übrigen Werte leben
+// vorerst nur im Panel und ändern die Karte noch nicht.
 const printCount = ref('1')
-// Startet beim echten Kartenformat in mm, ändert es aber noch nicht.
-const size = ref({ width: cardFormat.value.width, height: cardFormat.value.height })
 const unit = ref('mm')
 const cornerRadii = ref(uniformCornerRadii(20))
-const color = ref('#ffffff')
-const bleed = ref({ width: 3, height: 3 })
 
 const units = computed(() => [
   { value: 'cm', label: dictionary.cardEditor.unitCentimeters },
