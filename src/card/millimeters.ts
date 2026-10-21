@@ -25,8 +25,8 @@ export function measureInMillimeters(element: HTMLElement) {
 }
 
 // Millimeter fürs Panel: eine Nachkommastelle, mit dem Dezimalzeichen der
-// gewählten Sprache.
-export function formatMillimeters(value: number | undefined) {
+// gewählten Sprache. Ohne Wert ein leerer Text.
+export function formatMillimeters(value: number | null | undefined) {
   return value?.toLocaleString(currentLanguage.value, { maximumFractionDigits: 1 }) ?? ''
 }
 

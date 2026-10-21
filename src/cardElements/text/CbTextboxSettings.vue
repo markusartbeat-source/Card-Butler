@@ -11,43 +11,32 @@
         :items="sizings"
       />
     </div>
-    <!-- Eine automatische Seite zeigt „-“. Verknüpfen hält beim Eintippen das
-         Seitenverhältnis, die Anfasser ziehen weiter frei. -->
-    <div class="flex items-center gap-3">
-      <CbInput
-        v-model="texts.width"
-        class="flex-1"
-        :label="dictionary.cardEditor.width"
-        :placeholder="dictionary.cardEditor.automaticSizeMark"
-        :spoken-placeholder="dictionary.cardEditor.automaticSize"
-        @change="applyText('width')"
-      />
-      <CbToggle
-        v-model="areSizesLinked"
-        icon="link"
-        :disabled="!canLinkSizes"
-        :aria-label="dictionary.cardEditor.linkSizes"
-      />
-      <CbInput
-        v-model="texts.height"
-        class="flex-1"
-        :label="dictionary.cardEditor.height"
-        :placeholder="dictionary.cardEditor.automaticSizeMark"
-        :spoken-placeholder="dictionary.cardEditor.automaticSize"
-        @change="applyText('height')"
-      />
-    </div>
+    <!-- Eine automatische Seite zeigt „-“, ohne Verhältnis zum Halten.
+         Verknüpfen hält beim Eintippen das Seitenverhältnis, die Anfasser ziehen
+         weiter frei. -->
+    <CbSizeFields
+      :width="sizing === 'autoWidth' ? null : data?.width"
+      :height="sizing === 'fixed' ? data?.height : null"
+      :width-label="dictionary.cardEditor.width"
+      :height-label="dictionary.cardEditor.height"
+      :link-label="dictionary.cardEditor.linkSizes"
+      :link-disabled="sizing !== 'fixed'"
+      :placeholder="dictionary.cardEditor.automaticSizeMark"
+      :spoken-placeholder="dictionary.cardEditor.automaticSize"
+      @change="
+        (side, millimeters, keepsAspectRatio) =>
+          changeTextSize(elementId, side, millimeters, keepsAspectRatio)
+      "
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import CbInput from '../../components/atoms/CbInput.vue'
+import { computed } from 'vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
-import CbToggle from '../../components/atoms/CbToggle.vue'
+import CbSizeFields from '../../components/molecules/CbSizeFields.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
 import { findCardSetElement } from '../cardElements'
-import { formatMillimeters, parseMillimeters } from '../../card/millimeters'
 import { changeTextSize, changeTextSizing, textSizingOf } from './textSizing'
 
 const props = defineProps<{ elementId: string }>()
@@ -79,30 +68,4 @@ const sizingIndex = computed({
 })
 
 const data = computed(() => element.value?.data)
-const areSizesLinked = ref(false)
-// Bei „-“ gibt es kein Verhältnis zu halten.
-const canLinkSizes = computed(() => sizing.value === 'fixed')
-
-// Automatisch: Feld leer, es zeigt dann „-“.
-const storedTexts = computed(() => ({
-  width: sizing.value === 'autoWidth' ? '' : formatMillimeters(data.value?.width),
-  height: sizing.value === 'fixed' ? formatMillimeters(data.value?.height) : '',
-}))
-const texts = ref({ ...storedTexts.value })
-
-// Ziehen an den Anfassern ändert die Größe erst am Ende – dann stehen hier die
-// neuen Werte.
-watch(storedTexts, (stored) => (texts.value = { ...stored }))
-
-// Wie bei der Position: Gilt bei Enter bzw. beim Verlassen des Felds,
-// unveränderter Text zählt nicht. Ungültiges oder ≤ 0 zeigt wieder den
-// gespeicherten Wert bzw. „-“.
-function applyText(side: 'width' | 'height') {
-  const text = texts.value[side].trim()
-  const value = parseMillimeters(text)
-  if (text !== storedTexts.value[side] && value !== undefined && value > 0) {
-    changeTextSize(props.elementId, side, value, areSizesLinked.value && canLinkSizes.value)
-  }
-  texts.value = { ...storedTexts.value }
-}
 </script>

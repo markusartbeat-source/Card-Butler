@@ -25,15 +25,14 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(1)">
             <CbSettingsHeading>{{ dictionary.cardEditor.sizesGroup }}</CbSettingsHeading>
-            <div class="flex items-center gap-3">
-              <CbInput v-model="width" class="flex-1" :label="dictionary.cardEditor.width" />
-              <CbToggle
-                v-model="areSizesLinked"
-                icon="link"
-                :aria-label="dictionary.cardEditor.linkSizes"
-              />
-              <CbInput v-model="height" class="flex-1" :label="dictionary.cardEditor.height" />
-            </div>
+            <CbSizeFields
+              :width="size.width"
+              :height="size.height"
+              :width-label="dictionary.cardEditor.width"
+              :height-label="dictionary.cardEditor.height"
+              :link-label="dictionary.cardEditor.linkSizes"
+              @change="(side, value) => (size[side] = value)"
+            />
             <CbSelect
               v-model="unit"
               variant="field"
@@ -103,15 +102,14 @@
                 </CbButton>
               </CbTooltip>
             </div>
-            <div class="flex items-center gap-3">
-              <CbInput v-model="bleedWidth" class="flex-1" :label="dictionary.cardEditor.width" />
-              <CbToggle
-                v-model="isBleedLinked"
-                icon="link"
-                :aria-label="dictionary.cardEditor.linkSizes"
-              />
-              <CbInput v-model="bleedHeight" class="flex-1" :label="dictionary.cardEditor.height" />
-            </div>
+            <CbSizeFields
+              :width="bleed.width"
+              :height="bleed.height"
+              :width-label="dictionary.cardEditor.width"
+              :height-label="dictionary.cardEditor.height"
+              :link-label="dictionary.cardEditor.linkSizes"
+              @change="(side, value) => (bleed[side] = value)"
+            />
           </div>
         </div>
       </template>
@@ -133,6 +131,8 @@ import CbSlideSwap from '../components/atoms/CbSlideSwap.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'
 import CbToggle from '../components/atoms/CbToggle.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
+import CbSizeFields from '../components/molecules/CbSizeFields.vue'
+import { cardFormat } from '../card/cardFormat'
 
 // The panel is already on the page while the card is still flying in. The
 // groups are only built once it is really on screen, otherwise their entrance
@@ -149,17 +149,14 @@ function riseDelay(step: number) {
 
 // The values only live in the panel for now, they do not change the card yet.
 const printCount = ref('1')
-const width = ref('20')
-const height = ref('90')
-const areSizesLinked = ref(false)
-const unit = ref('cm')
+// Startet beim echten Kartenformat in mm, ändert es aber noch nicht.
+const size = ref({ width: cardFormat.value.width, height: cardFormat.value.height })
+const unit = ref('mm')
 const cornerRadius = ref('20')
 const areCornersSeparate = ref(false)
 const corners = ref({ topLeft: '20', topRight: '20', bottomLeft: '20', bottomRight: '20' })
 const color = ref('#ffffff')
-const bleedWidth = ref('3')
-const bleedHeight = ref('3')
-const isBleedLinked = ref(false)
+const bleed = ref({ width: 3, height: 3 })
 
 // The single field can hold all four values separated by commas. A missing
 // value falls back to the first one, so "20" fills every corner.
