@@ -42,6 +42,8 @@
           <CbElementCornerSettings :element-id="elementId" />
           <CbDivider />
         </template>
+        <CbShapeBorderSettings :element-id="elementId" />
+        <CbDivider />
       </template>
       <CbElementPositionSettings :element-id="elementId" />
     </div>
@@ -63,6 +65,7 @@ import CbElementPositionSettings from './CbElementPositionSettings.vue'
 import { findCardSetElement, maxElementNameLength, renameElement } from './cardElements'
 import CbPictureAppearanceSettings from './picture/CbPictureAppearanceSettings.vue'
 import CbShapeAppearanceSettings from './shape/CbShapeAppearanceSettings.vue'
+import CbShapeBorderSettings from './shape/CbShapeBorderSettings.vue'
 import CbTextAppearanceSettings from './text/CbTextAppearanceSettings.vue'
 import CbTextboxSettings from './text/CbTextboxSettings.vue'
 

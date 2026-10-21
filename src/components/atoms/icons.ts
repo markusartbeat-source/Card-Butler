@@ -44,6 +44,7 @@ import Image from '~icons/material-symbols/image-outline-rounded'
 import Info from '~icons/material-symbols/info-outline-rounded'
 import KeyboardArrowDown from '~icons/material-symbols/keyboard-arrow-down-rounded'
 import LightMode from '~icons/material-symbols/light-mode-outline-rounded'
+import LineWeight from '~icons/material-symbols/line-weight-rounded'
 import Link from '~icons/material-symbols/link-rounded'
 import LiveTv from '~icons/material-symbols/live-tv-outline-rounded'
 import LocationOn from '~icons/material-symbols/location-on-outline-rounded'
@@ -115,6 +116,7 @@ export const icons = {
   info: Info,
   keyboard_arrow_down: KeyboardArrowDown,
   light_mode: LightMode,
+  line_weight: LineWeight,
   link: Link,
   live_tv: LiveTv,
   location_on: LocationOn,

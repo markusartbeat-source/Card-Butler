@@ -219,6 +219,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     textAlignBottom: 'En bas',
     textColor: 'Couleur du texte',
     fillColor: 'Couleur de remplissage',
+    borderGroup: 'Contour',
+    borderColor: 'Couleur du contour',
+    borderWidth: 'Épaisseur du contour',
   },
   imageViewer: {
     imageSettings: "Réglages de l'image",

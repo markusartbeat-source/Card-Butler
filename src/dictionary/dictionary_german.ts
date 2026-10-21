@@ -251,6 +251,9 @@ export const dictionaryGerman = {
     textAlignBottom: 'Unten',
     textColor: 'Textfarbe',
     fillColor: 'Füllfarbe',
+    borderGroup: 'Kontur',
+    borderColor: 'Konturfarbe',
+    borderWidth: 'Konturstärke',
   },
   // The overlay for looking at a single picture.
   imageViewer: {

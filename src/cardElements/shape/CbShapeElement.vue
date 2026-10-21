@@ -1,13 +1,14 @@
 <template>
-  <!-- Ein Viereck oder Kreis, gefüllt mit seiner Farbe. data-element-id lässt die Anfasser sie
-       auf der Karte finden, Lage, Größe und Deckkraft gibt die Karte vor. Im
-       Editor per Tab erreichbar und wie ein Knopf mit Enter oder Leertaste
-       auszuwählen – einen 2. Schritt zum Bearbeiten wie beim Text gibt es nicht. -->
+  <!-- Ein Viereck oder Kreis, gefüllt mit seiner Farbe. data-element-id lässt die
+       Anfasser es auf der Karte finden, Lage, Größe und Deckkraft gibt die Karte
+       vor. Im Editor per Tab erreichbar und wie ein Knopf mit Enter oder
+       Leertaste auszuwählen – einen 2. Schritt zum Bearbeiten wie beim Text gibt
+       es nicht. -->
   <div
     v-ripple
     class="overflow-hidden"
     :class="{ 'cursor-pointer': editable }"
-    :style="{ backgroundColor: shapeAppearanceOf(element.data).color, borderRadius }"
+    :style="shapeStyle"
     :data-element-id="element.id"
     :tabindex="editable ? 0 : undefined"
     :role="editable ? 'button' : undefined"
@@ -37,6 +38,17 @@ const borderRadius = computed(() => {
   const { id, data } = props.element
   if (data.type === 'CIRCLE') return '50%'
   return cornerRadiiStyle(cornerRadiiOfElement(id, data.radius))
+})
+
+// Die Kontur liegt wie in Figma innen: Die Box zählt sie zu ihrer Größe
+// (border-box). Stärke in mm.
+const shapeStyle = computed(() => {
+  const { color, border } = shapeAppearanceOf(props.element.data)
+  return {
+    backgroundColor: color,
+    border: `${border.width}mm solid ${border.color}`,
+    borderRadius: borderRadius.value,
+  }
 })
 
 function selectShape() {

@@ -218,6 +218,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     textAlignBottom: 'Bottom',
     textColor: 'Text color',
     fillColor: 'Fill color',
+    borderGroup: 'Stroke',
+    borderColor: 'Stroke color',
+    borderWidth: 'Stroke width',
   },
   imageViewer: {
     imageSettings: 'Image settings',
