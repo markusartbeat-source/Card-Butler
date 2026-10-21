@@ -21,37 +21,53 @@ function findIconByName(name: string) {
   return textIcons.value.find((icon) => icon.name.trim().toLowerCase() === name.toLowerCase())
 }
 
-// The picture that stands in for the icon name inside the editable text.
-// It remembers the icon by id, so a renamed icon keeps its place in the text.
+// Aussehen jedes Icon-Bilds im Text – für das Tippfeld und die Karten gleich.
 // Size, lift and side spacing come from the CSS variables the text carries
 // (see textIconSettings.ts). A positive offset lifts the icon.
+export const iconImageClasses = 'inline object-contain align-middle'
+export const iconImageStyle = {
+  height: 'var(--icon-height)',
+  width: 'var(--icon-width)',
+  translate: '0 calc(-1 * var(--icon-vertical-offset))',
+  marginInline: 'var(--icon-side-spacing)',
+}
+
+// The picture that stands in for the icon name inside the editable text.
+// It remembers the icon by id, so a renamed icon keeps its place in the text.
 export function createIconImage(icon: TextIcon) {
   const image = document.createElement('img')
   image.src = icon.image
   image.alt = icon.name
   image.dataset.iconId = String(icon.id)
-  image.className = 'inline object-contain align-middle'
-  image.style.height = 'var(--icon-height)'
-  image.style.width = 'var(--icon-width)'
-  image.style.translate = '0 calc(-1 * var(--icon-vertical-offset))'
-  image.style.marginInline = 'var(--icon-side-spacing)'
+  image.className = iconImageClasses
+  Object.assign(image.style, iconImageStyle)
   return image
+}
+
+// Ein Stück Text; steht es für ein Icon, ist icon gesetzt und text das Wort.
+export type TextOrIconPart = { text: string; icon?: TextIcon }
+
+// Zerlegt den gespeicherten Text in Textstücke und Icons.
+export function splitByIconWords(text: string) {
+  const parts: TextOrIconPart[] = []
+  let lastIndex = 0
+  for (const match of text.matchAll(iconWordPattern())) {
+    const icon = findIconByName(match[1])
+    if (!icon) continue
+    parts.push({ text: text.slice(lastIndex, match.index) })
+    parts.push({ text: match[0], icon })
+    lastIndex = match.index + match[0].length
+  }
+  parts.push({ text: text.slice(lastIndex) })
+  return parts
 }
 
 // Turns the stored text into the nodes for the editable area: plain text
 // stays text, an icon name becomes its picture.
 export function textToNodes(text: string) {
-  const nodes: Node[] = []
-  let lastIndex = 0
-  for (const match of text.matchAll(iconWordPattern())) {
-    const icon = findIconByName(match[1])
-    if (!icon) continue
-    nodes.push(document.createTextNode(text.slice(lastIndex, match.index)))
-    nodes.push(createIconImage(icon))
-    lastIndex = match.index + match[0].length
-  }
-  nodes.push(document.createTextNode(text.slice(lastIndex)))
-  return nodes
+  return splitByIconWords(text).map((part) =>
+    part.icon ? createIconImage(part.icon) : document.createTextNode(part.text),
+  )
 }
 
 // The way back: pictures become their icon's current name, line breaks a

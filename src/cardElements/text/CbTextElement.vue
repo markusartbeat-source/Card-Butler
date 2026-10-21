@@ -16,7 +16,7 @@
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
     ]"
-    :style="textStyle"
+    :style="[textStyle, iconStyleVariables]"
     :data-element-id="element.id"
     :tabindex="editable ? 0 : undefined"
     :role="isButton ? 'button' : undefined"
@@ -47,14 +47,13 @@
     />
     <template v-else>
       <span v-if="isPlaceholderShown" class="text-background/70">{{ placeholder }}</span>
-      <CbHighlightedText :text="content" :search-word="highlightSearch ? searchWord : ''" />
+      <CbTextWithIcons :text="content" :search-word="highlightSearch ? searchWord : ''" />
     </template>
   </span>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, useTemplateRef } from 'vue'
-import CbHighlightedText from '../../components/atoms/CbHighlightedText.vue'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import {
   isEditingElement,
@@ -64,6 +63,8 @@ import {
   startEditingElement,
 } from '../../elementTransform/elementSelection'
 import { searchWord } from '../../search/searchWord'
+import CbTextWithIcons from '../../textIcons/CbTextWithIcons.vue'
+import { iconStyleVariables } from '../../textIcons/textIconSettings'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
 import { textAppearanceOf } from './textAppearance'
 import { textSizingOf } from './textSizing'
