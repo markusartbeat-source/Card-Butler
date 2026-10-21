@@ -2,11 +2,11 @@
   <CbExportDialog v-model:open="isExportDialogOpen" :cards="exportCards" />
 
   <CbCardEditor
-    v-if="selectedCard && selectedCardSet && selectedCardRect"
+    v-if="selectedCard && selectedCardSet && selectedCardBox"
     :key="selectedCard.id"
     :card="selectedCard"
     :card-set="selectedCardSet"
-    :start-rect="selectedCardRect"
+    :grid-card="selectedCardBox"
     @close="selectedCardId = null"
   />
 
@@ -54,7 +54,7 @@
                 risenCardIds.has(addCardId(cardSet)) ? '' : 'animate-cb-rise',
                 dimWhileDraggingClasses,
               ]"
-              :style="{ ...cardFormatStyle(cardFormat), zoom: gridZoom }"
+              :style="{ ...cardFormatStyle(cardSet.data), zoom: gridZoom }"
               @animationend="markRisen(addCardId(cardSet), $event)"
               @click="createCard(cardSet)"
             />
@@ -91,6 +91,7 @@
               >
                 <CbCardBackdrops
                   :count="card.printCount"
+                  :size="cardSet.data"
                   class="visible col-start-1 row-start-1 transition-opacity"
                   :class="[
                     isTurningCards ? 'duration-0' : 'duration-300',
@@ -197,7 +198,7 @@ import {
 import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
 import { currentProject } from '../project/currentProject'
-import { cardFormat, cardFormatStyle, gridZoom } from '../card/cardFormat'
+import { cardFormatStyle, gridZoom } from '../card/cardFormat'
 import { cardMatchesSearch } from '../search/cardMatchesSearch'
 import { searchWord } from '../search/searchWord'
 
@@ -305,12 +306,13 @@ const selectedCardSet = computed(() =>
   ),
 )
 
-// Where the clicked card sits in the grid — the editor starts its flight there.
-const selectedCardRect = ref<DOMRect | null>(null)
+// Die angeklickte Karte in der Übersicht – dort startet und landet der Flug des
+// Editors.
+const selectedCardBox = ref<HTMLElement | null>(null)
 
 function selectCard(id: string, event: MouseEvent) {
   if (isDragging.value) return
-  selectedCardRect.value = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  selectedCardBox.value = event.currentTarget as HTMLElement
   selectedCardId.value = id
 }
 

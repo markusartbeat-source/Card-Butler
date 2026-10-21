@@ -35,6 +35,7 @@ type Side = 'width' | 'height'
 
 // Breite und Höhe in mm. Eine Seite ohne Wert zeigt den Platzhalter.
 // linkDisabled sperrt das Verknüpfen, z.B. wenn es kein Verhältnis zu halten gibt.
+// allowsZero lässt auch 0 mm zu, z.B. „kein Anschnitt“.
 const props = defineProps<{
   width?: number | null
   height?: number | null
@@ -42,12 +43,14 @@ const props = defineProps<{
   heightLabel: string
   linkLabel: string
   linkDisabled?: boolean
+  allowsZero?: boolean
   placeholder?: string
   spokenPlaceholder?: string
 }>()
 
-// change: eine neue Seite über 0 mm. keepsAspectRatio sagt, dass die andere
-// Seite im gleichen Verhältnis mitgehen soll – umrechnen muss der Aufrufer.
+// change: eine neue Seite über 0 mm (mit allowsZero ab 0 mm). keepsAspectRatio
+// sagt, dass die andere Seite im gleichen Verhältnis mitgehen soll – umrechnen
+// muss der Aufrufer.
 const emit = defineEmits<{
   change: [side: Side, millimeters: number, keepsAspectRatio: boolean]
 }>()
@@ -55,6 +58,7 @@ const emit = defineEmits<{
 const areSidesLinked = ref(false)
 
 function emitChange(side: Side, millimeters: number) {
-  if (millimeters > 0) emit('change', side, millimeters, areSidesLinked.value && !props.linkDisabled)
+  const isAllowed = millimeters > 0 || (props.allowsZero && millimeters === 0)
+  if (isAllowed) emit('change', side, millimeters, areSidesLinked.value && !props.linkDisabled)
 }
 </script>

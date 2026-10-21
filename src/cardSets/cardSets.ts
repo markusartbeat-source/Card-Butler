@@ -48,6 +48,13 @@ export type CardSet = {
 // Die Kartensets des geöffneten Projekts. null, solange sie nicht geladen sind.
 export const cardSets = ref<CardSet[] | null>(null)
 
+/** Das Set, dem das Element gehört. */
+export function findCardSetOfElement(elementId: string) {
+  return cardSets.value?.find((cardSet) =>
+    cardSet.elements.some((element) => element.id === elementId),
+  )
+}
+
 /** Macht aus einem Kartenset des Backends eins der App. Karten und Elemente
     kommen eigens dazu. */
 export function cardSetFromResource({ id, version, data }: CardSetResource): CardSet {

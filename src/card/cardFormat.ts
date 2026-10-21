@@ -1,11 +1,10 @@
 import { ref } from 'vue'
 
-// How big a card really is. Millimetres, because that is what a printed card is
-// measured in and what people will type into the settings later. Every card of
-// the deck has the same format.
+// Wie groß eine Karte ist, in Millimetern – so misst man gedruckte Karten.
 export type CardFormat = { width: number; height: number; cornerRadius: number }
 
-// The standard trading card. Editing this comes with the card settings.
+// Die übliche Sammelkarte: Startformat neuer Sets. Danach hat jedes Set seine
+// eigene Breite und Höhe (CardSetData), der Eckenradius gilt vorerst für alle.
 export const cardFormat = ref<CardFormat>({ width: 63, height: 88, cornerRadius: 3 })
 
 // How large a card is drawn in each view. 1 means real size on screen; showing
@@ -18,11 +17,12 @@ export const editorZoom = 1.6
 // Rounded down, so six cards plus a scroll bar still fit into one row there.
 export const exportZoom = 0.6
 
-// Hands the format over to CSS, in millimetres just as it is stored.
-export function cardFormatStyle({ width, height, cornerRadius }: CardFormat) {
+// Gibt die Größe einer Karte an CSS weiter, in mm wie gespeichert. Die Ecken
+// runden sich bei allen Karten gleich.
+export function cardFormatStyle({ width, height }: { width: number; height: number }) {
   return {
     '--card-width-mm': `${width}mm`,
     '--card-height-mm': `${height}mm`,
-    '--card-corner-radius-mm': `${cornerRadius}mm`,
+    '--card-corner-radius-mm': `${cardFormat.value.cornerRadius}mm`,
   }
 }

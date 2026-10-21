@@ -31,6 +31,10 @@
               :width-label="dictionary.cardEditor.width"
               :height-label="dictionary.cardEditor.height"
               :link-label="dictionary.cardEditor.linkSizes"
+              @change="
+                (side, millimeters, keepsAspectRatio) =>
+                  changeCardSetSize(cardSet, side, millimeters, keepsAspectRatio)
+              "
             />
             <CbSelect
               v-model="unit"
@@ -76,6 +80,11 @@
               :width-label="dictionary.cardEditor.width"
               :height-label="dictionary.cardEditor.height"
               :link-label="dictionary.cardEditor.linkSizes"
+              allows-zero
+              @change="
+                (side, millimeters, keepsAspectRatio) =>
+                  changeCardSetBleed(cardSet, side, millimeters, keepsAspectRatio)
+              "
             />
             <!-- TEMPORÄR: Set-Version zum Prüfen, ob Speichern sie hochzählt. -->
             <p class="text-sm text-white">{{ cardSet.version }}</p>
@@ -111,6 +120,7 @@ import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.v
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
 import { uniformCornerRadii } from '../card/cornerRadii'
 import type { Card, CardSet } from '../cardSets/cardSets'
+import { changeCardSetBleed, changeCardSetSize } from '../cardSets/changeCardSet'
 import CbLayerList from '../layers/CbLayerList.vue'
 
 // The panel is already on the page while the card is still flying in. The

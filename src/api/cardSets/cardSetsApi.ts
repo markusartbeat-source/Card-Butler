@@ -53,5 +53,28 @@ function loadFullCardSet(cardSetId: string) {
   return postOffice.request<FullCardSet>(`/api/sets/${encodeURIComponent(cardSetId)}/snapshot`)
 }
 
+/** Lädt ein Kartenset ohne Karten und Elemente, z.B. um seine aktuelle Version
+ *  zu erfahren. */
+function loadCardSet(cardSetId: string) {
+  return postOffice.request<CardSetResource>(`/api/sets/${encodeURIComponent(cardSetId)}`)
+}
+
+/** Ersetzt die Einstellungen eines Kartensets komplett. `version` ist der Stand,
+ *  den der Aufrufer kennt – ist er veraltet, antwortet das Backend mit 412. Jede
+ *  Änderung an Karten, Elementen und Werten des Sets erhöht ihn. */
+function updateCardSet(cardSetId: string, cardSetData: CardSetData, version: number) {
+  return postOffice.request<CardSetResource>(`/api/sets/${encodeURIComponent(cardSetId)}`, {
+    method: 'PUT',
+    body: cardSetData,
+    version,
+  })
+}
+
 /** Fach `cardSets` der Poststelle, Aufruf als `postOffice.cardSets.…()`. */
-export const cardSetsApi = { loadCardSets, createCardSet, loadFullCardSet }
+export const cardSetsApi = {
+  loadCardSets,
+  createCardSet,
+  loadFullCardSet,
+  loadCardSet,
+  updateCardSet,
+}

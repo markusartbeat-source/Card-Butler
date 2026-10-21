@@ -1,6 +1,6 @@
 import type { ElementData } from '../api/elements/elementsApi'
-import { cardFormat } from '../card/cardFormat'
-import { cardSets } from '../cardSets/cardSets'
+import { sizeWithChangedSide } from '../card/sizeWithChangedSide'
+import { cardSets, findCardSetOfElement } from '../cardSets/cardSets'
 import { saveElement } from './saveElement'
 import { visibleSizeOf } from './text/textSizing'
 
@@ -56,9 +56,7 @@ export function resizeElementSide(
   const element = findCardSetElement(id)
   if (!element) return
 
-  const { width, height } = element.data
-  const factor = keepsAspectRatio ? millimeters / element.data[side] : 1
-  const size = { width: width * factor, height: height * factor, [side]: millimeters }
+  const size = sizeWithChangedSide(element.data, side, millimeters, keepsAspectRatio)
   resizeElement(id, size.width, size.height)
 }
 
@@ -105,9 +103,10 @@ export function changeElementPosition(id: string, xInMillimeters: number, yInMil
     automatische Größe zählt so, wie sie auf der offenen Karte zu sehen ist. */
 export function alignElementHorizontally(id: string, alignment: HorizontalAlignment) {
   const element = findCardSetElement(id)
-  if (!element) return
+  const cardSet = findCardSetOfElement(id)
+  if (!element || !cardSet) return
 
-  const freeSpace = cardFormat.value.width - visibleSizeOf(element).width
+  const freeSpace = cardSet.data.width - visibleSizeOf(element).width
   const x = { left: 0, center: freeSpace / 2, right: freeSpace }[alignment]
   changeElementPosition(id, x, element.data.position.y)
 }
@@ -116,9 +115,10 @@ export function alignElementHorizontally(id: string, alignment: HorizontalAlignm
     oder in die Mitte. */
 export function alignElementVertically(id: string, alignment: VerticalAlignment) {
   const element = findCardSetElement(id)
-  if (!element) return
+  const cardSet = findCardSetOfElement(id)
+  if (!element || !cardSet) return
 
-  const freeSpace = cardFormat.value.height - visibleSizeOf(element).height
+  const freeSpace = cardSet.data.height - visibleSizeOf(element).height
   const y = { top: 0, center: freeSpace / 2, bottom: freeSpace }[alignment]
   changeElementPosition(id, element.data.position.x, y)
 }

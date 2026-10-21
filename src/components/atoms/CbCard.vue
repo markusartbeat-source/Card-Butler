@@ -42,7 +42,7 @@ import { computed } from 'vue'
 import type { CardElementValues } from '../../cardElements/cardValues'
 import type { CardSetData } from '../../api/cardSets/cardSetsApi'
 import type { CardSetElement } from '../../cardSets/cardSets'
-import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
+import { cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import CbCardElement from '../../cardElements/CbCardElement.vue'
 import { endShine, shiningElementId } from '../../cardElements/elementShine'
 
@@ -55,7 +55,7 @@ import { endShine, shiningElementId } from '../../cardElements/elementShine'
 // will das, damit man sie sieht und anklicken kann. editableElements lässt in
 // die Felder tippen, changeElementValue meldet dann den neuen Inhalt. Nur dann
 // glänzt auch ein Element auf (siehe elementShine).
-// cardSetData sind die Einstellungen des Sets (Farbe, Anschnitt). showBleed
+// cardSetData sind die Einstellungen des Sets (Größe, Farbe, Anschnitt). showBleed
 // zeigt den Anschnitt rund um die Karte, showCutLine die goldene Schnittlinie –
 // beides will bisher nur der Editor. coverBleed verdeckt den Anschnitt, ohne den
 // Rahmen zu verkleinern – so fliegt die Editor-Karte wie die in der Übersicht.
@@ -97,7 +97,7 @@ const frameStyle = computed(() => {
   const { color, bleedWidth, bleedHeight } = props.cardSetData
   const bleed = `${bleedHeight}mm ${bleedWidth}mm`
   return {
-    ...cardFormatStyle(cardFormat.value),
+    ...cardFormatStyle(props.cardSetData),
     zoom: props.zoom,
     backgroundColor: color,
     outlineColor: props.highlightColor,

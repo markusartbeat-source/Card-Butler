@@ -127,7 +127,7 @@ import CbToolbar from '../molecules/CbToolbar.vue'
 import { cardToolbarElements, cardTools, type CardTool } from '../molecules/cardToolbarElements'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
-import { cardFormat, editorZoom } from '../../card/cardFormat'
+import { editorZoom } from '../../card/cardFormat'
 import { findCardSurface } from '../../card/cardSurface'
 import CbElementSettingsPanel from '../../cardElements/CbElementSettingsPanel.vue'
 import { changeCardText, saveWaitingCardTexts } from '../../cardElements/cardValues'
@@ -159,7 +159,8 @@ const props = defineProps<{
   card: Card
   // Das Set der Karte – ihm gehören die Elemente.
   cardSet: CardSet
-  startRect: DOMRect
+  // Die Karte in der Übersicht – dort startet und landet der Flug.
+  gridCard: HTMLElement
 }>()
 
 const emit = defineEmits<{ close: [] }>()
@@ -221,7 +222,8 @@ async function addElementAt(tool: CardTool, centerX: number, centerY: number) {
 
 // Ein Klick auf ein Werkzeug legt sein Element in der Kartenmitte an.
 function addElementFromToolbar(index: number) {
-  addElementAt(cardTools[index], cardFormat.value.width / 2, cardFormat.value.height / 2)
+  const { width, height } = props.cardSet.data
+  addElementAt(cardTools[index], width / 2, height / 2)
 }
 
 // Das Werkzeug, das gerade aus der Toolbar gezogen wird.
@@ -259,14 +261,16 @@ function playBackdropFade(direction: 'in' | 'out') {
 // Fly the card between its place in the grid and the center of the screen.
 // Gemessen wird die Kartenfläche ohne Anschnitt, so deckt sie sich mit der Karte
 // in der Übersicht. Der Anschnitt ist ringsum gleich breit, ihre Mitte ist also
-// die des Wrappers, um die er sich skaliert.
+// die des Wrappers, um die er sich skaliert. Die Karte in der Übersicht wird
+// jedes Mal neu gemessen: Ändert sich die Größe des Sets, steht sie danach
+// woanders.
 function playFlight(direction: 'in' | 'out') {
   const wrapper = cardWrapper.value
   const surface = findCardSurface(wrapper)
   if (!wrapper || !surface) return null
 
   const target = surface.getBoundingClientRect()
-  const start = props.startRect
+  const start = props.gridCard.getBoundingClientRect()
   const moveX = start.left + start.width / 2 - (target.left + target.width / 2)
   const moveY = start.top + start.height / 2 - (target.top + target.height / 2)
   const scaleX = start.width / target.width

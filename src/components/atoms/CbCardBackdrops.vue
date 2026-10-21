@@ -25,9 +25,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cardFormat, cardFormatStyle, gridZoom } from '../../card/cardFormat'
+import { cardFormatStyle, gridZoom } from '../../card/cardFormat'
 
-const props = defineProps<{ count: number }>()
+// size ist die Größe der Karte in mm.
+const props = defineProps<{ count: number; size: { width: number; height: number } }>()
 
 // From the deepest sheet to the one right behind the card, so the deepest
 // paints first. Written out so Tailwind finds the classes.
@@ -45,5 +46,5 @@ const shownSheets = computed(() => {
   return sheets.slice(sheets.length - sheetCount)
 })
 
-const faceStyle = computed(() => ({ ...cardFormatStyle(cardFormat.value), zoom: gridZoom }))
+const faceStyle = computed(() => ({ ...cardFormatStyle(props.size), zoom: gridZoom }))
 </script>
