@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, useTemplateRef } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import {
   isEditingElement,
@@ -65,7 +65,7 @@ import {
 import { searchWord } from '../../search/searchWord'
 import CbTextWithIcons from '../../textIcons/CbTextWithIcons.vue'
 import { iconStyleVariables } from '../../textIcons/textIconSettings'
-import { nodesToText, textToNodes } from '../../textIcons/textIconWords'
+import { nodesToText, replaceTypedIconWords, textToNodes } from '../../textIcons/textIconWords'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
 import { textAppearanceOf } from './textAppearance'
 import { textSizingOf } from './textSizing'
@@ -147,9 +147,29 @@ function stopTyping() {
 }
 
 // Browser hängen ans Ende oft einen Zeilenumbruch nur als Platzhalter an – der
-// zählt nicht, sonst wäre ein geleertes Feld nie mehr leer. Icon-Bilder werden
-// wieder zu ihren Namen.
-function emitTypedText() {
-  emit('update:content', editor.value ? nodesToText(editor.value).replace(/\n$/, '') : '')
+// zählt nicht, sonst wäre ein geleertes Feld nie mehr leer. Fertig getippte
+// Icon-Namen werden erst zum Bild, Bilder beim Zurücklesen wieder zu Namen.
+function typedText(textField: HTMLElement) {
+  replaceTypedIconWords(textField)
+  return nodesToText(textField).replace(/\n$/, '')
 }
+
+function emitTypedText() {
+  if (editor.value) emit('update:content', typedText(editor.value))
+}
+
+// Endet das Tippen (Escape, Klick daneben, Editor schließen), wird auch das
+// Wort am Cursor noch zum Icon. Sofort, solange das Tippfeld noch da ist und
+// bevor der Editor beim Verlassen speichert. Unveränderter Text wird nicht
+// gemeldet, sonst würde er unnötig gespeichert.
+watch(
+  isTyping,
+  (typing) => {
+    if (typing || !editor.value) return
+    window.getSelection()?.removeAllRanges()
+    const text = typedText(editor.value)
+    if (text !== props.content) emit('update:content', text)
+  },
+  { flush: 'sync' },
+)
 </script>

@@ -5,8 +5,8 @@ import shieldImage from '../assets/icons/shield.png'
 
 export type TextIcon = { id: number; name: string; image: string }
 
-// The icons that can be placed inside the text. Dummy data in memory for now;
-// later this belongs to the text element of the card set.
+// The icons that can be placed inside the text. Dummy data in memory for now.
+// Gilt pro Projekt, später lädt und speichert das Backend sie hier.
 export const textIcons = ref<TextIcon[]>([
   { id: 1, name: 'Gold', image: goldImage },
   { id: 2, name: 'Kristall', image: crystalImage },

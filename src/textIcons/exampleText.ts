@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
-// The example text and its font. Dummy data in memory for now; later this
-// belongs to the text element of the card set.
+// The example text and its font. Dummy data in memory for now.
+// Gilt pro Projekt, später lädt und speichert das Backend sie hier.
 export const exampleText = ref(dictionary.textIcons.exampleText)
 export const fontFamily = ref('Arial')
 export const fontWeight = ref('regular')

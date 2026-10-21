@@ -80,14 +80,6 @@
       >
         {{ dictionary.general.save }}
       </CbButton>
-
-      <!-- TEMPORÄR (Plan „Icons im Text“): gespeicherter Rohtext des Felds, in
-           das gerade getippt wird. Absolut, damit die Karte nicht verrutscht. -->
-      <pre
-        v-if="typedRawText !== null"
-        class="absolute top-full right-88 left-0 mt-4 rounded bg-surface p-2 text-sm whitespace-pre-wrap text-white"
-        >{{ typedRawText }}</pre
-      >
     </div>
 
     <!-- Ist ein Element ausgewählt, zeigt das Panel statt der Karte dessen
@@ -184,14 +176,6 @@ const selectedElement = computed(() =>
 const croppedPictureId = computed(() =>
   isEditingSelectedElement.value && selectedElement.value?.data.type === 'PICTURE'
     ? selectedElement.value.id
-    : null,
-)
-
-// TEMPORÄR (Plan „Icons im Text“): Rohtext des Textfelds, in das gerade
-// getippt wird, sonst null.
-const typedRawText = computed(() =>
-  isEditingSelectedElement.value && selectedElement.value?.data.type === 'TEXT'
-    ? (props.card.values[selectedElement.value.id]?.text ?? '')
     : null,
 )
 
