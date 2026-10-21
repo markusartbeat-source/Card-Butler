@@ -26,13 +26,7 @@
       <template v-if="type === 'PICTURE'">
         <CbPictureAppearanceSettings :element-id="elementId" :card="card" />
         <CbDivider />
-        <div class="flex flex-col gap-3">
-          <CbSettingsHeading>{{ dictionary.cardEditor.cornersGroup }}</CbSettingsHeading>
-          <CbCornerRadiusFields
-            :radii="cornerRadii"
-            @change="(radii) => changeElementCornerRadii(elementId, radii)"
-          />
-        </div>
+        <CbElementCornerSettings :element-id="elementId" />
         <CbDivider />
       </template>
       <template v-else-if="type === 'TEXT'">
@@ -44,6 +38,10 @@
       <template v-else>
         <CbShapeAppearanceSettings :element-id="elementId" />
         <CbDivider />
+        <template v-if="type === 'SQUARE'">
+          <CbElementCornerSettings :element-id="elementId" />
+          <CbDivider />
+        </template>
       </template>
       <CbElementPositionSettings :element-id="elementId" />
     </div>
@@ -58,13 +56,11 @@ import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbPanel from '../components/atoms/CbPanel.vue'
-import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
-import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.vue'
 import type { Card } from '../cardSets/cardSets'
 import { clearElementSelection } from '../elementTransform/elementSelection'
+import CbElementCornerSettings from './CbElementCornerSettings.vue'
 import CbElementPositionSettings from './CbElementPositionSettings.vue'
 import { findCardSetElement, maxElementNameLength, renameElement } from './cardElements'
-import { changeElementCornerRadii, cornerRadiiOfElement } from './elementCornerRadii'
 import CbPictureAppearanceSettings from './picture/CbPictureAppearanceSettings.vue'
 import CbShapeAppearanceSettings from './shape/CbShapeAppearanceSettings.vue'
 import CbTextAppearanceSettings from './text/CbTextAppearanceSettings.vue'
@@ -89,8 +85,6 @@ const title = computed(() => {
   }
   return type.value && titles[type.value]
 })
-
-const cornerRadii = computed(() => cornerRadiiOfElement(props.elementId, element.value?.data.radius))
 
 const name = ref(element.value?.data.name ?? '')
 
