@@ -14,10 +14,22 @@ export function fontFamilyItemsIncluding(fontFamily: string) {
     : [...fontFamilyItems, { value: fontFamily, label: fontFamily }]
 }
 
-export const fontWeightItems = computed(() => [
-  { value: 'regular', label: dictionary.cardEditor.fontWeightRegular },
-  { value: 'bold', label: dictionary.cardEditor.fontWeightBold },
+// Diese Schnitte haben alle Schriften oben, feinere wie Light gibt es dort nicht.
+export type FontStyle = 'regular' | 'bold' | 'italic' | 'boldItalic'
+
+export const fontStyleItems = computed(() => [
+  { value: 'regular', label: dictionary.cardEditor.fontStyleRegular },
+  { value: 'bold', label: dictionary.cardEditor.fontStyleBold },
+  { value: 'italic', label: dictionary.cardEditor.fontStyleItalic },
+  { value: 'boldItalic', label: dictionary.cardEditor.fontStyleBoldItalic },
 ])
+
+export const fontStyleClasses: Record<FontStyle, string> = {
+  regular: 'font-normal',
+  bold: 'font-bold',
+  italic: 'font-normal italic',
+  boldItalic: 'font-bold italic',
+}
 
 // Schriftgrößen in mm.
 export const fontSizeItems = [2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 12]

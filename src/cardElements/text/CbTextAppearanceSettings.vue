@@ -11,11 +11,11 @@
       :items="fontFamilyItemsIncluding(fontFamily)"
     />
     <CbSelect
-      v-model="fontWeight"
+      v-model="fontStyle"
       variant="field"
       hide-label
-      :label="dictionary.cardEditor.fontWeight"
-      :items="fontWeightItems"
+      :label="dictionary.cardEditor.fontStyle"
+      :items="fontStyleItems"
     />
     <CbCombobox
       v-model="fontSize"
@@ -68,12 +68,14 @@ import CbSelect from '../../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
 import { changeElementColor, findCardSetElement, previewElementColor } from '../cardElements'
-import { fontFamilyItemsIncluding, fontSizeItems, fontWeightItems } from './fonts'
+import { fontFamilyItemsIncluding, fontSizeItems, fontStyleItems } from './fonts'
 import {
   alignTextHorizontally,
   alignTextVertically,
   changeFontFamily,
   changeFontSize,
+  changeFontStyle,
+  fontStyleOf,
   textAppearanceOf,
 } from './textAppearance'
 
@@ -84,6 +86,11 @@ const element = computed(() => findCardSetElement(props.elementId))
 const fontFamily = computed({
   get: () => textAppearanceOf(element.value?.data).fontFamily,
   set: (value) => changeFontFamily(props.elementId, value),
+})
+
+const fontStyle = computed({
+  get: () => fontStyleOf(props.elementId),
+  set: (value) => changeFontStyle(props.elementId, value),
 })
 
 const fontSize = computed({
@@ -98,7 +105,6 @@ const color = computed({
 })
 
 // Diese Werte leben vorerst nur hier und wirken noch nicht auf den Text.
-const fontWeight = ref('regular')
 const lineHeight = ref('20')
 const letterSpacing = ref('0%')
 

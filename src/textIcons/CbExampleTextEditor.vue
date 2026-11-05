@@ -12,7 +12,7 @@
       <div>
         <div class="flex gap-3 p-6">
           <CbSelect v-model="fontFamily" class="flex-1" variant="field" :items="fontFamilyItems" />
-          <CbSelect v-model="fontWeight" class="flex-1" variant="field" :items="fontWeightItems" />
+          <CbSelect v-model="fontStyle" class="flex-1" variant="field" :items="fontStyleItems" />
           <CbCombobox
             v-model="fontSize"
             class="flex-1"
@@ -42,6 +42,7 @@
           aria-multiline="true"
           :aria-label="dictionary.textIcons.exampleTextLabel"
           class="leading-normal whitespace-pre-wrap text-white outline-none"
+          :class="fontStyleClasses[fontStyle]"
           :style="[exampleTextStyle, iconStyleVariables]"
           @focus="editing = true"
           @input="onInput"
@@ -58,8 +59,13 @@ import { computed, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vu
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbCombobox from '../components/atoms/CbCombobox.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
-import { fontFamilyItems, fontSizeItems, fontWeightItems } from '../cardElements/text/fonts'
-import { exampleText, fontFamily, fontWeight, fontSize } from './exampleText'
+import {
+  fontFamilyItems,
+  fontSizeItems,
+  fontStyleClasses,
+  fontStyleItems,
+} from '../cardElements/text/fonts'
+import { exampleText, fontFamily, fontStyle, fontSize } from './exampleText'
 import { textIcons } from './textIconList'
 import { iconStyleVariables } from './textIconSettings'
 import { nodesToText, replaceTypedIconWords, textToNodes } from './textIconWords'
@@ -68,7 +74,6 @@ const editing = ref(false)
 
 const exampleTextStyle = computed(() => ({
   fontFamily: fontFamily.value,
-  fontWeight: fontWeight.value === 'bold' ? 'bold' : 'normal',
   fontSize: `${fontSize.value}mm`,
 }))
 

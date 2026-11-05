@@ -12,6 +12,7 @@
     :class="[
       horizontalAlignmentClasses[element.data.alignment.horizontal],
       verticalAlignmentClasses[element.data.alignment.vertical],
+      fontStyleClasses[fontStyleOf(element.id)],
       wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },
@@ -66,8 +67,9 @@ import { searchWord } from '../../search/searchWord'
 import CbTextWithIcons from '../../textIcons/CbTextWithIcons.vue'
 import { iconStyleVariables } from '../../textIcons/textIconSettings'
 import { nodesToText, replaceTypedIconWords, textToNodes } from '../../textIcons/textIconWords'
+import { fontStyleClasses } from './fonts'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
-import { textAppearanceOf } from './textAppearance'
+import { fontStyleOf, textAppearanceOf } from './textAppearance'
 import { textSizingOf } from './textSizing'
 
 // The content is the one thing each card fills in itself. Only the card
