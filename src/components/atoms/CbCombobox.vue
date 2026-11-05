@@ -12,7 +12,7 @@
     :open-on-change="false"
     selection-behavior="preserve"
     :translations="{ triggerLabel: dictionary.general.showSuggestions }"
-    @select="selectItem"
+    @update:model-value="selectItem"
   >
     <Combobox.Control
       v-ripple
@@ -89,9 +89,9 @@ const storedText = computed(() => formatMillimeters(props.modelValue))
 const text = ref(storedText.value)
 watch(storedText, (stored) => (text.value = stored))
 
-// Ark meldet die Auswahl, bevor es den Text ersetzen würde – deshalb setzt ihn
-// diese Funktion selbst.
-function selectItem({ itemValue }: { itemValue: string }) {
+// Eine Auswahl kommt als neuer Wert der Liste, das Ereignis select löst Ark 5.39
+// nie aus. Den Text fasst Ark nicht an, deshalb setzt ihn diese Funktion selbst.
+function selectItem([itemValue]: string[]) {
   text.value = formatMillimeters(Number(itemValue))
   applyText()
 }
