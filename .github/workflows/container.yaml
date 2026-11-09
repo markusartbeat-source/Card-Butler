@@ -1,0 +1,46 @@
+name: Frontend
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm run build
+      - name: Build image
+        env:
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          IMAGE="ghcr.io/${OWNER,,}/card-butler-frontend:git-${GITHUB_SHA}"
+          docker build --label "org.opencontainers.image.source=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" -t "$IMAGE" .
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+      - name: Check Nginx and frontend routes
+        run: |
+          docker run --rm "$IMAGE" nginx -t
+          docker run -d --name frontend-check -p 127.0.0.1:18080:8080 "$IMAGE"
+          trap 'docker logs frontend-check; docker rm -f frontend-check' EXIT
+          curl --retry 10 --retry-connrefused --retry-delay 1 -fsS http://127.0.0.1:18080/healthz
+          test "$(docker exec frontend-check id -u)" = 10001
+          curl -fsS http://127.0.0.1:18080/ | grep -qi '<!doctype html>'
+          curl -fsS http://127.0.0.1:18080/login/success | grep -qi '<!doctype html>'
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18080/assets/missing-file.js)" = 404
+      - uses: docker/login-action@v4
+        if: github.event_name != 'pull_request'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: docker push "$IMAGE"
+        if: github.event_name != 'pull_request'
