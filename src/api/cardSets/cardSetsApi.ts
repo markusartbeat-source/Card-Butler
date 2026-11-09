@@ -27,7 +27,7 @@ export type FullCardSet = {
   cards: CardResource[]
   elements: ElementResource[]
   /** Die Werte aller Karten des Sets. */
-  values: ValueResource[]
+  cardElementValues: ValueResource[]
   /** Die Bilder, die Elemente oder Karten des Sets zeigen. */
   images: ImageResource[]
 }

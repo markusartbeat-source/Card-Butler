@@ -1,12 +1,12 @@
 import { ref } from 'vue'
-import type { CardSetData, CardSetResource, FullCardSet } from '../api/cardSets/cardSetsApi'
-import type { CardResource } from '../api/cards/cardsApi'
-import type { ElementData, ElementResource } from '../api/elements/elementsApi'
-import { newerFirst, olderFirst } from '../api/postOffice/resource'
+import type { CardSetData, FullCardSet } from '../api/cardSets/cardSetsApi'
+import type { ElementData } from '../api/elements/elementsApi'
 import type { CardElementValues } from '../cardElements/cardValues'
 import type { TextSizing } from '../cardElements/text/textSizing'
 import { rememberImages } from '../images/knownImages'
 import { inRememberedLayerOrder } from '../layers/layerOrder'
+import { cardSetFromSnapshot } from './cardSetModel'
+export { cardSetFromResource, cardSetElementFromResource, cardFromResource } from './cardSetModel'
 
 export type Card = {
   id: string
@@ -55,47 +55,16 @@ export function findCardSetOfElement(elementId: string) {
   )
 }
 
-/** Macht aus einem Kartenset des Backends eins der App. Karten und Elemente
-    kommen eigens dazu. */
-export function cardSetFromResource({ id, version, data }: CardSetResource): CardSet {
-  return { id, version, data, cards: [], elements: [] }
-}
-
-/** Macht aus einem Element des Backends eins des Sets. */
-export function cardSetElementFromResource({ id, version, data }: ElementResource): CardSetElement {
-  return { id, version, data, savedData: JSON.stringify(data), rotation: 0 }
-}
-
-/** Macht aus einer Karte des Backends eine der App. Ihren Namen braucht die App
-    nicht, Inhalte kommen eigens dazu, die Druckanzahl kennt das Backend noch
-    nicht. */
-export function cardFromResource(cardResource: CardResource): Card {
-  return {
-    id: cardResource.id,
-    version: cardResource.version,
-    values: {},
-    printCount: 1,
-  }
-}
-
 /** Macht aus einem vollständigen Kartenset des Backends eins der App, samt
     Karten, Elementen, Texten und Bildern der Karten. Die neueste Karte steht
     vorn – dort, wo auch neu angelegte hinkommen. Die Elemente stehen so, wie
     ihre Ebenen zuletzt sortiert waren, sonst das neueste hinten, also obenauf.
     Name und Adresse der Bilder merkt sich die App projektweit. */
 export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {
-  const cards = fullCardSet.cards.sort(newerFirst).map(cardFromResource)
-  for (const { parentId, data } of fullCardSet.values) {
-    const card = cards.find((card) => card.id === parentId)
-    if (card) card.values[data.elementId] = data.value
-  }
+  const cardSet = cardSetFromSnapshot(fullCardSet)
   rememberImages(fullCardSet.images)
-  const elements = fullCardSet.elements.sort(olderFirst).map(cardSetElementFromResource)
-  return {
-    ...cardSetFromResource(fullCardSet.set),
-    cards,
-    elements: inRememberedLayerOrder(fullCardSet.set.id, elements),
-  }
+  cardSet.elements = inRememberedLayerOrder(fullCardSet.set.id, cardSet.elements)
+  return cardSet
 }
 
 /** The set the project page should scroll to as soon as it shows it. The header

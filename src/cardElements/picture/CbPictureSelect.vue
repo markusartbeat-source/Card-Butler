@@ -21,7 +21,7 @@
     <template v-if="currentFolder && !search.trim()" #header>
       <CbToggle
         :chip="dictionary.cardEditor.defaultFolder"
-        :aria-label="dictionary.cardEditor.defaultFolderLabel(currentFolder.data.name)"
+        :aria-label="dictionary.cardEditor.defaultFolderLabel(currentFolder.name)"
         :model-value="defaultFolderIdOf(elementId) === currentFolder.id"
         @update:model-value="changeDefaultFolder"
       />
@@ -58,8 +58,8 @@ const levelItems = computed(() => {
     ? [
         {
           value: leaveFolderValue,
-          label: currentFolder.value.data.name,
-          ariaLabel: dictionary.cardEditor.leaveFolder(currentFolder.value.data.name),
+          label: currentFolder.value.name,
+          ariaLabel: dictionary.cardEditor.leaveFolder(currentFolder.value.name),
           icon: 'chevron_left' as const,
           keepsListOpen: true,
         },
@@ -69,9 +69,9 @@ const levelItems = computed(() => {
     ...leaveFolderItems,
     ...folders.value.map((folder) => ({
       value: folder.id,
-      label: folder.data.name,
+      label: folder.name,
       // Wählen öffnet den Ordner, statt ein Bild zu nehmen – das hört man auch.
-      ariaLabel: dictionary.cardEditor.openFolder(folder.data.name),
+      ariaLabel: dictionary.cardEditor.openFolder(folder.name),
       picture: folderPictures.value[folder.id],
       isFolder: true,
       keepsListOpen: true,
@@ -83,7 +83,7 @@ const levelItems = computed(() => {
 const items = computed(() => (search.value.trim() ? foundImages.value.map(imageItem) : levelItems.value))
 
 function imageItem(image: ImageResource) {
-  return { value: image.id, label: image.data.name, picture: image.data.location }
+  return { value: image.id, label: image.name, picture: image.location }
 }
 
 const imageId = computed(() => props.card.values[props.elementId]?.imageId ?? undefined)

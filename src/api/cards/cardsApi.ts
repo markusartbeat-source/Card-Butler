@@ -3,15 +3,15 @@ import type { Resource } from '../postOffice/resource'
 import { postOffice } from '../postOffice/transport'
 
 // Was die Karte selbst speichert. Ihre Inhalte liegen als eigene Werte daneben.
-export type CardData = { name: string }
+export type CardData = { printCount: number; position: number }
 
-export type CardResource = Resource<CardData>
+export type CardResource = Resource<CardData> & { setId: string }
 
 /** Legt in einem Kartenset eine Karte an. */
-function createCard(cardSetId: string, name: string) {
+function createCard(cardSetId: string) {
   return postOffice.request<CardResource>(`/api/sets/${encodeURIComponent(cardSetId)}/cards`, {
     method: 'POST',
-    body: { name },
+    body: {},
   })
 }
 

@@ -13,7 +13,8 @@ import { reloadCardSet } from './loadCardSets'
 export async function changeCardSet(cardSet: CardSet, changes: Partial<CardSetData>) {
   Object.assign(cardSet.data, changes)
   try {
-    const { version, data } = await postOffice.cardSets.loadCardSet(cardSet.id)
+    const { version, name, width, height, color, bleedWidth, bleedHeight } = await postOffice.cardSets.loadCardSet(cardSet.id)
+    const data: CardSetData = { name, width, height, color, bleedWidth, bleedHeight }
     const changedData = { ...data, ...changes }
     // Steht schon alles so im Backend (z.B. Farbwähler ohne neue Farbe
     // geschlossen), geht nichts raus – das spart Versionen und 412.

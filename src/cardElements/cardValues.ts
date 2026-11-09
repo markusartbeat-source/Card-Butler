@@ -8,7 +8,7 @@ import { reloadCardSet } from '../cardSets/loadCardSets'
 // Was eine Karte in die Elemente ihres Sets einträgt, je Element-id – wie im
 // Backend: bei Textfeldern den Text, bei Bild-Elementen das Bild. Gespeichert
 // wird immer nur der eine geänderte Wert.
-export type CardElementValues = Record<string, ValueData['value']>
+export type CardElementValues = Record<string, ValueData>
 
 // So lange nach dem letzten Tastendruck wird gewartet, bevor gespeichert wird.
 const typingPauseInMilliseconds = 1000

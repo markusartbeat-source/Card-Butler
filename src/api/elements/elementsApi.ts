@@ -26,9 +26,15 @@ export type ElementData = {
   imageId?: string | null
   fontSize?: number | null
   fontFamily?: string | null
+  textStyle?: string | null
+  letterSpacing?: number
+  textSizeType?: 'EXACT_SIZE' | 'AUTOMATIC_HEIGHT' | 'AUTOMATIC_WIDTH'
+  lineHeight?: number
+  lineType?: 'SOLID' | 'DASHED'
+  lineWidth?: number
 }
 
-export type ElementResource = Resource<ElementData>
+export type ElementResource = Resource<ElementData> & { setId: string }
 
 /** Legt in einem Kartenset ein Element an. */
 function createElement(cardSetId: string, data: ElementData) {

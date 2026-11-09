@@ -2,7 +2,7 @@
   <CbViewer
     v-if="openedImage"
     :key="openedImage.image.id"
-    :label="openedImage.image.data.name"
+    :label="openedImage.image.name"
     :ratio="openedImage.ratio"
     :start-rect="openedImage.tileRect"
     @close="openedImage = null"
@@ -10,8 +10,8 @@
     <!-- Zugeschnitten wie im Raster, falls dort das Seitenverhältnis noch
          nicht bekannt war (1:1). -->
     <img
-      :src="openedImage.image.data.location"
-      :alt="openedImage.image.data.name"
+      :src="openedImage.image.location"
+      :alt="openedImage.image.name"
       class="size-full rounded-lg object-cover"
     />
     <template #panel>
@@ -26,12 +26,12 @@
   <CbViewer
     v-if="openedFolder"
     :key="openedFolder.folder.id"
-    :label="openedFolder.folder.data.name"
+    :label="openedFolder.folder.name"
     :ratio="folderGraphicRatio"
     :start-rect="openedFolder.graphicRect"
     @close="openedFolder = null"
   >
-    <CbFolder :name="openedFolder.folder.data.name" :picture="folderPictures[openedFolder.folder.id]" graphic-only />
+    <CbFolder :name="openedFolder.folder.name" :picture="folderPictures[openedFolder.folder.id]" graphic-only />
     <template #panel>
       <CbFolderSettingsPanel
         class="h-full"
@@ -78,7 +78,7 @@
       <div v-for="(folder, index) in projectFolders" :key="folder.id" class="cb-folder-tile">
         <CbFolder
           :id="folderElementId(folder.id)"
-          :name="folder.data.name"
+          :name="folder.name"
           :picture="folderPictures[folder.id]"
           class="cb-folder-face cursor-grab active:cursor-grabbing"
           :class="{ invisible: folder.id === openedFolder?.folder.id }"
@@ -188,7 +188,7 @@ useHeader(() => ({
   title: currentProject.value?.name,
   path: [
     pathEntry(dictionary.header.allImages, null),
-    ...folderPath.value.map((folder) => pathEntry(folder.data.name, folder.id)),
+    ...folderPath.value.map((folder) => pathEntry(folder.name, folder.id)),
   ],
   searchbar: false,
 }))

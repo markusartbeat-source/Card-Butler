@@ -12,7 +12,7 @@ export async function loadFolderPath(folderId: string | null, knownFolders: Fold
       knownFolders.find((knownFolder) => knownFolder.id === nextFolderId) ??
       (await postOffice.folders.loadFolder(nextFolderId))
     path.unshift(folder)
-    nextFolderId = folder.data.parentId
+    nextFolderId = folder.parentId
   }
   return path
 }

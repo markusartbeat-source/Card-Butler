@@ -24,7 +24,7 @@ export async function deleteFolder(folder: FolderResource) {
     // Z.B. ein Bild darin ist noch auf einer Karte benutzt: Was bis dahin
     // gelöscht ist, bleibt weg, der Ordner bleibt. Seine Ebene zeigt wieder,
     // was das Backend hat – sofern sie noch zu sehen ist.
-    await loadProjectFolders(folder.projectId, folder.data.parentId)
+    await loadProjectFolders(folder.projectId, folder.parentId)
     return false
   }
 }

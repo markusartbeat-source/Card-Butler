@@ -13,13 +13,13 @@ export async function moveFolder(folder: FolderResource, parentId: string | null
     return await postOffice.folders.updateFolder(
       folder.projectId,
       folder.id,
-      { name: folder.data.name, parentId },
+      { name: folder.name, parentId },
       folder.version,
     )
   } catch {
     // Inzwischen geändert oder schon weg: Die Ebene, aus der er kam, zeigt
     // wieder, was das Backend hat – sofern sie noch zu sehen ist.
-    await loadProjectFolders(folder.projectId, folder.data.parentId)
+    await loadProjectFolders(folder.projectId, folder.parentId)
     return null
   }
 }

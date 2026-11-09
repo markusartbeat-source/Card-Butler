@@ -48,7 +48,7 @@ export async function pasteImageOnKey(event: KeyboardEvent, projectId: string, f
   const { image, isCut } = clipboard
 
   if (isCut) {
-    if (image.data.folderId === folderId) return
+    if (image.folderId === folderId) return
     clipboardImage.value = null
     // Seine Ebene ist nicht geladen, es steht also in keiner Liste. Fehler meldet
     // moveImage selbst.
@@ -61,7 +61,7 @@ export async function pasteImageOnKey(event: KeyboardEvent, projectId: string, f
   try {
     const content = await postOffice.images.loadImageContent(image.id)
     // Den Toast danach bringt das Hochladen mit.
-    uploadImages(projectId, folderId, [new File([content], image.data.name, { type: content.type })])
+    uploadImages(projectId, folderId, [new File([content], image.name, { type: content.type })])
   } catch {
     // Fehler meldet schon die Poststelle per Toast.
   }

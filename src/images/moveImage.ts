@@ -11,15 +11,15 @@ export async function moveImage(image: ImageResource, folderId: string | null, i
   const index = images.indexOf(image)
   if (index >= 0) images.splice(index, 1)
   try {
-    const movedImage = await postOffice.images.updateImage(image.id, { name: image.data.name, folderId }, image.version)
+    const movedImage = await postOffice.images.updateImage(image.id, { name: image.name, folderId }, image.version)
     // Der alte und der neue Ordner zeigen danach vielleicht ein anderes Bild.
-    loadFolderPicture(image.projectId, image.data.folderId)
+    loadFolderPicture(image.projectId, image.folderId)
     loadFolderPicture(image.projectId, folderId)
     return movedImage
   } catch {
     // Inzwischen geändert oder schon weg: Die Ebene, aus der es kam, zeigt
     // wieder, was das Backend hat – sofern sie noch zu sehen ist.
-    await loadProjectImages(image.projectId, image.data.folderId)
+    await loadProjectImages(image.projectId, image.folderId)
     return null
   }
 }

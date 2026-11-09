@@ -48,7 +48,7 @@ export function usePictureSearch() {
 
   const foundImages = computed(() => {
     const word = search.value.trim().toLowerCase()
-    return allImages.value.filter((image) => image.data.name.toLowerCase().includes(word))
+    return allImages.value.filter((image) => image.name.toLowerCase().includes(word))
   })
 
   function forgetImages() {

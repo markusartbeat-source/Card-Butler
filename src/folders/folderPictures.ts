@@ -15,7 +15,7 @@ export async function loadFolderPicture(projectId: string, folderId: string | nu
   try {
     // Das Backend kennt kein Vorschaubild, darum die Bilder des Ordners.
     const [firstImage] = (await postOffice.images.loadImages(projectId, folderId)).sort(newerFirst)
-    if (firstImage) folderPictures.value[folderId] = firstImage.data.location
+    if (firstImage) folderPictures.value[folderId] = firstImage.location
     else delete folderPictures.value[folderId]
   } catch {
     // Der Ordner behält, was er zeigt.

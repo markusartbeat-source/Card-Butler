@@ -12,7 +12,7 @@ export async function deleteImage(image: ImageResource) {
     // Noch auf einer Karte benutzt, inzwischen geändert oder schon weg: Die
     // Ebene des Bildes zeigt wieder, was das Backend hat – sofern sie noch zu
     // sehen ist.
-    await loadProjectImages(image.projectId, image.data.folderId)
+    await loadProjectImages(image.projectId, image.folderId)
     return false
   }
 }

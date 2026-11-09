@@ -43,8 +43,8 @@
         @keydown="sortWithAltArrow($event, images, image)"
       >
         <img
-          :src="image.data.location"
-          :alt="image.data.name"
+          :src="image.location"
+          :alt="image.name"
           class="size-full object-cover"
           @load="rememberRatio(image, $event)"
         />

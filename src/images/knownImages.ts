@@ -7,5 +7,5 @@ import type { ImageInfo, ImageResource } from '../api/images/imagesApi'
 export const knownImages = ref<Record<string, ImageInfo>>({})
 
 export function rememberImages(images: ImageResource[]) {
-  for (const { id, data } of images) knownImages.value[id] = data
+  for (const image of images) knownImages.value[image.id] = image
 }
