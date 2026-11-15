@@ -18,7 +18,11 @@
                 </CbButton>
               </CbTooltip>
             </div>
-            <CbInput v-model="printCount" :label="dictionary.cardEditor.printCount" />
+            <CbNumberInput
+              :value="card.printCount"
+              :label="dictionary.cardEditor.printCount"
+              @commit="(printCount) => changePrintCount(card, printCount)"
+            />
           </div>
 
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(1)" />
@@ -117,13 +121,13 @@ import CbButton from '../components/atoms/CbButton.vue'
 import CbColorPicker from '../components/atoms/CbColorPicker.vue'
 import CbDivider from '../components/atoms/CbDivider.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
-import CbInput from '../components/atoms/CbInput.vue'
 import CbPanel from '../components/atoms/CbPanel.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../components/atoms/CbSettingsHeading.vue'
 import CbTabs from '../components/atoms/CbTabs.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.vue'
+import CbNumberInput from '../components/molecules/CbNumberInput.vue'
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
 import { cardCornerRadiiOf, changeCardCornerRadii } from '../card/cardFormat'
 import type { Card, CardSet } from '../cardSets/cardSets'
@@ -134,6 +138,7 @@ import {
   previewCardSetColor,
 } from '../cardSets/changeCardSet'
 import CbLayerList from '../layers/CbLayerList.vue'
+import { changePrintCount } from '../printCount/changePrintCount'
 
 // The panel is already on the page while the card is still flying in. The
 // groups are only built once it is really on screen, otherwise their entrance
@@ -150,9 +155,8 @@ function riseDelay(step: number) {
   return { animationDelay: `${step * 60}ms` }
 }
 
-// Größe, Ecken, Farbe und Anschnitt gehören zum Set. Die übrigen Werte leben
-// vorerst nur im Panel und ändern die Karte noch nicht.
-const printCount = ref('1')
+// Die Druckanzahl gehört zur Karte, Größe, Ecken, Farbe und Anschnitt gehören
+// zum Set. Die Einheit lebt vorerst nur im Panel und ändert noch nichts.
 const unit = ref('mm')
 
 const units = computed(() => [

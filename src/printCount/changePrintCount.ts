@@ -15,10 +15,11 @@ const pauseInMilliseconds = 1000
 // Speicherungen, die noch auf die Pause warten – je Karte eine.
 const waitingSaves = new Map<string, ReturnType<typeof setTimeout>>()
 
-/** Setzt, wie oft die Karte gedruckt wird, begrenzt auf die erlaubten Werte.
- *  Gespeichert wird nach einer Pause, jeder weitere Aufruf schiebt das hinaus. */
+/** Setzt, wie oft die Karte gedruckt wird – gerundet und begrenzt auf die
+ *  erlaubten Werte. Gespeichert wird nach einer Pause, jeder weitere Aufruf
+ *  schiebt das hinaus. */
 export function changePrintCount(card: Card, printCount: number) {
-  card.printCount = Math.min(maxPrintCount, Math.max(minPrintCount, printCount))
+  card.printCount = Math.min(maxPrintCount, Math.max(minPrintCount, Math.round(printCount)))
 
   clearTimeout(waitingSaves.get(card.id))
   const save = () => {
