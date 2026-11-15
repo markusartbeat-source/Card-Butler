@@ -88,8 +88,6 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
       `Esta carta é impressa ${count} vezes. Podes alterar a quantidade nas definições desta carta, ou com Alt + roda do rato.`,
     notPrintedTooltip:
       'Esta carta não é impressa. Podes alterar a quantidade nas definições desta carta, ou com Alt + roda do rato.',
-    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
-    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   cardSets: {
     title: 'Conjuntos de cartas',
@@ -142,11 +140,13 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     pictureElementDeleted: 'Imagem excluída',
     squareElementDeleted: 'Quadrado excluído',
     circleElementDeleted: 'Círculo excluído',
+    lineElementDeleted: 'Linha excluída',
     cardSettings: 'Definições da carta',
     textSettings: 'Definições do texto',
     pictureSettings: 'Definições da imagem',
     squareSettings: 'Definições do quadrado',
     circleSettings: 'Definições do círculo',
+    lineSettings: 'Definições da linha',
     elementName: 'Nome',
     backToCardSettings: 'Voltar às definições da carta',
     settingsTab: 'Definições',
@@ -231,6 +231,9 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     borderGroup: 'Contorno',
     borderColor: 'Cor do contorno',
     borderWidth: 'Espessura do contorno',
+    lineGroup: 'Linha',
+    lineColor: 'Cor da linha',
+    lineWidth: 'Espessura da linha',
     borderLineType: 'Tipo de linha',
     borderSolid: 'Contínua',
     borderDashed: 'Tracejada',

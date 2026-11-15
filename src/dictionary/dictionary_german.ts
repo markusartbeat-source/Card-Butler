@@ -110,8 +110,6 @@ export const dictionaryGerman = {
       `Diese Karte wird ${count}-mal gedruckt. Du kannst die Anzahl in den Karteneinstellungen dieser Karte ändern, oder mit Alt + Mausrad.`,
     notPrintedTooltip:
       'Diese Karte wird nicht gedruckt. Du kannst die Anzahl in den Karteneinstellungen dieser Karte ändern, oder mit Alt + Mausrad.',
-    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
-    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   // The list of card sets at the right edge of the project page.
   cardSets: {
@@ -175,11 +173,13 @@ export const dictionaryGerman = {
     pictureElementDeleted: 'Bild gelöscht',
     squareElementDeleted: 'Viereck gelöscht',
     circleElementDeleted: 'Kreis gelöscht',
+    lineElementDeleted: 'Linie gelöscht',
     cardSettings: 'Karteneinstellungen',
     textSettings: 'Texteinstellungen',
     pictureSettings: 'Bildeinstellungen',
     squareSettings: 'Viereckeinstellungen',
     circleSettings: 'Kreiseinstellungen',
+    lineSettings: 'Linieneinstellungen',
     elementName: 'Name',
     backToCardSettings: 'Zurück zu den Karteneinstellungen',
     settingsTab: 'Einstellungen',
@@ -264,6 +264,9 @@ export const dictionaryGerman = {
     borderGroup: 'Kontur',
     borderColor: 'Konturfarbe',
     borderWidth: 'Konturstärke',
+    lineGroup: 'Linie',
+    lineColor: 'Linienfarbe',
+    lineWidth: 'Linienstärke',
     borderLineType: 'Linienart',
     borderSolid: 'Durchgezogen',
     borderDashed: 'Gestrichelt',

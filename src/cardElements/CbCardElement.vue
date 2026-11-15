@@ -19,7 +19,7 @@
     :style="sizeStyle"
   />
   <CbShapeElement
-    v-else-if="element.data.type === 'SQUARE' || element.data.type === 'CIRCLE'"
+    v-else
     :element="element"
     :editable="editable"
     :style="sizeStyle"
@@ -38,8 +38,8 @@ import CbTextElement from './text/CbTextElement.vue'
 import { textSizingOf } from './text/textSizing'
 
 // Ein Element des Sets, so wie es eine Karte zeigt – mit dem, was sie einträgt
-// (values). Jeder Typ bringt seine Komponente aus seinem Ordner mit, Linien
-// werden noch nicht gezeichnet. Die Lage gibt der Aufrufer per style dazu.
+// (values). Jeder Typ bringt seine Komponente aus seinem Ordner mit, Vierecke,
+// Kreise und Linien teilen sich die Form. Die Lage gibt der Aufrufer per style dazu.
 // markIfEmpty zeigt ein leeres Element mit Rahmen und Namen bzw. Icon,
 // editable macht es bedienbar, highlightSearch markiert die Suchtreffer im Text.
 const props = withDefaults(

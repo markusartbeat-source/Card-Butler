@@ -1,6 +1,6 @@
 import type { ElementData } from '../api/elements/elementsApi'
 import type { CardTool } from '../components/molecules/cardToolbarElements'
-import { shapeAppearanceDefaults } from './shape/shapeAppearance'
+import { lineAppearanceDefaults, shapeAppearanceDefaults } from './shape/shapeAppearance'
 import { textAppearanceDefaults } from './text/textAppearance'
 
 // Deckkraft, Ausrichtung und Lage sind bei allen neuen Elementen gleich.
@@ -40,6 +40,14 @@ const newElementDataByTool: Partial<Record<CardTool, () => NewElementDefaults>> 
     width: 20,
     height: 20,
     ...shapeAppearanceDefaults,
+  }),
+  // Waagerecht, die Box so hoch wie der Strich – eine Höhe verlangt das Backend.
+  line: () => ({
+    name: dictionary.cardEditor.line,
+    type: 'LINE',
+    width: 30,
+    height: lineAppearanceDefaults.lineWidth,
+    ...lineAppearanceDefaults,
   }),
 }
 

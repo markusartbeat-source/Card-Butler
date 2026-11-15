@@ -88,8 +88,6 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
       `This card is printed ${count} times. You can change the count in this card's settings, or with Alt + mouse wheel.`,
     notPrintedTooltip:
       "This card is not printed. You can change the count in this card's settings, or with Alt + mouse wheel.",
-    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
-    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   cardSets: {
     title: 'Card sets',
@@ -142,11 +140,13 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     pictureElementDeleted: 'Image deleted',
     squareElementDeleted: 'Square deleted',
     circleElementDeleted: 'Circle deleted',
+    lineElementDeleted: 'Line deleted',
     cardSettings: 'Card settings',
     textSettings: 'Text settings',
     pictureSettings: 'Image settings',
     squareSettings: 'Square settings',
     circleSettings: 'Circle settings',
+    lineSettings: 'Line settings',
     elementName: 'Name',
     backToCardSettings: 'Back to card settings',
     settingsTab: 'Settings',
@@ -231,6 +231,9 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     borderGroup: 'Stroke',
     borderColor: 'Stroke color',
     borderWidth: 'Stroke width',
+    lineGroup: 'Line',
+    lineColor: 'Line color',
+    lineWidth: 'Line width',
     borderLineType: 'Line style',
     borderSolid: 'Solid',
     borderDashed: 'Dashed',

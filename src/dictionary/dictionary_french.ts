@@ -88,8 +88,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
       `Cette carte est imprimée ${count} fois. Tu peux changer le nombre dans les paramètres de cette carte, ou avec Alt + molette de la souris.`,
     notPrintedTooltip:
       "Cette carte n'est pas imprimée. Tu peux changer le nombre dans les paramètres de cette carte, ou avec Alt + molette de la souris.",
-    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
-    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   cardSets: {
     title: 'Jeux de cartes',
@@ -142,11 +140,13 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     pictureElementDeleted: 'Image supprimée',
     squareElementDeleted: 'Carré supprimé',
     circleElementDeleted: 'Cercle supprimé',
+    lineElementDeleted: 'Ligne supprimée',
     cardSettings: 'Réglages de la carte',
     textSettings: 'Réglages du texte',
     pictureSettings: 'Réglages de l’image',
     squareSettings: 'Réglages du carré',
     circleSettings: 'Réglages du cercle',
+    lineSettings: 'Réglages de la ligne',
     elementName: 'Nom',
     backToCardSettings: 'Retour aux réglages de la carte',
     settingsTab: 'Réglages',
@@ -232,6 +232,9 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     borderGroup: 'Contour',
     borderColor: 'Couleur du contour',
     borderWidth: 'Épaisseur du contour',
+    lineGroup: 'Ligne',
+    lineColor: 'Couleur de la ligne',
+    lineWidth: 'Épaisseur de la ligne',
     borderLineType: 'Style de trait',
     borderSolid: 'Trait plein',
     borderDashed: 'Tirets',

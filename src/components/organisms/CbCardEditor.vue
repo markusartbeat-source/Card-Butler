@@ -156,6 +156,7 @@ import CbPrintCountOverlay from '../../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../../printCount/changePrintCountByWheel'
 import { printCountOverlayCardId } from '../../printCount/printCountOverlayState'
 import type { Card, CardSet } from '../../cardSets/cardSets'
+import type { ElementType } from '../../api/elements/elementsApi'
 
 const props = defineProps<{
   card: Card
@@ -322,12 +323,12 @@ function deleteSelectedElementOnKey(event: KeyboardEvent) {
   event.preventDefault()
   clearElementSelection()
   const { cardSet } = props
-  // Linien werden nicht gezeichnet, lassen sich also auch nicht auswählen.
-  const deletedMessages: Record<string, string> = {
+  const deletedMessages: Record<ElementType, string> = {
     TEXT: dictionary.cardEditor.textElementDeleted,
     PICTURE: dictionary.cardEditor.pictureElementDeleted,
     SQUARE: dictionary.cardEditor.squareElementDeleted,
     CIRCLE: dictionary.cardEditor.circleElementDeleted,
+    LINE: dictionary.cardEditor.lineElementDeleted,
   }
   const deletedMessage = deletedMessages[elementToDelete.data.type]
   deleteWithUndo(cardSet.elements, elementToDelete, deletedMessage, (element) =>

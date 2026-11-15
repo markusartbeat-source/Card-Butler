@@ -4,8 +4,11 @@ import type { Directive } from 'vue'
 // directive so any element can use it, not only CbInteractive.
 // The element it sits on has to bring "relative overflow-hidden", otherwise
 // the circle would be placed against the page and run over the edges.
-export const ripple: Directive<HTMLElement> = {
-  mounted(element) {
+// v-ripple="false" lässt den Kreis weg, z.B. wenn das Element nichts
+// abschneiden darf.
+export const ripple: Directive<HTMLElement, boolean | undefined> = {
+  mounted(element, binding) {
+    if (binding.value === false) return
     element.addEventListener('mousedown', (event) => playRipple(element, event.clientX, event.clientY))
   },
 }

@@ -144,15 +144,6 @@
                   :class="printCountBadgeClasses"
                 />
               </CbTooltip>
-              <!-- TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position
-                   der Karte im Backend, zum Prüfen der Reihenfolge. Im
-                   Aufräumschritt entfernen. -->
-              <span
-                aria-hidden="true"
-                class="pointer-events-none relative col-start-1 row-start-1 m-2 self-start justify-self-start rounded-full bg-background px-1.5 py-0.5 text-2xs leading-none text-gold-light"
-              >
-                {{ dictionary.project.cardBackendState(card.version, card.position) }}
-              </span>
               <!-- Shows while Alt + wheel changes the count. Last in the cell,
                    so it lies over faces and badge. Die Ecken folgen der Karte,
                    umgerechnet auf ihren Zoom.

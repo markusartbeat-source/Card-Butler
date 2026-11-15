@@ -53,6 +53,7 @@ import {
 } from '../cardElements/cardElements'
 import { saveElement } from '../cardElements/saveElement'
 import { textSizingOf, type TextSizing } from '../cardElements/text/textSizing'
+import type { CardSetElement } from '../cardSets/cardSets'
 
 // The card the selected element lives in. Searching inside it instead of the
 // whole page keeps us away from the same element on the other cards.
@@ -118,9 +119,15 @@ const resizeDirectionsBySizing: Record<TextSizing, string[]> = {
   fixed: ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'],
 }
 
+// Eine Linie ändert beim Ziehen nur ihre Länge, wie ein Textfeld mit Auto-Höhe:
+// Ihre Höhe ist die Strichstärke, die stellt das Panel ein.
+function sizingWhenResized(element: CardSetElement | undefined): TextSizing {
+  return element?.data.type === 'LINE' ? 'autoHeight' : textSizingOf(element)
+}
+
 const resizeDirections = computed(() => {
   const element = selectedElementId.value ? findCardSetElement(selectedElementId.value) : undefined
-  return resizeDirectionsBySizing[textSizingOf(element)]
+  return resizeDirectionsBySizing[sizingWhenResized(element)]
 })
 
 // Wie das Feld während des Ziehens zu seiner Größe kommt. Nur Textfelder kennen
@@ -135,7 +142,7 @@ function setResizeStartSize(event: OnResizeStart) {
   const element = selectedElementId.value && findCardSetElement(selectedElementId.value)
   if (!element) return
 
-  sizingWhileResizing = textSizingOf(element)
+  sizingWhileResizing = sizingWhenResized(element)
   const size = measureInMillimeters(event.target as HTMLElement)
   event.set([millimetersToPixels(size.width), millimetersToPixels(size.height)])
   // Wächst die Höhe mit dem Text, bleibt die Oberkante liegen statt der Mitte.

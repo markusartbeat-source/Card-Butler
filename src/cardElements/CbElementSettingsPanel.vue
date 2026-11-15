@@ -35,6 +35,12 @@
         <CbTextboxSettings :element-id="elementId" />
         <CbDivider />
       </template>
+      <!-- Bei der Linie ist der Strich alles, was sie hat – keine Füllung, keine
+           Ecken. -->
+      <template v-else-if="type === 'LINE'">
+        <CbShapeBorderSettings :element-id="elementId" />
+        <CbDivider />
+      </template>
       <template v-else>
         <CbShapeAppearanceSettings :element-id="elementId" />
         <CbDivider />
@@ -80,11 +86,12 @@ const type = computed(() => element.value?.data.type)
 
 // Nur für Screenreader, sichtbar ist der Name.
 const title = computed(() => {
-  const titles: Partial<Record<ElementType, string>> = {
+  const titles: Record<ElementType, string> = {
     TEXT: dictionary.cardEditor.textSettings,
     PICTURE: dictionary.cardEditor.pictureSettings,
     SQUARE: dictionary.cardEditor.squareSettings,
     CIRCLE: dictionary.cardEditor.circleSettings,
+    LINE: dictionary.cardEditor.lineSettings,
   }
   return type.value && titles[type.value]
 })

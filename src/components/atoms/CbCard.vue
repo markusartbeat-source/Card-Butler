@@ -107,11 +107,11 @@ const frameStyle = computed(() => {
   }
 })
 
-// Gezeichnet werden bisher nur Textfelder, Bilder, Vierecke und Kreise mit
-// x/y-Position; andere (z.B. von einer KI per MCP angelegt) fehlen noch.
+// Gezeichnet werden nur Elemente mit x/y-Position; ausgerichtete (z.B. von einer
+// KI per MCP angelegt) fehlen noch.
 function isDrawn({ data }: CardSetElement) {
   const { x, y } = data.position
-  return ['TEXT', 'PICTURE', 'SQUARE', 'CIRCLE'].includes(data.type) && x != null && y != null
+  return x != null && y != null
 }
 
 const elementsOnThisSide = computed(() =>
