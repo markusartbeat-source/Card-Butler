@@ -1,3 +1,4 @@
+import type { ElementData } from '../../api/elements/elementsApi'
 import { measureInMillimeters } from '../../card/millimeters'
 import type { CardSetElement } from '../../cardSets/cardSets'
 import { selectedElementNode } from '../../elementTransform/elementSelection'
@@ -8,17 +9,32 @@ import { saveElement } from '../saveElement'
 // dem Text, nur die Höhe folgt ihm, oder beides ist fest.
 export type TextSizing = 'autoWidth' | 'autoHeight' | 'fixed'
 
-// Das Backend kennt den Modus noch nicht – er lebt nur am Element im Set und
-// geht beim Neuladen verloren. Ohne Modus gilt feste Größe, Breite und Höhe sind
-// dann ja Zahlen. Nur über diese beiden Funktionen lesen und setzen: Dann bleibt
-// der spätere Umzug ins Backend (Breite/Höhe = null) klein.
+// Im Backend heißt der Modus textSizeType. Breite und Höhe sind dort immer
+// Zahlen, bei einer automatischen Seite der zuletzt gespeicherte Stand.
+type TextSizeType = NonNullable<ElementData['textSizeType']>
+
+const textSizeTypes: Record<TextSizing, TextSizeType> = {
+  autoWidth: 'AUTOMATIC_WIDTH',
+  autoHeight: 'AUTOMATIC_HEIGHT',
+  fixed: 'EXACT_SIZE',
+}
+
+const textSizings: Record<TextSizeType, TextSizing> = {
+  AUTOMATIC_WIDTH: 'autoWidth',
+  AUTOMATIC_HEIGHT: 'autoHeight',
+  EXACT_SIZE: 'fixed',
+}
+
+// Nur über diese beiden Funktionen lesen und setzen. Ohne Modus (z.B. kein
+// Textfeld) gilt feste Größe.
 export function textSizingOf(element: CardSetElement | undefined): TextSizing {
-  return element?.textSizing ?? 'fixed'
+  const textSizeType = element?.data.textSizeType
+  return textSizeType ? textSizings[textSizeType] : 'fixed'
 }
 
 export function setTextSizing(id: string, sizing: TextSizing) {
   const element = findCardSetElement(id)
-  if (element) element.textSizing = sizing
+  if (element) element.data.textSizeType = textSizeTypes[sizing]
 }
 
 // Auf eine Nachkommastelle aufgerundet: So ist das Feld nie schmaler als sein
@@ -65,8 +81,8 @@ export function switchTextSizing(element: CardSetElement, sizing: TextSizing) {
   )
 }
 
-/** Stellt um, wie das ausgewählte Textfeld zu seiner Größe kommt. Der Modus lebt
-    nur lokal – gespeichert wird nur eine geänderte Größe. */
+/** Stellt um, wie das ausgewählte Textfeld zu seiner Größe kommt, und speichert
+    den Modus samt einer dabei fest gewordenen Größe. */
 export function changeTextSizing(id: string, sizing: TextSizing) {
   const element = findCardSetElement(id)
   if (!element) return

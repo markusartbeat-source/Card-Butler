@@ -248,13 +248,16 @@ const loadedCardSets = computed(() => cardSets.value ?? [])
 // The cards of every set in one row — for the editor.
 const allCards = computed(() => loadedCardSets.value.flatMap((cardSet) => cardSet.cards))
 // Für den Export: jede Karte mit den Elementen und Einstellungen ihres Sets.
+// Karten mit Druckanzahl 0 werden nicht gedruckt und bleiben draußen.
 const exportCards = computed(() =>
   loadedCardSets.value.flatMap((cardSet) =>
-    cardSet.cards.map((card) => ({
-      ...card,
-      elements: cardSet.elements,
-      cardSet,
-    })),
+    cardSet.cards
+      .filter((card) => card.printCount > 0)
+      .map((card) => ({
+        ...card,
+        elements: cardSet.elements,
+        cardSet,
+      })),
   ),
 )
 const selectedCardId = ref<string | null>(null)

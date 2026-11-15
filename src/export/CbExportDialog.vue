@@ -93,13 +93,14 @@
 
     <!-- In the format list the export button has nothing to export yet, so it
          stays disabled. In the PNG step it names how many cards go into the
-         export and how large they become, and starts it. -->
+         export and how large they become, and starts it. Ohne Karten (z.B.
+         alle mit Druckanzahl 0) bleibt er ebenfalls gesperrt. -->
     <template #footer>
       <CbButton variant="secondary" @click="leaveDialogOrStep">
         {{ step === 'formats' ? dictionary.general.cancel : dictionary.general.back }}
       </CbButton>
 
-      <CbButton :disabled="step === 'formats'" @click="exportCards">
+      <CbButton :disabled="step === 'formats' || cards.length === 0" @click="exportCards">
         {{
           step === 'formats'
             ? dictionary.project.export

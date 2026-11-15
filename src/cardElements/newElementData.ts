@@ -15,6 +15,8 @@ const newElementDataByTool: Partial<Record<CardTool, () => NewElementDefaults>> 
     type: 'TEXT',
     width: 40,
     height: 10,
+    // Wächst mit seinem Text nach unten.
+    textSizeType: 'AUTOMATIC_HEIGHT',
     ...textAppearanceDefaults,
   }),
   image: () => ({

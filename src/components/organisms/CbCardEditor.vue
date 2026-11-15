@@ -141,7 +141,6 @@ import { newElementData } from '../../cardElements/newElementData'
 import { deleteWithUndo } from '../../deletion/deleteWithUndo'
 import { undoDeletionOnKey } from '../../deletion/undoDeletionOnKey'
 import { isInInputField } from '../../keyboard/isInInputField'
-import { setTextSizing } from '../../cardElements/text/textSizing'
 import CbPictureCropTransform from '../../cardElements/picture/CbPictureCropTransform.vue'
 import CbNewElementPreview from '../../cardElements/newElementDrag/CbNewElementPreview.vue'
 import { useNewElementDrag } from '../../cardElements/newElementDrag/useNewElementDrag'
@@ -212,15 +211,12 @@ watch(isEditingSelectedElement, (isEditing) => {
 })
 
 // Legt das Element des Werkzeugs mit der Mitte auf diesem Punkt der Karte (mm)
-// an und wählt es gleich aus. Ein Textfeld wächst mit seinem Text nach unten.
-// Werkzeuge ohne Element haben noch keine Funktion.
+// an und wählt es gleich aus. Werkzeuge ohne Element haben noch keine Funktion.
 async function addElementAt(tool: CardTool, centerX: number, centerY: number) {
   const data = newElementData(tool, centerX, centerY)
   if (!data) return
   const createdElement = await createElement(props.cardSet, data)
-  if (!createdElement) return
-  if (tool === 'text') setTextSizing(createdElement.id, 'autoHeight')
-  selectElement(createdElement.id)
+  if (createdElement) selectElement(createdElement.id)
 }
 
 // Ein Klick auf ein Werkzeug legt sein Element in der Kartenmitte an.

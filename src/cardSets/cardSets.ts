@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import type { CardSetData, FullCardSet } from '../api/cardSets/cardSetsApi'
 import type { ElementData } from '../api/elements/elementsApi'
 import type { CardElementValues } from '../cardElements/cardValues'
-import type { TextSizing } from '../cardElements/text/textSizing'
 import { rememberImages } from '../images/knownImages'
 import { inRememberedLayerOrder } from '../layers/layerOrder'
 import { cardSetFromSnapshot } from './cardSetModel'
@@ -23,16 +22,14 @@ export type Card = {
 // Ein Element des Sets mit seinen vollständigen Backend-Daten – der einzigen
 // Quelle der Wahrheit, gezeichnet wird direkt daraus. Die Version geht beim
 // Ändern als If-Match mit. savedData ist der zuletzt gespeicherte Stand als
-// JSON, so speichert saveElement nur Änderungen. Die Drehung (Grad) und wie ein
-// Textfeld zu seiner Größe kommt, kennt das Backend nicht – beides lebt nur hier
-// und geht beim Neuladen verloren.
+// JSON, so speichert saveElement nur Änderungen. Die Drehung (Grad) kennt das
+// Backend nicht – sie lebt nur hier und geht beim Neuladen verloren.
 export type CardSetElement = {
   id: string
   version: number
   data: ElementData
   savedData: string
   rotation: number
-  textSizing?: TextSizing
 }
 
 // A project has many card sets, each with its own cards. Header, project page
