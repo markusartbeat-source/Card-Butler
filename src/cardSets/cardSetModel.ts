@@ -19,7 +19,8 @@ export function cardSetElementFromResource(source: ElementResource): CardSetElem
 }
 
 export function cardFromResource(source: CardResource): Card {
-  return { id: source.id, version: source.version, printCount: source.printCount, values: {} }
+  const { id, version, position, printCount } = source
+  return { id, version, position, printCount, values: {} }
 }
 
 export function cardSetFromSnapshot(snapshot: FullCardSet): CardSet {

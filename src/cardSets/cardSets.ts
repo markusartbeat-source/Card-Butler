@@ -12,6 +12,8 @@ export type Card = {
   id: string
   /** Stand der Karte im Backend, wird beim Ändern als If-Match mitgeschickt. */
   version: number
+  /** Platz der Karte in ihrem Set laut Backend, 0 = vorn. */
+  position: number
   // What this card fills into the deck's elements.
   values: CardElementValues
   // How many copies of this card get printed. 1 is the normal card.

@@ -86,6 +86,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     linkCopiedText: 'The link is on your clipboard.',
     printCountTooltip: (count: number) =>
       `This card is printed ${count} times. You can change the count in this card's settings, or with Alt + mouse wheel.`,
+    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
+    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   cardSets: {
     title: 'Card sets',

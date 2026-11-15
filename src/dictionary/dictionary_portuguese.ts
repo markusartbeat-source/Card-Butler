@@ -86,6 +86,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     linkCopiedText: 'O link está na área de transferência.',
     printCountTooltip: (count: number) =>
       `Esta carta é impressa ${count} vezes. Podes alterar a quantidade nas definições desta carta, ou com Alt + roda do rato.`,
+    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
+    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   cardSets: {
     title: 'Conjuntos de cartas',

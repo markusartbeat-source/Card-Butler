@@ -86,6 +86,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     linkCopiedText: 'Le lien est dans le presse-papiers.',
     printCountTooltip: (count: number) =>
       `Cette carte est imprimée ${count} fois. Tu peux changer le nombre dans les paramètres de cette carte, ou avec Alt + molette de la souris.`,
+    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
+    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   cardSets: {
     title: 'Jeux de cartes',

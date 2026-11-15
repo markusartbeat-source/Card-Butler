@@ -108,6 +108,8 @@ export const dictionaryGerman = {
     linkCopiedText: 'Der Link liegt in der Zwischenablage.',
     printCountTooltip: (count: number) =>
       `Diese Karte wird ${count}-mal gedruckt. Du kannst die Anzahl in den Karteneinstellungen dieser Karte ändern, oder mit Alt + Mausrad.`,
+    // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
+    cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },
   // The list of card sets at the right edge of the project page.
   cardSets: {
