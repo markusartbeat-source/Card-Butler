@@ -57,6 +57,7 @@ import NorthWest from '~icons/material-symbols/north-west-rounded'
 import PhotoLibrary from '~icons/material-symbols/photo-library-outline-rounded'
 import PlayingCards from '~icons/material-symbols/playing-cards-outline-rounded'
 import Print from '~icons/material-symbols/print-outline-rounded'
+import PrintDisabled from '~icons/material-symbols/print-disabled-outline-rounded'
 // The looping arrow of the material symbol called "360".
 import Rotate360 from '~icons/material-symbols/360-rounded'
 import Search from '~icons/material-symbols/search-rounded'
@@ -130,6 +131,7 @@ export const icons = {
   photo_library: PhotoLibrary,
   playing_cards: PlayingCards,
   print: Print,
+  print_disabled: PrintDisabled,
   rotate_360: Rotate360,
   search: Search,
   select: Select,

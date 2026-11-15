@@ -86,6 +86,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     linkCopiedText: 'El enlace está en el portapapeles.',
     printCountTooltip: (count: number) =>
       `Esta carta se imprime ${count} veces. Puedes cambiar la cantidad en los ajustes de esta carta, o con Alt + rueda del ratón.`,
+    notPrintedTooltip:
+      'Esta carta no se imprime. Puedes cambiar la cantidad en los ajustes de esta carta, o con Alt + rueda del ratón.',
     // TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position der Karte.
     cardBackendState: (version: number, position: number) => `v${version} · #${position}`,
   },

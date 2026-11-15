@@ -1,16 +1,18 @@
 <template>
-  <!-- Glass pill from the Figma design: shows how many copies a card is
-       printed as, e.g. "x3". -->
   <span
     class="flex items-center gap-0.5 rounded-full bg-white/20 p-0.5 text-2xs leading-none text-background backdrop-blur-sm text-shadow-2xs text-shadow-black/25"
   >
-    <CbIcon name="stacks" size="small" />
+    <!-- Glass pill from the Figma design: shows how many copies a card is
+         printed as, e.g. "x3", with the icon the caller picks. The comment sits
+         inside the root on purpose, so a tooltip can wrap the badge (as-child). -->
+    <CbIcon :name="icon" size="small" />
     x{{ count }}
   </span>
 </template>
 
 <script setup lang="ts">
 import CbIcon from './CbIcon.vue'
+import type { IconName } from './icons'
 
-defineProps<{ count: number }>()
+defineProps<{ count: number; icon: IconName }>()
 </script>

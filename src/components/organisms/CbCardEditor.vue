@@ -45,6 +45,7 @@
             show-cut-line
             :cover-bleed="isBleedCovered"
             :style="bleedTransition"
+            :class="{ 'opacity-50': card.printCount === 0 }"
             mark-empty-elements
             editable-elements
             @change-element-value="(elementId, text) => changeCardText(card, elementId, text)"

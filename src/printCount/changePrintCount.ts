@@ -4,8 +4,8 @@ import { queueCardChange } from '../cardSets/cardChangeQueue'
 import { cardSets, type Card } from '../cardSets/cardSets'
 import { reloadCardSet } from '../cardSets/loadCardSets'
 
-// A card is printed at least once, and never more than 99 times.
-export const minPrintCount = 1
+// 0 heißt: Die Karte wird nicht gedruckt. Mehr als 99-mal geht nicht.
+export const minPrintCount = 0
 export const maxPrintCount = 99
 
 // So lange nach der letzten Änderung wird gewartet, bevor gespeichert wird – ein

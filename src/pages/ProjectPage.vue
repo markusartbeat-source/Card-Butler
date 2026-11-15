@@ -106,6 +106,7 @@
                 :values="card.values"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
+                :class="{ 'opacity-50': card.printCount === 0 }"
               />
               <CbCard
                 :id="card.id"
@@ -115,20 +116,34 @@
                 highlight-search
                 side="back"
                 class="cb-card-back col-start-1 row-start-1"
+                :class="{ 'opacity-50': card.printCount === 0 }"
               />
-              <!-- How often the card is printed — only worth showing from 2 up.
+              <!-- How often the card is printed — only worth showing from 2 up,
+                   and for 0 (not printed, the card is pale then).
                    It does not turn with the card: front and back show it in the
                    same place; it vanishes at once while the turn runs and fades
                    back in after. It lies in page pixels, not card zoom. "relative"
                    keeps it above the faces: their transform would otherwise
                    paint them over it. While the mouse is on the card (the
-                   "group" box) it fades out, so it never hides the corner. -->
+                   "group" box) it fades out, so it never hides the corner. Bei 0
+                   bleibt sie stehen: Sie trägt den Hinweis im Tooltip. -->
               <CbPrintCountBadge
                 v-if="card.printCount >= 2"
                 :count="card.printCount"
-                class="relative col-start-1 row-start-1 m-2 self-end justify-self-end transition-opacity group-hover:opacity-0"
-                :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
+                :icon="printCountIcon(card.printCount)"
+                class="group-hover:opacity-0"
+                :class="printCountBadgeClasses"
               />
+              <CbTooltip
+                v-else-if="card.printCount === 0"
+                :text="dictionary.project.notPrintedTooltip"
+              >
+                <CbPrintCountBadge
+                  :count="card.printCount"
+                  :icon="printCountIcon(card.printCount)"
+                  :class="printCountBadgeClasses"
+                />
+              </CbTooltip>
               <!-- TEMPORÄR (Plan „Neues Backend anbinden“): Version und Position
                    der Karte im Backend, zum Prüfen der Reihenfolge. Im
                    Aufräumschritt entfernen. -->
@@ -196,6 +211,7 @@ import CbPrintExportBar from '../printExport/CbPrintExportBar.vue'
 import CbPrintCountOverlay from '../printCount/CbPrintCountOverlay.vue'
 import { changePrintCountByWheel } from '../printCount/changePrintCountByWheel'
 import { printCountOverlayCardId } from '../printCount/printCountOverlayState'
+import { printCountIcon } from '../printCount/printCountIcon'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
@@ -275,6 +291,12 @@ watch(
   },
   { immediate: true },
 )
+
+// Lage und Einblenden der Plakette mit der Druckanzahl, gleich für beide Fälle.
+const printCountBadgeClasses = computed(() => [
+  'relative col-start-1 row-start-1 m-2 self-end justify-self-end transition-opacity',
+  isTurningCards.value ? 'opacity-0 duration-0' : 'opacity-100 duration-300',
+])
 
 function riseDelay(id: string, index: number) {
   return initialCardIds.has(id) ? { animationDelay: `${(index + 1) * 60}ms` } : undefined

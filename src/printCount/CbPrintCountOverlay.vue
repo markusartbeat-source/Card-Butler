@@ -9,7 +9,7 @@
          the card is drawn at a different zoom in the grid and in the editor.
          The comment sits inside the root on purpose: next to it, the caller's
          Transition would fade an empty text node instead of this layer. -->
-    <CbIcon name="stacks" size="large" />
+    <CbIcon :name="printCountIcon(count)" size="large" />
     <!-- Old and new number share one cell, so the old one slides out while the
          new one slides in — upwards when the count grows, downwards when it
          shrinks. The box cuts off whatever is outside. -->
@@ -29,6 +29,7 @@ import { ref, watch } from 'vue'
 import CbDimLayer from '../components/atoms/CbDimLayer.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import { maxPrintCount } from './changePrintCount'
+import { printCountIcon } from './printCountIcon'
 
 const props = defineProps<{ count: number }>()
 
