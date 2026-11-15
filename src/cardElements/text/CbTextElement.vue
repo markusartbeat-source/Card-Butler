@@ -12,7 +12,7 @@
     :class="[
       horizontalAlignmentClasses[element.data.alignment.horizontal],
       verticalAlignmentClasses[element.data.alignment.vertical],
-      fontStyleClasses[fontStyleOf(element.id)],
+      fontStyleClasses[fontStyleOf(element.data)],
       wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
       { 'border-background/70 border border-dashed': isPlaceholderShown },

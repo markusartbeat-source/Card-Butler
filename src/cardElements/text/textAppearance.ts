@@ -3,9 +3,8 @@ import type {
   HorizontalAlignment,
   VerticalAlignment,
 } from '../../api/elements/elementsApi'
-import { refStoredInBrowser } from '../../browserStorage/refStoredInBrowser'
 import { changeElement } from '../cardElements'
-import type { FontStyle } from './fonts'
+import { fontStyleClasses, type FontStyle } from './fonts'
 
 // Wie der Text aussieht. Gilt auf allen Karten des Sets.
 
@@ -32,17 +31,15 @@ export function changeFontSize(id: string, millimeters: number) {
   changeElement(id, (data) => (data.fontSize = millimeters))
 }
 
-// Das Backend kennt den Schnitt noch nicht. Den merkt sich deshalb der Browser,
-// je Element-id. Nur über diese beiden Funktionen lesen und setzen: Dann bleibt
-// der spätere Umzug ins Backend klein.
-const fontStyles = refStoredInBrowser<Record<string, FontStyle>>('fontStyles', {})
-
-export function fontStyleOf(id: string): FontStyle {
-  return fontStyles.value[id] ?? 'regular'
+/** Der Schnitt des Texts, im Backend textStyle. Fehlt er oder ist er unbekannt
+    (z.B. von einer KI eingetragen), gilt normal. */
+export function fontStyleOf(data: ElementData | undefined): FontStyle {
+  const textStyle = data?.textStyle
+  return textStyle && Object.hasOwn(fontStyleClasses, textStyle) ? (textStyle as FontStyle) : 'regular'
 }
 
 export function changeFontStyle(id: string, fontStyle: FontStyle) {
-  fontStyles.value = { ...fontStyles.value, [id]: fontStyle }
+  changeElement(id, (data) => (data.textStyle = fontStyle))
 }
 
 /** Richtet den Text in seiner Box links, mittig oder rechts aus. */

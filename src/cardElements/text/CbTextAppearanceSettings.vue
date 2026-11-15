@@ -89,7 +89,7 @@ const fontFamily = computed({
 })
 
 const fontStyle = computed({
-  get: () => fontStyleOf(props.elementId),
+  get: () => fontStyleOf(element.value?.data),
   set: (value) => changeFontStyle(props.elementId, value),
 })
 
