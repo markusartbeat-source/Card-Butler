@@ -22,7 +22,6 @@ const newElementDataByTool: Partial<Record<CardTool, () => NewElementDefaults>> 
     type: 'PICTURE',
     width: 40,
     height: 30,
-    radius: 0,
     imageId: null,
   }),
   square: () => ({
