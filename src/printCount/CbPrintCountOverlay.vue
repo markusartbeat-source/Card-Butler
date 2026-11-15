@@ -28,7 +28,7 @@
 import { ref, watch } from 'vue'
 import CbDimLayer from '../components/atoms/CbDimLayer.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
-import { maxPrintCount } from './changePrintCountByWheel'
+import { maxPrintCount } from './changePrintCount'
 
 const props = defineProps<{ count: number }>()
 
