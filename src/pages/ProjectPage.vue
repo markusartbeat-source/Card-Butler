@@ -201,6 +201,7 @@ import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/drag
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { deleteDroppedItem } from '../dragAndDrop/deleteDroppedItem'
 import { deleteCard } from '../cardSets/deleteCard'
+import { moveCard } from '../cardSets/moveCard'
 import {
   cardTurnEnded,
   flipAllCards,
@@ -332,7 +333,10 @@ function selectCard(id: string, event: MouseEvent) {
 // Letting go over a field of the drop bar is not a sort — the row stays as it
 // was, and the field decides what happens to the card. Deleting brings its own
 // animation along, which is why it gives the drag state back itself.
-function finishCardDrag(cardSet: CardSet, event: { newDraggableIndex?: number }) {
+function finishCardDrag(
+  cardSet: CardSet,
+  event: { newDraggableIndex?: number; oldDraggableIndex?: number },
+) {
   const { droppedOn, index, element } = endDrag(event)
   if (droppedOn === 'deleteCard') {
     return deleteDroppedItem(cardSet.cards, index, element, dictionary.dropBar.cardDeleted, (card) =>
@@ -341,6 +345,8 @@ function finishCardDrag(cardSet: CardSet, event: { newDraggableIndex?: number })
   }
 
   if (droppedOn === 'flipAllCards') flipAllCards()
+  // Einfach einsortiert: Der neue Platz kommt ins Backend.
+  if (!droppedOn && index !== event.oldDraggableIndex) moveCard(cardSet, cardSet.cards[index].id)
   releaseDrag()
 }
 

@@ -58,8 +58,8 @@ export function findCardSetOfElement(elementId: string) {
 }
 
 /** Macht aus einem vollständigen Kartenset des Backends eins der App, samt
-    Karten, Elementen, Texten und Bildern der Karten. Die neueste Karte steht
-    vorn – dort, wo auch neu angelegte hinkommen. Die Elemente stehen so, wie
+    Karten, Elementen, Texten und Bildern der Karten. Die Karten stehen in der
+    Reihenfolge, die das Backend speichert (position). Die Elemente stehen so, wie
     ihre Ebenen zuletzt sortiert waren, sonst das neueste hinten, also obenauf.
     Name und Adresse der Bilder merkt sich die App projektweit. */
 export function cardSetFromFullCardSet(fullCardSet: FullCardSet): CardSet {

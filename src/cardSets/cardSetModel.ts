@@ -24,9 +24,8 @@ export function cardFromResource(source: CardResource): Card {
 }
 
 export function cardSetFromSnapshot(snapshot: FullCardSet): CardSet {
-  const cards = [...snapshot.cards]
-    .sort((a, b) => Date.parse(b.audit.createdAt) - Date.parse(a.audit.createdAt))
-    .map(cardFromResource)
+  // Das Backend liefert die Karten schon nach position sortiert.
+  const cards = snapshot.cards.map(cardFromResource)
   for (const { cardId, elementId, text, imageId } of snapshot.cardElementValues) {
     const card = cards.find((card) => card.id === cardId)
     if (card) card.values[elementId] = { text, imageId }
