@@ -206,7 +206,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     croppingKeys:
       'Adjust crop: arrow keys move the picture, further with Shift. Plus and minus zoom. Escape finishes.',
     opacity: 'Opacity',
-    opacityValue: (percent: number) => `${percent}%`,
+    percentValue: (percent: string) => `${percent}%`,
     fontFamily: 'Font',
     fontStyle: 'Font style',
     fontStyleRegular: 'Regular',

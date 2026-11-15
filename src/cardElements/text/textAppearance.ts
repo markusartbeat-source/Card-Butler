@@ -10,8 +10,13 @@ import { fontStyleClasses, type FontStyle } from './fonts'
 
 /** Gelten, solange das Backend keinen Wert hat. Neue Textfelder bekommen sie
     gleich mit – die Namen sind die aus ElementData. Schriftgröße in mm, Farbe
-    als Hex-Wert (Daten, kein Styling). */
-export const textAppearanceDefaults = { fontFamily: 'Arial', fontSize: 4, color: '#000000' }
+    als Hex-Wert (Daten, kein Styling), Zeilenhöhe als Faktor (1 = einfach). */
+export const textAppearanceDefaults = {
+  fontFamily: 'Arial',
+  fontSize: 4,
+  color: '#000000',
+  lineHeight: 1,
+}
 
 /** Die Darstellung des Texts, fehlende Werte durch die Startwerte ersetzt. */
 export function textAppearanceOf(data: ElementData | undefined) {
@@ -19,7 +24,22 @@ export function textAppearanceOf(data: ElementData | undefined) {
     fontFamily: data?.fontFamily ?? textAppearanceDefaults.fontFamily,
     fontSize: data?.fontSize ?? textAppearanceDefaults.fontSize,
     color: data?.color ?? textAppearanceDefaults.color,
+    lineHeight: data?.lineHeight ?? textAppearanceDefaults.lineHeight,
   }
+}
+
+// Einfacher Zeilenabstand (1 im Backend) wie „Auto“ in Figma bei Arial: 1,15
+// der Schriftgröße. Sonst erbte der Text die 1,5 der Seite.
+const singleLineHeight = 1.15
+
+/** Die Zeilenhöhe fürs CSS (ohne Einheit, also je Schriftgröße). */
+export function cssLineHeight(lineHeight: number) {
+  return lineHeight * singleLineHeight
+}
+
+/** Die Zeilenhöhe als Faktor: 1 = einfach, 1,5 = anderthalbfach. Nur größer als 0. */
+export function changeLineHeight(id: string, lineHeight: number) {
+  if (lineHeight > 0) changeElement(id, (data) => (data.lineHeight = lineHeight))
 }
 
 export function changeFontFamily(id: string, fontFamily: string) {

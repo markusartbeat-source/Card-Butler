@@ -207,7 +207,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
       "Ajuster le cadrage : les flèches déplacent l'image, plus loin avec Maj. Plus et moins zooment. Échap termine.",
     opacity: 'Opacité',
     // Im Französischen steht vor dem Prozentzeichen ein geschütztes Leerzeichen.
-    opacityValue: (percent: number) => `${percent} %`,
+    percentValue: (percent: string) => `${percent} %`,
     fontFamily: 'Police',
     fontStyle: 'Style de police',
     fontStyleRegular: 'Normal',

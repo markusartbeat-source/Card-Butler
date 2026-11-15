@@ -206,7 +206,7 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     croppingKeys:
       'Ajustar recorte: as setas movem a imagem, mais longe com Shift. Mais e menos fazem zoom. Escape termina.',
     opacity: 'Opacidade',
-    opacityValue: (percent: number) => `${percent}%`,
+    percentValue: (percent: string) => `${percent}%`,
     fontFamily: 'Tipo de letra',
     fontStyle: 'Estilo do tipo de letra',
     fontStyleRegular: 'Normal',

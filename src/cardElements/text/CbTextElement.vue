@@ -69,7 +69,7 @@ import { iconStyleVariables } from '../../textIcons/textIconSettings'
 import { nodesToText, replaceTypedIconWords, textToNodes } from '../../textIcons/textIconWords'
 import { fontStyleClasses } from './fonts'
 import { placeCaretAtPoint } from './placeCaretAtPoint'
-import { fontStyleOf, textAppearanceOf } from './textAppearance'
+import { cssLineHeight, fontStyleOf, textAppearanceOf } from './textAppearance'
 import { textSizingOf } from './textSizing'
 
 // The content is the one thing each card fills in itself. Only the card
@@ -102,8 +102,8 @@ const verticalAlignmentClasses = {
 
 // Schriftgröße in mm.
 const textStyle = computed(() => {
-  const { fontFamily, fontSize, color } = textAppearanceOf(props.element.data)
-  return { fontFamily, fontSize: `${fontSize}mm`, color }
+  const { fontFamily, fontSize, color, lineHeight } = textAppearanceOf(props.element.data)
+  return { fontFamily, fontSize: `${fontSize}mm`, color, lineHeight: cssLineHeight(lineHeight) }
 })
 
 // Mit automatischer Breite wird das Feld breiter, nur Enter beginnt eine neue

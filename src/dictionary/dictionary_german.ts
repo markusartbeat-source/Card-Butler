@@ -239,7 +239,7 @@ export const dictionaryGerman = {
     croppingKeys:
       'Ausschnitt anpassen: Pfeiltasten verschieben das Bild, mit Umschalt weiter. Plus und Minus zoomen. Escape beendet.',
     opacity: 'Sichtbarkeit',
-    opacityValue: (percent: number) => `${percent}%`,
+    percentValue: (percent: string) => `${percent}%`,
     fontFamily: 'Schriftart',
     fontStyle: 'Schriftschnitt',
     fontStyleRegular: 'Regular',

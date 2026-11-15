@@ -206,7 +206,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     croppingKeys:
       'Ajustar recorte: las flechas mueven la imagen, más lejos con Mayús. Más y menos hacen zoom. Escape termina.',
     opacity: 'Opacidad',
-    opacityValue: (percent: number) => `${percent}%`,
+    percentValue: (percent: string) => `${percent}%`,
     fontFamily: 'Fuente',
     fontStyle: 'Estilo de fuente',
     fontStyleRegular: 'Normal',

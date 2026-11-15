@@ -24,11 +24,15 @@
       :items="fontSizeItems"
     />
     <div class="flex gap-3">
-      <CbInput
-        v-model="lineHeight"
+      <!-- In Prozent: 100 % = einfacher Zeilenabstand. -->
+      <CbNumberInput
+        :value="textAppearanceOf(element?.data).lineHeight * 100"
+        :format="formatPercent"
+        :parse="parsePercent"
         class="flex-1"
         icon="format_line_height"
         :label="dictionary.cardEditor.lineHeight"
+        @commit="(percent) => changeLineHeight(elementId, percent / 100)"
       />
       <CbInput
         v-model="letterSpacing"
@@ -66,7 +70,9 @@ import CbCombobox from '../../components/atoms/CbCombobox.vue'
 import CbInput from '../../components/atoms/CbInput.vue'
 import CbSelect from '../../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
+import CbNumberInput from '../../components/molecules/CbNumberInput.vue'
 import CbToggleGroup from '../../components/molecules/CbToggleGroup.vue'
+import { formatPercent, parsePercent } from '../../card/percent'
 import { changeElementColor, findCardSetElement, previewElementColor } from '../cardElements'
 import { fontFamilyItemsIncluding, fontSizeItems, fontStyleItems } from './fonts'
 import {
@@ -75,6 +81,7 @@ import {
   changeFontFamily,
   changeFontSize,
   changeFontStyle,
+  changeLineHeight,
   fontStyleOf,
   textAppearanceOf,
 } from './textAppearance'
@@ -104,8 +111,7 @@ const color = computed({
   set: (value) => previewElementColor(props.elementId, value),
 })
 
-// Diese Werte leben vorerst nur hier und wirken noch nicht auf den Text.
-const lineHeight = ref('20')
+// Dieser Wert lebt vorerst nur hier und wirkt noch nicht auf den Text.
 const letterSpacing = ref('0%')
 
 const horizontalAlignments = computed(() => [
