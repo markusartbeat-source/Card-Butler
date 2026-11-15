@@ -38,7 +38,7 @@
           <CbCard
             :id="card.id"
             :elements="cardSet.elements"
-            :card-set-data="cardSet.data"
+            :card-set="cardSet"
             :values="card.values"
             :zoom="editorZoom"
             show-bleed
@@ -52,9 +52,9 @@
             <!-- The cursors of people standing on exactly this card. -->
             <slot />
           </CbCard>
-          <!-- Shows while Alt + wheel changes the count. The corner follows the
-               big card: 3 mm at the editor zoom is about 18 px, "rounded-2xl"
-               is 16. It appears at once and fades out when it goes. -->
+          <!-- Shows while Alt + wheel changes the count. Die Ecken folgen der
+               Karte, umgerechnet auf ihren Zoom. It appears at once and fades
+               out when it goes. -->
           <Transition
             leave-active-class="transition-opacity duration-300"
             leave-to-class="opacity-0"
@@ -62,7 +62,8 @@
             <CbPrintCountOverlay
               v-if="card.id === printCountOverlayCardId"
               :count="card.printCount"
-              class="absolute inset-0 rounded-2xl"
+              class="absolute inset-0"
+              :style="{ borderRadius: cornerRadiiStyle(cardCornerRadiiOf(cardSet.id), editorZoom) }"
             />
           </Transition>
         </div>
@@ -127,8 +128,9 @@ import CbToolbar from '../molecules/CbToolbar.vue'
 import { cardToolbarElements, cardTools, type CardTool } from '../molecules/cardToolbarElements'
 import CbCardSettingsPanel from '../../cardSettings/CbCardSettingsPanel.vue'
 import CbElementTransform from '../../elementTransform/CbElementTransform.vue'
-import { editorZoom } from '../../card/cardFormat'
+import { cardCornerRadiiOf, editorZoom } from '../../card/cardFormat'
 import { findCardSurface } from '../../card/cardSurface'
+import { cornerRadiiStyle } from '../../card/cornerRadii'
 import CbElementSettingsPanel from '../../cardElements/CbElementSettingsPanel.vue'
 import { changeCardText, saveWaitingCardTexts } from '../../cardElements/cardValues'
 import { createElement } from '../../cardElements/createElement'

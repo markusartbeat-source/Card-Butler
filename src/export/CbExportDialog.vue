@@ -192,7 +192,7 @@ async function measureExportSize(dpi: number) {
   const stageCards = Array.from(renderStage.value?.stageElement?.children ?? [])
   if (!stageCards.length) return
 
-  const sampleImage = await cardToPngBlob(stageCards[0], props.cards[0].cardSetData, dpi)
+  const sampleImage = await cardToPngBlob(stageCards[0], props.cards[0].cardSet.data, dpi)
 
   // Clicking through the resolutions starts a measurement each time; only the
   // one that is still chosen may write its number.
@@ -260,7 +260,7 @@ async function exportCards() {
 // Die Bühne zeichnet die Karten in derselben Reihenfolge wie props.cards.
 async function* cardZipEntries(stageCards: Element[]) {
   for (const [position, stageCard] of stageCards.entries()) {
-    const cardSize = props.cards[position].cardSetData
+    const cardSize = props.cards[position].cardSet.data
     const cardImage = await cardToPngBlob(stageCard, cardSize, exportDpi.value)
     reportExportedCard(position + 1)
 

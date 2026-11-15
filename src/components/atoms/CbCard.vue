@@ -40,8 +40,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { CardElementValues } from '../../cardElements/cardValues'
-import type { CardSetData } from '../../api/cardSets/cardSetsApi'
-import type { CardSetElement } from '../../cardSets/cardSets'
+import type { CardSet, CardSetElement } from '../../cardSets/cardSets'
 import { cardFormatStyle, gridZoom } from '../../card/cardFormat'
 import CbCardElement from '../../cardElements/CbCardElement.vue'
 import { endShine, shiningElementId } from '../../cardElements/elementShine'
@@ -55,7 +54,7 @@ import { endShine, shiningElementId } from '../../cardElements/elementShine'
 // will das, damit man sie sieht und anklicken kann. editableElements lässt in
 // die Felder tippen, changeElementValue meldet dann den neuen Inhalt. Nur dann
 // glänzt auch ein Element auf (siehe elementShine).
-// cardSetData sind die Einstellungen des Sets (Größe, Farbe, Anschnitt). showBleed
+// cardSet ist das Set der Karte: Größe, Ecken, Farbe, Anschnitt. showBleed
 // zeigt den Anschnitt rund um die Karte, showCutLine die goldene Schnittlinie –
 // beides will bisher nur der Editor. coverBleed verdeckt den Anschnitt, ohne den
 // Rahmen zu verkleinern – so fliegt die Editor-Karte wie die in der Übersicht.
@@ -63,7 +62,7 @@ const props = withDefaults(
   defineProps<{
     id: string
     elements: CardSetElement[]
-    cardSetData: CardSetData
+    cardSet: CardSet
     showBleed?: boolean
     showCutLine?: boolean
     coverBleed?: boolean
@@ -94,10 +93,10 @@ const emit = defineEmits<{ changeElementValue: [elementId: string, value: string
 // je, bleedHeight oben und unten je. Verdeckt schneidet der Rahmen an der
 // Kartenkante ab, mit deren runden Ecken – style.css lässt den Wechsel gleiten.
 const frameStyle = computed(() => {
-  const { color, bleedWidth, bleedHeight } = props.cardSetData
+  const { color, bleedWidth, bleedHeight } = props.cardSet.data
   const bleed = `${bleedHeight}mm ${bleedWidth}mm`
   return {
-    ...cardFormatStyle(props.cardSetData),
+    ...cardFormatStyle(props.cardSet),
     zoom: props.zoom,
     backgroundColor: color,
     outlineColor: props.highlightColor,

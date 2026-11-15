@@ -49,7 +49,10 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(2)">
             <CbSettingsHeading>{{ dictionary.cardEditor.cornersGroup }}</CbSettingsHeading>
-            <CbCornerRadiusFields :radii="cornerRadii" @change="(radii) => (cornerRadii = radii)" />
+            <CbCornerRadiusFields
+              :radii="cardCornerRadiiOf(cardSet.id)"
+              @change="(radii) => changeCardCornerRadii(cardSet.id, radii)"
+            />
           </div>
 
           <CbDivider class="animate-cb-rise my-6" :style="riseDelay(3)" />
@@ -122,7 +125,7 @@ import CbTabs from '../components/atoms/CbTabs.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCornerRadiusFields from '../components/molecules/CbCornerRadiusFields.vue'
 import CbSizeFields from '../components/molecules/CbSizeFields.vue'
-import { uniformCornerRadii } from '../card/cornerRadii'
+import { cardCornerRadiiOf, changeCardCornerRadii } from '../card/cardFormat'
 import type { Card, CardSet } from '../cardSets/cardSets'
 import {
   changeCardSetBleed,
@@ -147,11 +150,10 @@ function riseDelay(step: number) {
   return { animationDelay: `${step * 60}ms` }
 }
 
-// Größe, Farbe und Anschnitt kommen aus dem Set. Die übrigen Werte leben
+// Größe, Ecken, Farbe und Anschnitt gehören zum Set. Die übrigen Werte leben
 // vorerst nur im Panel und ändern die Karte noch nicht.
 const printCount = ref('1')
 const unit = ref('mm')
-const cornerRadii = ref(uniformCornerRadii(20))
 
 const units = computed(() => [
   { value: 'cm', label: dictionary.cardEditor.unitCentimeters },

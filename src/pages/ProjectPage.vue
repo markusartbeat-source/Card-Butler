@@ -54,7 +54,7 @@
                 risenCardIds.has(addCardId(cardSet)) ? '' : 'animate-cb-rise',
                 dimWhileDraggingClasses,
               ]"
-              :style="{ ...cardFormatStyle(cardSet.data), zoom: gridZoom }"
+              :style="{ ...cardFormatStyle(cardSet), zoom: gridZoom }"
               @animationend="markRisen(addCardId(cardSet), $event)"
               @click="createCard(cardSet)"
             />
@@ -91,7 +91,7 @@
               >
                 <CbCardBackdrops
                   :count="card.printCount"
-                  :size="cardSet.data"
+                  :card-set="cardSet"
                   class="visible col-start-1 row-start-1 transition-opacity"
                   :class="[
                     isTurningCards ? 'duration-0' : 'duration-300',
@@ -102,7 +102,7 @@
               <CbCard
                 :id="card.id"
                 :elements="cardSet.elements"
-                :card-set-data="cardSet.data"
+                :card-set="cardSet"
                 :values="card.values"
                 highlight-search
                 class="cb-card-front col-start-1 row-start-1"
@@ -110,7 +110,7 @@
               <CbCard
                 :id="card.id"
                 :elements="cardSet.elements"
-                :card-set-data="cardSet.data"
+                :card-set="cardSet"
                 :values="card.values"
                 highlight-search
                 side="back"
@@ -130,8 +130,8 @@
                 :class="isTurningCards ? 'opacity-0 duration-0' : 'opacity-100 duration-300'"
               />
               <!-- Shows while Alt + wheel changes the count. Last in the cell,
-                   so it lies over faces and badge. The corner follows the card:
-                   3 mm at the grid zoom is about 9 px, "rounded-lg" is 8.
+                   so it lies over faces and badge. Die Ecken folgen der Karte,
+                   umgerechnet auf ihren Zoom.
                    It appears at once and fades out when it goes. -->
               <Transition
                 leave-active-class="transition-opacity duration-300"
@@ -140,7 +140,10 @@
                 <CbPrintCountOverlay
                   v-if="card.id === printCountOverlayCardId"
                   :count="card.printCount"
-                  class="relative col-start-1 row-start-1 rounded-lg"
+                  class="relative col-start-1 row-start-1"
+                  :style="{
+                    borderRadius: cornerRadiiStyle(cardCornerRadiiOf(cardSet.id), gridZoom),
+                  }"
                 />
               </Transition>
             </div>
@@ -198,7 +201,8 @@ import {
 import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
 import { currentProject } from '../project/currentProject'
-import { cardFormatStyle, gridZoom } from '../card/cardFormat'
+import { cardCornerRadiiOf, cardFormatStyle, gridZoom } from '../card/cardFormat'
+import { cornerRadiiStyle } from '../card/cornerRadii'
 import { cardMatchesSearch } from '../search/cardMatchesSearch'
 import { searchWord } from '../search/searchWord'
 
@@ -223,7 +227,7 @@ const exportCards = computed(() =>
     cardSet.cards.map((card) => ({
       ...card,
       elements: cardSet.elements,
-      cardSetData: cardSet.data,
+      cardSet,
     })),
   ),
 )

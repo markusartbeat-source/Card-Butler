@@ -14,7 +14,7 @@
       :key="card.id"
       :id="card.id"
       :elements="card.elements"
-      :card-set-data="card.cardSetData"
+      :card-set="card.cardSet"
       :values="card.values"
       :zoom="exportZoom"
       class="pointer-events-none"

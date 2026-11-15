@@ -14,7 +14,13 @@ export function areCornerRadiiUniform(radii: CornerRadii) {
   return corners.every((corner) => radii[corner] === radii.topLeft)
 }
 
-// Für CSS border-radius – das zählt im Uhrzeigersinn ab oben links.
-export function cornerRadiiStyle({ topLeft, topRight, bottomRight, bottomLeft }: CornerRadii) {
-  return `${topLeft}mm ${topRight}mm ${bottomRight}mm ${bottomLeft}mm`
+// Für CSS border-radius – das zählt im Uhrzeigersinn ab oben links. zoom ist für
+// Flächen, die ohne eigenen Zoom über einer gezoomten Karte liegen.
+export function cornerRadiiStyle(
+  { topLeft, topRight, bottomRight, bottomLeft }: CornerRadii,
+  zoom = 1,
+) {
+  return [topLeft, topRight, bottomRight, bottomLeft]
+    .map((radius) => `${radius * zoom}mm`)
+    .join(' ')
 }
