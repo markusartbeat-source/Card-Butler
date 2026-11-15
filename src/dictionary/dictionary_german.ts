@@ -248,6 +248,8 @@ export const dictionaryGerman = {
     fontStyleBoldItalic: 'Fett kursiv',
     fontSize: 'Schriftgröße',
     lineHeight: 'Zeilenhöhe',
+    // Der einfache Zeilenabstand, wie in Figma.
+    lineHeightAuto: 'Auto',
     letterSpacing: 'Zeichenabstand',
     textAlignHorizontally: 'Text horizontal ausrichten',
     textAlignVertically: 'Text vertikal ausrichten',

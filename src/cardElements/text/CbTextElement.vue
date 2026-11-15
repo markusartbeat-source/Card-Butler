@@ -100,10 +100,18 @@ const verticalAlignmentClasses = {
   BOTTOM: 'content-end',
 }
 
-// Schriftgröße in mm.
+// Schriftgröße in mm, der Zeichenabstand je Schriftgröße (em).
 const textStyle = computed(() => {
-  const { fontFamily, fontSize, color, lineHeight } = textAppearanceOf(props.element.data)
-  return { fontFamily, fontSize: `${fontSize}mm`, color, lineHeight: cssLineHeight(lineHeight) }
+  const { fontFamily, fontSize, color, lineHeight, letterSpacing } = textAppearanceOf(
+    props.element.data,
+  )
+  return {
+    fontFamily,
+    fontSize: `${fontSize}mm`,
+    color,
+    lineHeight: cssLineHeight(lineHeight),
+    letterSpacing: `${letterSpacing}em`,
+  }
 })
 
 // Mit automatischer Breite wird das Feld breiter, nur Enter beginnt eine neue

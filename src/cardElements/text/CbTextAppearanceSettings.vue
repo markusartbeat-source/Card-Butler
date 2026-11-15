@@ -24,21 +24,25 @@
       :items="fontSizeItems"
     />
     <div class="flex gap-3">
-      <!-- In Prozent: 100 % = einfacher Zeilenabstand. -->
+      <!-- In Prozent, der einfache Zeilenabstand (100 %) heißt „Auto“. -->
       <CbNumberInput
         :value="textAppearanceOf(element?.data).lineHeight * 100"
-        :format="formatPercent"
-        :parse="parsePercent"
+        :format="formatLineHeight"
+        :parse="parseLineHeight"
         class="flex-1"
         icon="format_line_height"
         :label="dictionary.cardEditor.lineHeight"
         @commit="(percent) => changeLineHeight(elementId, percent / 100)"
       />
-      <CbInput
-        v-model="letterSpacing"
+      <!-- In Prozent der Schriftgröße, auch negativ. -->
+      <CbNumberInput
+        :value="textAppearanceOf(element?.data).letterSpacing * 100"
+        :format="formatPercent"
+        :parse="parsePercent"
         class="flex-1"
         icon="format_letter_spacing_wider"
         :label="dictionary.cardEditor.letterSpacing"
+        @commit="(percent) => changeLetterSpacing(elementId, percent / 100)"
       />
     </div>
     <div class="flex gap-3">
@@ -64,10 +68,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import CbColorPicker from '../../components/atoms/CbColorPicker.vue'
 import CbCombobox from '../../components/atoms/CbCombobox.vue'
-import CbInput from '../../components/atoms/CbInput.vue'
 import CbSelect from '../../components/atoms/CbSelect.vue'
 import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbNumberInput from '../../components/molecules/CbNumberInput.vue'
@@ -81,6 +84,7 @@ import {
   changeFontFamily,
   changeFontSize,
   changeFontStyle,
+  changeLetterSpacing,
   changeLineHeight,
   fontStyleOf,
   textAppearanceOf,
@@ -105,14 +109,23 @@ const fontSize = computed({
   set: (millimeters) => changeFontSize(props.elementId, millimeters),
 })
 
+// Der einfache Zeilenabstand (100 %) heißt wie in Figma „Auto“. Leer oder „Auto“
+// eingetippt stellt ihn wieder her.
+function formatLineHeight(percent: number | null | undefined) {
+  return percent === 100 ? dictionary.cardEditor.lineHeightAuto : formatPercent(percent)
+}
+
+function parseLineHeight(text: string) {
+  const isAuto = !text || text.toLowerCase() === dictionary.cardEditor.lineHeightAuto.toLowerCase()
+  return isAuto ? 100 : parsePercent(text)
+}
+
 // Beim Ziehen nur zeigen, gespeichert wird bei change.
 const color = computed({
   get: () => textAppearanceOf(element.value?.data).color,
   set: (value) => previewElementColor(props.elementId, value),
 })
 
-// Dieser Wert lebt vorerst nur hier und wirkt noch nicht auf den Text.
-const letterSpacing = ref('0%')
 
 const horizontalAlignments = computed(() => [
   {

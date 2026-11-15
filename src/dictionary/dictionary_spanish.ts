@@ -215,6 +215,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     fontStyleBoldItalic: 'Negrita cursiva',
     fontSize: 'Tamaño de fuente',
     lineHeight: 'Interlineado',
+    // Der einfache Zeilenabstand, wie in Figma.
+    lineHeightAuto: 'Auto',
     letterSpacing: 'Espaciado entre letras',
     textAlignHorizontally: 'Alinear el texto horizontalmente',
     textAlignVertically: 'Alinear el texto verticalmente',

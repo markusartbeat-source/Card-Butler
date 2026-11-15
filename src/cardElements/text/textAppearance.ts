@@ -10,12 +10,14 @@ import { fontStyleClasses, type FontStyle } from './fonts'
 
 /** Gelten, solange das Backend keinen Wert hat. Neue Textfelder bekommen sie
     gleich mit – die Namen sind die aus ElementData. Schriftgröße in mm, Farbe
-    als Hex-Wert (Daten, kein Styling), Zeilenhöhe als Faktor (1 = einfach). */
+    als Hex-Wert (Daten, kein Styling), Zeilenhöhe und Zeichenabstand als Faktor
+    der Schriftgröße (Zeilenhöhe 1 = einfach). */
 export const textAppearanceDefaults = {
   fontFamily: 'Arial',
   fontSize: 4,
   color: '#000000',
   lineHeight: 1,
+  letterSpacing: 0,
 }
 
 /** Die Darstellung des Texts, fehlende Werte durch die Startwerte ersetzt. */
@@ -25,6 +27,7 @@ export function textAppearanceOf(data: ElementData | undefined) {
     fontSize: data?.fontSize ?? textAppearanceDefaults.fontSize,
     color: data?.color ?? textAppearanceDefaults.color,
     lineHeight: data?.lineHeight ?? textAppearanceDefaults.lineHeight,
+    letterSpacing: data?.letterSpacing ?? textAppearanceDefaults.letterSpacing,
   }
 }
 
@@ -40,6 +43,12 @@ export function cssLineHeight(lineHeight: number) {
 /** Die Zeilenhöhe als Faktor: 1 = einfach, 1,5 = anderthalbfach. Nur größer als 0. */
 export function changeLineHeight(id: string, lineHeight: number) {
   if (lineHeight > 0) changeElement(id, (data) => (data.lineHeight = lineHeight))
+}
+
+/** Der Zeichenabstand als Faktor der Schriftgröße: 0,05 rückt die Buchstaben um
+    5 % auseinander, negativ rücken sie zusammen. */
+export function changeLetterSpacing(id: string, letterSpacing: number) {
+  changeElement(id, (data) => (data.letterSpacing = letterSpacing))
 }
 
 export function changeFontFamily(id: string, fontFamily: string) {
