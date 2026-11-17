@@ -6,7 +6,7 @@
     :aria-label="label"
     :deselectable="false"
     :model-value="[String(modelValue)]"
-    class="flex rounded-md bg-surface-light"
+    class="flex rounded-md bg-surface-light ring ring-surface-edge"
     @update:model-value="(values) => $emit('update:modelValue', Number(values[0]))"
   >
     <!-- Die Auswahl liegt außen um den Tooltip, damit ihre Kennungen am Knopf

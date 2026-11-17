@@ -3,7 +3,7 @@
     <!-- A toast that carries export progress in its meta brings its own look
          along; every other toast is a title with an optional description. -->
     <Toast.Root
-      class="cb-toast relative flex flex-col items-start rounded-lg text-white shadow-lg"
+      class="cb-toast relative flex flex-col items-start rounded-lg text-foreground shadow-lg ring ring-surface-edge"
       :class="[
         backgroundClass(toast.type),
         toast.meta?.exportProgress ? 'w-84 p-5' : 'w-80 gap-1 py-4 pr-10 pl-4',

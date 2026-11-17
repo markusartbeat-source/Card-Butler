@@ -30,13 +30,23 @@
         <div class="cb-regular-text animate-cb-rise flex items-center p-6" :style="riseDelay(2)">
           {{ dictionary.settings.theme }}
           <div class="grow"></div>
-          <CbSelect v-model="theme" :items="themes" />
+          <CbSelect
+            v-model="themeName"
+            :items="themes"
+            :label="dictionary.settings.theme"
+            hide-label
+            :class="notStoredClass"
+          />
         </div>
 
         <div class="cb-regular-text animate-cb-rise flex items-center p-6" :style="riseDelay(3)">
-          {{ dictionary.settings.accessibility }}
+          {{ dictionary.settings.highContrast }}
           <div class="grow"></div>
-          <CbSwitch v-model="accessibility" />
+          <CbSwitch
+            v-model="isHighContrast"
+            :label="dictionary.settings.highContrast"
+            :class="notStoredClass"
+          />
         </div>
       </CbSettingsGroup>
 
@@ -61,7 +71,7 @@
             </p>
           </div>
           <div class="grow"></div>
-          <CbProgress :value="subscription.storageUsedMb" :max="subscription.storageTotalMb" />
+          <CbProgress :value="subscription.storageUsedMb" :max="subscription.storageTotalMb" class="w-52" />
         </div>
 
         <div class="animate-cb-rise flex items-center p-6" :style="riseDelay(6)">
@@ -73,7 +83,7 @@
             </p>
           </div>
           <div class="grow"></div>
-          <CbProgress :value="subscription.projectsUsed" :max="subscription.projectsTotal" />
+          <CbProgress :value="subscription.projectsUsed" :max="subscription.projectsTotal" class="w-52" />
         </div>
 
         <div
@@ -101,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import CbAvatar from '../components/atoms/CbAvatar.vue'
 import CbButton from '../components/atoms/CbButton.vue'
@@ -117,6 +127,8 @@ import type { IconName } from '../components/atoms/icons'
 import { postOffice } from '../api/postOffice/postOffice'
 import { signOut, useCurrentUser } from '../composables/useCurrentUser'
 import { subscription } from '../settings/subscription'
+import { notStoredClass } from '../notStored/notStoredMark'
+import { isHighContrast, theme, type ThemeChoice } from '../theme/theme'
 import guestPicture from '../assets/profile_pictures/profile_picture_small.png'
 
 const router = useRouter()
@@ -145,15 +157,18 @@ const language = computed<string>({
   set: (value) => setLanguage(value as LanguageCode),
 })
 
-// Picking a theme only changes the field for now, nothing switches yet.
-const themes = computed<{ value: string; label: string; icon: IconName }[]>(() => [
+// Wie das Gerät, hell oder dunkel, dazu der Schalter für hohen Kontrast (folgt
+// ebenfalls dem Gerät, bis man ihn umlegt). Beides schaltet sofort um
+// (theme/theme.ts) und gilt vorerst nur in diesem Browser – darum rot markiert.
+const themes = computed<{ value: ThemeChoice; label: string; icon: IconName }[]>(() => [
+  { value: 'device', label: dictionary.settings.themeDevice, icon: 'brightness_auto' },
   { value: 'dark', label: dictionary.settings.themeDark, icon: 'dark_mode' },
   { value: 'light', label: dictionary.settings.themeLight, icon: 'light_mode' },
 ])
-const theme = ref('dark')
-
-// The switch only flips for now, nothing changes on the page yet.
-const accessibility = ref(false)
+const themeName = computed<string>({
+  get: () => theme.value,
+  set: (value) => (theme.value = value as ThemeChoice),
+})
 
 // Every row waits a moment longer than the one above it, so the page builds
 // itself up from top to bottom — the same feel as the plan cards.

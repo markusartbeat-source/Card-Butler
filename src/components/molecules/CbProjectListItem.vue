@@ -6,7 +6,7 @@
     <router-link
       v-ripple
       :to="`/project/${projectId}`"
-      class="cb-regular-text bg-surface cb-hover relative flex min-w-0 flex-1 items-center gap-2 overflow-hidden rounded-lg px-3 py-2 shadow-lg"
+      class="cb-regular-text bg-surface cb-hover relative flex min-w-0 flex-1 items-center gap-2 overflow-hidden rounded-lg px-3 py-2 shadow-lg ring ring-surface-edge"
     >
       <CbIcon name="playing_cards" />
       <span class="truncate">{{ name }}</span>

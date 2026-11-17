@@ -6,7 +6,7 @@
   <div
     ref="panel"
     class="rounded-3xl transition-all duration-350"
-    :class="editing && 'bg-surface shadow-lg'"
+    :class="editing && 'bg-surface shadow-lg ring ring-surface-edge'"
   >
     <div class="cb-unfold" :class="editing && 'cb-unfold-open'">
       <div>
@@ -41,7 +41,7 @@
           role="textbox"
           aria-multiline="true"
           :aria-label="dictionary.textIcons.exampleTextLabel"
-          class="leading-normal whitespace-pre-wrap text-white outline-none"
+          class="leading-normal whitespace-pre-wrap text-foreground outline-none"
           :class="fontStyleClasses[fontStyle]"
           :style="[exampleTextStyle, iconStyleVariables]"
           @focus="editing = true"

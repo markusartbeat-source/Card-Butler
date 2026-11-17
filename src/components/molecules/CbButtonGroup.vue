@@ -3,7 +3,7 @@
        dazwischen. Bekommt die Gruppe eine Breite, teilen die Knöpfe sie gleich
        auf. Der Name steht als Tooltip am Knopf und ist für Screenreader sein
        Name. -->
-  <div role="group" :aria-label="label" class="flex rounded-md bg-surface-light">
+  <div role="group" :aria-label="label" class="flex rounded-md bg-surface-light ring ring-surface-edge">
     <CbTooltip v-for="(item, index) in items" :key="item.name" :text="item.name">
       <CbButtonGroupItem :icon="item.icon" :aria-label="item.name" @click="emit('select', index)" />
     </CbTooltip>

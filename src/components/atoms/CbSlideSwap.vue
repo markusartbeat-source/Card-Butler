@@ -2,12 +2,16 @@
   <!-- Two blocks sit above each other in one cut-off box and only one of them
        shows. On a switch the strip slides by the distance between the blocks
        while the box grows to the new height — one even movement. -->
-  <div class="cb-swap" :style="{ height: boxHeight }">
+  <!-- Die Blöcke haben 2px Luft, sonst schnitte der Kasten den 1px-Rand der
+       Felder (ring, im Kontrastmodus sichtbar) ab – bei Bildschirm-Skalierung
+       (z.B. 125 %) reicht 1px wegen Rundung nicht. -m-0.5 hebt die Luft im
+       Layout auf. -->
+  <div class="cb-swap -m-0.5" :style="{ height: boxHeight }">
     <div class="cb-swap-strip flex flex-col gap-3" :style="{ transform: stripOffset }">
-      <div ref="firstBlock" :inert="showSecond">
+      <div ref="firstBlock" class="p-0.5" :inert="showSecond">
         <slot name="first" />
       </div>
-      <div ref="secondBlock" :inert="!showSecond">
+      <div ref="secondBlock" class="p-0.5" :inert="!showSecond">
         <slot name="second" />
       </div>
     </div>

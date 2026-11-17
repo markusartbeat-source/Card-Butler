@@ -23,7 +23,7 @@
     <Select.Control>
       <Select.Trigger
         v-ripple
-        class="cb-regular-text cb-hover relative flex items-center overflow-hidden bg-surface-light"
+        class="cb-regular-text cb-hover relative flex items-center overflow-hidden bg-surface-light ring ring-surface-edge"
         :class="triggerClasses[variant]"
       >
         <CbThumbnail
@@ -59,7 +59,7 @@
                  Text – Ark würde damit wählen bzw. springen. -->
             <label
               v-if="searchLabel"
-              class="cb-regular-text-muted mb-1 flex items-center gap-1.5 rounded-md bg-surface px-1.5 py-1"
+              class="cb-regular-text-muted mb-1 flex items-center gap-1.5 rounded-md bg-surface px-1.5 py-1 ring ring-surface-edge"
             >
               <CbIcon name="search" />
               <input

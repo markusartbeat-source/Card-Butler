@@ -20,7 +20,7 @@ export function playRipple(element: HTMLElement, clientX: number, clientY: numbe
   const size = Math.max(rect.width, rect.height) * 2
 
   const circle = document.createElement('span')
-  circle.className = 'bg-white/40 pointer-events-none absolute rounded-full'
+  circle.className = 'bg-highlight/40 pointer-events-none absolute rounded-full'
   circle.style.left = `${clientX - rect.left - size / 2}px`
   circle.style.top = `${clientY - rect.top - size / 2}px`
   circle.style.width = `${size}px`

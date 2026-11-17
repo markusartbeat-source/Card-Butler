@@ -20,7 +20,7 @@
         <!-- How wide and how tall the dialog is comes from the outside, only
              never bigger than the screen. -->
         <Dialog.Content
-          class="cb-dialog flex max-h-full max-w-full rounded-3xl bg-gradient-to-b from-surface to-transparent p-px shadow-lg"
+          class="cb-dialog flex max-h-full max-w-full rounded-3xl bg-gradient-to-b from-surface to-transparent p-px shadow-lg ring ring-surface-edge"
           :class="sizeClass"
         >
           <!-- w-full inside the flex frame lets the dark surface fill the panel.
@@ -29,7 +29,7 @@
           <div
             ref="panel"
             tabindex="-1"
-            class="flex w-full flex-col rounded-3xl bg-background p-6 text-white focus:outline-none"
+            class="flex w-full flex-col rounded-3xl bg-background p-6 text-foreground focus:outline-none"
             :class="panelClass"
           >
             <div class="flex items-center justify-between">

@@ -12,7 +12,7 @@
     class="flex items-center justify-center"
     :class="{
       'cursor-pointer': editable,
-      'border-background/70 text-background/70 border border-dashed': isMarkedEmpty,
+      'border-on-light/70 text-on-light/70 border border-dashed': isMarkedEmpty,
       'outline-2 outline-gold': isCropping,
     }"
     :style="{ borderRadius }"

@@ -12,6 +12,7 @@ import AlignVerticalTop from '~icons/material-symbols/align-vertical-top-rounded
 import ArrowCircleUp from '~icons/material-symbols/arrow-circle-up-outline-rounded'
 import Article from '~icons/material-symbols/article-outline-rounded'
 import ArtTrack from '~icons/material-symbols/art-track-outline-rounded'
+import BrightnessAuto from '~icons/material-symbols/brightness-auto-outline-rounded'
 import Check from '~icons/material-symbols/check-rounded'
 import ChevronLeft from '~icons/material-symbols/chevron-left-rounded'
 import Circle from '~icons/material-symbols/circle-outline'
@@ -88,6 +89,7 @@ export const icons = {
   arrow_circle_up: ArrowCircleUp,
   article: Article,
   art_track: ArtTrack,
+  brightness_auto: BrightnessAuto,
   check: Check,
   chevron_left: ChevronLeft,
   circle: Circle,

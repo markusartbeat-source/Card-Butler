@@ -20,7 +20,7 @@
       </Toc.Item>
 
       <!-- Ark hands the place of the active entry over as variables. -->
-      <Toc.Indicator class="top-(--top) left-0 h-(--height) w-0.5 bg-gold" />
+      <Toc.Indicator class="top-(--top) left-0 h-(--height) w-0.5 bg-accent" />
     </Toc.List>
   </Toc.Root>
 </template>

@@ -3,7 +3,7 @@
        The label is the grey word inside the dark box, left of the value. -->
   <Field.Root
     v-ripple
-    class="cb-hover group relative flex min-h-8 items-center gap-1.5 overflow-hidden rounded-md bg-surface-light"
+    class="cb-hover group relative flex min-h-8 items-center gap-1.5 overflow-hidden rounded-md bg-surface-light ring ring-surface-edge"
     :class="variantClasses[variant].root"
   >
     <!-- With an icon or hideLabel the word itself stays hidden, but screen

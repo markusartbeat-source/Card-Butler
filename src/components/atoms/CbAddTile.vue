@@ -1,6 +1,6 @@
 <template>
   <CbInteractive
-    class="cb-regular-text-gold flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gold p-3 text-center"
+    class="cb-regular-text-gold flex flex-col items-center justify-center gap-2 border-2 border-dashed border-accent p-3 text-center"
   >
     <!-- Gestrichelte Goldkachel zum Hinzufügen. Größe, Ecken und Klick kommen
          vom Aufrufer. Kein Kommentar vor der Wurzel: Ark legt sich per

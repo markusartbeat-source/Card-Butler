@@ -10,9 +10,10 @@
     @update:checked="(checked) => $emit('update:modelValue', checked === true)"
   >
     <!-- The fill is bound instead of a data attribute variant, so a template
-         utility can never win over it. -->
+         utility can never win over it. Im hellen Modus ist der Rand dunkleres
+         Gold, sonst verschwindet er auf weißem Grund. -->
     <Checkbox.Control
-      class="flex size-5.5 items-center justify-center rounded-sm border-2 border-gold-light text-background"
+      class="flex size-5.5 shrink-0 items-center justify-center rounded-sm border-2 border-gold-light text-on-light light:border-accent"
       :class="modelValue ? 'bg-gradient-to-br from-gold-light to-gold' : ''"
     >
       <Checkbox.Indicator>

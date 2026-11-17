@@ -19,7 +19,7 @@
 
     <Tooltip.Positioner>
       <Tooltip.Content
-        class="cb-regular-text z-50 max-w-56 rounded-md bg-surface-light px-2 py-1 shadow-lg"
+        class="cb-regular-text z-50 max-w-56 rounded-md bg-surface-light px-2 py-1 shadow-lg ring ring-surface-edge"
       >
         <!-- Ark UI only sets the arrow position, its size and colour are ours. -->
         <Tooltip.Arrow :style="arrowStyle">

@@ -14,14 +14,15 @@
     <span class="cb-tiny-text">{{ lowLabel }}</span>
 
     <Slider.Control class="relative flex grow items-center">
-      <Slider.Track class="h-2 w-full rounded-full bg-background">
+      <!-- Strecke und Griff tragen im Kontrastmodus einen Rand wie alle Felder. -->
+      <Slider.Track class="h-2 w-full rounded-full bg-background ring ring-surface-edge">
         <Slider.Range
-          class="h-full rounded-full border-2 border-surface bg-gradient-to-r from-gold-light to-gold"
+          class="h-full rounded-full border-2 border-surface bg-gradient-to-r from-gold-light to-gold ring ring-surface-edge"
         />
       </Slider.Track>
       <Slider.Thumb
         :index="0"
-        class="size-4 cursor-grab rounded-full border-2 border-gold-light bg-gradient-to-br from-gold-light to-gold"
+        class="size-4 cursor-grab rounded-full border-2 border-gold-light bg-gradient-to-br from-gold-light to-gold ring ring-surface-edge"
       >
         <Slider.HiddenInput />
       </Slider.Thumb>

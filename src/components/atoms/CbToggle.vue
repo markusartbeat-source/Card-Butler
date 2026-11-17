@@ -11,9 +11,9 @@
     class="relative shrink-0 overflow-hidden rounded-full"
     :class="[
       chip ? 'px-3 py-1' : 'p-1',
-      modelValue && 'bg-radial from-gold-light to-gold',
-      chip ? (modelValue ? 'cb-small-text-dark' : 'cb-small-text') : modelValue ? 'text-surface' : 'text-white',
-      chip && !modelValue && 'bg-surface',
+      modelValue && 'bg-linear-to-r from-gold to-gold-light',
+      chip ? (modelValue ? 'cb-small-text-dark' : 'cb-small-text') : modelValue ? 'text-on-light' : 'text-foreground',
+      chip && !modelValue && 'bg-surface ring ring-surface-edge',
       disabled ? 'opacity-40' : 'cb-hover',
     ]"
     @update:pressed="(pressed) => $emit('update:modelValue', pressed)"

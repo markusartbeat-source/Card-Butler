@@ -3,7 +3,7 @@
        The thin gradient frame plus the blurred, half transparent surface
        give the card its dark glass look. -->
   <div
-    class="flex w-80 rounded-2xl bg-gradient-to-b from-white/30 to-transparent p-px"
+    class="flex w-80 rounded-2xl bg-gradient-to-b from-highlight/30 to-transparent p-px ring ring-surface-edge"
   >
     <!-- w-full inside the flex frame lets the dark surface fill the whole card. -->
     <div

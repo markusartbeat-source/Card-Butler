@@ -5,8 +5,12 @@
     <!-- Hintere Ebene: liegt hinter Header und Seite. -->
     <div v-if="isSceneShown" class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
       <img src="../assets/visuals/Background.png" alt="" class="size-full object-cover blur-sm" />
-      <!-- Blauer Verlauf ab Header-Unterkante: links dunkler, damit der Text lesbar bleibt. -->
-      <div class="from-background/60 absolute inset-x-0 top-25 bottom-0 bg-linear-to-r to-transparent to-42%" />
+      <!-- Verlauf ab Header-Unterkante in Hintergrundfarbe: links deckender, damit
+           der Text lesbar bleibt. Hell muss er das dunkle Foto stärker und
+           weiter abdecken. -->
+      <div
+        class="from-background/60 light:from-background/90 light:via-background/70 absolute inset-x-0 top-25 bottom-0 bg-linear-to-r to-transparent to-42% light:to-60%"
+      />
       <!-- Tisch mit Fuchs, volle Breite. Um ein Siebtel seiner Höhe nach oben
            geschoben (Figma: 178 von 1257px), so ragt das Ohr über den Header.
            Hier hinten, damit der Seiteninhalt (z.B. die Projektliste) davor liegt. -->
@@ -42,12 +46,16 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useIsBelowBreakpoint } from '../composables/useIsBelowBreakpoint'
+import { isHighContrast } from '../theme/theme'
 
 const route = useRoute()
 const isBelowTablet = useIsBelowBreakpoint('tablet')
 // Auf dem Handy keine Bühne. v-if statt CSS, damit die Bilder dort gar nicht
 // erst geladen werden. Wird das Fenster breiter, erscheint sie nachträglich.
-const isSceneShown = computed(() => route.path === '/home' && !isBelowTablet.value)
+// Bei hohem Kontrast auch nicht: Text auf einem Foto erreicht den Kontrast nicht sicher.
+const isSceneShown = computed(
+  () => route.path === '/home' && !isBelowTablet.value && !isHighContrast.value,
+)
 
 // Weiches Ein- und Ausblenden beim Seitenwechsel.
 const fade = {

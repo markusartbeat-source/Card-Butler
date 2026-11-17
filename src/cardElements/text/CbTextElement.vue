@@ -15,7 +15,7 @@
       fontStyleClasses[fontStyleOf(element.data)],
       wrapsLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
       isTyping ? 'cursor-text' : 'cursor-pointer px-1',
-      { 'border-background/70 border border-dashed': isPlaceholderShown },
+      { 'border-on-light/70 border border-dashed': isPlaceholderShown },
     ]"
     :style="[textStyle, iconStyleVariables]"
     :data-element-id="element.id"
@@ -47,7 +47,7 @@
       @keydown.escape.stop="stopTyping"
     />
     <template v-else>
-      <span v-if="isPlaceholderShown" class="text-background/70">{{ placeholder }}</span>
+      <span v-if="isPlaceholderShown" class="text-on-light/70">{{ placeholder }}</span>
       <CbTextWithIcons :text="content" :search-word="highlightSearch ? searchWord : ''" />
     </template>
   </span>

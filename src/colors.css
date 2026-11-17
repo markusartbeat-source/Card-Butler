@@ -1,3 +1,12 @@
+/* Alle Farben der App. Vier Modi: dunkel (Standard, hier im @theme), hell und je
+   eine kontrastreiche Variante (WCAG AAA). Den Modus schreibt theme/theme.ts an
+   <html> (data-theme, data-high-contrast), die Blöcke unten überschreiben dann
+   nur, was sich ändert. */
+
+/* Präfix für Klassen, die nur im hellen Modus gelten (auch kontrastreich),
+   z.B. light:shadow. */
+@custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+
 /* "static" writes every colour into the page, not only the ones a Tailwind
    class happens to use. Otherwise a colour read from script — like the confetti
    does — would arrive empty. */
@@ -5,20 +14,44 @@
   --color-background: #202036;
   --color-surface: #2c2f45;
   --color-surface-light: #3a3d5c;
-  --color-label: #9697a2;
   /* Der ausgewählte Knopf in einer Icon-Reihe – im Designfile eine rohe Farbe
      (rgba 101 107 147 mit 60 % Deckkraft). */
   --color-surface-selected: #656b9399;
+  /* Rand um Flächen und Felder (ring ring-surface-edge). Nur in den
+     Kontrastmodi sichtbar, sonst trennen Helligkeit und Schatten. */
+  --color-surface-edge: transparent;
+  /* Text und Icons. */
+  --color-foreground: #ffffff;
+  --color-label: #9697a2;
+  /* Gold auf dem Hintergrund: Text, Rahmen und Markierungen. Goldene Flächen
+     (Knöpfe) nehmen gold-*, die bleiben in allen Modi gleich. */
+  --color-accent: #cfa23f;
+  /* Text und Icons auf Flächen, die in jedem Modus hell sind: Gold, die Karte,
+     die Landkarte. */
+  --color-on-light: #2c2f45;
+  /* Hover, Ripple usw. – nur mit Deckkraft verwenden (z.B. bg-highlight/10).
+     Hellt im dunklen Modus auf, dunkelt im hellen ab. */
+  --color-highlight: #ffffff;
+  /* Die Schicht über einem Element beim Hover (cb-hover): weiß mit 10 %. */
+  --color-hover: #ffffff1a;
+  --color-scrollbar: var(--color-surface);
+  /* Logo: Hut und Schwung, dazu das Pik als Verlauf von start nach end. */
+  --color-logo: #ffffff;
+  --color-logo-spade-start: #cfa23f;
+  --color-logo-spade-end: #f0eb8a;
   --color-gold-dark: #b98522;
   --color-gold: #cfa23f;
   --color-gold-light: #e0c151;
   --color-gold-lighter: #f3f18f;
+  /* Schein unter dem goldenen Knopf (gold-light, halb durchsichtig) – wie auf
+     der Website nur im hellen Modus (light:shadow-gold-glow). */
+  --color-gold-glow: #e0c15180;
   /* The thin decorative strokes around the print button use their own gold —
      read out of the design file, where it is a raw colour, not a variable. */
   --color-gold-line: #e6cd68;
   /* The sheets stacked behind a card that is printed more than once. 1 lies
-     right behind the card, 5 is the deepest; each step is one shade darker.
-     The first one is from the design file, the rest step down evenly from it. */
+     right behind the card, 5 is the deepest; each step comes closer to the
+     background. The first one is from the design file, the rest step evenly. */
   --color-card-backdrop-1: #7c7c87;
   --color-card-backdrop-2: #6a6a76;
   --color-card-backdrop-3: #585865;
@@ -26,7 +59,8 @@
   --color-card-backdrop-5: #343443;
   /* Hintergrundfarbe neuer Kartensets – wird im Backend am Set gespeichert. */
   --color-card-default: #ffffff;
-  --color-success: #16a34a;
+  /* Toasts. Dunkel genug, dass weißer Text AA erreicht. */
+  --color-success: #15803d;
   --color-danger: #dc2626;
   /* Nur im Dev-Modus: Hintergrund von Feldern, deren Wert der Server (noch)
      nicht speichert (siehe notStored/notStoredMark.ts). */
@@ -39,4 +73,67 @@
   --color-cursor-blue: #60a5fa;
   --color-cursor-purple: #a78bfa;
   --color-cursor-pink: #f472b6;
+}
+
+/* Hell: Der Hintergrund ist leicht grau, Panels und Karten liegen weiß darauf,
+   Felder in Panels sind wieder etwas grauer. Text mindestens AA. */
+:root[data-theme='light'] {
+  --color-background: #e9e9eb;
+  --color-surface: #ffffff;
+  --color-surface-light: #eef0f4;
+  --color-surface-selected: #656b9340;
+  --color-foreground: #2c2f45;
+  --color-label: #5f6175;
+  --color-accent: #8a6414;
+  --color-highlight: #2c2f45;
+  /* Nur leicht abdunkeln: highlight mit 6 %. */
+  --color-hover: #2c2f450f;
+  --color-scrollbar: #c5c7d0;
+  --color-logo: #2c2f45;
+  --color-logo-spade-start: #2c2f45;
+  --color-logo-spade-end: #2c2f45;
+  --color-card-backdrop-1: #b4b5bf;
+  --color-card-backdrop-2: #bfc0c9;
+  --color-card-backdrop-3: #cacbd2;
+  --color-card-backdrop-4: #d5d6db;
+  --color-card-backdrop-5: #dfdfe3;
+  /* Helle Toasts mit dunklem Text. */
+  --color-success: #dcfce7;
+  --color-danger: #fee2e2;
+  /* Helles Rot, damit dunkler Text und graue Labels darauf lesbar bleiben. */
+  --color-not-stored: #fdd5d5;
+}
+
+/* Dunkel kontrastreich (AAA): Schwarz, Weiß und Gold, Flächen mit weißem Rand.
+   Text mindestens 7:1, Ränder und Auswahl mindestens 3:1. */
+:root:not([data-theme='light'])[data-high-contrast] {
+  --color-background: #000000;
+  --color-surface: #161616;
+  --color-surface-light: #262626;
+  --color-surface-selected: #737373;
+  --color-surface-edge: #ffffff;
+  --color-label: #c8c8cc;
+  --color-accent: #e0c151;
+  --color-on-light: #000000;
+  --color-scrollbar: #c8c8cc;
+  --color-success: #166534;
+  --color-danger: #991b1b;
+}
+
+/* Hell kontrastreich (AAA): baut auf hell auf, Text schwarz, Flächen mit
+   schwarzem Rand. Text mindestens 7:1, Ränder und Auswahl mindestens 3:1. */
+:root[data-theme='light'][data-high-contrast] {
+  --color-background: #e4e4e4;
+  --color-surface-light: #f0f0f0;
+  --color-surface-selected: #858585;
+  --color-surface-edge: #000000;
+  --color-foreground: #000000;
+  --color-label: #3d3d45;
+  --color-accent: #5c4008;
+  --color-on-light: #000000;
+  --color-highlight: #000000;
+  --color-scrollbar: #3d3d45;
+  --color-logo: #000000;
+  --color-logo-spade-start: #000000;
+  --color-logo-spade-end: #000000;
 }

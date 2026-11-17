@@ -16,7 +16,7 @@
            that gets cut off; the list inside keeps its full height, so the
            entries never squash together. -->
       <Menu.Content
-        class="cb-regular-text cb-collapse z-50 overflow-hidden rounded-lg bg-surface shadow-lg"
+        class="cb-regular-text cb-collapse z-50 overflow-hidden rounded-lg bg-surface shadow-lg ring ring-surface-edge"
       >
         <div>
           <!-- min-w keeps a short list from looking pinched, longer entries

@@ -1,6 +1,6 @@
 <template>
   <CbDimLayer
-    class="pointer-events-none flex flex-col items-center justify-center gap-2 text-white"
+    class="pointer-events-none flex flex-col items-center justify-center gap-2 text-foreground"
   >
     <!-- Lies over the whole card while its print count is being changed: the
          editor's dim layer with the stack icon and the count in the middle.

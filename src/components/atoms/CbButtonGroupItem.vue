@@ -4,7 +4,7 @@
        zählen Linien und runde Enden nur die Knöpfe selbst (*-of-type).
        Klick, Name (aria-label) und alles Weitere gehen direkt an den Knopf. -->
   <CbInteractive
-    class="flex flex-1 justify-center border-l border-surface py-1 text-white first-of-type:rounded-l-md first-of-type:border-l-0 last-of-type:rounded-r-md"
+    class="flex flex-1 justify-center border-l border-surface py-1 text-foreground first-of-type:rounded-l-md first-of-type:border-l-0 last-of-type:rounded-r-md"
   >
     <CbIcon :name="icon" />
   </CbInteractive>

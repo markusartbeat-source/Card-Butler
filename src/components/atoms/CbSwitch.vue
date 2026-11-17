@@ -5,24 +5,28 @@
     @update:checked="(checked) => $emit('update:modelValue', checked)"
   >
     <!-- The moving and colour classes are bound instead of a data attribute
-         variant, so a template utility can never win over them. -->
+         variant, so a template utility can never win over them. Im hellen
+         Modus ist der Griff weiß mit Schatten, sonst ginge er auf dem hellen
+         Grund unter. -->
     <Switch.Control
       v-ripple
-      class="cb-hover relative flex h-6 w-10 items-center overflow-hidden rounded-full px-0.5 transition-colors duration-200"
+      class="cb-hover relative flex h-6 w-10 items-center overflow-hidden rounded-full px-0.5 ring ring-surface-edge transition-colors duration-200"
       :class="modelValue ? 'bg-gold-light' : 'bg-surface-light'"
     >
       <Switch.Thumb
-        class="size-5 rounded-full bg-background transition-transform duration-200"
+        class="size-5 rounded-full bg-background ring ring-surface-edge transition-transform duration-200 light:bg-surface light:shadow"
         :class="modelValue ? 'translate-x-4' : 'translate-x-0'"
       />
     </Switch.Control>
-    <Switch.HiddenInput />
+    <!-- Der Schalter hat keinen eigenen sichtbaren Text, der Name kommt über
+         label. -->
+    <Switch.HiddenInput :aria-label="label" />
   </Switch.Root>
 </template>
 
 <script setup lang="ts">
 import { Switch } from '@ark-ui/vue'
 
-defineProps<{ modelValue: boolean }>()
+defineProps<{ modelValue: boolean; label: string }>()
 defineEmits<{ 'update:modelValue': [value: boolean] }>()
 </script>

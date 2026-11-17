@@ -20,7 +20,7 @@
       </Tabs.Trigger>
 
       <!-- Ark sets position and left inline, the width comes as a variable. -->
-      <Tabs.Indicator class="bottom-0 h-0.5 w-(--width) bg-gold" />
+      <Tabs.Indicator class="bottom-0 h-0.5 w-(--width) bg-accent" />
     </Tabs.List>
 
     <Tabs.Content v-for="item in items" :key="item.value" :value="item.value">

@@ -19,7 +19,7 @@
     <!-- Left side is as wide as the right side, so the search stays centered. -->
     <div class="flex min-w-0 flex-1 items-center gap-2.5">
       <template v-if="logo">
-        <img src="../../assets/logos/logo.svg" alt="" class="size-12" :class="dimWhileDraggingClasses" />
+        <CbLogo class="size-12" :class="dimWhileDraggingClasses" />
         <span class="cb-headline-01" :class="dimWhileDraggingClasses">{{ dictionary.header.appName }}</span>
       </template>
 
@@ -34,7 +34,7 @@
           v-ripple
           to="/home"
           :aria-label="dictionary.header.backToHome"
-          class="cb-hover relative flex items-center overflow-hidden rounded-full p-2 text-white"
+          class="cb-hover relative flex items-center overflow-hidden rounded-full p-2 text-foreground"
           :class="dimWhileDraggingClasses"
         >
           <CbIcon name="west" />
@@ -55,7 +55,7 @@
          profile menu). -->
     <div
       v-if="searchbar"
-      class="bg-surface hidden w-96 items-center rounded-full text-white shadow-lg laptop:flex"
+      class="bg-surface hidden w-96 items-center rounded-full text-foreground shadow-lg ring ring-surface-edge laptop:flex"
       :class="dimWhileDraggingClasses"
     >
       <!-- The typing happens here. The label carries hover and ripple, because
@@ -75,7 +75,7 @@
         <!-- The X only appears once there is something to clear. -->
         <CbInteractive
           v-if="searchWord"
-          class="rounded-full p-2 text-white"
+          class="rounded-full p-2 text-foreground"
           :aria-label="dictionary.header.clearSearch"
           @click="clearSearch"
         >
@@ -144,6 +144,7 @@ import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
+import CbLogo from '../atoms/CbLogo.vue'
 import CbBreadcrumbs, { type BreadcrumbEntry } from '../molecules/CbBreadcrumbs.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
 import { cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
@@ -274,7 +275,7 @@ const navigationMenus = computed(() => [
    straight. It is a ::before, because ::after already belongs to the hover
    lightening of cb-hover. */
 .cb-header-menu-active {
-  color: var(--color-gold);
+  color: var(--color-accent);
 }
 
 .cb-header-menu-active::before {
@@ -284,6 +285,6 @@ const navigationMenus = computed(() => [
   bottom: 0;
   left: 8px;
   height: 2px;
-  background-color: var(--color-gold);
+  background-color: var(--color-accent);
 }
 </style>

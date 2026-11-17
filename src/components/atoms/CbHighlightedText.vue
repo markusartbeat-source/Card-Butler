@@ -2,7 +2,7 @@
   <span
     v-for="(part, index) in parts"
     :key="index"
-    :class="part.isMatch && 'rounded bg-gold-light text-background'"
+    :class="part.isMatch && 'rounded bg-gold-light text-on-light'"
     >{{ part.text }}</span
   >
 </template>

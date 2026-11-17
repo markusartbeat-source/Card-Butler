@@ -3,7 +3,7 @@
        The label stays for screen readers. -->
   <Field.Root
     v-ripple
-    class="cb-regular-text cb-hover relative flex overflow-hidden rounded-md bg-surface-light px-1.5 py-1"
+    class="cb-regular-text cb-hover relative flex overflow-hidden rounded-md bg-surface-light px-1.5 py-1 ring ring-surface-edge"
   >
     <Field.Label class="sr-only">{{ label }}</Field.Label>
     <Field.Textarea

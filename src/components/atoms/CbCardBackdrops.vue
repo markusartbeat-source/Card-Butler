@@ -1,7 +1,8 @@
 <template>
   <!-- The sheets stacked behind a card that is printed more than once: one
        sheet per extra copy, at most five. Each is a card-sized face pushed 4px
-       further to the bottom right and one shade darker than the one in front.
+       further to the bottom right and one step closer to the background colour
+       than the one in front.
        The root fills the card's cell and is positioned, so the faces (which are
        transformed) paint over it. The offset sits on a wrapper without zoom, so
        it stays in real page pixels. -->

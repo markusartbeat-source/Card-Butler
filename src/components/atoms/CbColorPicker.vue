@@ -12,7 +12,7 @@
     <ColorPicker.Control>
       <ColorPicker.Trigger
         v-ripple
-        class="cb-regular-text cb-hover relative flex min-h-8 w-full items-center gap-1.5 overflow-hidden rounded-md bg-surface-light px-1.5 py-1"
+        class="cb-regular-text cb-hover relative flex min-h-8 w-full items-center gap-1.5 overflow-hidden rounded-md bg-surface-light px-1.5 py-1 ring ring-surface-edge"
         :aria-label="label"
       >
         <ColorPicker.ValueSwatch class="size-4.5 shrink-0 rounded" />
@@ -25,7 +25,7 @@
            list does. The padding sits on the inner box, otherwise it would
            stay behind as a thin strip. -->
       <ColorPicker.Content
-        class="cb-collapse z-50 overflow-hidden rounded-lg bg-surface-light shadow-lg"
+        class="cb-collapse z-50 overflow-hidden rounded-lg bg-surface-light shadow-lg ring ring-surface-edge"
       >
         <div>
           <div class="flex flex-col gap-3 p-3">
@@ -40,7 +40,7 @@
             <div class="flex items-center gap-3">
               <ColorPicker.EyeDropperTrigger
                 v-ripple
-                class="cb-hover relative shrink-0 overflow-hidden rounded-md bg-surface p-1.5 text-white"
+                class="cb-hover relative shrink-0 overflow-hidden rounded-md bg-surface p-1.5 text-foreground ring ring-surface-edge"
               >
                 <CbIcon name="colorize" />
               </ColorPicker.EyeDropperTrigger>
@@ -67,11 +67,11 @@
             <div class="flex gap-3">
               <ColorPicker.ChannelInput
                 channel="hex"
-                class="cb-regular-text min-w-0 grow rounded-md bg-surface px-1.5 py-1 outline-none"
+                class="cb-regular-text min-w-0 grow rounded-md bg-surface px-1.5 py-1 outline-none ring ring-surface-edge"
               />
               <ColorPicker.ChannelInput
                 channel="alpha"
-                class="cb-regular-text w-14 min-w-0 rounded-md bg-surface px-1.5 py-1 outline-none"
+                class="cb-regular-text w-14 min-w-0 rounded-md bg-surface px-1.5 py-1 outline-none ring ring-surface-edge"
               />
             </div>
           </div>

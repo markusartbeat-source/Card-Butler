@@ -1,6 +1,6 @@
 <template>
   <!-- Thin frame around the bar: gold at both round ends, dark in between. -->
-  <div class="cb-gold-edge-frame rounded-full p-0.5 shadow-lg">
+  <div class="cb-gold-edge-frame rounded-full p-0.5 shadow-lg ring ring-surface-edge">
     <div ref="bar" class="bg-surface flex items-center rounded-full">
       <!-- Square click zones, only the outer ones follow the bar's round ends.
            With the names written out, the tooltip would only repeat them. The
@@ -10,7 +10,7 @@
         :key="element.name"
         class="flex items-center gap-2.5 px-3 py-4 first:rounded-l-full first:pl-4 last:rounded-r-full last:pr-4"
         :class="
-          index === activeIndex ? 'cb-regular-text-dark bg-radial from-gold-light to-gold' : 'cb-regular-text'
+          index === activeIndex ? 'cb-regular-text-dark bg-linear-to-r from-gold to-gold-light' : 'cb-regular-text'
         "
         :title="showNames ? undefined : element.name"
         @click="emit('select', index)"

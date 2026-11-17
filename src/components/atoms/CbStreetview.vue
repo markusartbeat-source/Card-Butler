@@ -10,7 +10,7 @@
     <div ref="mapContainer" class="isolate size-full"></div>
 
     <div class="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
-      <CbIcon name="location_on" class="text-surface" />
+      <CbIcon name="location_on" class="text-on-light" />
       <span class="cb-regular-text rounded-lg bg-surface px-2 py-1">{{ cityName }}</span>
     </div>
   </div>

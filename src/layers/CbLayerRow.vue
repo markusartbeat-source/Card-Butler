@@ -5,7 +5,7 @@
        Zeile, per Tastatur sortiert Alt+Pfeil auf einem der Knöpfe. Beim Ziehen
        kippt die Zeile, nicht das Listenelement darum (siehe style.css). -->
   <div
-    class="group cb-regular-text cb-layer-face flex h-16 w-full cursor-grab items-center gap-1.5 rounded-md bg-surface-light p-1.5 active:cursor-grabbing"
+    class="group cb-regular-text cb-layer-face flex h-16 w-full cursor-grab items-center gap-1.5 rounded-md bg-surface-light p-1.5 ring ring-surface-edge active:cursor-grabbing"
   >
     <CbLayerPreview :element="element" :card="card" :card-color="cardColor" />
     <CbIcon :name="elementTypeIcons[element.data.type]" class="mx-1" />

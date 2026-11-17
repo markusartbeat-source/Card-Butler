@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-surface rounded-2xl p-6">
+  <div class="bg-surface rounded-2xl p-6 ring ring-surface-edge">
     <!-- Titel mit einem goldenen Strich links und rechts, die den Platz daneben
          füllen. Statt des Titels kann eigener Inhalt dazwischen stehen. -->
     <div class="flex items-center justify-center gap-3">

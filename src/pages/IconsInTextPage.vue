@@ -15,7 +15,7 @@
         </CbTooltip>
       </div>
       <!-- The dark panel: settings on top, the icon tiles below a line. -->
-      <div class="rounded-3xl bg-surface shadow-lg">
+      <div class="rounded-3xl bg-surface shadow-lg ring ring-surface-edge">
         <CbTextIconSettings />
         <CbDivider />
         <CbTextIconTiles />

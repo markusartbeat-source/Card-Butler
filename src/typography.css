@@ -2,8 +2,9 @@
    hier. Ein Text bekommt genau eine dieser Klassen statt text-sm, font-bold,
    text-white usw. Varianten gehen wie bei jeder Tailwind-Klasse, z.B.
    hover:cb-regular-text.
-   Farbvarianten: ohne Zusatz weiß, -muted grau (Hinweise, Zusatzinfos), -dark
-   dunkel (auf Gold), -gold golden. Eine Farbvariante übernimmt ihren Grundstil
+   Farbvarianten: ohne Zusatz die Textfarbe des Modus (foreground), -muted grau
+   (Hinweise, Zusatzinfos), -dark dunkel (auf Gold und anderen immer hellen
+   Flächen), -gold golden (accent). Eine Farbvariante übernimmt ihren Grundstil
    und setzt danach nur die Farbe neu – die spätere Angabe gewinnt. */
 
 @theme {
@@ -16,27 +17,27 @@
 
 /* Große Überschrift, z.B. auf der Startseite. Auf dem Handy kleiner. */
 @utility cb-display-text {
-  @apply text-3xl font-bold text-white tablet:text-display;
+  @apply text-3xl font-bold text-foreground tablet:text-display;
 }
 
 @utility cb-display-text-gold {
   @apply cb-display-text;
-  @apply text-gold;
+  @apply text-accent;
 }
 
 /* Titel von Seiten, Panels und Dialogen. */
 @utility cb-headline-01 {
-  @apply text-xl text-white;
+  @apply text-xl text-foreground;
 }
 
 /* Überschrift einer Gruppe, Reiter. */
 @utility cb-headline-02 {
-  @apply text-base font-bold text-white;
+  @apply text-base font-bold text-foreground;
 }
 
 /* Normaler Text. */
 @utility cb-regular-text {
-  @apply text-sm text-white;
+  @apply text-sm text-foreground;
 }
 
 @utility cb-regular-text-muted {
@@ -46,17 +47,17 @@
 
 @utility cb-regular-text-dark {
   @apply cb-regular-text;
-  @apply text-surface;
+  @apply text-on-light;
 }
 
 @utility cb-regular-text-gold {
   @apply cb-regular-text;
-  @apply text-gold;
+  @apply text-accent;
 }
 
 /* Kleiner Text, z.B. Zusatzinfos oder Initialen im kleinen Avatar. */
 @utility cb-small-text {
-  @apply text-xs text-white;
+  @apply text-xs text-foreground;
 }
 
 @utility cb-small-text-muted {
@@ -66,15 +67,15 @@
 
 @utility cb-small-text-dark {
   @apply cb-small-text;
-  @apply text-surface;
+  @apply text-on-light;
 }
 
 /* Kleinster Text, z.B. Ordnernamen. */
 @utility cb-tiny-text {
-  @apply text-2xs text-white;
+  @apply text-2xs text-foreground;
 }
 
 @utility cb-tiny-text-dark {
   @apply cb-tiny-text;
-  @apply text-surface;
+  @apply text-on-light;
 }

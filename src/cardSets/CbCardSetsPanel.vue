@@ -15,7 +15,7 @@
     <Transition name="slide">
       <aside
         v-show="isCardSetsPanelShown"
-        class="w-44 bg-gradient-to-b from-white/30 to-transparent pl-px"
+        class="w-44 bg-gradient-to-b from-highlight/30 to-transparent pl-px ring ring-surface-edge"
       >
         <div
           class="h-full bg-gradient-to-b from-surface/80 to-background/80 pt-8 backdrop-blur-md"

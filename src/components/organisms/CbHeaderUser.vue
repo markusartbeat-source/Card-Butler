@@ -12,7 +12,7 @@
          same way an open menu above shows its gold underline. -->
     <CbInteractive
       class="rounded-full"
-      :class="{ 'outline-2 outline-gold': activeProfileItem }"
+      :class="{ 'outline-2 outline-accent': activeProfileItem }"
     >
       <CbAvatar :name="userLabel" :image-url="userPicture" />
     </CbInteractive>

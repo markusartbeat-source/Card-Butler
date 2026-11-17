@@ -1,7 +1,7 @@
 <template>
   <!-- The settings of the PNG export, in the look of the card settings panel.
        317 px wide in the Figma design, w-79 is the nearest Tailwind step. -->
-  <div class="w-79 shrink-0 overflow-y-auto rounded-2xl bg-surface p-6">
+  <div class="w-79 shrink-0 overflow-y-auto rounded-2xl bg-surface p-6 ring ring-surface-edge">
     <!-- Title framed by a short golden stroke on each side. -->
     <div class="flex items-center justify-center gap-3">
       <span class="h-px w-4.5 bg-gold"></span>

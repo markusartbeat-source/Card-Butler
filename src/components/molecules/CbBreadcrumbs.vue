@@ -18,7 +18,7 @@
           v-else
           :to="entry.to"
           v-bind="entry.dropTarget === undefined ? {} : pageDropTargetAttributes(entry.dropTarget)"
-          class="relative truncate rounded px-1 hover:cb-regular-text data-drop-hovered:bg-white/10 data-drop-hovered:cb-regular-text"
+          class="relative truncate rounded px-1 hover:cb-regular-text data-drop-hovered:bg-highlight/10 data-drop-hovered:cb-regular-text"
         >
           {{ entry.label }}
         </router-link>
