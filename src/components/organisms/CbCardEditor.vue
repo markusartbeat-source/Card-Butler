@@ -212,9 +212,11 @@ watch(isEditingSelectedElement, (isEditing) => {
 })
 
 // Legt das Element des Werkzeugs mit der Mitte auf diesem Punkt der Karte (mm)
-// an und wählt es gleich aus.
+// an und wählt es gleich aus. Werkzeuge ohne Element haben noch keine Funktion.
 async function addElementAt(tool: CardTool, centerX: number, centerY: number) {
-  const createdElement = await createElement(props.cardSet, newElementData(tool, centerX, centerY))
+  const data = newElementData(tool, centerX, centerY)
+  if (!data) return
+  const createdElement = await createElement(props.cardSet, data)
   if (createdElement) selectElement(createdElement.id)
 }
 
@@ -236,7 +238,9 @@ const { dragPosition, startDrag } = useNewElementDrag(cardWrapper, (centerX, cen
 })
 
 function startDragFromToolbar(index: number, event: PointerEvent) {
-  draggedTool.value = cardTools[index]
+  const tool = cardTools[index]
+  if (!newElementData(tool, 0, 0)) return
+  draggedTool.value = tool
   startDrag(event)
 }
 

@@ -170,6 +170,7 @@ export const dictionaryGerman = {
     line: 'Linie',
     text: 'Text',
     image: 'Bild',
+    comment: 'Kommentar',
     textElementName: 'Textfeld',
     textElementDeleted: 'Textfeld gelöscht',
     pictureElementName: 'Bild',

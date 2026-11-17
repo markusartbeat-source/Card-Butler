@@ -92,6 +92,8 @@
   --color-logo: #2c2f45;
   --color-logo-spade-start: #2c2f45;
   --color-logo-spade-end: #2c2f45;
+  /* Die Schwünge um den Druck-Knopf sind im hellen Modus schwarz. */
+  --color-gold-line: #000000;
   --color-card-backdrop-1: #b4b5bf;
   --color-card-backdrop-2: #bfc0c9;
   --color-card-backdrop-3: #cacbd2;
