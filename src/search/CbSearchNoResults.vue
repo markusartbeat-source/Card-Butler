@@ -4,7 +4,7 @@
        final text come later. -->
   <div class="flex flex-1 items-center justify-center">
     <div
-      class="flex flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-label px-12 py-10 text-center text-label"
+      class="cb-regular-text-muted flex flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-label px-12 py-10 text-center"
     >
       {{ dictionary.search.noResults }}
     </div>

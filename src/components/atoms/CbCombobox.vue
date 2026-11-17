@@ -16,9 +16,9 @@
   >
     <Combobox.Control
       v-ripple
-      class="cb-hover relative flex min-h-8 w-full items-center gap-1.5 overflow-hidden rounded-md bg-surface-light px-1.5 py-1 text-sm text-white"
+      class="cb-regular-text cb-hover relative flex min-h-8 w-full items-center gap-1.5 overflow-hidden rounded-md bg-surface-light px-1.5 py-1"
     >
-      <Combobox.Label class="text-label" :class="hideLabel && 'sr-only'">{{ label }}</Combobox.Label>
+      <Combobox.Label class="cb-regular-text-muted" :class="hideLabel && 'sr-only'">{{ label }}</Combobox.Label>
       <Combobox.Input
         class="min-w-0 grow cursor-text bg-transparent outline-none"
         @keydown.enter="applyText"

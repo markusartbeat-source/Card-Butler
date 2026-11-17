@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './colors.css';
 @import './breakpoints.css';
+@import './typography.css';
 @import '@fontsource/comfortaa/300.css';
 @import '@fontsource/comfortaa/400.css';
 @import '@fontsource/comfortaa/700.css';
@@ -8,11 +9,6 @@
 /* Comfortaa is the app's font, so every element uses it by default. */
 @theme {
   --font-sans: 'Comfortaa', sans-serif;
-
-  /* The smallest text in the design is 10 px, Tailwind stops at 12 px. */
-  --text-2xs: 0.625rem;
-  /* The 40 px of the print count overlay — Tailwind jumps from 36 to 48 px. */
-  --text-display: 2.5rem;
 }
 
 :root {

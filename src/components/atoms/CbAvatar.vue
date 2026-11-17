@@ -5,7 +5,7 @@
     :class="size === 'small' ? 'size-7' : 'size-10'"
     :style="color ? { backgroundColor: color } : undefined"
   >
-    <Avatar.Fallback :class="size === 'small' ? 'text-xs' : 'text-sm'" class="text-white">
+    <Avatar.Fallback :class="size === 'small' ? 'cb-small-text' : 'cb-regular-text'">
       {{ initials }}
     </Avatar.Fallback>
     <!-- Google answers its profile pictures with 429 once a referrer comes

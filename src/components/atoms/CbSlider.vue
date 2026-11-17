@@ -11,7 +11,7 @@
     <!-- The real name of the slider is only read out, on screen the two ends
          say what low and high mean. -->
     <Slider.Label class="sr-only">{{ label }}</Slider.Label>
-    <span class="text-2xs">{{ lowLabel }}</span>
+    <span class="cb-tiny-text">{{ lowLabel }}</span>
 
     <Slider.Control class="relative flex grow items-center">
       <Slider.Track class="h-2 w-full rounded-full bg-background">
@@ -27,7 +27,7 @@
       </Slider.Thumb>
     </Slider.Control>
 
-    <span class="text-2xs">{{ highLabel }}</span>
+    <span class="cb-tiny-text">{{ highLabel }}</span>
   </Slider.Root>
 </template>
 

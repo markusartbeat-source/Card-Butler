@@ -3,11 +3,11 @@
        The label stays for screen readers. -->
   <Field.Root
     v-ripple
-    class="cb-hover relative flex overflow-hidden rounded-md bg-surface-light px-1.5 py-1 text-sm"
+    class="cb-regular-text cb-hover relative flex overflow-hidden rounded-md bg-surface-light px-1.5 py-1"
   >
     <Field.Label class="sr-only">{{ label }}</Field.Label>
     <Field.Textarea
-      class="min-h-32 w-full min-w-0 resize-none cursor-text bg-transparent text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
+      class="min-h-32 w-full min-w-0 resize-none cursor-text bg-transparent outline-none placeholder:text-label focus:placeholder:text-transparent"
       :value="modelValue"
       :placeholder="placeholder"
       @input="(event) => $emit('update:modelValue', (event.target as HTMLTextAreaElement).value)"

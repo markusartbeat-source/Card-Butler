@@ -30,7 +30,7 @@
         class="rounded-md transition-all duration-350"
         :class="editing && 'bg-surface-light px-1.5 py-1'"
       >
-        <div class="cb-unfold text-sm text-label" :class="editing && 'cb-unfold-open'">
+        <div class="cb-regular-text-muted cb-unfold" :class="editing && 'cb-unfold-open'">
           <div>{{ dictionary.textIcons.exampleTextLabel }}</div>
         </div>
         <!-- An editable area instead of a textarea, because a textarea cannot

@@ -8,9 +8,9 @@
       <CbInteractive
         v-for="(element, index) in elements"
         :key="element.name"
-        class="flex items-center gap-2.5 px-3 py-4 text-sm first:rounded-l-full first:pl-4 last:rounded-r-full last:pr-4"
+        class="flex items-center gap-2.5 px-3 py-4 first:rounded-l-full first:pl-4 last:rounded-r-full last:pr-4"
         :class="
-          index === activeIndex ? 'bg-radial from-gold-light to-gold text-surface' : 'text-white'
+          index === activeIndex ? 'cb-regular-text-dark bg-radial from-gold-light to-gold' : 'cb-regular-text'
         "
         :title="showNames ? undefined : element.name"
         @click="emit('select', index)"

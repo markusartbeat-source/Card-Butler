@@ -20,7 +20,7 @@
     <div class="flex min-w-0 flex-1 items-center gap-2.5">
       <template v-if="logo">
         <img src="../../assets/logos/logo.svg" alt="" class="size-12" :class="dimWhileDraggingClasses" />
-        <span class="text-xl text-white" :class="dimWhileDraggingClasses">{{ dictionary.header.appName }}</span>
+        <span class="cb-headline-01" :class="dimWhileDraggingClasses">{{ dictionary.header.appName }}</span>
       </template>
 
       <!-- The back button belongs to the heading, so it only shows with one.
@@ -42,9 +42,9 @@
         <!-- Groß der Titel, klein darunter die zweite Zeile: der Pfad oder
              ein Text. Alles endet lang in „…“. -->
         <div class="flex min-w-0 flex-col">
-          <h1 class="truncate text-xl text-white" :class="dimWhileDraggingClasses">{{ title }}</h1>
-          <CbBreadcrumbs v-if="path" :entries="path" :label="dictionary.header.path" class="text-label text-sm" />
-          <p v-else-if="subtitle" class="text-label truncate text-sm" :class="dimWhileDraggingClasses">
+          <h1 class="cb-headline-01 truncate" :class="dimWhileDraggingClasses">{{ title }}</h1>
+          <CbBreadcrumbs v-if="path" :entries="path" :label="dictionary.header.path" class="cb-regular-text-muted" />
+          <p v-else-if="subtitle" class="cb-regular-text-muted truncate" :class="dimWhileDraggingClasses">
             {{ subtitle }}
           </p>
         </div>
@@ -67,7 +67,7 @@
       >
         <input
           v-model="searchWord"
-          class="w-full min-w-0 cursor-text bg-transparent text-sm text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
+          class="cb-regular-text w-full min-w-0 cursor-text bg-transparent outline-none placeholder:text-label focus:placeholder:text-transparent"
           :placeholder="searchModeLabel"
         />
       </label>

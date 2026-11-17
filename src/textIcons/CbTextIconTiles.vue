@@ -4,7 +4,7 @@
   <div class="grid grid-cols-4 gap-3 p-6">
     <!-- The dashed tile opens the hidden file picker. -->
     <CbInteractive
-      class="flex flex-col items-center justify-center gap-2.5 rounded-md border-2 border-dashed border-label text-sm text-label"
+      class="cb-regular-text-muted flex flex-col items-center justify-center gap-2.5 rounded-md border-2 border-dashed border-label"
       @click="fileInput?.click()"
     >
       <CbIcon name="add_2" />

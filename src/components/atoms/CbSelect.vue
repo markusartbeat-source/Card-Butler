@@ -23,7 +23,7 @@
     <Select.Control>
       <Select.Trigger
         v-ripple
-        class="cb-hover relative flex items-center overflow-hidden bg-surface-light text-sm text-white"
+        class="cb-regular-text cb-hover relative flex items-center overflow-hidden bg-surface-light"
         :class="triggerClasses[variant]"
       >
         <CbThumbnail
@@ -34,12 +34,12 @@
         <CbIcon v-else-if="shownItem?.icon" :name="shownItem.icon" />
         <!-- The field variant names the value with a grey word in front of it. -->
         <Select.Label v-if="label" as-child>
-          <span class="text-label" :class="hideLabel && 'sr-only'">{{ label }}</span>
+          <span class="cb-regular-text-muted" :class="hideLabel && 'sr-only'">{{ label }}</span>
         </Select.Label>
         <!-- Im großen Feld höchstens zwei Zeilen, ein längerer Name endet mit „…“. -->
         <span
           class="min-w-0 grow text-left wrap-break-word"
-          :class="[!shownItem && 'text-label', variant === 'pictures' && 'line-clamp-2']"
+          :class="[!shownItem && 'cb-regular-text-muted', variant === 'pictures' && 'line-clamp-2']"
         >
           {{ shownItem?.label ?? placeholder }}
         </span>
@@ -59,7 +59,7 @@
                  Text – Ark würde damit wählen bzw. springen. -->
             <label
               v-if="searchLabel"
-              class="mb-1 flex items-center gap-1.5 rounded-md bg-surface px-1.5 py-1 text-label"
+              class="cb-regular-text-muted mb-1 flex items-center gap-1.5 rounded-md bg-surface px-1.5 py-1"
             >
               <CbIcon name="search" />
               <input
@@ -71,7 +71,7 @@
                 :aria-activedescendant="highlightedValue === null ? undefined : itemId(highlightedValue)"
                 :aria-label="searchLabel"
                 :placeholder="searchLabel"
-                class="min-w-0 grow cursor-text bg-transparent text-white outline-none placeholder:text-label"
+                class="cb-regular-text min-w-0 grow cursor-text bg-transparent outline-none placeholder:text-label"
                 @keydown.space.stop
                 @keydown.home.stop
                 @keydown.end.stop
@@ -114,7 +114,7 @@
                 </CbListItem>
               </Select.Item>
             </component>
-            <p v-if="isSearching && !items.length" class="px-2 py-1.5 text-label">{{ noResultsText }}</p>
+            <p v-if="isSearching && !items.length" class="cb-regular-text-muted px-2 py-1.5">{{ noResultsText }}</p>
           </CbPopupList>
         </Select.Content>
       </Select.Positioner>

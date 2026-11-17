@@ -16,7 +16,7 @@
            that gets cut off; the list inside keeps its full height, so the
            entries never squash together. -->
       <Menu.Content
-        class="cb-collapse z-50 overflow-hidden rounded-lg bg-surface text-sm text-white shadow-lg"
+        class="cb-regular-text cb-collapse z-50 overflow-hidden rounded-lg bg-surface shadow-lg"
       >
         <div>
           <!-- min-w keeps a short list from looking pinched, longer entries
@@ -38,7 +38,7 @@
                 v-else
                 as-child
                 :value="item.value"
-                :class="{ 'text-gold': item.value === activeItem }"
+                :class="{ 'cb-regular-text-gold': item.value === activeItem }"
               >
                 <CbListItem :icon="item.icon">{{ item.label }}</CbListItem>
               </Menu.Item>

@@ -5,7 +5,7 @@
     <div class="flex items-center justify-center gap-3">
       <span class="bg-gold h-px min-w-4.5 grow"></span>
       <slot name="title">
-        <h2 class="text-xl text-white">{{ title }}</h2>
+        <h2 class="cb-headline-01">{{ title }}</h2>
       </slot>
       <span class="bg-gold h-px min-w-4.5 grow"></span>
     </div>

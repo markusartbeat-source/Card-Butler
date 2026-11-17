@@ -2,15 +2,17 @@
   <!-- Ark UI brings the behaviour only, the whole look comes from here.
        A round icon button that stays pressed until it is clicked again. Mit
        chip eine Pille mit diesem Text statt des Icons. -->
-  <!-- Gesperrt: :hover greift trotzdem, deshalb kommt der Hover von Hand weg. -->
+  <!-- Gesperrt: :hover greift trotzdem, deshalb kommt der Hover von Hand weg.
+       Die Pille trägt einen Textstil, ohne Pille färbt die Farbe nur das Icon. -->
   <Toggle.Root
     v-ripple
     :pressed="modelValue"
     :disabled="disabled"
     class="relative shrink-0 overflow-hidden rounded-full"
     :class="[
-      chip ? 'px-3 py-1 text-xs' : 'p-1',
-      modelValue ? 'bg-radial from-gold-light to-gold text-surface' : 'text-white',
+      chip ? 'px-3 py-1' : 'p-1',
+      modelValue && 'bg-radial from-gold-light to-gold',
+      chip ? (modelValue ? 'cb-small-text-dark' : 'cb-small-text') : modelValue ? 'text-surface' : 'text-white',
       chip && !modelValue && 'bg-surface',
       disabled ? 'opacity-40' : 'cb-hover',
     ]"

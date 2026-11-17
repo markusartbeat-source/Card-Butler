@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-6 text-white">
-    <p class="text-sm">{{ dictionary.cardEditor.layersHint }}</p>
+  <div class="flex flex-col gap-6">
+    <p class="cb-regular-text">{{ dictionary.cardEditor.layersHint }}</p>
     <!-- Ziehen sortiert die Ebenen um, per Tastatur Alt+Pfeil. Die Position
          steht für Screenreader in der aria-description. Ein Klick (Enter,
          Leertaste) lässt das Element auf der Karte aufglänzen, ohne es

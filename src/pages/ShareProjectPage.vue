@@ -19,7 +19,7 @@
 
         <!-- Link row -->
         <div class="flex flex-col gap-3 p-6">
-          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(1)">
+          <h3 class="cb-regular-text animate-cb-rise" :style="riseDelay(1)">
             {{ dictionary.shareProject.linkHeading }}
           </h3>
           <div class="animate-cb-rise flex items-center gap-3" :style="riseDelay(2)">
@@ -46,7 +46,7 @@
 
         <!-- Mail row -->
         <div class="flex flex-col gap-3 p-6">
-          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(5)">
+          <h3 class="cb-regular-text animate-cb-rise" :style="riseDelay(5)">
             {{ dictionary.shareProject.mailHeading }}
           </h3>
           <div class="animate-cb-rise flex items-center gap-3" :style="riseDelay(6)">

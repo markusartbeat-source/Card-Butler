@@ -6,7 +6,7 @@
     :class="{ 'opacity-40': disabled }"
   >
     <CbInteractive
-      class="bg-radial from-gold-light to-gold text-surface flex w-full items-center justify-center rounded-md text-sm"
+      class="cb-regular-text-dark bg-radial from-gold-light to-gold flex w-full items-center justify-center rounded-md"
       :class="framedSizeClasses[size]"
       :disabled="disabled"
       @click="$emit('click', $event)"
@@ -21,7 +21,7 @@
        the padding for a button that sits next to text instead of on its own. -->
   <CbInteractive
     v-else
-    class="flex items-center text-sm text-white"
+    class="cb-regular-text flex items-center"
     :class="[
       variantClasses[variant],
       backgroundlessVariants.includes(variant) ? evenSizeClasses[size] : sizeClasses[size],

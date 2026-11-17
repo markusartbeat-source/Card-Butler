@@ -14,8 +14,8 @@
     :class="interactive && 'first:rounded-t-3xl last:rounded-b-3xl'"
   >
     <div>
-      <p class="text-sm text-white">{{ title }}</p>
-      <p v-if="info" class="text-xs text-white/50">{{ info }}</p>
+      <p class="cb-regular-text">{{ title }}</p>
+      <p v-if="info" class="cb-small-text-muted">{{ info }}</p>
     </div>
     <div class="grow"></div>
     <slot />

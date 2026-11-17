@@ -38,7 +38,7 @@
               <div class="flex items-center gap-2">
                 <slot name="titleStart" />
 
-                <Dialog.Title class="text-xl">{{ title }}</Dialog.Title>
+                <Dialog.Title class="cb-headline-01">{{ title }}</Dialog.Title>
               </div>
 
               <Dialog.CloseTrigger as-child>

@@ -13,6 +13,8 @@ export default defineConfig({
     // Fester Port, weil Backend und Google-Redirect-URI auf 5173 eingestellt sind.
     port: 5173,
     strictPort: true,
+    // Auch im lokalen Netz erreichbar, z.B. zum Testen auf dem Handy.
+    host: true,
     // Nur diese Pfade gehören dem Backend. Nicht pauschal /login, denn
     // /login/success ist eine Frontend-Route.
     proxy: {

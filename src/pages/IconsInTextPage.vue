@@ -7,7 +7,7 @@
 
     <div class="flex flex-col gap-3">
       <div class="flex items-center gap-1.5">
-        <h2 class="text-xl text-white">{{ dictionary.textIcons.myIcons }}</h2>
+        <h2 class="cb-headline-01">{{ dictionary.textIcons.myIcons }}</h2>
         <CbTooltip :text="dictionary.textIcons.shortcodeHint">
           <CbButton variant="icon" size="small" :aria-label="dictionary.textIcons.shortcodeHint">
             <CbIcon name="info" />

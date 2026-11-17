@@ -9,7 +9,7 @@
     aria-hidden="true"
   >
     <div
-      class="border-gold bg-background/80 text-gold overflow-hidden border border-dashed px-1 shadow-lg"
+      class="cb-regular-text-gold border-gold bg-background/80 overflow-hidden border border-dashed px-1 shadow-lg"
       :class="element.type === 'CIRCLE' ? 'flex items-center justify-center rounded-full' : 'rounded'"
       :style="{ width: `${element.width}mm`, height: `${element.height}mm`, zoom: editorZoom }"
     >

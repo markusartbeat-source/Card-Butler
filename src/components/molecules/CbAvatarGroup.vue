@@ -11,7 +11,7 @@
     />
     <div
       v-if="hiddenCount > 0"
-      class="bg-surface-light ring-surface flex shrink-0 items-center justify-center rounded-full text-xs text-white ring-2"
+      class="cb-small-text bg-surface-light ring-surface flex shrink-0 items-center justify-center rounded-full ring-2"
       :class="size === 'small' ? 'size-7' : 'size-10'"
     >
       +{{ hiddenCount }}

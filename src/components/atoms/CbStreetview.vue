@@ -11,7 +11,7 @@
 
     <div class="pointer-events-none absolute inset-0 flex items-center justify-center gap-1">
       <CbIcon name="location_on" class="text-surface" />
-      <span class="rounded-lg bg-surface px-2 py-1 text-sm text-white">{{ cityName }}</span>
+      <span class="cb-regular-text rounded-lg bg-surface px-2 py-1">{{ cityName }}</span>
     </div>
   </div>
 </template>

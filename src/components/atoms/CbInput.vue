@@ -8,7 +8,7 @@
   >
     <!-- With an icon or hideLabel the word itself stays hidden, but screen
          readers keep it. -->
-    <Field.Label class="text-label" :class="hideLabel && 'sr-only'">
+    <Field.Label class="cb-regular-text-muted" :class="hideLabel && 'sr-only'">
       <CbIcon v-if="icon" :name="icon" />
       <span :class="icon && 'sr-only'">{{ label }}</span>
       <!-- Platzhalter nur fürs Auge, der Screenreader hört stattdessen den
@@ -19,7 +19,7 @@
       </template>
     </Field.Label>
     <Field.Input
-      class="min-w-0 cursor-text bg-transparent text-white outline-none placeholder:text-label focus:placeholder:text-transparent"
+      class="min-w-0 cursor-text bg-transparent outline-none placeholder:text-label focus:placeholder:text-transparent"
       :class="variantClasses[variant].input"
       :value="modelValue"
       :placeholder="spokenPlaceholder ? undefined : placeholder"
@@ -37,10 +37,10 @@ import CbIcon from './CbIcon.vue'
 import type { IconName } from './icons'
 
 // „title“ steht im Kopf eines Panels statt des Titels: große, mittige Schrift,
-// und das Feld wächst mit dem Text.
+// und das Feld wächst mit dem Text. Das Eingabefeld erbt den Textstil der Box.
 const variantClasses = {
-  default: { root: 'px-1.5 py-1 text-sm', input: 'w-full' },
-  title: { root: 'min-w-24 px-3 py-0.5 text-xl', input: 'field-sizing-content grow text-center' },
+  default: { root: 'cb-regular-text px-1.5 py-1', input: 'w-full' },
+  title: { root: 'cb-headline-01 min-w-24 px-3 py-0.5', input: 'field-sizing-content grow text-center' },
 }
 
 withDefaults(

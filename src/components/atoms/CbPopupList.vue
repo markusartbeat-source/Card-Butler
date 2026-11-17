@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cb-collapse z-50 overflow-hidden rounded-lg bg-surface-light text-sm text-white shadow-lg"
+    class="cb-regular-text cb-collapse z-50 overflow-hidden rounded-lg bg-surface-light shadow-lg"
   >
     <!-- Die Liste, die unter einem Feld aufklappt. Ark legt sein Verhalten per
          as-child darauf, z.B. <Select.Content as-child>. z-50 hält sie über

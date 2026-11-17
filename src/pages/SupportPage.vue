@@ -17,7 +17,7 @@
 
         <!-- Feedback row -->
         <div class="flex flex-col gap-3 p-6">
-          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(1)">
+          <h3 class="cb-regular-text animate-cb-rise" :style="riseDelay(1)">
             {{ dictionary.support.feedbackHeading }}
           </h3>
           <CbTextarea
@@ -31,11 +31,11 @@
 
         <!-- Screenshot row: the dashed tile opens the hidden file picker. -->
         <div class="flex flex-col gap-3 p-6">
-          <h3 class="animate-cb-rise text-sm text-white" :style="riseDelay(3)">
+          <h3 class="cb-regular-text animate-cb-rise" :style="riseDelay(3)">
             {{ dictionary.support.screenshotHeading }}
           </h3>
           <CbInteractive
-            class="animate-cb-rise flex w-28 flex-col items-center gap-2.5 rounded-md border-2 border-dashed border-label py-4 text-sm text-label"
+            class="cb-regular-text-muted animate-cb-rise flex w-28 flex-col items-center gap-2.5 rounded-md border-2 border-dashed border-label py-4"
             :style="riseDelay(4)"
             @click="screenshotInput?.click()"
           >
@@ -50,14 +50,14 @@
             class="hidden"
             @change="pickScreenshots"
           />
-          <p v-for="file in screenshots" :key="file.name" class="text-sm text-label">
+          <p v-for="file in screenshots" :key="file.name" class="cb-regular-text-muted">
             {{ file.name }}
           </p>
         </div>
 
         <!-- Contact row: each checkbox carries its own 6 px of padding, so the
              rows need no gap of their own. -->
-        <div class="flex flex-col p-6 text-white">
+        <div class="flex flex-col p-6">
           <CbCheckbox
             v-model="notifyAboutUpdates"
             :label="dictionary.support.notifyUpdatesCheckbox"

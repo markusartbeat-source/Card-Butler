@@ -5,12 +5,12 @@
     <!-- Title framed by a short golden stroke on each side. -->
     <div class="flex items-center justify-center gap-3">
       <span class="h-px w-4.5 bg-gold"></span>
-      <h2 class="text-xl text-white">{{ dictionary.exportDialog.settingsTitle }}</h2>
+      <h2 class="cb-headline-01">{{ dictionary.exportDialog.settingsTitle }}</h2>
       <span class="h-px w-4.5 bg-gold"></span>
     </div>
 
     <div class="mt-6 flex flex-col gap-3">
-      <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.whichCardsGroup }}</h3>
+      <h3 class="cb-headline-02">{{ dictionary.exportDialog.whichCardsGroup }}</h3>
 
       <!-- The rows need no gap of their own: each one already carries 6 px of
            padding, which puts 12 px between two boxes. -->
@@ -27,7 +27,7 @@
     <CbDivider class="my-6" />
 
     <div class="flex flex-col gap-3">
-      <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.cardSidesGroup }}</h3>
+      <h3 class="cb-headline-02">{{ dictionary.exportDialog.cardSidesGroup }}</h3>
 
       <div class="flex flex-col">
         <CbCheckbox
@@ -42,7 +42,7 @@
     <CbDivider class="my-6" />
 
     <div class="flex flex-col gap-3">
-      <h3 class="text-base font-bold text-white">{{ dictionary.exportDialog.imageQualityGroup }}</h3>
+      <h3 class="cb-headline-02">{{ dictionary.exportDialog.imageQualityGroup }}</h3>
       <CbSelect v-model="chosenResolution" variant="field" :items="resolutionOptions" />
     </div>
   </div>

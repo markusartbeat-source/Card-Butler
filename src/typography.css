@@ -1,0 +1,80 @@
+/* Die Textstile der App: Größe, Schriftstärke und Farbe eines Textes stehen nur
+   hier. Ein Text bekommt genau eine dieser Klassen statt text-sm, font-bold,
+   text-white usw. Varianten gehen wie bei jeder Tailwind-Klasse, z.B.
+   hover:cb-regular-text.
+   Farbvarianten: ohne Zusatz weiß, -muted grau (Hinweise, Zusatzinfos), -dark
+   dunkel (auf Gold), -gold golden. Eine Farbvariante übernimmt ihren Grundstil
+   und setzt danach nur die Farbe neu – die spätere Angabe gewinnt. */
+
+@theme {
+  /* Der kleinste Text im Design ist 10 px, Tailwind hört bei 12 px auf. */
+  --text-2xs: 0.625rem;
+  /* 40 px mit 50 px Zeilenhöhe – Tailwind springt von 36 auf 48 px. */
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.25;
+}
+
+/* Große Überschrift, z.B. auf der Startseite. Auf dem Handy kleiner. */
+@utility cb-display-text {
+  @apply text-3xl font-bold text-white tablet:text-display;
+}
+
+@utility cb-display-text-gold {
+  @apply cb-display-text;
+  @apply text-gold;
+}
+
+/* Titel von Seiten, Panels und Dialogen. */
+@utility cb-headline-01 {
+  @apply text-xl text-white;
+}
+
+/* Überschrift einer Gruppe, Reiter. */
+@utility cb-headline-02 {
+  @apply text-base font-bold text-white;
+}
+
+/* Normaler Text. */
+@utility cb-regular-text {
+  @apply text-sm text-white;
+}
+
+@utility cb-regular-text-muted {
+  @apply cb-regular-text;
+  @apply text-label;
+}
+
+@utility cb-regular-text-dark {
+  @apply cb-regular-text;
+  @apply text-surface;
+}
+
+@utility cb-regular-text-gold {
+  @apply cb-regular-text;
+  @apply text-gold;
+}
+
+/* Kleiner Text, z.B. Zusatzinfos oder Initialen im kleinen Avatar. */
+@utility cb-small-text {
+  @apply text-xs text-white;
+}
+
+@utility cb-small-text-muted {
+  @apply cb-small-text;
+  @apply text-label;
+}
+
+@utility cb-small-text-dark {
+  @apply cb-small-text;
+  @apply text-surface;
+}
+
+/* Kleinster Text, z.B. Ordnernamen. */
+@utility cb-tiny-text {
+  @apply text-2xs text-white;
+}
+
+@utility cb-tiny-text-dark {
+  @apply cb-tiny-text;
+  @apply text-surface;
+}

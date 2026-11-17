@@ -14,7 +14,7 @@
         :key="item.value"
         v-ripple
         :value="item.value"
-        class="cb-hover relative flex-1 overflow-hidden px-3 py-2 text-center text-base font-bold text-white"
+        class="cb-headline-02 cb-hover relative flex-1 overflow-hidden px-3 py-2 text-center"
       >
         {{ item.label }}
       </Tabs.Trigger>

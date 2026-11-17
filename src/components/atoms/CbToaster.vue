@@ -16,8 +16,8 @@
       />
 
       <template v-else>
-        <Toast.Title class="text-sm font-medium">{{ toast.title }}</Toast.Title>
-        <Toast.Description v-if="toast.description" class="text-sm opacity-80">
+        <Toast.Title class="cb-regular-text">{{ toast.title }}</Toast.Title>
+        <Toast.Description v-if="toast.description" class="cb-regular-text opacity-80">
           {{ toast.description }}
         </Toast.Description>
         <Toast.ActionTrigger v-if="toast.action" as-child>

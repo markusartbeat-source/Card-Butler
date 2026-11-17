@@ -7,7 +7,7 @@
     panel-class="gap-6"
     @update:open="(open) => !open && $emit('close')"
   >
-    <p class="text-sm">{{ dictionary.userManagement.removeUserQuestion(member?.name ?? '') }}</p>
+    <p class="cb-regular-text">{{ dictionary.userManagement.removeUserQuestion(member?.name ?? '') }}</p>
 
     <template #footer>
       <CbButton variant="secondary" @click="$emit('close')">

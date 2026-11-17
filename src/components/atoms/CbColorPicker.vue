@@ -12,7 +12,7 @@
     <ColorPicker.Control>
       <ColorPicker.Trigger
         v-ripple
-        class="cb-hover relative flex min-h-8 w-full items-center gap-1.5 overflow-hidden rounded-md bg-surface-light px-1.5 py-1 text-sm text-white"
+        class="cb-regular-text cb-hover relative flex min-h-8 w-full items-center gap-1.5 overflow-hidden rounded-md bg-surface-light px-1.5 py-1"
         :aria-label="label"
       >
         <ColorPicker.ValueSwatch class="size-4.5 shrink-0 rounded" />
@@ -67,11 +67,11 @@
             <div class="flex gap-3">
               <ColorPicker.ChannelInput
                 channel="hex"
-                class="min-w-0 grow rounded-md bg-surface px-1.5 py-1 text-sm text-white outline-none"
+                class="cb-regular-text min-w-0 grow rounded-md bg-surface px-1.5 py-1 outline-none"
               />
               <ColorPicker.ChannelInput
                 channel="alpha"
-                class="w-14 min-w-0 rounded-md bg-surface px-1.5 py-1 text-sm text-white outline-none"
+                class="cb-regular-text w-14 min-w-0 rounded-md bg-surface px-1.5 py-1 outline-none"
               />
             </div>
           </div>

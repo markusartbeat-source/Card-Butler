@@ -8,7 +8,7 @@
         <!-- The spacer pushes the button to the right edge of the row. -->
         <div class="animate-cb-rise flex items-center gap-3.5 p-6" :style="riseDelay(0)">
           <CbAvatar :name="userLabel" :image-url="userPicture" />
-          <p class="text-sm text-white">{{ userLabel }}</p>
+          <p class="cb-regular-text">{{ userLabel }}</p>
           <div class="grow"></div>
 
           <CbButton
@@ -21,19 +21,19 @@
           </CbButton>
         </div>
 
-        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(1)">
+        <div class="cb-regular-text animate-cb-rise flex items-center p-6" :style="riseDelay(1)">
           {{ dictionary.settings.language }}
           <div class="grow"></div>
           <CbSelect v-model="language" :items="languages" />
         </div>
 
-        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(2)">
+        <div class="cb-regular-text animate-cb-rise flex items-center p-6" :style="riseDelay(2)">
           {{ dictionary.settings.theme }}
           <div class="grow"></div>
           <CbSelect v-model="theme" :items="themes" />
         </div>
 
-        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(3)">
+        <div class="cb-regular-text animate-cb-rise flex items-center p-6" :style="riseDelay(3)">
           {{ dictionary.settings.accessibility }}
           <div class="grow"></div>
           <CbSwitch v-model="accessibility" />
@@ -41,7 +41,7 @@
       </CbSettingsGroup>
 
       <CbSettingsGroup :title="dictionary.settings.subscriptionGroup" same-row-height>
-        <div class="animate-cb-rise flex items-center p-6 text-sm text-white" :style="riseDelay(4)">
+        <div class="cb-regular-text animate-cb-rise flex items-center p-6" :style="riseDelay(4)">
           {{ subscription.planName }}, {{ subscription.pricePerMonth }}€
           {{ dictionary.settings.perMonth }}
           <div class="grow"></div>
@@ -54,8 +54,8 @@
 
         <div class="animate-cb-rise flex items-center p-6" :style="riseDelay(5)">
           <div>
-            <p class="text-sm text-white">{{ dictionary.settings.storage }}</p>
-            <p class="text-xs text-white/50">
+            <p class="cb-regular-text">{{ dictionary.settings.storage }}</p>
+            <p class="cb-small-text-muted">
               {{ subscription.storageUsedMb }} MB {{ dictionary.settings.storageOf }}
               {{ subscription.storageTotalMb }} MB {{ dictionary.settings.storageUsed }}
             </p>
@@ -66,8 +66,8 @@
 
         <div class="animate-cb-rise flex items-center p-6" :style="riseDelay(6)">
           <div>
-            <p class="text-sm text-white">{{ dictionary.settings.freeProjects }}</p>
-            <p class="text-xs text-white/50">
+            <p class="cb-regular-text">{{ dictionary.settings.freeProjects }}</p>
+            <p class="cb-small-text-muted">
               {{ subscription.projectsUsed }} {{ dictionary.settings.storageOf }}
               {{ subscription.projectsTotal }} {{ dictionary.settings.storageUsed }}
             </p>
@@ -77,7 +77,7 @@
         </div>
 
         <div
-          class="animate-cb-rise flex items-center px-6 py-3 text-sm text-white"
+          class="cb-regular-text animate-cb-rise flex items-center px-6 py-3"
           :style="riseDelay(7)"
         >
           {{ dictionary.settings.dataLocation }}

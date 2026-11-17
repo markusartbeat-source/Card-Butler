@@ -2,7 +2,7 @@
   <div
     v-ripple
     class="cb-hover relative overflow-hidden rounded-md"
-    :class="isTile ? 'flex flex-col gap-1 p-1 text-center text-2xs' : 'flex items-center gap-2 px-2 py-1.5'"
+    :class="isTile ? 'cb-tiny-text flex flex-col gap-1 p-1 text-center' : 'flex items-center gap-2 px-2 py-1.5'"
   >
     <!-- Ein Eintrag einer aufgeklappten Liste, mit Icon davor, wenn er eins hat.
          Mit Bild oder als Ordner wird er zur Kachel im Raster: oben das Bild im

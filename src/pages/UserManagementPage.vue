@@ -38,7 +38,7 @@
           <div
             v-ripple
             :data-member-id="member.id"
-            class="group cb-hover relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-lg px-2 py-1 text-sm text-white"
+            class="cb-regular-text group cb-hover relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-lg px-2 py-1"
             @click="togglePermissionList($event, member.id)"
           >
             <CbAvatar :name="member.name" />

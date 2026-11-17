@@ -20,7 +20,7 @@
       </Checkbox.Indicator>
     </Checkbox.Control>
 
-    <Checkbox.Label class="text-sm">{{ label }}</Checkbox.Label>
+    <Checkbox.Label class="cb-regular-text">{{ label }}</Checkbox.Label>
     <Checkbox.HiddenInput />
   </Checkbox.Root>
 </template>

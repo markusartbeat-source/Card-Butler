@@ -7,14 +7,14 @@
   >
     <!-- w-full inside the flex frame lets the dark surface fill the whole card. -->
     <div
-      class="flex w-full flex-col rounded-2xl bg-gradient-to-b from-surface/80 to-background/80 p-6 text-white backdrop-blur-md"
+      class="flex w-full flex-col rounded-2xl bg-gradient-to-b from-surface/80 to-background/80 p-6 backdrop-blur-md"
     >
-      <h2 class="animate-cb-rise text-xl font-bold" :style="riseDelay(0)">{{ name }}</h2>
-      <p class="animate-cb-rise mt-1 text-sm text-white/70" :style="riseDelay(1)">{{ subtitle }}</p>
+      <h2 class="cb-headline-01 animate-cb-rise" :style="riseDelay(0)">{{ name }}</h2>
+      <p class="cb-regular-text-muted animate-cb-rise mt-1" :style="riseDelay(1)">{{ subtitle }}</p>
       <div class="animate-cb-rise mt-10 mb-4 flex items-end gap-2" :style="riseDelay(2)">
-        <p class="text-4xl font-bold">{{ price }}€</p>
+        <p class="cb-display-text">{{ price }}€</p>
         <!-- Paid plans explain what the price covers. -->
-        <p v-if="price > 0" class="pb-1 text-xs text-white/50">
+        <p v-if="price > 0" class="cb-small-text-muted pb-1">
           {{ dictionary.upgrade.priceNote }}<br />
           {{ dictionary.upgrade.billingNote }}
         </p>
@@ -26,14 +26,14 @@
           <CbIcon name="arrow_circle_up" />
           {{ dictionary.general.upgrade }}
         </CbButton>
-        <p class="animate-cb-rise mt-2 text-center text-xs text-white/70" :style="riseDelay(4)">
+        <p class="cb-small-text-muted animate-cb-rise mt-2 text-center" :style="riseDelay(4)">
           {{ dictionary.upgrade.noCommitment }}
         </p>
       </template>
 
       <div
         v-else
-        class="animate-cb-rise mt-6 mb-5 flex items-center gap-2.5 rounded-xl bg-surface-light p-3 text-sm"
+        class="cb-regular-text animate-cb-rise mt-6 mb-5 flex items-center gap-2.5 rounded-xl bg-surface-light p-3"
         :style="riseDelay(3)"
       >
         <!-- Free is always the plan the visitor is currently on. The extra
@@ -46,10 +46,10 @@
       <!-- The line runs from edge to edge, so it cancels the card padding. -->
       <CbDivider class="animate-cb-rise my-6 -mx-6" :style="riseDelay(5)" />
 
-      <p class="animate-cb-rise mb-4 text-sm text-white/70" :style="riseDelay(6)">
+      <p class="cb-regular-text-muted animate-cb-rise mb-4" :style="riseDelay(6)">
         {{ benefitsTitle }}
       </p>
-      <div class="flex flex-col gap-2 text-white/70">
+      <div class="cb-regular-text-muted flex flex-col gap-2">
         <CbCheckLabel
           v-for="(benefit, benefitIndex) in benefits"
           :key="benefit"

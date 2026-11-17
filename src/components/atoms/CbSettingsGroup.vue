@@ -8,7 +8,7 @@
   <!-- The panel takes the width it is given and stops growing at 160, so it
        looks the same on the settings page and inside a dialog. -->
   <section class="w-full max-w-160">
-    <h2 class="mb-3 text-xl text-white">{{ title }}</h2>
+    <h2 class="cb-headline-01 mb-3">{{ title }}</h2>
     <div
       class="grid divide-y divide-surface-light rounded-3xl bg-surface shadow-lg"
       :class="{ 'auto-rows-fr': sameRowHeight }"

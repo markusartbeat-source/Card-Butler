@@ -4,7 +4,7 @@
        Klick tut, legt die Liste fest; sein Name ist der des Elements. Beim Ziehen
        kippt der Knopf, nicht das Listenelement darum (siehe style.css). -->
   <CbInteractive
-    class="cb-layer-face flex h-16 w-full cursor-grab items-center gap-1.5 rounded-md bg-surface-light p-1.5 text-left text-sm active:cursor-grabbing"
+    class="cb-regular-text cb-layer-face flex h-16 w-full cursor-grab items-center gap-1.5 rounded-md bg-surface-light p-1.5 text-left active:cursor-grabbing"
   >
     <CbLayerPreview :element="element" :card="card" :card-color="cardColor" />
     <CbIcon :name="elementTypeIcons[element.data.type]" class="mx-1" />

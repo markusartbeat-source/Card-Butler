@@ -13,7 +13,7 @@
     <!-- Old and new number share one cell, so the old one slides out while the
          new one slides in — upwards when the count grows, downwards when it
          shrinks. The box cuts off whatever is outside. -->
-    <div class="grid justify-items-center overflow-hidden text-display leading-none">
+    <div class="cb-display-text grid justify-items-center overflow-hidden leading-none">
       <!-- Keeps the box as wide as the widest count, so nothing jumps when the
            number gets a digit more or less (9 → 10). -->
       <span class="invisible col-start-1 row-start-1">x{{ maxPrintCount }}</span>

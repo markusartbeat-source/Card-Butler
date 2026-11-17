@@ -1,11 +1,12 @@
 <template>
-  <!-- Textblock links, Abstände wie im Figma (105px links, 88px unter der Linie). -->
-  <div class="mt-22 ml-26 flex w-fit flex-col gap-2.5">
-    <h1 class="text-display flex flex-col leading-12.5 font-bold text-white">
+  <!-- Textblock links, ab Tablet Abstände wie im Figma (105px links, 88px unter
+       der Linie). Auf dem Handy schmaler Rand, damit der Text Platz hat. -->
+  <div class="mx-4 mt-8 flex w-fit flex-col gap-2.5 tablet:mt-22 tablet:ml-26">
+    <h1 class="cb-display-text flex flex-col">
       <span>{{ dictionary.home.titleCards }}</span>
-      <span class="text-gold">{{ dictionary.home.titleStories }}</span>
+      <span class="cb-display-text-gold">{{ dictionary.home.titleStories }}</span>
     </h1>
-    <p class="w-100 font-bold text-white">{{ dictionary.home.description }}</p>
+    <p class="cb-headline-02 tablet:w-100">{{ dictionary.home.description }}</p>
     <!-- Vorerst ohne Funktion. -->
     <CbButton class="self-start">
       <CbIcon name="live_tv" />
@@ -18,7 +19,7 @@
       aria-labelledby="home-projects-title"
       class="mt-10 flex flex-col gap-2.5"
     >
-      <h2 id="home-projects-title" class="font-bold text-white">
+      <h2 id="home-projects-title" class="cb-headline-02">
         {{ dictionary.home.projectsTitle }}
       </h2>
       <ul v-if="projects.length" class="flex flex-col gap-2">
@@ -30,7 +31,7 @@
           @rename="projectToRename = project"
         />
       </ul>
-      <p v-else class="text-label text-sm">{{ dictionary.home.noProjects }}</p>
+      <p v-else class="cb-regular-text-muted">{{ dictionary.home.noProjects }}</p>
       <CbButton variant="secondary" class="self-start" @click="isNewProjectDialogOpen = true">
         <CbIcon name="add_2" />
         {{ dictionary.home.newProject }}

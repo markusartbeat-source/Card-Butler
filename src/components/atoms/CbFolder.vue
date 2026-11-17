@@ -41,7 +41,7 @@
       </foreignObject>
     </svg>
     <!-- Lange Wörter brechen um, statt über die Kachel hinauszuragen. -->
-    <span v-if="!graphicOnly" class="text-2xs w-full text-center wrap-break-word text-white">{{ name }}</span>
+    <span v-if="!graphicOnly" class="cb-tiny-text w-full text-center wrap-break-word">{{ name }}</span>
   </component>
 </template>
 

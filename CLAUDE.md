@@ -9,6 +9,11 @@ Diese Regeln werden mit der Zeit ergänzt.
   Dateien.
 - Tailwind-Klassen möglichst ohne eckige Klammern (`[...]`) verwenden — also
   Tailwind-Basisklassen statt Arbitrary Values.
+- Textstile (Größe, Schriftstärke, Farbe) nur über die `cb-`-Klassen aus
+  `src/typography.css` (z.B. `cb-regular-text`, `cb-headline-01`,
+  `cb-small-text-muted`) — genau eine Klasse pro Text. Kein `text-sm`,
+  `font-bold`, `text-white` usw. direkt an Texten. Neuer Stil oder neue
+  Farbvariante → dort ergänzen.
 - Responsive nur über die eigenen Breakpoints aus `src/breakpoints.css`
   (`tablet:`, `laptop:`, `desktop:`, ohne Präfix = Handy). Keine
   Tailwind-Namen (`sm:`, `md:`, `lg:`, `xl:`) und keine eigenen
