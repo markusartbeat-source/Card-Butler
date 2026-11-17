@@ -189,6 +189,9 @@ export const dictionaryGerman = {
     layersTab: 'Ebenen',
     layersHint: 'Je tiefer eine Ebene ist, desto eher wird sie von anderen Dingen verdeckt.',
     layerPosition: (position: number, count: number) => `Ebene ${position} von ${count}`,
+    // Die zwei Knöpfe einer Ebene, Tooltip und Vorlesename zugleich.
+    shineLayer: (name: string) => `„${name}“ auf der Karte zeigen`,
+    selectLayer: (name: string) => `„${name}“ bearbeiten`,
     printGroup: 'Druck',
     printCount: 'Anzahl',
     printInfo: 'Wie oft diese Karte beim Drucken und Exportieren enthalten ist.',

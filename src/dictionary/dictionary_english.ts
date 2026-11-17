@@ -154,6 +154,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     layersTab: 'Layers',
     layersHint: 'The lower a layer is, the more likely it is to be covered by other things.',
     layerPosition: (position: number, count: number) => `Layer ${position} of ${count}`,
+    shineLayer: (name: string) => `Show “${name}” on the card`,
+    selectLayer: (name: string) => `Edit “${name}”`,
     printGroup: 'Print',
     printCount: 'Count',
     printInfo: 'How many times this card is included when printing and exporting.',

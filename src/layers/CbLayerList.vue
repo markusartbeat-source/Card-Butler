@@ -2,9 +2,9 @@
   <div class="flex flex-col gap-6">
     <p class="cb-regular-text">{{ dictionary.cardEditor.layersHint }}</p>
     <!-- Ziehen sortiert die Ebenen um, per Tastatur Alt+Pfeil. Die Position
-         steht für Screenreader in der aria-description. Ein Klick (Enter,
-         Leertaste) lässt das Element auf der Karte aufglänzen, ohne es
-         auszuwählen – sonst wechselte das Panel und die Liste wäre weg. -->
+         steht für Screenreader in der aria-description. Je Ebene lässt ein
+         Knopf das Element auf der Karte aufglänzen (die Liste bleibt), der
+         andere wählt es aus – dann wechselt das Panel zum Element. -->
     <VueDraggable
       v-model="topLayerFirst"
       v-bind="dragOptions"
@@ -19,10 +19,10 @@
           :element="element"
           :card="card"
           :card-color="cardSet.data.color"
-          :aria-keyshortcuts="sortingKeyShortcuts"
-          :aria-description="dictionary.cardEditor.layerPosition(index + 1, topLayerFirst.length)"
-          @click="shineLayer(element)"
-          @keydown="sortLayerWithAltArrow($event, element)"
+          :position-description="dictionary.cardEditor.layerPosition(index + 1, topLayerFirst.length)"
+          @shine="shineLayer(element)"
+          @select="selectLayer(element)"
+          @sort-key="sortLayerWithAltArrow($event, element)"
         />
       </li>
     </VueDraggable>
@@ -35,7 +35,8 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { shiningElementId } from '../cardElements/elementShine'
 import type { Card, CardSet, CardSetElement } from '../cardSets/cardSets'
 import { dragOptions } from '../dragAndDrop/dragOptions'
-import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
+import { selectElement } from '../elementTransform/elementSelection'
+import { sortWithAltArrow } from '../keyboard/sortWithAltArrow'
 import { notStoredClass } from '../notStored/notStoredMark'
 import CbLayerRow from './CbLayerRow.vue'
 import { rememberLayerOrder } from './layerOrder'
@@ -62,8 +63,8 @@ function sortLayerWithAltArrow(event: KeyboardEvent, element: CardSetElement) {
   sortWithAltArrow(event, topLayerFirst.value, element, (layers) => (topLayerFirst.value = layers))
 }
 
-// Ein beendetes Ziehen löst danach noch einen Klick auf die Zeile aus – der
-// glänzt nicht. Darum endet das Ziehen erst nach diesem Klick.
+// Ein beendetes Ziehen löst danach noch einen Klick auf einen Knopf aus – der
+// zählt nicht. Darum endet das Ziehen erst nach diesem Klick.
 const isDraggingLayer = ref(false)
 
 function releaseLayerDrag() {
@@ -72,5 +73,9 @@ function releaseLayerDrag() {
 
 function shineLayer(element: CardSetElement) {
   if (!isDraggingLayer.value) shiningElementId.value = element.id
+}
+
+function selectLayer(element: CardSetElement) {
+  if (!isDraggingLayer.value) selectElement(element.id)
 }
 </script>

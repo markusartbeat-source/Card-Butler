@@ -154,6 +154,8 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     layersTab: 'Camadas',
     layersHint: 'Quanto mais abaixo estiver uma camada, mais facilmente fica tapada por outras coisas.',
     layerPosition: (position: number, count: number) => `Camada ${position} de ${count}`,
+    shineLayer: (name: string) => `Mostrar “${name}” na carta`,
+    selectLayer: (name: string) => `Editar “${name}”`,
     printGroup: 'Impressão',
     printCount: 'Quantidade',
     printInfo: 'Quantas vezes esta carta é incluída ao imprimir e exportar.',

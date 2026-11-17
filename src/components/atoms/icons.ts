@@ -72,6 +72,7 @@ import SupportAgent from '~icons/material-symbols/support-agent-outline-rounded'
 import Title from '~icons/material-symbols/title-rounded'
 import Undo from '~icons/material-symbols/undo-rounded'
 import VerticalAlignCenter from '~icons/material-symbols/vertical-align-center-rounded'
+import Visibility from '~icons/material-symbols/visibility-outline-rounded'
 import West from '~icons/material-symbols/west-rounded'
 import WrapText from '~icons/material-symbols/wrap-text-rounded'
 
@@ -142,6 +143,7 @@ export const icons = {
   title: Title,
   undo: Undo,
   vertical_align_center: VerticalAlignCenter,
+  visibility: Visibility,
   west: West,
   wrap_text: WrapText,
 }

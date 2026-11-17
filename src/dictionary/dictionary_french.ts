@@ -154,6 +154,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     layersTab: 'Calques',
     layersHint: 'Plus un calque est bas, plus il risque d’être caché par d’autres éléments.',
     layerPosition: (position: number, count: number) => `Calque ${position} sur ${count}`,
+    shineLayer: (name: string) => `Montrer « ${name} » sur la carte`,
+    selectLayer: (name: string) => `Modifier « ${name} »`,
     printGroup: 'Impression',
     printCount: 'Nombre',
     printInfo: "Combien de fois cette carte est incluse à l'impression et à l'export.",
