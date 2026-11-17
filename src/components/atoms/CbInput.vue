@@ -27,6 +27,9 @@
       :maxlength="maxLength"
       @input="(event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
       @change="$emit('change')"
+      @focus="selectValue"
+      @pointerdown="noteFirstClick"
+      @mouseup="keepSelection"
     />
   </Field.Root>
 </template>
@@ -61,4 +64,23 @@ withDefaults(
 )
 // change: Der Wert wurde bestätigt (Enter oder Feld verlassen).
 defineEmits<{ 'update:modelValue': [value: string]; change: [] }>()
+
+// Wer ins Feld kommt (Klick, Tab, Dialog), hat den ganzen Wert markiert und kann
+// ihn gleich überschreiben. Beim ersten Klick setzte das Loslassen der Maus den
+// Cursor sonst wieder an die Klickstelle – das wird darum übergangen.
+let isFirstClick = false
+
+function selectValue(event: FocusEvent) {
+  const input = event.target as HTMLInputElement
+  input.select()
+}
+
+function noteFirstClick(event: PointerEvent) {
+  isFirstClick = document.activeElement !== event.target
+}
+
+function keepSelection(event: MouseEvent) {
+  if (isFirstClick) event.preventDefault()
+  isFirstClick = false
+}
 </script>
