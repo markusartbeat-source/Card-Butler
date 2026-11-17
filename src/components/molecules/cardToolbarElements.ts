@@ -4,7 +4,7 @@ import type { IconName } from '../atoms/icons'
 import type { ToolbarElement } from './toolbarElement'
 
 // Die Werkzeuge der Karten-Toolbar, in Toolbar-Reihenfolge.
-export const cardTools = ['square', 'circle', 'line', 'text', 'image', 'comment'] as const
+export const cardTools = ['square', 'circle', 'line', 'text', 'image'] as const
 
 export type CardTool = (typeof cardTools)[number]
 
@@ -14,7 +14,6 @@ const cardToolIcons: Record<CardTool, IconName> = {
   line: 'horizontal_rule',
   text: 'title',
   image: 'image',
-  comment: 'add_comment',
 }
 
 // Das Icon je Element-Typ – dasselbe wie beim Werkzeug, das ihn anlegt.

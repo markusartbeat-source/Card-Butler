@@ -58,9 +58,8 @@
       class="bg-surface hidden w-96 items-center rounded-full text-white shadow-lg laptop:flex"
       :class="dimWhileDraggingClasses"
     >
-      <!-- The typing happens here, the icons next to it only switch the mode.
-           The label carries hover and ripple, because those need a child
-           element and an input cannot have one. -->
+      <!-- The typing happens here. The label carries hover and ripple, because
+           those need a child element and an input cannot have one. -->
       <label
         v-ripple
         class="cb-hover relative flex min-w-0 flex-1 items-center self-stretch overflow-hidden rounded-l-full pl-6"
@@ -68,7 +67,7 @@
         <input
           v-model="searchWord"
           class="cb-regular-text w-full min-w-0 cursor-text bg-transparent outline-none placeholder:text-label focus:placeholder:text-transparent"
-          :placeholder="searchModeLabel"
+          :placeholder="dictionary.header.searchInCards"
         />
       </label>
       <div class="flex gap-0.5 p-1.5">
@@ -80,15 +79,8 @@
         >
           <CbIcon name="close" />
         </CbInteractive>
-        <CbInteractive
-          v-for="mode in searchModeNames"
-          :key="mode"
-          class="rounded-full p-2 text-white"
-          :class="{ 'bg-surface-light': mode === activeSearchMode }"
-          @click="activeSearchMode = mode"
-        >
-          <CbIcon :name="mode" />
-        </CbInteractive>
+        <!-- Die Lupe zeigt nur, dass hier gesucht wird, und hält die Höhe der Leiste. -->
+        <CbIcon name="search" class="m-2" />
       </div>
     </div>
 
@@ -144,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
@@ -247,17 +239,6 @@ const navigationMenus = computed(() => [
   { value: 'images', label: dictionary.images.title, items: imagePages.value },
   { value: 'collaboration', label: dictionary.header.collaboration, items: collaborationPages.value },
 ])
-
-// Each search mode has its own icon button and its own text in the pill.
-const searchModeNames = ['search', 'forum'] as const
-
-const activeSearchMode = ref<(typeof searchModeNames)[number]>('search')
-
-const searchModeLabel = computed(() =>
-  activeSearchMode.value === 'search'
-    ? dictionary.header.searchInCards
-    : dictionary.header.askButler,
-)
 </script>
 
 <style scoped>

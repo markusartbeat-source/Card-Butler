@@ -27,7 +27,6 @@ export const dictionaryGerman = {
   header: {
     appName: 'Card Butler',
     searchInCards: 'In den Karten finden',
-    askButler: 'Frag den Butler',
     // The entries of the images menu.
     allImages: 'Alle Bilder',
     iconsInText: 'Icons im Text',
@@ -166,7 +165,6 @@ export const dictionaryGerman = {
     line: 'Linie',
     text: 'Text',
     image: 'Bild',
-    comment: 'Kommentar',
     textElementName: 'Textfeld',
     textElementDeleted: 'Textfeld gelöscht',
     pictureElementName: 'Bild',

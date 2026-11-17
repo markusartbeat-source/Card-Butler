@@ -2,7 +2,6 @@
 // the ones we actually need. Add a new line per icon, then use its key in
 // <CbIcon name="..." />.
 import Add2 from '~icons/material-symbols/add-2-rounded'
-import AddComment from '~icons/material-symbols/add-comment-outline-rounded'
 import AddPhotoAlternate from '~icons/material-symbols/add-photo-alternate-outline-rounded'
 import AlignHorizontalCenter from '~icons/material-symbols/align-horizontal-center-rounded'
 import AlignHorizontalLeft from '~icons/material-symbols/align-horizontal-left-rounded'
@@ -37,7 +36,6 @@ import FolderOpen from '~icons/material-symbols/folder-open-outline-rounded'
 import FormatLetterSpacingWider from '~icons/material-symbols/format-letter-spacing-wider-rounded'
 // Eigenes Icon (Zeilenhöhe) aus src/assets/custom_icons.
 import FormatLineHeight from '~icons/card-butler/format-line-height'
-import Forum from '~icons/material-symbols/forum-outline-rounded'
 import Home from '~icons/material-symbols/home-outline-rounded'
 import HorizontalRule from '~icons/material-symbols/horizontal-rule-rounded'
 import Image from '~icons/material-symbols/image-outline-rounded'
@@ -79,7 +77,6 @@ import WrapText from '~icons/material-symbols/wrap-text-rounded'
 
 export const icons = {
   add_2: Add2,
-  add_comment: AddComment,
   add_photo_alternate: AddPhotoAlternate,
   align_horizontal_center: AlignHorizontalCenter,
   align_horizontal_left: AlignHorizontalLeft,
@@ -112,7 +109,6 @@ export const icons = {
   folder_open: FolderOpen,
   format_letter_spacing_wider: FormatLetterSpacingWider,
   format_line_height: FormatLineHeight,
-  forum: Forum,
   home: Home,
   horizontal_rule: HorizontalRule,
   image: Image,

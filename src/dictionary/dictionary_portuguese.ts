@@ -24,7 +24,6 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   header: {
     appName: 'Card Butler',
     searchInCards: 'Buscar nas cartas',
-    askButler: 'Pergunte ao mordomo',
     allImages: 'Todas as imagens',
     iconsInText: 'Ícones no texto',
     collaboration: 'Colaboração',
@@ -133,7 +132,6 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
     line: 'Linha',
     text: 'Texto',
     image: 'Imagem',
-    comment: 'Comentário',
     textElementName: 'Campo de texto',
     textElementDeleted: 'Campo de texto excluído',
     pictureElementName: 'Imagem',
