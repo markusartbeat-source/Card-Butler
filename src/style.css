@@ -126,6 +126,14 @@ body {
     @apply cursor-grab active:cursor-grabbing;
   }
 
+  /* Nur im Dev-Modus gesetzt (notStored/notStoredMark.ts): Was der Server (noch)
+     nicht speichert, wird rot. Die Felder darin nehmen ihre Flächenfarben aus
+     diesen Variablen. Aufklappende Listen hängen am body und bleiben, wie sie sind. */
+  .cb-not-stored {
+    --color-surface: var(--color-not-stored);
+    --color-surface-light: var(--color-not-stored);
+  }
+
   /* The card, always written in its real millimetres. The view only says how
      big to draw it, through the "zoom" property — and zoom, unlike
      transform: scale(), also shrinks the space the card takes up in the page.

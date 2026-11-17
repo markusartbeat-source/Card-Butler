@@ -45,6 +45,7 @@
               variant="field"
               :label="dictionary.cardEditor.unit"
               :items="units"
+              :class="notStoredClass"
             />
           </div>
 
@@ -53,8 +54,10 @@
 
           <div class="animate-cb-rise flex flex-col gap-3" :style="riseDelay(2)">
             <CbSettingsHeading>{{ dictionary.cardEditor.cornersGroup }}</CbSettingsHeading>
+            <!-- Die Ecken merkt sich nur der Browser. -->
             <CbCornerRadiusFields
               :radii="cardCornerRadiiOf(cardSet.id)"
+              :class="notStoredClass"
               @change="(radii) => changeCardCornerRadii(cardSet.id, radii)"
             />
           </div>
@@ -138,6 +141,7 @@ import {
   previewCardSetColor,
 } from '../cardSets/changeCardSet'
 import CbLayerList from '../layers/CbLayerList.vue'
+import { notStoredClass } from '../notStored/notStoredMark'
 import { changePrintCount } from '../printCount/changePrintCount'
 
 // The panel is already on the page while the card is still flying in. The

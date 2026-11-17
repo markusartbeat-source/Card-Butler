@@ -19,9 +19,11 @@
     @update:open="prepareOpening"
   >
     <template v-if="currentFolder && !search.trim()" #header>
+      <!-- Den Standard-Ordner merkt sich nur der Browser. -->
       <CbToggle
         :chip="dictionary.cardEditor.defaultFolder"
         :aria-label="dictionary.cardEditor.defaultFolderLabel(currentFolder.name)"
+        :class="notStoredClass"
         :model-value="defaultFolderIdOf(elementId) === currentFolder.id"
         @update:model-value="changeDefaultFolder"
       />
@@ -37,6 +39,7 @@ import CbToggle from '../../components/atoms/CbToggle.vue'
 import type { Card } from '../../cardSets/cardSets'
 import { folderPictures } from '../../folders/folderPictures'
 import { knownImages } from '../../images/knownImages'
+import { notStoredClass } from '../../notStored/notStoredMark'
 import { chooseCardPicture } from '../cardValues'
 import { defaultFolderIdOf, setDefaultFolder } from './defaultPictureFolders'
 import { usePictureLevel } from './usePictureLevel'

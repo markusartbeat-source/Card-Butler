@@ -53,6 +53,14 @@
        Kacheln kurz von ihrem alten Platz herüber und würden sonst für einen
        Moment einen waagrechten Scrollbalken bringen. -->
   <div class="mx-auto flex max-w-315 flex-col gap-6 overflow-x-clip px-4 tablet:px-6">
+    <!-- Nur im Dev-Modus: Die Reihenfolge speichert der Server (noch) nicht. -->
+    <p
+      v-if="showsNotStoredMarks"
+      class="cb-regular-text flex items-center gap-1.5 rounded-md bg-not-stored px-3 py-2"
+    >
+      <CbIcon name="info" />
+      {{ dictionary.images.orderNotStored }}
+    </p>
     <!-- Each folder carries 8px of padding for its hover layer, so the row
          pulls back by that much and the gap of 8px adds up to the 24px
          between the folder graphics from the design. -->
@@ -130,6 +138,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import CbAddTile from '../components/atoms/CbAddTile.vue'
 import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFileUpload.vue'
 import CbFolder, { folderGraphicRatio } from '../components/atoms/CbFolder.vue'
+import CbIcon from '../components/atoms/CbIcon.vue'
 import { showDangerToast } from '../components/atoms/toaster'
 import CbNameDialog from '../components/organisms/CbNameDialog.vue'
 import CbViewer from '../components/organisms/CbViewer.vue'
@@ -165,6 +174,7 @@ import { flyIntoFolder, folderElementId } from '../folders/flyIntoFolder'
 import { folderPath } from '../folders/currentFolder'
 import { showFolder } from '../folders/showFolder'
 import { levelDropTarget } from '../folders/levelDropTarget'
+import { showsNotStoredMarks } from '../notStored/notStoredMark'
 
 // Die Seite wird je Projekt und je Ordner neu eingehängt (App.vue schlüsselt
 // nach der Adresse), die IDs bleiben also fest. Ohne Ordner die oberste Ebene.

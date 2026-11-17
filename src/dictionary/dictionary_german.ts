@@ -99,6 +99,9 @@ export const dictionaryGerman = {
     imageCut: 'Bild ausgeschnitten',
     imagePasted: 'Bild eingefügt',
     markedAsCut: 'ausgeschnitten',
+    // Hinweis nur im Dev-Modus.
+    orderNotStored:
+      'Die Reihenfolge von Bildern und Ordnern speichert der Server noch nicht – nach dem Neuladen ist sie weg.',
   },
   // The page with the card grid.
   project: {

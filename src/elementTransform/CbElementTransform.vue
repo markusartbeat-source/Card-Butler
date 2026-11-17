@@ -7,11 +7,12 @@
        edge-draggable: Ziehen an der Rahmenkante verschiebt – auch beim Tippen.
        line-padding macht die sonst 1 px dünne Kante nach außen greifbar.
        use-resize-observer: Wächst das Feld mit seinem Text (z.B. beim Tippen),
-       misst Moveable neu – außer während es selbst zieht. -->
+       misst Moveable neu – außer während es selbst zieht.
+       Die Drehung speichert der Server nicht, im Dev-Modus ist ihr Anfasser rot. -->
   <Moveable
     v-if="selectedElementNode"
     ref="moveable"
-    class-name="cb-element-transform"
+    :class-name="`cb-element-transform ${notStoredClass}`"
     :target="selectedElementNode"
     :root-container="card"
     :check-input="true"
@@ -54,6 +55,7 @@ import {
 import { saveElement } from '../cardElements/saveElement'
 import { textSizingOf, type TextSizing } from '../cardElements/text/textSizing'
 import type { CardSetElement } from '../cardSets/cardSets'
+import { notStoredClass } from '../notStored/notStoredMark'
 
 // The card the selected element lives in. Searching inside it instead of the
 // whole page keeps us away from the same element on the other cards.
@@ -193,5 +195,15 @@ function applyRotate(event: OnRotate) {
    two class names to weigh more than its one. */
 .moveable-control-box.cb-element-transform {
   --moveable-color: var(--color-gold);
+}
+
+/* Nur im Dev-Modus: Strich und Anfasser der Drehung rot. Der Anfasser ist von
+   Moveable weiß gefüllt, darum braucht die Regel so viele Klassen. */
+.moveable-control-box.cb-not-stored .moveable-rotation {
+  --moveable-color: var(--color-not-stored);
+}
+
+.moveable-control-box.cb-not-stored .moveable-rotation .moveable-rotation-control {
+  background: var(--color-not-stored);
 }
 </style>

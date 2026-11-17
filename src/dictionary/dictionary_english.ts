@@ -77,6 +77,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     imageCut: 'Image cut',
     imagePasted: 'Image pasted',
     markedAsCut: 'cut',
+    orderNotStored:
+      'The server does not store the order of images and folders yet – it is gone after a reload.',
   },
   project: {
     export: 'Export',

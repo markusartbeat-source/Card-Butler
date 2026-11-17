@@ -12,7 +12,7 @@
       </template>
       <!-- Zwei Reihen mit je zwei Feldern, jedes gleich breit. -->
       <template #second>
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3" :class="separateCornersClass">
           <div v-for="(row, index) in cornerRows" :key="index" class="flex gap-3">
             <CbNumberInput
               v-for="corner in row"
@@ -49,8 +49,9 @@ import {
 import { formatMillimeters, parseMillimeters } from '../../card/millimeters'
 import CbNumberInput from './CbNumberInput.vue'
 
-// Die Rundung jeder Ecke in mm.
-const props = defineProps<{ radii: CornerRadii }>()
+// Die Rundung jeder Ecke in mm. separateCornersClass gilt nur für die vier
+// Einzelfelder.
+const props = defineProps<{ radii: CornerRadii; separateCornersClass?: string }>()
 
 // change: neue Rundungen ab 0 mm, bestätigt mit Enter oder beim Verlassen eines
 // Felds. Speichern muss der Aufrufer.

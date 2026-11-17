@@ -28,6 +28,9 @@
   --color-card-default: #ffffff;
   --color-success: #16a34a;
   --color-danger: #dc2626;
+  /* Nur im Dev-Modus: Hintergrund von Feldern, deren Wert der Server (noch)
+     nicht speichert (siehe notStored/notStoredMark.ts). */
+  --color-not-stored: #7f1d1d;
 
   /* One of these is picked for each person showing a live cursor. */
   --color-cursor-red: #ef5350;

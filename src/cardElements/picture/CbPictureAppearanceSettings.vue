@@ -1,7 +1,8 @@
 <template>
   <!-- Wie das Bild auf der Karte erscheint – welches Bild und welcher Ausschnitt,
        beides gilt nur für diese Karte. Der Knopf startet das Zuschneiden auf der
-       Karte, ohne Bild gibt es nichts zuzuschneiden. Die Deckkraft in Prozent.
+       Karte, ohne Bild gibt es nichts zuzuschneiden – den Ausschnitt merkt sich
+       nur der Browser. Die Deckkraft in Prozent.
        Verknüpfen hält beim Eintippen das Seitenverhältnis, die Anfasser ziehen
        weiter frei. -->
   <div class="flex flex-col gap-3">
@@ -10,6 +11,7 @@
     <CbButton
       variant="light"
       class="justify-center"
+      :class="notStoredClass"
       :disabled="!card.values[elementId]?.imageId"
       @click="startEditingElement(elementId)"
     >
@@ -39,6 +41,7 @@ import CbSettingsHeading from '../../components/atoms/CbSettingsHeading.vue'
 import CbSizeFields from '../../components/molecules/CbSizeFields.vue'
 import type { Card } from '../../cardSets/cardSets'
 import { startEditingElement } from '../../elementTransform/elementSelection'
+import { notStoredClass } from '../../notStored/notStoredMark'
 import CbElementOpacityField from '../CbElementOpacityField.vue'
 import { changeElementSize, findCardSetElement } from '../cardElements'
 import CbPictureSelect from './CbPictureSelect.vue'

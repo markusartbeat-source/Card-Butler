@@ -10,6 +10,7 @@
       v-bind="dragOptions"
       tag="ul"
       class="flex flex-col gap-3 select-none"
+      :class="notStoredClass"
       @start="isDraggingLayer = true"
       @end="releaseLayerDrag"
     >
@@ -35,6 +36,7 @@ import { shiningElementId } from '../cardElements/elementShine'
 import type { Card, CardSet, CardSetElement } from '../cardSets/cardSets'
 import { dragOptions } from '../dragAndDrop/dragOptions'
 import { sortingKeyShortcuts, sortWithAltArrow } from '../keyboard/sortWithAltArrow'
+import { notStoredClass } from '../notStored/notStoredMark'
 import CbLayerRow from './CbLayerRow.vue'
 import { rememberLayerOrder } from './layerOrder'
 
