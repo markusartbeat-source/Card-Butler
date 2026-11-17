@@ -5,8 +5,9 @@
     <!-- Bühne der Home-Seite: Ebenen hinter und vor Header und Seite. -->
     <CbHomeScene />
 
-    <!-- The header sits above the animated area, so a page change only moves
-         the content below it. Each page says what it should show. -->
+    <!-- Der Header liegt über der Seite, die verschwommen dahinter weiterläuft.
+         Ein Seitenwechsel bewegt nur die Seite. Jede Seite sagt, was der Header
+         zeigt. -->
     <div class="relative z-10 flex flex-1 flex-col overflow-hidden">
       <CbHeader
         :logo="headerSettings.logo"
@@ -25,10 +26,15 @@
            Each page scrolls in its own wrapper (the page area), not in main:
            so a new page always starts at the top while the old one keeps its
            scroll position as it fades out. -->
+      <!-- Die Seite beginnt unter dem 100px hohen Header (pt-25). scroll-pt-25
+           hält Tastaturfokus und Sprungziele unter ihm, statt dahinter. -->
       <main class="relative grid flex-1 grid-cols-1 grid-rows-1 overflow-hidden">
         <router-view v-slot="{ Component, route }">
           <Transition name="page">
-            <div :key="route.path" class="cb-page-area col-start-1 row-start-1 h-full overflow-y-auto">
+            <div
+              :key="route.path"
+              class="cb-page-area col-start-1 row-start-1 h-full scroll-pt-25 overflow-y-auto pt-25"
+            >
               <component :is="Component" />
             </div>
           </Transition>
@@ -55,6 +61,12 @@ import CbDropBar from './dragAndDrop/CbDropBar.vue'
    push the content sideways when its scrollbar appears. */
 .cb-page-area {
   scrollbar-gutter: stable;
+}
+
+/* Die Scrollleiste beginnt erst unter dem Header, sonst läge ihr Anfang
+   verdeckt dahinter (Firefox kennt das nicht). */
+.cb-page-area::-webkit-scrollbar-track {
+  margin-top: 100px;
 }
 
 .page-enter-active,

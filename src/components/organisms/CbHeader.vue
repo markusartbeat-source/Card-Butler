@@ -1,12 +1,28 @@
 <template>
   <!-- Height and side spacing come from the design: 100px tall, 24px inset. -->
-  <!-- Außen deckend, in der Mitte durchscheinend und verschwommen. Die Unschärfe
-       macht den Header zu einer eigenen Ebene; z-20 hält seine Menüs über der Seite. -->
+  <!-- Liegt über der Seite, die verschwommen dahinter weiterläuft (Platz dafür
+       lässt App.vue frei). z-20 hält ihn und seine Menüs über der Seite. -->
   <!-- Beim Ziehen (Karte, Bild) tritt der Header zurück – bis auf den Pfad, auf
        den sich Gezogenes legen lässt. Darum wird jeder Teil für sich blass. -->
-  <div
-    class="from-background via-background/20 to-background relative z-20 flex h-25 w-full shrink-0 items-center gap-2.5 bg-linear-to-r px-6 backdrop-blur-lg"
-  >
+  <div class="absolute inset-x-0 top-0 z-20 flex h-25 items-center gap-2.5 px-6">
+    <!-- Hintergrund: außen deckend, in der Mitte durchscheinend und verschwommen.
+         Er reicht 12px über den Header hinaus und läuft ab 84px weich aus, so
+         verschwindet die Seite ohne harte Kante darunter. Nicht weiter, sonst wäre
+         der Anfang mancher Seiten (z.B. Bilder) auch ohne Scrollen verschwommen.
+         In den Kontrastmodi deckend mit Linie und so hoch wie der Header, damit
+         nichts halb verdeckt durchscheint. Klicks gehen hindurch. -->
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-28 high-contrast:h-full">
+      <div
+        v-for="blurStep in blurSteps"
+        :key="blurStep"
+        class="absolute inset-0 high-contrast:hidden"
+        :class="blurStep"
+      />
+      <div
+        class="from-background via-background/50 to-background high-contrast:via-background absolute inset-0 border-b border-surface-edge bg-linear-to-r mask-b-from-21 high-contrast:mask-none"
+      />
+    </div>
+
     <!-- Goldene Linie an der Unterkante, blendet zur Mitte hin aus. Liegt im
          Header, damit dessen Höhe bei 100px bleibt. Nur wenn die Seite sie anschaltet. -->
     <div
@@ -177,6 +193,15 @@ const emit = defineEmits<{ action: [key: string] }>()
 
 const router = useRouter()
 const route = useRoute()
+
+// Unschärfe in Stufen, übereinander: Jede verschwimmt stärker und endet etwas
+// höher. So wird es nach unten allmählich schärfer, statt dass eine volle
+// Unschärfe nur ausblendet (das wirkt wie ein Doppelbild).
+const blurSteps = [
+  'backdrop-blur-xs mask-b-from-25 mask-b-to-28',
+  'backdrop-blur-sm mask-b-from-23 mask-b-to-26',
+  'backdrop-blur-md mask-b-from-21 mask-b-to-24',
+]
 
 // Das X verschwindet mit dem Leeren – der Fokus geht darum ins Suchfeld, nicht
 // auf die Seite.

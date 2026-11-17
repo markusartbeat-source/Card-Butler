@@ -14,8 +14,12 @@ export function scrollToCardSetSection(cardSetId: string) {
   const pageArea = section?.closest<HTMLElement>('.cb-page-area')
   if (!section || !pageArea) return
 
+  // Oben liegt der Header über der Fläche (scroll-padding, siehe App.vue), das
+  // Set soll darunter beginnen.
+  const headerHeight = parseFloat(getComputedStyle(pageArea).scrollPaddingTop)
   const startTop = pageArea.scrollTop
-  const sectionTop = startTop + section.getBoundingClientRect().top - pageArea.getBoundingClientRect().top
+  const sectionTop =
+    startTop + section.getBoundingClientRect().top - pageArea.getBoundingClientRect().top - headerHeight
   const furthestTop = pageArea.scrollHeight - pageArea.clientHeight
   const distance = Math.min(sectionTop, furthestTop) - startTop
   const startTime = performance.now()

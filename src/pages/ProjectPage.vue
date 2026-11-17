@@ -389,10 +389,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* A section is at least as tall as the page area — the screen minus the 100px
-   header (see CbHeader) — so a set scrolled to the top stands alone on the
-   screen. A percentage cannot do this: nothing above the section has a fixed
-   height, the page only has a minimum. */
+/* Ein Abschnitt ist mindestens so hoch wie der Platz unter dem 100px hohen
+   Header (siehe CbHeader), so steht ein nach oben gescrolltes Set allein auf dem
+   Bildschirm. Prozent geht nicht: Nichts über dem Abschnitt hat eine feste
+   Höhe, die Seite hat nur eine Mindesthöhe. */
 .cb-card-set-section {
   min-height: calc(100vh - 100px);
 }

@@ -7,6 +7,10 @@
    z.B. light:shadow. */
 @custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
 
+/* Präfix für Klassen, die nur in den kontrastreichen Modi gelten (hell und
+   dunkel), z.B. high-contrast:mask-none. */
+@custom-variant high-contrast (&:where([data-high-contrast], [data-high-contrast] *));
+
 /* "static" writes every colour into the page, not only the ones a Tailwind
    class happens to use. Otherwise a colour read from script — like the confetti
    does — would arrive empty. */

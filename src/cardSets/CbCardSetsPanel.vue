@@ -56,7 +56,8 @@ watch(visibleCardSetId, flashCardSetsPanel)
 </script>
 
 <style scoped>
-/* The page area is the screen minus the 100px header (see CbHeader). */
+/* Klebt unter dem 100px hohen Header und füllt den Platz darunter. Dafür reicht
+   top-0: Sticky zählt ab dem oberen Innenabstand der Seite (pt-25, App.vue). */
 .cb-card-sets-panel {
   height: calc(100vh - 100px);
 }
