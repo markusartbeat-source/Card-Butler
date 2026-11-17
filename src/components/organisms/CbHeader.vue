@@ -65,6 +65,7 @@
         class="cb-hover relative flex min-w-0 flex-1 items-center self-stretch overflow-hidden rounded-l-full pl-6"
       >
         <input
+          ref="searchInput"
           v-model="searchWord"
           class="cb-regular-text w-full min-w-0 cursor-text bg-transparent outline-none placeholder:text-label focus:placeholder:text-transparent"
           :placeholder="dictionary.header.searchInCards"
@@ -75,7 +76,8 @@
         <CbInteractive
           v-if="searchWord"
           class="rounded-full p-2 text-white"
-          @click="clearSearchWord()"
+          :aria-label="dictionary.header.clearSearch"
+          @click="clearSearch"
         >
           <CbIcon name="close" />
         </CbInteractive>
@@ -136,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CbButton from '../atoms/CbButton.vue'
 import CbDropdown from '../atoms/CbDropdown.vue'
@@ -174,6 +176,15 @@ const emit = defineEmits<{ action: [key: string] }>()
 
 const router = useRouter()
 const route = useRoute()
+
+// Das X verschwindet mit dem Leeren – der Fokus geht darum ins Suchfeld, nicht
+// auf die Seite.
+const searchInput = useTemplateRef<HTMLInputElement>('searchInput')
+
+function clearSearch() {
+  clearSearchWord()
+  searchInput.value?.focus()
+}
 
 // Der Eintrag der offenen Seite. Ihn hat immer nur ein Menü, so ist stets klar,
 // wo man ist. Auf den Kartensets des Projekts ist es das Set, das gerade zu

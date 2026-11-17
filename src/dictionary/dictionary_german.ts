@@ -27,6 +27,8 @@ export const dictionaryGerman = {
   header: {
     appName: 'Card Butler',
     searchInCards: 'In den Karten finden',
+    // Vorlesename des X, das die Suche leert.
+    clearSearch: 'Suche leeren',
     // The entries of the images menu.
     allImages: 'Alle Bilder',
     iconsInText: 'Icons im Text',

@@ -24,6 +24,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
   header: {
     appName: 'Card Butler',
     searchInCards: 'Buscar en las cartas',
+    clearSearch: 'Borrar búsqueda',
     allImages: 'Todas las imágenes',
     iconsInText: 'Iconos en el texto',
     collaboration: 'Colaboración',
