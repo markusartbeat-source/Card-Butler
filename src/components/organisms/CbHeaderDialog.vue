@@ -14,14 +14,33 @@
     <!-- Nur der Inhalt scrollt, der Titel bleibt stehen. 2px Luft, damit der
          Scrollbereich Ringe am Rand nicht abschneidet. -->
     <div v-if="shownDialog" class="-m-0.5 min-h-0 flex-1 overflow-y-auto p-0.5">
-      <component :is="contentByDialog[shownDialog.value]" :key="shownDialog.fullPath" />
+      <component :is="contentByDialog[shownDialog.value]" ref="content" :key="shownDialog.fullPath" />
     </div>
+
+    <!-- Jeder Dialog hat unten Knöpfe. Der Support schickt sein Formular von
+         hier ab. Alle anderen übernehmen Änderungen sofort, dort schließen
+         „Speichern“ und „Schließen“ darum beide nur den Dialog. -->
+    <template #footer>
+      <template v-if="shownDialog?.value === 'support'">
+        <CbButton variant="secondary" @click="closeHeaderDialog(router)">
+          {{ dictionary.general.cancel }}
+        </CbButton>
+        <CbButton @click="sendFeedback">{{ dictionary.support.submit }}</CbButton>
+      </template>
+      <template v-else>
+        <CbButton variant="secondary" @click="closeHeaderDialog(router)">
+          {{ dictionary.general.close }}
+        </CbButton>
+        <CbButton @click="closeHeaderDialog(router)">{{ dictionary.general.save }}</CbButton>
+      </template>
+    </template>
   </CbDialog>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect, type Component } from 'vue'
+import { computed, ref, useTemplateRef, watchEffect, type Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import CbButton from '../atoms/CbButton.vue'
 import CbDialog from '../atoms/CbDialog.vue'
 import CbAllImages from '../../images/CbAllImages.vue'
 import CbIconsInText from '../../textIcons/CbIconsInText.vue'
@@ -57,5 +76,13 @@ watchEffect(() => {
 // Ging inzwischen schon wieder einer auf, bleibt der stehen.
 function forgetClosedDialog() {
   if (!openDialog.value) shownDialog.value = null
+}
+
+// Der gezeigte Inhalt. Nur der Support bringt etwas mit: sein Formular.
+const content = useTemplateRef<{ sendFeedback?: () => void }>('content')
+
+function sendFeedback() {
+  content.value?.sendFeedback?.()
+  closeHeaderDialog(router)
 }
 </script>

@@ -5,16 +5,17 @@
     @confirm="confirmRemove"
   />
 
-  <CbSettingsGroup :title="dictionary.userManagement.title">
+  <!-- Nur ein Bereich, daher ohne eigene Überschrift und ohne Kasten: Bild und
+       Liste stehen direkt im Dialog. -->
+  <div class="flex flex-col gap-6">
     <!-- Image row: the same shape as in the share dialog. Decorative only,
          so the alt text stays empty. -->
-    <div class="animate-cb-rise border-b-0 px-6 pt-6" :style="riseDelay(0)">
-      <img
-        src="../assets/visuals/Benutzerverwaltung.png"
-        alt=""
-        class="member-image w-full rounded-2xl object-cover"
-      />
-    </div>
+    <img
+      src="../assets/visuals/Benutzerverwaltung.png"
+      alt=""
+      class="member-image animate-cb-rise w-full rounded-2xl object-cover"
+      :style="riseDelay(0)"
+    />
 
     <!-- One row per member: avatar, name, permission, plan. The delete
          button only shows up while the mouse is on the row (or the button
@@ -23,7 +24,7 @@
          permission list, so nobody has to aim at the small field. -->
     <!-- The divider sits on a straight outer box: on the rounded row
          itself it would bend along the corners. -->
-    <div class="flex flex-col divide-y divide-surface-light p-6">
+    <div class="flex flex-col divide-y divide-surface-light">
       <div
         v-for="(member, index) in projectMembers"
         :key="member.id"
@@ -62,7 +63,7 @@
         </div>
       </div>
     </div>
-  </CbSettingsGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -72,7 +73,6 @@ import CbAvatar from '../components/atoms/CbAvatar.vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
-import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbRemoveMemberDialog from './CbRemoveMemberDialog.vue'
 import { projectMembers, removeProjectMember, type Permission, type ProjectMember } from './projectMembers'
 

@@ -1,17 +1,18 @@
 <template>
-  <CbSettingsGroup :title="dictionary.support.title">
+  <!-- Nur ein Bereich, daher ohne eigene Überschrift und ohne Kasten: Bild und
+       Formular stehen direkt im Dialog. -->
+  <div class="flex flex-col gap-6">
     <!-- Image row: the same shape as in the share dialog. Decorative only,
          so the alt text stays empty. -->
-    <div class="animate-cb-rise border-b-0 px-6 pt-6" :style="riseDelay(0)">
-      <img
-        src="../assets/visuals/Support.png"
-        alt=""
-        class="support-image w-full rounded-2xl object-cover"
-      />
-    </div>
+    <img
+      src="../assets/visuals/Support.png"
+      alt=""
+      class="support-image animate-cb-rise w-full rounded-2xl object-cover"
+      :style="riseDelay(0)"
+    />
 
     <!-- Feedback row -->
-    <div class="flex flex-col gap-3 p-6">
+    <div class="flex flex-col gap-3">
       <h4 class="cb-regular-text animate-cb-rise" :style="riseDelay(1)">
         {{ dictionary.support.feedbackHeading }}
       </h4>
@@ -25,7 +26,7 @@
     </div>
 
     <!-- Screenshot row: the dashed tile opens the hidden file picker. -->
-    <div class="flex flex-col gap-3 p-6">
+    <div class="flex flex-col gap-3">
       <h4 class="cb-regular-text animate-cb-rise" :style="riseDelay(3)">
         {{ dictionary.support.screenshotHeading }}
       </h4>
@@ -52,7 +53,7 @@
 
     <!-- Contact row: each checkbox carries its own 6 px of padding, so the
          rows need no gap of their own. -->
-    <div class="flex flex-col p-6">
+    <div class="flex flex-col">
       <CbCheckbox
         v-model="notifyAboutUpdates"
         :label="dictionary.support.notifyUpdatesCheckbox"
@@ -66,23 +67,14 @@
         :style="riseDelay(6)"
       />
     </div>
-
-    <!-- Submit row: the button sits on the right, as in the design. -->
-    <div class="flex justify-end p-6">
-      <CbButton class="animate-cb-rise w-24" :style="riseDelay(7)" @click="sendFeedback">
-        {{ dictionary.support.submit }}
-      </CbButton>
-    </div>
-  </CbSettingsGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
-import CbButton from '../components/atoms/CbButton.vue'
 import CbCheckbox from '../components/atoms/CbCheckbox.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import CbInteractive from '../components/atoms/CbInteractive.vue'
-import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import CbTextarea from '../components/atoms/CbTextarea.vue'
 import { showSuccessToast } from '../components/atoms/toaster'
 
@@ -101,14 +93,13 @@ function pickScreenshots(event: Event) {
 const notifyAboutUpdates = ref(true)
 const allowContact = ref(true)
 
-// No backend yet: thanks the user and clears the form. The hidden input is
-// reset too, so picking the same files again fires its change event.
+// Abgeschickt wird über den Knopf im Footer (CbHeaderDialog), der den Dialog
+// danach schließt – beim nächsten Öffnen ist das Formular darum wieder leer.
+// Noch ohne Backend: nur der Dank an den Nutzer.
 function sendFeedback() {
   showSuccessToast(dictionary.support.sentToast)
-  feedbackText.value = ''
-  screenshots.value = []
-  if (screenshotInput.value) screenshotInput.value.value = ''
 }
+defineExpose({ sendFeedback })
 
 // Every row waits a moment longer than the one above it, so the panel builds
 // itself up from top to bottom — the same feel as the share dialog.

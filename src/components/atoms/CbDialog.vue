@@ -17,14 +17,17 @@
     @exit-complete="$emit('closed')"
   >
     <Teleport to="body">
-      <Dialog.Backdrop class="cb-fade fixed inset-0 z-50 bg-background/80 backdrop-blur-md" />
+      <Dialog.Backdrop class="cb-fade fixed inset-0 z-50 bg-backdrop backdrop-blur-md" />
 
       <!-- Mit fillsPhoneScreen füllt der Dialog auf dem Handy den ganzen
            Bildschirm, ohne Rand und ohne runde Ecken. -->
+      <!-- Ist der Dialog niedriger als der Bildschirm, liegt 1/3 des freien
+           Platzes über ihm und 2/3 darunter (flex-1 zu flex-2). -->
       <Dialog.Positioner
-        class="fixed inset-0 z-50 flex items-center justify-center"
+        class="fixed inset-0 z-50 flex flex-col items-center"
         :class="fillsPhoneScreen ? 'tablet:p-6' : 'p-6'"
       >
+        <div class="flex-1" />
         <!-- How wide and how tall the dialog is comes from the outside, only
              never bigger than the screen. -->
         <Dialog.Content
@@ -37,10 +40,17 @@
           <div
             ref="panel"
             tabindex="-1"
-            class="flex w-full flex-col bg-background p-6 text-foreground focus:outline-none"
-            :class="[panelClass, cornerClass]"
+            class="flex w-full flex-col bg-background text-foreground focus:outline-none"
+            :class="cornerClass"
           >
-            <div class="flex items-center justify-between">
+            <!-- Titelzeile in surface, damit sie sich vom Inhalt abhebt. Der
+                 Rand unten ist nur in den Kontrastmodi sichtbar. Kein
+                 overflow-hidden am Panel für die Ecken, das könnte Listen im
+                 Inhalt abschneiden – die Zeile rundet sich selbst. -->
+            <div
+              class="flex items-center justify-between border-b border-surface-edge bg-surface px-6 py-4"
+              :class="topCornerClass"
+            >
               <!-- Anything that belongs in front of the title, like the arrow
                    back to the previous step of a dialog with several steps. -->
               <div class="flex items-center gap-2">
@@ -56,15 +66,21 @@
               </Dialog.CloseTrigger>
             </div>
 
-            <slot />
+            <!-- Inhalt und Fußzeile. min-h-0, damit ein Inhalt, der selbst
+                 scrollt, kleiner werden darf als er ist. -->
+            <div class="flex min-h-0 flex-1 flex-col p-6" :class="panelClass">
+              <slot />
 
-            <!-- The footer only exists when the dialog really brings one,
-                 otherwise it would leave an empty gap at the bottom. -->
-            <footer v-if="$slots.footer" class="flex justify-end gap-4">
-              <slot name="footer" />
-            </footer>
+              <!-- The footer only exists when the dialog really brings one,
+                   otherwise it would leave an empty gap at the bottom. -->
+              <footer v-if="$slots.footer" class="flex justify-end gap-4">
+                <slot name="footer" />
+              </footer>
+            </div>
           </div>
         </Dialog.Content>
+
+        <div class="flex-2" />
       </Dialog.Positioner>
     </Teleport>
   </Dialog.Root>
@@ -85,8 +101,8 @@ function initialFocusElement() {
   return panel.value?.querySelector<HTMLElement>('[autofocus]') ?? panel.value
 }
 
-// sizeClass is how wide and tall the dialog is, panelClass the space between
-// its title, its content and its footer. Both come from whoever opens the
+// sizeClass is how wide and tall the dialog is, panelClass der Abstand zwischen
+// Inhalt und Fußzeile. Both come from whoever opens the
 // dialog — the dialog itself has no size of its own.
 const props = defineProps<{
   open: boolean
@@ -97,6 +113,7 @@ const props = defineProps<{
 }>()
 
 const cornerClass = computed(() => (props.fillsPhoneScreen ? 'tablet:rounded-3xl' : 'rounded-3xl'))
+const topCornerClass = computed(() => (props.fillsPhoneScreen ? 'tablet:rounded-t-3xl' : 'rounded-t-3xl'))
 defineEmits<{
   'update:open': [open: boolean]
   /** Ganz zu, auch das Ausblenden ist vorbei. */

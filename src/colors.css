@@ -39,6 +39,9 @@
   /* Die Schicht über einem Element beim Hover (cb-hover): weiß mit 10 %. */
   --color-hover: #ffffff1a;
   --color-scrollbar: var(--color-surface);
+  /* Abdunkelung hinter Dialogen – dunkler als background, damit sich der
+     Dialog (bg-background) von der Seite abhebt. */
+  --color-backdrop: #0c0c1acc;
   /* Logo: Hut und Schwung, dazu das Pik als Verlauf von start nach end. */
   --color-logo: #ffffff;
   --color-logo-spade-start: #cfa23f;
@@ -96,6 +99,7 @@
   /* Nur leicht abdunkeln: highlight mit 6 %. */
   --color-hover: #2c2f450f;
   --color-scrollbar: #c5c7d0;
+  --color-backdrop: #bfc0c9cc;
   --color-logo: #2c2f45;
   --color-logo-spade-start: #2c2f45;
   --color-logo-spade-end: #2c2f45;
@@ -126,6 +130,8 @@
   --color-accent: #e0c151;
   --color-on-light: #000000;
   --color-scrollbar: #c8c8cc;
+  /* Dunkler als Schwarz geht nicht, der weiße Rand hebt den Dialog ab. */
+  --color-backdrop: #000000cc;
   --color-success: #166534;
   --color-danger: #991b1b;
   --color-danger-text: #ffaaaa;

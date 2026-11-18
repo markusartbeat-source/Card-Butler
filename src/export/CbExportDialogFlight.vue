@@ -4,7 +4,7 @@
        toast corner, where the real toast takes over. The dark backdrop of the
        dialog fades away while it flies. -->
   <Teleport to="body">
-    <div ref="backdropElement" class="fixed inset-0 z-50 bg-background/80 backdrop-blur-md" />
+    <div ref="backdropElement" class="fixed inset-0 z-50 bg-backdrop backdrop-blur-md" />
 
     <div
       ref="boxElement"

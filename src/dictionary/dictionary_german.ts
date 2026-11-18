@@ -335,7 +335,6 @@ export const dictionaryGerman = {
   },
   // The page for sharing a project by link or mail.
   shareProject: {
-    title: 'Wen würdest du gern einladen?',
     linkHeading: 'Link',
     copy: 'Kopieren',
     permission: 'Berechtigung',
@@ -350,7 +349,6 @@ export const dictionaryGerman = {
   },
   // The support page with the feedback form.
   support: {
-    title: 'Was möchtest du uns mitteilen?',
     feedbackHeading: 'Beschreibe gerne dein Feedback',
     feedbackPlaceholder: 'Hier dein Text',
     screenshotHeading: 'Lade gerne Screenshots des Problems hoch:',
@@ -363,7 +361,6 @@ export const dictionaryGerman = {
   },
   // The page with the list of everyone who is in the project.
   userManagement: {
-    title: 'Was wollen wir an der Zusammenarbeit ändern?',
     removeUser: 'Benutzer entfernen',
     removeUserQuestion: (name: string) => `Soll ${name} wirklich aus dem Projekt entfernt werden?`,
     remove: 'Entfernen',

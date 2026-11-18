@@ -292,7 +292,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     dataLocationSoonText: 'Ici, tu pourras choisir où tes données sont stockées.',
   },
   shareProject: {
-    title: 'Qui aimerais-tu inviter ?',
     linkHeading: 'Lien',
     copy: 'Copier',
     permission: 'Autorisation',
@@ -306,7 +305,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     inviteSent: (mail: string) => `Invitation envoyée à ${mail}`,
   },
   support: {
-    title: 'Que souhaites-tu nous dire ?',
     feedbackHeading: 'Décris volontiers ton retour',
     feedbackPlaceholder: 'Ton texte ici',
     screenshotHeading: "N'hésite pas à joindre des captures d'écran du problème :",
@@ -318,7 +316,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     sentToast: 'Merci pour ton retour',
   },
   userManagement: {
-    title: 'Que voulons-nous changer dans la collaboration ?',
     removeUser: 'Retirer l’utilisateur',
     removeUserQuestion: (name: string) => `Retirer vraiment ${name} du projet ?`,
     remove: 'Retirer',

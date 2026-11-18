@@ -1,17 +1,18 @@
 <template>
-  <CbSettingsGroup :title="dictionary.shareProject.title">
-    <!-- Image row: the width comes from the panel, the height follows.
+  <!-- Nur ein Bereich, daher ohne eigene Überschrift und ohne Kasten: Bild,
+       Link und Mail stehen direkt im Dialog. -->
+  <div class="flex flex-col gap-6">
+    <!-- Image row: the width comes from the dialog, the height follows.
          Decorative only, so the alt text stays empty. -->
-    <div class="animate-cb-rise border-b-0 px-6 pt-6" :style="riseDelay(0)">
-      <img
-        src="../assets/visuals/Add Friends.png"
-        alt=""
-        class="share-image w-full rounded-2xl object-cover"
-      />
-    </div>
+    <img
+      src="../assets/visuals/Add Friends.png"
+      alt=""
+      class="share-image animate-cb-rise w-full rounded-2xl object-cover"
+      :style="riseDelay(0)"
+    />
 
     <!-- Link row -->
-    <div class="flex flex-col gap-3 p-6">
+    <div class="flex flex-col gap-3">
       <h4 class="cb-regular-text animate-cb-rise" :style="riseDelay(1)">
         {{ dictionary.shareProject.linkHeading }}
       </h4>
@@ -38,7 +39,7 @@
     </div>
 
     <!-- Mail row -->
-    <div class="flex flex-col gap-3 p-6">
+    <div class="flex flex-col gap-3">
       <h4 class="cb-regular-text animate-cb-rise" :style="riseDelay(5)">
         {{ dictionary.shareProject.mailHeading }}
       </h4>
@@ -60,7 +61,7 @@
         :style="riseDelay(7)"
       />
     </div>
-  </CbSettingsGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -68,7 +69,6 @@ import { computed, ref } from 'vue'
 import CbButton from '../components/atoms/CbButton.vue'
 import CbInput from '../components/atoms/CbInput.vue'
 import CbSelect from '../components/atoms/CbSelect.vue'
-import CbSettingsGroup from '../components/atoms/CbSettingsGroup.vue'
 import { showSuccessToast } from '../components/atoms/toaster'
 
 // A made-up link until the project has a real one to share.

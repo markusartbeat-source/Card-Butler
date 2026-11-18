@@ -291,7 +291,6 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     dataLocationSoonText: 'Aquí podrás elegir dónde se guardan tus datos.',
   },
   shareProject: {
-    title: '¿A quién te gustaría invitar?',
     linkHeading: 'Enlace',
     copy: 'Copiar',
     permission: 'Permiso',
@@ -305,7 +304,6 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     inviteSent: (mail: string) => `Invitación enviada a ${mail}`,
   },
   support: {
-    title: '¿Qué te gustaría contarnos?',
     feedbackHeading: 'Describe tu comentario con gusto',
     feedbackPlaceholder: 'Tu texto aquí',
     screenshotHeading: 'Sube capturas de pantalla del problema si quieres:',
@@ -317,7 +315,6 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     sentToast: 'Gracias por tu comentario',
   },
   userManagement: {
-    title: '¿Qué queremos cambiar en la colaboración?',
     removeUser: 'Quitar usuario',
     removeUserQuestion: (name: string) => `¿Quitar de verdad a ${name} del proyecto?`,
     remove: 'Quitar',
