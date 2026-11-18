@@ -14,8 +14,6 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     cancel: 'Cancel',
     back: 'Back',
     undo: 'Undo',
-    notAvailableTitle: 'Not available',
-    notAvailableText: 'This feature does not exist yet.',
     support: 'Support',
     showSuggestions: 'Show suggestions',
     pathSeparator: '/',
@@ -30,11 +28,8 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
     collaboration: 'Collaboration',
     shareProject: 'Share this project',
     userManagement: 'User management',
-    cards: 'Cards',
-    newCardSet: 'New card set',
     search: 'Search',
     backToHome: 'Back to home',
-    path: 'Path',
   },
   home: {
     titleCards: 'Your cards.',
@@ -66,6 +61,7 @@ export const dictionaryEnglish: typeof dictionaryGerman = {
   },
   images: {
     title: 'Images',
+    path: 'Path',
     uploadImages: 'Upload images',
     imageRejected: (fileName: string) => `“${fileName}” not uploaded`,
     wrongImageType: 'Only PNG, JPEG and GIF are allowed.',

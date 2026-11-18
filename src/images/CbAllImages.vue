@@ -52,7 +52,16 @@
   <!-- Seitlich Überstehendes wird abgeschnitten: Beim Sortieren gleiten
        Kacheln kurz von ihrem alten Platz herüber und würden sonst für einen
        Moment einen waagrechten Scrollbalken bringen. -->
-  <div class="mx-auto flex max-w-315 flex-col gap-6 overflow-x-clip px-4 tablet:px-6">
+  <div class="flex flex-col gap-6 overflow-x-clip">
+    <!-- Der Pfad von „Alle Bilder“ bis zum gezeigten Ordner, nur in einem Ordner
+         (oben steht schon der Titel). Auf jeden Eintrag lässt sich ziehen, darum
+         bleibt er beim Scrollen oben stehen. -->
+    <CbBreadcrumbs
+      v-if="folderPath.length"
+      :entries="path"
+      :label="dictionary.images.path"
+      class="cb-regular-text-muted sticky top-0 z-10 bg-background"
+    />
     <!-- Nur im Dev-Modus: Die Reihenfolge speichert der Server (noch) nicht. -->
     <p
       v-if="showsNotStoredMarks"
@@ -132,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
 import CbAddTile from '../components/atoms/CbAddTile.vue'
@@ -140,28 +149,27 @@ import CbFileUpload, { type FileRejectionReason } from '../components/atoms/CbFi
 import CbFolder, { folderGraphicRatio } from '../components/atoms/CbFolder.vue'
 import CbIcon from '../components/atoms/CbIcon.vue'
 import { showDangerToast } from '../components/atoms/toaster'
+import CbBreadcrumbs from '../components/molecules/CbBreadcrumbs.vue'
 import CbNameDialog from '../components/organisms/CbNameDialog.vue'
 import CbViewer from '../components/organisms/CbViewer.vue'
-import CbImageGrid from '../images/CbImageGrid.vue'
-import CbImageSettingsPanel from '../images/CbImageSettingsPanel.vue'
+import CbImageGrid from './CbImageGrid.vue'
+import CbImageSettingsPanel from './CbImageSettingsPanel.vue'
 import CbFolderSettingsPanel from '../folders/CbFolderSettingsPanel.vue'
 import type { ImageResource } from '../api/images/imagesApi'
 import type { FolderResource } from '../api/folders/foldersApi'
-import { projectImages } from '../images/projectImages'
-import { isUploadingImages, uploadImages } from '../images/uploadImages'
-import { useHeader } from '../components/organisms/headerState'
+import { projectImages } from './projectImages'
+import { isUploadingImages, uploadImages } from './uploadImages'
 import { cardFormat } from '../card/cardFormat'
-import { currentProject } from '../project/currentProject'
 import { dimWhileDraggingClasses } from '../dragAndDrop/dimWhileDragging'
 import { edgeSortingDragOptions } from '../dragAndDrop/dragOptions'
 import { endDrag, isDragging, releaseDrag, startDrag } from '../dragAndDrop/dragState'
 import { pageDropTargetAttributes } from '../dragAndDrop/pageDropTarget'
 import { deleteDroppedItem } from '../dragAndDrop/deleteDroppedItem'
 import { deleteWithUndo } from '../deletion/deleteWithUndo'
-import { deleteImage } from '../images/deleteImage'
-import { moveDroppedImage } from '../images/moveDroppedImage'
-import { moveImage } from '../images/moveImage'
-import { copyOrCutImageOnKey, pasteImageOnKey } from '../images/imageClipboard'
+import { deleteImage } from './deleteImage'
+import { moveDroppedImage } from './moveDroppedImage'
+import { moveImage } from './moveImage'
+import { copyOrCutImageOnKey, pasteImageOnKey } from './imageClipboard'
 import { deleteFolder } from '../folders/deleteFolder'
 import { moveDroppedFolder } from '../folders/moveDroppedFolder'
 import { moveFolder } from '../folders/moveFolder'
@@ -176,37 +184,31 @@ import { showFolder } from '../folders/showFolder'
 import { levelDropTarget } from '../folders/levelDropTarget'
 import { showsNotStoredMarks } from '../notStored/notStoredMark'
 
-// Die Seite wird je Projekt und je Ordner neu eingehängt (App.vue schlüsselt
-// nach der Adresse), die IDs bleiben also fest. Ohne Ordner die oberste Ebene.
+// Der Inhalt wird je Ordner neu eingehängt (CbHeaderDialog schlüsselt nach der
+// Adresse), die IDs bleiben also fest. Ohne Ordner die oberste Ebene.
 const route = useRoute()
 const router = useRouter()
 const projectId = String(route.params.projectId)
-const folderId = route.params.folderId ? String(route.params.folderId) : null
+const folderId = typeof route.query.folder === 'string' ? route.query.folder : null
 
-// Adresse einer Ebene dieser Seite, null = oberste.
+// Adresse einer Ebene in diesem Dialog, null = oberste.
 function folderRoute(targetFolderId: string | null) {
-  return { name: 'all-images', params: { projectId, folderId: targetFolderId } }
+  return { query: { dialog: 'all-images', folder: targetFolderId ?? undefined } }
 }
 
-// Die zweite Zeile ist der Pfad von „Alle Bilder“ bis zur gezeigten Ebene. Auf
-// jeden Eintrag lässt sich ein Bild ziehen, es landet in dessen Ebene.
+// Jeder Eintrag des Pfads führt zu seiner Ebene, ein Bild darauf landet dort.
 function pathEntry(label: string, targetFolderId: string | null) {
   return { label, to: folderRoute(targetFolderId), dropTarget: levelDropTarget(targetFolderId) }
 }
 
-useHeader(() => ({
-  title: currentProject.value?.name,
-  path: [
-    pathEntry(dictionary.header.allImages, null),
-    ...folderPath.value.map((folder) => pathEntry(folder.name, folder.id)),
-  ],
-  searchbar: false,
-}))
+const path = computed(() => [
+  pathEntry(dictionary.header.allImages, null),
+  ...folderPath.value.map((folder) => pathEntry(folder.name, folder.id)),
+])
 
-// Bei jedem Öffnen der Seite frisch, so erscheinen auch Bilder und Ordner der
-// anderen im Projekt. Einen unbekannten Ordner meldet schon die Poststelle,
-// dann geht es auf die oberste Ebene – "replace", damit „Zurück“ nicht wieder
-// hierher führt.
+// Bei jedem Öffnen frisch, so erscheinen auch Bilder und Ordner der anderen im
+// Projekt. Einen unbekannten Ordner meldet schon die Poststelle, dann geht es
+// auf die oberste Ebene – "replace", damit „Zurück“ nicht wieder hierher führt.
 showFolder(projectId, folderId).then((isFolderFound) => {
   if (!isFolderFound) router.replace(folderRoute(null))
 })
@@ -262,8 +264,8 @@ function clickFolder(folder: FolderResource, event: MouseEvent, graphicRect: DOM
   pendingFolderClick = { folderId: folder.id, timer }
 }
 
-// Der Betrachter verschwindet sofort, sonst stünde er beim Seitenwechsel noch
-// über der neuen Ebene.
+// Der Betrachter verschwindet sofort, sonst stünde er beim Wechsel noch über
+// der neuen Ebene.
 function enterOpenedFolder() {
   const folder = openedFolder.value?.folder
   if (!folder) return

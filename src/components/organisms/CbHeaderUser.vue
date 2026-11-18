@@ -2,7 +2,11 @@
   <!-- The end of the header: upgrading (or signing in) and the own profile.
        Below laptop width the button leaves the header (it moves into the
        profile menu). -->
-  <CbButton class="hidden laptop:block" @click="currentUser ? goToUpgrade() : postOffice.user.signInWithGoogle()">
+  <CbButton
+    v-if="showsUpgradeOrSignIn"
+    class="hidden laptop:block"
+    @click="currentUser ? goToUpgrade() : postOffice.user.signInWithGoogle()"
+  >
     <CbIcon :name="currentUser ? 'arrow_circle_up' : 'login'" />
     {{ currentUser ? dictionary.general.upgrade : dictionary.general.signIn }}
   </CbButton>
@@ -31,9 +35,23 @@ import { postOffice } from '../../api/postOffice/postOffice'
 import { signOut, useCurrentUser } from '../../composables/useCurrentUser'
 import { useIsBelowBreakpoint } from '../../composables/useIsBelowBreakpoint'
 import guestPicture from '../../assets/profile_pictures/profile_picture_small.png'
-import { collaborationPages, headerPageAt, headerPageRoute, imagePages } from './headerPages'
+import {
+  collaborationDialogs,
+  headerDialogAt,
+  headerDialogRoute,
+  imageDialogs,
+  isProfileDialog,
+  profileDialogs,
+} from './headerDialogs'
+
+const router = useRouter()
+const route = useRoute()
 
 const { currentUser, displayName, avatarUrl } = useCurrentUser()
+
+// Im Projekt gibt es kein Upgrade, weder als Knopf noch im Menü. Anmelden für
+// Gäste bleibt.
+const showsUpgradeOrSignIn = computed(() => !currentUser.value || !route.params.projectId)
 
 const userLabel = computed(() => displayName.value ?? dictionary.general.guest)
 const userPicture = computed(() => avatarUrl.value ?? guestPicture)
@@ -49,10 +67,10 @@ const searchItems = computed<DropdownItem[]>(() => [
   'separator',
 ])
 
-const headerPageItems = computed<DropdownItem[]>(() => [
-  ...imagePages.value,
+const headerMenuItems = computed<DropdownItem[]>(() => [
+  ...imageDialogs.value,
   'separator',
-  ...collaborationPages.value,
+  ...collaborationDialogs.value,
   'separator',
 ])
 
@@ -66,10 +84,9 @@ const upgradeItems = computed<DropdownItem[]>(() => [
 // Only somebody who is signed in can sign out. Abmelden steht abgesetzt und rot.
 const profileMenuItems = computed<DropdownItem[]>(() => [
   ...(isBelowLaptop.value ? searchItems.value : []),
-  ...(isBelowDesktop.value ? headerPageItems.value : []),
-  ...(isBelowLaptop.value ? upgradeItems.value : []),
-  { value: 'settings', label: dictionary.settings.title, icon: 'settings' as const },
-  { value: 'support', label: dictionary.general.support, icon: 'support_agent' as const },
+  ...(isBelowDesktop.value ? headerMenuItems.value : []),
+  ...(isBelowLaptop.value && showsUpgradeOrSignIn.value ? upgradeItems.value : []),
+  ...profileDialogs.value,
   ...(currentUser.value
     ? [
         'separator' as const,
@@ -83,27 +100,15 @@ const profileMenuItems = computed<DropdownItem[]>(() => [
     : []),
 ])
 
-const router = useRouter()
-const route = useRoute()
-
-// The profile's own pages, with the URL they lead to.
-const pageByProfileItem: Record<string, string> = {
-  settings: '/settings',
-  support: '/support',
-}
-
 const upgradePath = '/upgrade'
 
-// The entry whose page is open right now. The entries that moved in from the
-// header count as well, but only while they are in here — on a wide screen
-// the header itself shows where the user is.
+// The entry whose dialog or page is open right now. The entries that moved in
+// from the header count as well, but only while they are in here — on a wide
+// screen the header itself shows where the user is.
 const activeProfileItem = computed(() => {
-  const ownPage = Object.keys(pageByProfileItem).find(
-    (item) => pageByProfileItem[item] === route.path,
-  )
-  if (ownPage) return ownPage
+  const openDialog = headerDialogAt(route)
+  if (openDialog && (isProfileDialog(openDialog) || isBelowDesktop.value)) return openDialog.value
   if (isBelowLaptop.value && route.path === upgradePath) return 'upgrade'
-  if (isBelowDesktop.value) return headerPageAt(route.name)
 })
 
 function goToUpgrade() {
@@ -111,9 +116,9 @@ function goToUpgrade() {
 }
 
 function runProfileAction(value: string) {
-  const pageRoute =
-    pageByProfileItem[value] ?? (value === 'upgrade' ? upgradePath : headerPageRoute(value))
-  if (pageRoute) router.push(pageRoute)
+  const dialogRoute = headerDialogRoute(value, route)
+  if (dialogRoute) router.push(dialogRoute)
+  else if (value === 'upgrade') goToUpgrade()
   else if (value === 'signIn') postOffice.user.signInWithGoogle()
   else if (value === 'signOut') signOut()
   // The search entry only closes the menu for now.

@@ -1,5 +1,4 @@
 import { onUnmounted, ref, watchEffect } from 'vue'
-import type { BreadcrumbEntry } from '../molecules/CbBreadcrumbs.vue'
 import type { HeaderButton } from './headerButton'
 
 export type HeaderSettings = {
@@ -8,10 +7,6 @@ export type HeaderSettings = {
   menus?: boolean
   goldLine?: boolean
   title?: string
-  // Kleine zweite Zeile unter dem Titel, z.B. der Bereich im Projekt.
-  subtitle?: string
-  // Statt subtitle ein Pfad, dessen Einträge dorthin führen.
-  path?: BreadcrumbEntry[]
   searchbar?: boolean
   buttons?: HeaderButton[]
   onAction?: (key: string) => void

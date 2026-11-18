@@ -1,15 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './pages/HomePage.vue'
-import AllImagesPage from './pages/AllImagesPage.vue'
-import IconsInTextPage from './pages/IconsInTextPage.vue'
-import ShareProjectPage from './pages/ShareProjectPage.vue'
-import UserManagementPage from './pages/UserManagementPage.vue'
 import ProjectPage from './pages/ProjectPage.vue'
 import CbProjectFrame from './project/CbProjectFrame.vue'
 import UpgradePage from './pages/UpgradePage.vue'
-import SettingsPage from './pages/SettingsPage.vue'
-import SupportPage from './pages/SupportPage.vue'
 
+// Bilder, Zusammenarbeit, Einstellungen und Support sind Dialoge über der Seite,
+// sie stehen im Abfrageteil der Adresse (components/organisms/headerDialogs.ts).
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -20,24 +16,14 @@ const router = createRouter({
     { path: '/home', component: HomePage },
     // Ohne Projekt-ID gibt es nichts zu zeigen.
     { path: '/project', redirect: '/home' },
-    // Der Rahmen öffnet das Projekt, die Seiten darunter laufen darin. Die Namen
-    // sind zugleich die Werte der Menüeinträge (headerPages.ts).
+    // Der Rahmen öffnet das Projekt, die Seite darunter läuft darin.
     {
       path: '/project/:projectId',
       component: CbProjectFrame,
       props: true,
-      children: [
-        { path: '', component: ProjectPage },
-        // Ohne Ordner-ID die oberste Ebene der Bilder.
-        { path: 'images/all/:folderId?', name: 'all-images', component: AllImagesPage },
-        { path: 'images/icons-in-text', name: 'icons-in-text', component: IconsInTextPage },
-        { path: 'collaboration/share', name: 'share-project', component: ShareProjectPage },
-        { path: 'collaboration/users', name: 'user-management', component: UserManagementPage },
-      ],
+      children: [{ path: '', component: ProjectPage }],
     },
     { path: '/upgrade', component: UpgradePage },
-    { path: '/settings', component: SettingsPage },
-    { path: '/support', component: SupportPage },
   ],
 })
 

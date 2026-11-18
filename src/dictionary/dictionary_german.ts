@@ -13,8 +13,6 @@ export const dictionaryGerman = {
     cancel: 'Abbrechen',
     back: 'Zurück',
     undo: 'Rückgängig',
-    notAvailableTitle: 'Nicht verfügbar',
-    notAvailableText: 'Diese Funktion gibt es noch nicht.',
     support: 'Support',
     // Pfeil an einem Feld, das eine Liste mit Vorschlägen aufklappt.
     showSuggestions: 'Vorschläge anzeigen',
@@ -36,15 +34,10 @@ export const dictionaryGerman = {
     collaboration: 'Zusammenarbeit',
     shareProject: 'Dieses Projekt teilen',
     userManagement: 'Benutzerverwaltung',
-    // The entries of the cards menu.
-    cards: 'Karten',
-    newCardSet: 'Neues Kartenset',
     // The search entry of the profile menu on narrow screens.
     search: 'Suche',
     // Vorlesetext des Zurück-Pfeils links neben dem Titel.
     backToHome: 'Zurück zur Startseite',
-    // Vorlesename des Pfads unter dem Titel, z.B. „Alle Bilder / Ordner“.
-    path: 'Pfad',
   },
   // The search over all cards, started in the header pill.
   home: {
@@ -83,6 +76,8 @@ export const dictionaryGerman = {
   // The page with the picture library.
   images: {
     title: 'Bilder',
+    // Vorlesename des Pfads unter dem Dialogtitel, z.B. „Alle Bilder / Ordner“.
+    path: 'Pfad',
     uploadImages: 'Bilder hochladen',
     // Toast für eine abgelehnte Datei: Titel mit Dateiname, darunter der Grund.
     imageRejected: (fileName: string) => `„${fileName}“ nicht hochgeladen`,

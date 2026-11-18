@@ -2,8 +2,7 @@
   <!-- Height and side spacing come from the design: 100px tall, 24px inset. -->
   <!-- Liegt über der Seite, die verschwommen dahinter weiterläuft (Platz dafür
        lässt App.vue frei). z-20 hält ihn und seine Menüs über der Seite. -->
-  <!-- Beim Ziehen (Karte, Bild) tritt der Header zurück – bis auf den Pfad, auf
-       den sich Gezogenes legen lässt. Darum wird jeder Teil für sich blass. -->
+  <!-- Beim Ziehen tritt der Header zurück, jeder Teil für sich wird blass. -->
   <div class="absolute inset-x-0 top-0 z-20 flex h-25 items-center gap-2.5 px-6">
     <!-- Hintergrund: außen deckend, in der Mitte durchscheinend und verschwommen.
          Er reicht 12px über den Header hinaus und läuft ab 84px weich aus, so
@@ -55,15 +54,7 @@
         >
           <CbIcon name="west" />
         </router-link>
-        <!-- Groß der Titel, klein darunter die zweite Zeile: der Pfad oder
-             ein Text. Alles endet lang in „…“. -->
-        <div class="flex min-w-0 flex-col">
-          <h1 class="cb-headline-01 truncate" :class="dimWhileDraggingClasses">{{ title }}</h1>
-          <CbBreadcrumbs v-if="path" :entries="path" :label="dictionary.header.path" class="cb-regular-text-muted" />
-          <p v-else-if="subtitle" class="cb-regular-text-muted truncate" :class="dimWhileDraggingClasses">
-            {{ subtitle }}
-          </p>
-        </div>
+        <h1 class="cb-headline-01 truncate" :class="dimWhileDraggingClasses">{{ title }}</h1>
       </template>
     </div>
 
@@ -106,24 +97,20 @@
          Below, the right side is as wide as its content, so the title keeps
          its room. -->
     <div class="flex items-center justify-end gap-3 laptop:flex-1" :class="dimWhileDraggingClasses">
-      <!-- The three menus of the design. They open the same list as every other
-           menu in the header, the one of the profile included. Below desktop
-           width only the cards menu stays, the others move into the profile
-           menu. -->
+      <!-- Die Menüs des Projekts. Sie öffnen dieselbe Liste wie jedes andere
+           Menü im Header, das des Profils eingeschlossen. Unter desktop-Breite
+           wandern sie ins Profilmenü. -->
       <CbDropdown
         v-for="menu in menus ? navigationMenus : []"
         :key="menu.value"
         :items="menu.items"
         :active-item="activeItemOf(menu.items)"
-        @select="runMenuAction"
+        @select="openDialog"
       >
         <CbButton
           variant="ghost"
-          class="cb-header-menu"
-          :class="{
-            'cb-header-menu-active': activeItemOf(menu.items),
-            'hidden desktop:flex': menu.value !== 'cards',
-          }"
+          class="cb-header-menu hidden desktop:flex"
+          :class="{ 'cb-header-menu-active': activeItemOf(menu.items) }"
         >
           {{ menu.label }}
           <CbIcon name="keyboard_arrow_down" class="cb-header-menu-arrow" />
@@ -161,16 +148,11 @@ import CbDropdown from '../atoms/CbDropdown.vue'
 import CbIcon from '../atoms/CbIcon.vue'
 import CbInteractive from '../atoms/CbInteractive.vue'
 import CbLogo from '../atoms/CbLogo.vue'
-import CbBreadcrumbs, { type BreadcrumbEntry } from '../molecules/CbBreadcrumbs.vue'
 import CbHeaderUser from './CbHeaderUser.vue'
-import { cardSetIdToShow, cardSets } from '../../cardSets/cardSets'
-import { createCardSet } from '../../cardSets/createCardSet'
-import { visibleCardSetId } from '../../cardSets/visibleCardSet'
-import { currentProject } from '../../project/currentProject'
 import { dimWhileDraggingClasses } from '../../dragAndDrop/dimWhileDragging'
 import { clearSearchWord, searchWord } from '../../search/searchWord'
 import type { HeaderButton } from './headerButton'
-import { collaborationPages, headerPageAt, headerPageRoute, imagePages } from './headerPages'
+import { collaborationDialogs, headerDialogAt, headerDialogRoute, imageDialogs } from './headerDialogs'
 
 withDefaults(
   defineProps<{
@@ -178,8 +160,6 @@ withDefaults(
     menus?: boolean
     goldLine?: boolean
     title?: string
-    subtitle?: string
-    path?: BreadcrumbEntry[]
     searchbar?: boolean
     buttons?: HeaderButton[]
   }>(),
@@ -189,7 +169,7 @@ withDefaults(
     buttons: () => [],
   },
 )
-const emit = defineEmits<{ action: [key: string] }>()
+defineEmits<{ action: [key: string] }>()
 
 const router = useRouter()
 const route = useRoute()
@@ -212,69 +192,24 @@ function clearSearch() {
   searchInput.value?.focus()
 }
 
-// Der Eintrag der offenen Seite. Ihn hat immer nur ein Menü, so ist stets klar,
-// wo man ist. Auf den Kartensets des Projekts ist es das Set, das gerade zu
-// sehen ist.
-const activeMenuItem = computed(
-  () => headerPageAt(route.name) ?? (route.params.projectId ? visibleCardSetId.value : undefined),
-)
+// Der Eintrag des offenen Dialogs. Ihn hat immer nur ein Menü, so ist stets
+// klar, wo man ist.
+const activeMenuItem = computed(() => headerDialogAt(route)?.value)
 
 function activeItemOf(menuItems: { value: string }[]) {
   return menuItems.find((item) => item.value === activeMenuItem.value)?.value
 }
 
-// A set (new or existing) is shown on the project page, an entry with a page
-// opens it, every other entry is left to the page.
-function runMenuAction(value: string) {
-  if (value === 'new-card-set') {
-    addCardSet()
-    return
-  }
-
-  if (cardSets.value?.some((cardSet) => cardSet.id === value)) {
-    showCardSet(value)
-    return
-  }
-
-  const pageRoute = headerPageRoute(value)
-  if (pageRoute) router.push(pageRoute)
-  else emit('action', value)
-}
-
-// Ohne geöffnetes Projekt wird nichts angelegt, es geht zur Startseite mit der
-// Projektliste.
-async function addCardSet() {
-  if (!currentProject.value) return router.push('/home')
-
-  const cardSet = await createCardSet(currentProject.value.id)
-  if (cardSet) showCardSet(cardSet.id)
-}
-
-// Kartensets liegen im geöffneten Projekt. Ist noch keins offen, geht es zur
-// Startseite mit der Projektliste.
-function showCardSet(cardSetId: string) {
-  cardSetIdToShow.value = cardSetId
-  router.push(currentProject.value ? `/project/${currentProject.value.id}` : '/home')
+function openDialog(value: string) {
+  const dialogRoute = headerDialogRoute(value, route)
+  if (dialogRoute) router.push(dialogRoute)
 }
 
 // The menus of the design. They belong to the header itself, so they stand in
 // every page.
 const navigationMenus = computed(() => [
-  {
-    value: 'cards',
-    label: dictionary.header.cards,
-    items: [
-      // Every card set stands here with its own name, the last entry adds one.
-      ...(cardSets.value ?? []).map((cardSet) => ({
-        value: cardSet.id,
-        label: cardSet.data.name,
-        icon: 'playing_cards' as const,
-      })),
-      { value: 'new-card-set', label: dictionary.header.newCardSet, icon: 'add_2' as const },
-    ],
-  },
-  { value: 'images', label: dictionary.images.title, items: imagePages.value },
-  { value: 'collaboration', label: dictionary.header.collaboration, items: collaborationPages.value },
+  { value: 'images', label: dictionary.images.title, items: imageDialogs.value },
+  { value: 'collaboration', label: dictionary.header.collaboration, items: collaborationDialogs.value },
 ])
 </script>
 

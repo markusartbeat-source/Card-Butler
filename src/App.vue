@@ -14,8 +14,6 @@
         :menus="headerSettings.menus"
         :gold-line="headerSettings.goldLine"
         :title="headerSettings.title"
-        :subtitle="headerSettings.subtitle"
-        :path="headerSettings.path"
         :searchbar="headerSettings.searchbar"
         :buttons="headerSettings.buttons"
         @action="headerSettings.onAction?.($event)"
@@ -45,11 +43,14 @@
          page change and a fixed bar inside it would move with it. -->
     <CbDropBar />
     <CbToaster />
+    <!-- Außerhalb der Seite: Ein Seitenwechsel bewegt den Dialog nicht mit. -->
+    <CbHeaderDialog />
   </div>
 </template>
 
 <script setup lang="ts">
 import CbHeader from './components/organisms/CbHeader.vue'
+import CbHeaderDialog from './components/organisms/CbHeaderDialog.vue'
 import { headerSettings } from './components/organisms/headerState'
 import CbToaster from './components/atoms/CbToaster.vue'
 import CbHomeScene from './home/CbHomeScene.vue'

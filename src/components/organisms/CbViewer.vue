@@ -139,8 +139,12 @@ function startClosing() {
   closingFlight.onfinish = () => emit('close')
 }
 
+// Escape gehört allein dem Betrachter: Er fängt sie als Erster ab (capture am
+// window) und gibt sie nicht weiter – sonst schlösse ein Dialog darunter mit.
 function closeOnEscape(event: KeyboardEvent) {
-  if (event.key === 'Escape') startClosing()
+  if (event.key !== 'Escape') return
+  event.stopPropagation()
+  startClosing()
 }
 
 onMounted(() => {
@@ -150,12 +154,12 @@ onMounted(() => {
   if (animation) animation.onfinish = () => (areControlsVisible.value = true)
   else areControlsVisible.value = true
 
-  window.addEventListener('keydown', closeOnEscape)
+  window.addEventListener('keydown', closeOnEscape, { capture: true })
 })
 
 onUnmounted(() => {
   // Content picked mid-close replaces us — that close must not fire any more.
   if (closingFlight) closingFlight.onfinish = null
-  window.removeEventListener('keydown', closeOnEscape)
+  window.removeEventListener('keydown', closeOnEscape, { capture: true })
 })
 </script>

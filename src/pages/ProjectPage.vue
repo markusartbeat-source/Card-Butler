@@ -234,7 +234,6 @@ import {
   isTurningCards,
   showingCardBacks,
 } from '../cardDrag/flipAllCards'
-import { showDangerToast } from '../components/atoms/toaster'
 import { useHeader } from '../components/organisms/headerState'
 import { currentProject } from '../project/currentProject'
 import { cardCornerRadiiOf, cardFormatStyle, gridZoom } from '../card/cardFormat'
@@ -244,13 +243,7 @@ import { searchWord } from '../search/searchWord'
 
 const isExportDialogOpen = ref(false)
 
-useHeader(() => ({
-  title: currentProject.value?.name,
-  subtitle: dictionary.header.cards,
-  // Every entry of the header menus is still a placeholder.
-  onAction: () =>
-    showDangerToast(dictionary.general.notAvailableTitle, dictionary.general.notAvailableText),
-}))
+useHeader(() => ({ title: currentProject.value?.name }))
 
 // Solange die Sets laden, zeigt die Seite einfach keine.
 const loadedCardSets = computed(() => cardSets.value ?? [])

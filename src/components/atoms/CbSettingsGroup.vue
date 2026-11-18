@@ -5,10 +5,10 @@
        which is why the padding sits in the rows and not in the panel.
        With sameRowHeight, auto-rows-fr gives every row the height of the
        tallest one, so no row needs a height of its own. -->
-  <!-- The panel takes the width it is given and stops growing at 160, so it
-       looks the same on the settings page and inside a dialog. -->
+  <!-- The panel takes the width it is given and stops growing at 160. -->
+  <!-- h3: Die Gruppen stehen in Dialogen, deren Titel ist die h2. -->
   <section class="w-full max-w-160">
-    <h2 class="cb-headline-01 mb-3">{{ title }}</h2>
+    <h3 class="cb-headline-01 mb-3">{{ title }}</h3>
     <div
       class="grid divide-y divide-surface-light rounded-3xl bg-surface shadow-lg ring ring-surface-edge"
       :class="{ 'auto-rows-fr': sameRowHeight }"

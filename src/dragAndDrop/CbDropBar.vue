@@ -1,10 +1,11 @@
 <template>
   <!-- Die Leiste fährt über den blassen Header ein, darum fest am oberen
-       Fensterrand und so hoch wie der Header – damit auf Höhe der Suche. -->
+       Fensterrand und so hoch wie der Header – damit auf Höhe der Suche. z-60
+       hält sie auch über Dialogen (z-50), z.B. beim Ziehen in „Alle Bilder“. -->
   <Transition name="drop-bar">
     <div
       v-if="draggedKind"
-      class="pointer-events-none fixed inset-x-0 top-0 z-10 flex h-25 items-center justify-center"
+      class="pointer-events-none fixed inset-x-0 top-0 z-60 flex h-25 items-center justify-center"
     >
       <CbToolbar
         ref="toolbar"

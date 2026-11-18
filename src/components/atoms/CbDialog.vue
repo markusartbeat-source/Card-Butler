@@ -7,21 +7,29 @@
        the browser then rings as if it had been reached with the Tab key. The
        panel itself takes the focus instead — a screen reader reads the title
        that way, and the Tab key still walks through the dialog from the top. -->
+  <!-- Toasts bleiben bedienbar (z.B. „Rückgängig“), ein Klick darauf schließt
+       den Dialog nicht. -->
   <Dialog.Root
     :open="open"
     :initial-focus-el="initialFocusElement"
+    :persistent-elements="[toastGroupElement]"
     @update:open="$emit('update:open', $event)"
     @exit-complete="$emit('closed')"
   >
     <Teleport to="body">
       <Dialog.Backdrop class="cb-fade fixed inset-0 z-50 bg-background/80 backdrop-blur-md" />
 
-      <Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center p-6">
+      <!-- Mit fillsPhoneScreen füllt der Dialog auf dem Handy den ganzen
+           Bildschirm, ohne Rand und ohne runde Ecken. -->
+      <Dialog.Positioner
+        class="fixed inset-0 z-50 flex items-center justify-center"
+        :class="fillsPhoneScreen ? 'tablet:p-6' : 'p-6'"
+      >
         <!-- How wide and how tall the dialog is comes from the outside, only
              never bigger than the screen. -->
         <Dialog.Content
-          class="cb-dialog flex max-h-full max-w-full rounded-3xl bg-gradient-to-b from-surface to-transparent p-px shadow-lg ring ring-surface-edge"
-          :class="sizeClass"
+          class="cb-dialog flex max-h-full max-w-full bg-gradient-to-b from-surface to-transparent p-px shadow-lg ring ring-surface-edge"
+          :class="[sizeClass, cornerClass, { 'size-full': fillsPhoneScreen }]"
         >
           <!-- w-full inside the flex frame lets the dark surface fill the panel.
                tabindex -1 only lets the panel be focused by the dialog itself,
@@ -29,8 +37,8 @@
           <div
             ref="panel"
             tabindex="-1"
-            class="flex w-full flex-col rounded-3xl bg-background p-6 text-foreground focus:outline-none"
-            :class="panelClass"
+            class="flex w-full flex-col bg-background p-6 text-foreground focus:outline-none"
+            :class="[panelClass, cornerClass]"
           >
             <div class="flex items-center justify-between">
               <!-- Anything that belongs in front of the title, like the arrow
@@ -67,6 +75,7 @@ import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import { Dialog } from '@ark-ui/vue'
 import CbButton from './CbButton.vue'
 import CbIcon from './CbIcon.vue'
+import { toastGroupElement } from './toaster'
 
 const panel = useTemplateRef<HTMLElement>('panel')
 
@@ -84,7 +93,10 @@ const props = defineProps<{
   title: string
   sizeClass?: string
   panelClass?: string
+  fillsPhoneScreen?: boolean
 }>()
+
+const cornerClass = computed(() => (props.fillsPhoneScreen ? 'tablet:rounded-3xl' : 'rounded-3xl'))
 defineEmits<{
   'update:open': [open: boolean]
   /** Ganz zu, auch das Ausblenden ist vorbei. */

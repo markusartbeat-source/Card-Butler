@@ -32,6 +32,11 @@ export function showActionToast(
   })
 }
 
+/** Die Fläche, in der alle Toasts stehen. */
+export function toastGroupElement() {
+  return document.querySelector('[data-scope="toast"][data-part="group"]')
+}
+
 /** Schließt einen Toast, als hätte man aufs Kreuz geklickt. */
 export function dismissToast(id: string) {
   toaster.dismiss(id)

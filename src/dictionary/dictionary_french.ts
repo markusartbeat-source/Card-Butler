@@ -14,8 +14,6 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     cancel: 'Annuler',
     back: 'Retour',
     undo: 'Annuler',
-    notAvailableTitle: 'Non disponible',
-    notAvailableText: "Cette fonction n'existe pas encore.",
     support: 'Assistance',
     showSuggestions: 'Afficher les suggestions',
     pathSeparator: '/',
@@ -30,11 +28,8 @@ export const dictionaryFrench: typeof dictionaryGerman = {
     collaboration: 'Collaboration',
     shareProject: 'Partager ce projet',
     userManagement: 'Gestion des utilisateurs',
-    cards: 'Cartes',
-    newCardSet: 'Nouveau jeu de cartes',
     search: 'Recherche',
     backToHome: 'Retour à l’accueil',
-    path: 'Chemin',
   },
   home: {
     titleCards: 'Tes cartes.',
@@ -66,6 +61,7 @@ export const dictionaryFrench: typeof dictionaryGerman = {
   },
   images: {
     title: 'Images',
+    path: 'Chemin',
     uploadImages: 'Importer des images',
     imageRejected: (fileName: string) => `« ${fileName} » non importé`,
     wrongImageType: 'Seuls les formats PNG, JPEG et GIF sont acceptés.',

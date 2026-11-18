@@ -1,7 +1,7 @@
 <template>
   <!-- The four fields that decide how every icon inside the text is drawn. -->
   <div class="flex flex-col gap-3 p-6">
-    <h3 class="cb-headline-02">{{ dictionary.textIcons.iconSettings }}</h3>
+    <h4 class="cb-headline-02">{{ dictionary.textIcons.iconSettings }}</h4>
     <CbInput v-model="iconHeight" :label="dictionary.textIcons.height" />
     <CbInput v-model="iconWidth" :label="dictionary.textIcons.width" />
     <div class="flex gap-6">

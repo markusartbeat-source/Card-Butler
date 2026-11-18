@@ -14,8 +14,6 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     cancel: 'Cancelar',
     back: 'Atrás',
     undo: 'Deshacer',
-    notAvailableTitle: 'No disponible',
-    notAvailableText: 'Esta función todavía no existe.',
     support: 'Soporte',
     showSuggestions: 'Mostrar sugerencias',
     pathSeparator: '/',
@@ -30,11 +28,8 @@ export const dictionarySpanish: typeof dictionaryGerman = {
     collaboration: 'Colaboración',
     shareProject: 'Compartir este proyecto',
     userManagement: 'Gestión de usuarios',
-    cards: 'Cartas',
-    newCardSet: 'Nuevo conjunto de cartas',
     search: 'Buscar',
     backToHome: 'Volver al inicio',
-    path: 'Ruta',
   },
   home: {
     titleCards: 'Tus cartas.',
@@ -66,6 +61,7 @@ export const dictionarySpanish: typeof dictionaryGerman = {
   },
   images: {
     title: 'Imágenes',
+    path: 'Ruta',
     uploadImages: 'Subir imágenes',
     imageRejected: (fileName: string) => `«${fileName}» no se ha subido`,
     wrongImageType: 'Solo se admiten PNG, JPEG y GIF.',

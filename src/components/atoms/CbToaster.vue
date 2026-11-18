@@ -1,37 +1,41 @@
 <template>
-  <Toaster v-slot="toast" :toaster="toaster">
-    <!-- A toast that carries export progress in its meta brings its own look
-         along; every other toast is a title with an optional description. -->
-    <Toast.Root
-      class="cb-toast relative flex flex-col items-start rounded-lg text-foreground shadow-lg ring ring-surface-edge"
-      :class="[
-        backgroundClass(toast.type),
-        toast.meta?.exportProgress ? 'w-84 p-5' : 'w-80 gap-1 py-4 pr-10 pl-4',
-      ]"
-    >
-      <CbExportProgressToast
-        v-if="toast.meta?.exportProgress"
-        :value="toast.meta.exportProgress.value"
-        :max="toast.meta.exportProgress.max"
-      />
+  <!-- Direkt im body: Ein offener Dialog versteckt den Rest der App vor
+       Screenreadern, Toasts liest er so trotzdem vor. -->
+  <Teleport to="body">
+    <Toaster v-slot="toast" :toaster="toaster">
+      <!-- A toast that carries export progress in its meta brings its own look
+           along; every other toast is a title with an optional description. -->
+      <Toast.Root
+        class="cb-toast relative flex flex-col items-start rounded-lg text-foreground shadow-lg ring ring-surface-edge"
+        :class="[
+          backgroundClass(toast.type),
+          toast.meta?.exportProgress ? 'w-84 p-5' : 'w-80 gap-1 py-4 pr-10 pl-4',
+        ]"
+      >
+        <CbExportProgressToast
+          v-if="toast.meta?.exportProgress"
+          :value="toast.meta.exportProgress.value"
+          :max="toast.meta.exportProgress.max"
+        />
 
-      <template v-else>
-        <Toast.Title class="cb-regular-text">{{ toast.title }}</Toast.Title>
-        <Toast.Description v-if="toast.description" class="cb-regular-text opacity-80">
-          {{ toast.description }}
-        </Toast.Description>
-        <Toast.ActionTrigger v-if="toast.action" as-child>
-          <CbButton variant="secondary" class="mt-1">
-            <CbIcon name="undo" />
-            {{ toast.action.label }}
-          </CbButton>
-        </Toast.ActionTrigger>
-        <Toast.CloseTrigger class="absolute top-2 right-2 cursor-pointer rounded p-1 opacity-60 hover:opacity-100">
-          <CbIcon name="close" />
-        </Toast.CloseTrigger>
-      </template>
-    </Toast.Root>
-  </Toaster>
+        <template v-else>
+          <Toast.Title class="cb-regular-text">{{ toast.title }}</Toast.Title>
+          <Toast.Description v-if="toast.description" class="cb-regular-text opacity-80">
+            {{ toast.description }}
+          </Toast.Description>
+          <Toast.ActionTrigger v-if="toast.action" as-child>
+            <CbButton variant="secondary" class="mt-1">
+              <CbIcon name="undo" />
+              {{ toast.action.label }}
+            </CbButton>
+          </Toast.ActionTrigger>
+          <Toast.CloseTrigger class="absolute top-2 right-2 cursor-pointer rounded p-1 opacity-60 hover:opacity-100">
+            <CbIcon name="close" />
+          </Toast.CloseTrigger>
+        </template>
+      </Toast.Root>
+    </Toaster>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
