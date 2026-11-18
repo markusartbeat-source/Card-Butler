@@ -4,7 +4,7 @@
    hover:cb-regular-text.
    Farbvarianten: ohne Zusatz die Textfarbe des Modus (foreground), -muted grau
    (Hinweise, Zusatzinfos), -dark dunkel (auf Gold und anderen immer hellen
-   Flächen), -gold golden (accent). Eine Farbvariante übernimmt ihren Grundstil
+   Flächen), -gold golden (accent), -danger rot (danger-text). Eine Farbvariante übernimmt ihren Grundstil
    und setzt danach nur die Farbe neu – die spätere Angabe gewinnt. */
 
 @theme {
@@ -53,6 +53,12 @@
 @utility cb-regular-text-gold {
   @apply cb-regular-text;
   @apply text-accent;
+}
+
+/* Rot, z.B. „Löschen“ in einem Menü. */
+@utility cb-regular-text-danger {
+  @apply cb-regular-text;
+  @apply text-danger-text;
 }
 
 /* Kleiner Text, z.B. Zusatzinfos oder Initialen im kleinen Avatar. */

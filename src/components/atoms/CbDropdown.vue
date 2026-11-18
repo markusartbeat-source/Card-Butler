@@ -38,7 +38,10 @@
                 v-else
                 as-child
                 :value="item.value"
-                :class="{ 'cb-regular-text-gold': item.value === activeItem }"
+                :class="{
+                  'cb-regular-text-gold': item.value === activeItem,
+                  'cb-regular-text-danger': item.danger,
+                }"
               >
                 <CbListItem :icon="item.icon">{{ item.label }}</CbListItem>
               </Menu.Item>
@@ -56,8 +59,10 @@ import CbListItem from './CbListItem.vue'
 import type { IconName } from './icons'
 
 // An entry of the list, or the word 'separator' for a thin line between two
-// entries.
-export type DropdownItem = { value: string; label: string; icon?: IconName } | 'separator'
+// entries. danger färbt den Eintrag rot, z.B. für Löschen.
+export type DropdownItem =
+  | { value: string; label: string; icon?: IconName; danger?: boolean }
+  | 'separator'
 
 // activeItem is the value of the entry the user is on right now. It is drawn in
 // gold, so the list also tells where one is.

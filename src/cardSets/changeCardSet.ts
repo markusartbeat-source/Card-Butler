@@ -29,6 +29,11 @@ export async function changeCardSet(cardSet: CardSet, changes: Partial<CardSetDa
   }
 }
 
+/** Neuer Name des Sets. */
+export function renameCardSet(cardSet: CardSet, name: string) {
+  return changeCardSet(cardSet, { name })
+}
+
 /** Neue Breite oder Höhe der Karten in mm. Die Elemente bleiben stehen – sie
  *  messen ab der linken oberen Ecke. Mit keepsAspectRatio ändert sich die
  *  andere Seite im gleichen Verhältnis mit. */

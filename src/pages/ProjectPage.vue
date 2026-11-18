@@ -22,147 +22,165 @@
       <div class="flex flex-1">
         <!-- Every set is a section of its own, a thin line divides them. A card
              can only be sorted within its set: the sections share no drag group.
-             The rows pack at the top, so the minimum height does not stretch
-             the cards. While searching, a set without a hit is left out, and
-             with it its line. -->
+             While searching, a set without a hit is left out, and with it its
+             line. -->
         <div
           v-if="!hasNoSearchResults"
           class="flex min-w-0 flex-1 flex-col divide-y divide-surface-light"
         >
-          <VueDraggable
+          <!-- Das Format des Sets steht schon am Abschnitt: Daraus rechnet der
+               Block darin seine Breite (siehe style unten). -->
+          <section
             v-for="cardSet in shownCardSets"
             :id="cardSetElementId(cardSet.id)"
             :key="cardSet.id"
-            v-model="cardSet.cards"
-            v-bind="dragOptions"
-            draggable=".cb-card"
-            :disabled="isSearching"
-            class="cb-card-set-section flex flex-wrap content-start justify-center gap-6 py-32 select-none tablet:px-16"
-            @start="startDrag('card', $event)"
-            @end="finishCardDrag(cardSet, $event)"
+            class="cb-card-set-section py-32 tablet:px-16"
+            :style="{ ...cardFormatStyle(cardSet), '--grid-zoom': gridZoom }"
           >
-            <!-- The button stands in front of the row. It is not a ".cb-card", so the
-                 drag library skips it: a card is only ever put before or after another
-                 card, which keeps the button the first thing in the row. While
-                 searching it steps aside — the row then shows hits only. -->
-            <CbAddTile
-              v-if="!isSearching"
-              icon="add_2"
-              :label="dictionary.project.newCard"
-              class="cb-card-face"
-              :class="[
-                risenCardIds.has(addCardId(cardSet)) ? '' : 'animate-cb-rise',
-                dimWhileDraggingClasses,
-              ]"
-              :style="{ ...cardFormatStyle(cardSet), zoom: gridZoom }"
-              @animationend="markRisen(addCardId(cardSet), $event)"
-              @click="createCard(cardSet)"
-            />
-
-            <!-- The box the drag library picks up. It must be plain page pixels: the
-                 library writes the position of the dragged copy into "transform", and
-                 the "zoom" that draws the card would shrink that movement, so the card
-                 would fall behind the cursor. The zoom sits on the card inside.
-                 Front and back share the one grid cell of the box, so they lie on top
-                 of each other; the flip turns the two faces (see style.css). -->
-            <div
-              v-for="(card, cardIndex) in visibleCardsOf(cardSet)"
-              :key="card.id"
-              class="cb-card group grid"
-              :style="riseDelay(card.id, cardIndex)"
-              :class="[
-                risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
-                { invisible: card.id === selectedCardId, 'cb-card-flipped': showingCardBacks },
-              ]"
-              @animationend="markRisen(card.id, $event)"
-              @transitionend="cardTurnEnded"
-              @click="selectCard(card.id, $event)"
-              @wheel="changePrintCountByWheel(card, $event)"
-            >
-              <!-- Behind the faces, so it comes first. Vanishes and fades back in
-                   with the turn just like the badge below. "visible" lifts the
-                   box's "invisible" while its card is in the editor: the
-                   backdrops fade out and in instead of vanishing at once.
-                   The tooltip opens from the strip that peeks out under the
-                   card — the faces cover the rest. -->
-              <CbTooltip
-                v-if="card.printCount >= 2"
-                :text="dictionary.project.printCountTooltip(card.printCount)"
+            <!-- Der Block ist so breit wie die Karten, die nebeneinander passen,
+                 und steht mittig. So liegt die Überschrift bündig über der ersten
+                 Karte. -->
+            <div class="cb-card-set-content mx-auto w-fit">
+              <CbCardSetHeading :card-set="cardSet" class="mb-2" :class="dimWhileDraggingClasses" />
+              <VueDraggable
+                v-model="cardSet.cards"
+                v-bind="dragOptions"
+                draggable=".cb-card"
+                :disabled="isSearching"
+                class="flex flex-wrap justify-center gap-6 select-none"
+                @start="startDrag('card', $event)"
+                @end="finishCardDrag(cardSet, $event)"
               >
-                <CbCardBackdrops
-                  :count="card.printCount"
-                  :card-set="cardSet"
-                  class="visible col-start-1 row-start-1 transition-opacity"
+                <!-- The button stands in front of the row. It is not a ".cb-card", so
+                     the drag library skips it: a card is only ever put before or after
+                     another card, which keeps the button the first thing in the row.
+                     While searching it steps aside — the row then shows hits only. -->
+                <CbAddTile
+                  v-if="!isSearching"
+                  icon="add_2"
+                  :label="dictionary.project.newCard"
+                  class="cb-card-face"
                   :class="[
-                    isTurningCards ? 'duration-0' : 'duration-300',
-                    isTurningCards || card.id === selectedCardId ? 'opacity-0' : 'opacity-100',
+                    risenCardIds.has(addCardId(cardSet)) ? '' : 'animate-cb-rise',
+                    dimWhileDraggingClasses,
                   ]"
+                  :style="{ ...cardFormatStyle(cardSet), zoom: gridZoom }"
+                  @animationend="markRisen(addCardId(cardSet), $event)"
+                  @click="createCard(cardSet)"
                 />
-              </CbTooltip>
-              <CbCard
-                :id="card.id"
-                :elements="cardSet.elements"
-                :card-set="cardSet"
-                :values="card.values"
-                highlight-search
-                class="cb-card-front col-start-1 row-start-1"
-                :class="{ 'opacity-50': card.printCount === 0 }"
-              />
-              <CbCard
-                :id="card.id"
-                :elements="cardSet.elements"
-                :card-set="cardSet"
-                :values="card.values"
-                highlight-search
-                side="back"
-                class="cb-card-back col-start-1 row-start-1"
-                :class="{ 'opacity-50': card.printCount === 0 }"
-              />
-              <!-- How often the card is printed — only worth showing from 2 up,
-                   and for 0 (not printed, the card is pale then).
-                   It does not turn with the card: front and back show it in the
-                   same place; it vanishes at once while the turn runs and fades
-                   back in after. It lies in page pixels, not card zoom. "relative"
-                   keeps it above the faces: their transform would otherwise
-                   paint them over it. While the mouse is on the card (the
-                   "group" box) it fades out, so it never hides the corner. Bei 0
-                   bleibt sie stehen: Sie trägt den Hinweis im Tooltip. -->
-              <CbPrintCountBadge
-                v-if="card.printCount >= 2"
-                :count="card.printCount"
-                :icon="printCountIcon(card.printCount)"
-                class="group-hover:opacity-0"
-                :class="printCountBadgeClasses"
-              />
-              <CbTooltip
-                v-else-if="card.printCount === 0"
-                :text="dictionary.project.notPrintedTooltip"
-              >
-                <CbPrintCountBadge
-                  :count="card.printCount"
-                  :icon="printCountIcon(card.printCount)"
-                  :class="printCountBadgeClasses"
-                />
-              </CbTooltip>
-              <!-- Shows while Alt + wheel changes the count. Last in the cell,
-                   so it lies over faces and badge. Die Ecken folgen der Karte,
-                   umgerechnet auf ihren Zoom.
-                   It appears at once and fades out when it goes. -->
-              <Transition
-                leave-active-class="transition-opacity duration-300"
-                leave-to-class="opacity-0"
-              >
-                <CbPrintCountOverlay
-                  v-if="card.id === printCountOverlayCardId"
-                  :count="card.printCount"
-                  class="relative col-start-1 row-start-1"
-                  :style="{
-                    borderRadius: cornerRadiiStyle(cardCornerRadiiOf(cardSet.id), gridZoom),
-                  }"
-                />
-              </Transition>
+
+                <!-- The box the drag library picks up. It must be plain page pixels:
+                     the library writes the position of the dragged copy into
+                     "transform", and the "zoom" that draws the card would shrink that
+                     movement, so the card would fall behind the cursor. The zoom sits
+                     on the card inside. Front and back share the one grid cell of the
+                     box, so they lie on top of each other; the flip turns the two
+                     faces (see style.css). -->
+                <div
+                  v-for="(card, cardIndex) in visibleCardsOf(cardSet)"
+                  :key="card.id"
+                  class="cb-card group grid"
+                  :style="riseDelay(card.id, cardIndex)"
+                  :class="[
+                    risenCardIds.has(card.id) ? '' : 'animate-cb-rise',
+                    {
+                      invisible: card.id === selectedCardId,
+                      'cb-card-flipped': showingCardBacks,
+                    },
+                  ]"
+                  @animationend="markRisen(card.id, $event)"
+                  @transitionend="cardTurnEnded"
+                  @click="selectCard(card.id, $event)"
+                  @wheel="changePrintCountByWheel(card, $event)"
+                >
+                  <!-- Behind the faces, so it comes first. Vanishes and fades back in
+                       with the turn just like the badge below. "visible" lifts the
+                       box's "invisible" while its card is in the editor: the
+                       backdrops fade out and in instead of vanishing at once.
+                       The tooltip opens from the strip that peeks out under the
+                       card — the faces cover the rest. -->
+                  <CbTooltip
+                    v-if="card.printCount >= 2"
+                    :text="dictionary.project.printCountTooltip(card.printCount)"
+                  >
+                    <CbCardBackdrops
+                      :count="card.printCount"
+                      :card-set="cardSet"
+                      class="visible col-start-1 row-start-1 transition-opacity"
+                      :class="[
+                        isTurningCards ? 'duration-0' : 'duration-300',
+                        isTurningCards || card.id === selectedCardId
+                          ? 'opacity-0'
+                          : 'opacity-100',
+                      ]"
+                    />
+                  </CbTooltip>
+                  <CbCard
+                    :id="card.id"
+                    :elements="cardSet.elements"
+                    :card-set="cardSet"
+                    :values="card.values"
+                    highlight-search
+                    class="cb-card-front col-start-1 row-start-1"
+                    :class="{ 'opacity-50': card.printCount === 0 }"
+                  />
+                  <CbCard
+                    :id="card.id"
+                    :elements="cardSet.elements"
+                    :card-set="cardSet"
+                    :values="card.values"
+                    highlight-search
+                    side="back"
+                    class="cb-card-back col-start-1 row-start-1"
+                    :class="{ 'opacity-50': card.printCount === 0 }"
+                  />
+                  <!-- How often the card is printed — only worth showing from 2 up,
+                       and for 0 (not printed, the card is pale then).
+                       It does not turn with the card: front and back show it in the
+                       same place; it vanishes at once while the turn runs and fades
+                       back in after. It lies in page pixels, not card zoom.
+                       "relative" keeps it above the faces: their transform would
+                       otherwise paint them over it. While the mouse is on the card
+                       (the "group" box) it fades out, so it never hides the corner.
+                       Bei 0 bleibt sie stehen: Sie trägt den Hinweis im Tooltip. -->
+                  <CbPrintCountBadge
+                    v-if="card.printCount >= 2"
+                    :count="card.printCount"
+                    :icon="printCountIcon(card.printCount)"
+                    class="group-hover:opacity-0"
+                    :class="printCountBadgeClasses"
+                  />
+                  <CbTooltip
+                    v-else-if="card.printCount === 0"
+                    :text="dictionary.project.notPrintedTooltip"
+                  >
+                    <CbPrintCountBadge
+                      :count="card.printCount"
+                      :icon="printCountIcon(card.printCount)"
+                      :class="printCountBadgeClasses"
+                    />
+                  </CbTooltip>
+                  <!-- Shows while Alt + wheel changes the count. Last in the cell,
+                       so it lies over faces and badge. Die Ecken folgen der Karte,
+                       umgerechnet auf ihren Zoom.
+                       It appears at once and fades out when it goes. -->
+                  <Transition
+                    leave-active-class="transition-opacity duration-300"
+                    leave-to-class="opacity-0"
+                  >
+                    <CbPrintCountOverlay
+                      v-if="card.id === printCountOverlayCardId"
+                      :count="card.printCount"
+                      class="relative col-start-1 row-start-1"
+                      :style="{
+                        borderRadius: cornerRadiiStyle(cardCornerRadiiOf(cardSet.id), gridZoom),
+                      }"
+                    />
+                  </Transition>
+                </div>
+              </VueDraggable>
             </div>
-          </VueDraggable>
+          </section>
         </div>
 
         <CbSearchNoResults v-else />
@@ -191,6 +209,7 @@ import CbPrintCountBadge from '../components/atoms/CbPrintCountBadge.vue'
 import CbTooltip from '../components/atoms/CbTooltip.vue'
 import CbCardEditor from '../components/organisms/CbCardEditor.vue'
 import CbExportDialog from '../export/CbExportDialog.vue'
+import CbCardSetHeading from '../cardSets/CbCardSetHeading.vue'
 import CbCardSetsPanel from '../cardSets/CbCardSetsPanel.vue'
 import { cardSetIdToShow, cardSets, type CardSet } from '../cardSets/cardSets'
 import { createCard } from '../cardSets/createCard'
@@ -381,8 +400,9 @@ onMounted(() => {
   updateVisibleCardSetFromScroll()
 })
 // Die Sets kommen oft erst nach dem Einhängen der Seite – dann, sobald ihre
-// Abschnitte auf der Seite stehen.
-watch(cardSets, updateVisibleCardSetFromScroll, { flush: 'post' })
+// Abschnitte auf der Seite stehen. Ebenso, wenn ein Set dazukommt oder wegfällt
+// (deep: 1 – Änderungen in einem Set zählen nicht).
+watch(cardSets, updateVisibleCardSetFromScroll, { flush: 'post', deep: 1 })
 onUnmounted(() => {
   pageArea.value?.removeEventListener('scroll', updateVisibleCardSetFromScroll)
 })
@@ -395,5 +415,16 @@ onUnmounted(() => {
    Höhe, die Seite hat nur eine Mindesthöhe. */
 .cb-card-set-section {
   min-height: calc(100vh - 100px);
+}
+
+/* Höchstens so breit wie die Karten, die nebeneinander passen: Platz plus ein
+   Abstand (gap-6), abgerundet auf ganze Karten samt Abstand, minus den letzten
+   Abstand. Mindestens eine Karte. 1px Spiel fängt Rundungen des Zooms ab, sonst
+   bräche die letzte Karte der Reihe um. */
+.cb-card-set-content {
+  --card-with-gap: calc(var(--card-width-mm) * var(--grid-zoom) + 1.5rem);
+  max-width: calc(
+    max(var(--card-with-gap), round(down, 100% + 1.5rem, var(--card-with-gap))) - 1.5rem + 1px
+  );
 }
 </style>

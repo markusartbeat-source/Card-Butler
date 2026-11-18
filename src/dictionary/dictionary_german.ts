@@ -120,6 +120,14 @@ export const dictionaryGerman = {
     title: 'Kartensets',
     // The name a set gets when it is created, numbered in order.
     cardSetName: (number: number) => `Kartenset ${number}`,
+    // Das Drei-Punkte-Menü neben dem Namen eines Sets auf der Projektseite. Der
+    // Knopf nennt das Set, damit Screenreader die Knöpfe unterscheiden.
+    menuLabel: (name: string) => `Optionen für „${name}“`,
+    addCardSet: 'Kartenset hinzufügen',
+    // Menüeintrag und Titel des Namens-Dialogs.
+    renameCardSet: 'Kartenset umbenennen',
+    deleteCardSet: 'Kartenset löschen',
+    cardSetDeleted: 'Kartenset gelöscht',
   },
   // The dialog for picking an export format.
   exportDialog: {

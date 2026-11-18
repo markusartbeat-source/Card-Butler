@@ -70,6 +70,15 @@ function updateCardSet(cardSetId: string, cardSetData: CardSetData, version: num
   })
 }
 
+/** Löscht ein Kartenset samt Karten und Elementen. `version` wie bei
+ *  updateCardSet. */
+function deleteCardSet(cardSetId: string, version: number) {
+  return postOffice.request<void>(`/api/sets/${encodeURIComponent(cardSetId)}`, {
+    method: 'DELETE',
+    version,
+  })
+}
+
 /** Fach `cardSets` der Poststelle, Aufruf als `postOffice.cardSets.…()`. */
 export const cardSetsApi = {
   loadCardSets,
@@ -77,4 +86,5 @@ export const cardSetsApi = {
   loadFullCardSet,
   loadCardSet,
   updateCardSet,
+  deleteCardSet,
 }

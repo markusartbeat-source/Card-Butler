@@ -63,7 +63,7 @@ const upgradeItems = computed<DropdownItem[]>(() => [
   'separator',
 ])
 
-// Only somebody who is signed in can sign out.
+// Only somebody who is signed in can sign out. Abmelden steht abgesetzt und rot.
 const profileMenuItems = computed<DropdownItem[]>(() => [
   ...(isBelowLaptop.value ? searchItems.value : []),
   ...(isBelowDesktop.value ? headerPageItems.value : []),
@@ -71,7 +71,15 @@ const profileMenuItems = computed<DropdownItem[]>(() => [
   { value: 'settings', label: dictionary.settings.title, icon: 'settings' as const },
   { value: 'support', label: dictionary.general.support, icon: 'support_agent' as const },
   ...(currentUser.value
-    ? [{ value: 'signOut', label: dictionary.general.signOut, icon: 'door_open' as const }]
+    ? [
+        'separator' as const,
+        {
+          value: 'signOut',
+          label: dictionary.general.signOut,
+          icon: 'door_open' as const,
+          danger: true,
+        },
+      ]
     : []),
 ])
 

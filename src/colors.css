@@ -66,6 +66,9 @@
   /* Toasts. Dunkel genug, dass weißer Text AA erreicht. */
   --color-success: #15803d;
   --color-danger: #dc2626;
+  /* Roter Text und Icons auf Flächen, z.B. „Löschen“ in einem Menü. Hell genug
+     für AA auf surface, auch unter der Hover-Schicht. */
+  --color-danger-text: #ff9999;
   /* Nur im Dev-Modus: Hintergrund von Feldern, deren Wert der Server (noch)
      nicht speichert (siehe notStored/notStoredMark.ts). */
   --color-not-stored: #7f1d1d;
@@ -106,6 +109,7 @@
   /* Helle Toasts mit dunklem Text. */
   --color-success: #dcfce7;
   --color-danger: #fee2e2;
+  --color-danger-text: #b91c1c;
   /* Helles Rot, damit dunkler Text und graue Labels darauf lesbar bleiben. */
   --color-not-stored: #fdd5d5;
 }
@@ -124,6 +128,7 @@
   --color-scrollbar: #c8c8cc;
   --color-success: #166534;
   --color-danger: #991b1b;
+  --color-danger-text: #ffaaaa;
 }
 
 /* Hell kontrastreich (AAA): baut auf hell auf, Text schwarz, Flächen mit
@@ -137,6 +142,7 @@
   --color-label: #3d3d45;
   --color-accent: #5c4008;
   --color-on-light: #000000;
+  --color-danger-text: #991b1b;
   --color-highlight: #000000;
   --color-scrollbar: #3d3d45;
   --color-logo: #000000;

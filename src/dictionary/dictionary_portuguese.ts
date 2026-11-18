@@ -94,6 +94,11 @@ export const dictionaryPortuguese: typeof dictionaryGerman = {
   cardSets: {
     title: 'Conjuntos de cartas',
     cardSetName: (number: number) => `Conjunto de cartas ${number}`,
+    menuLabel: (name: string) => `Opções de “${name}”`,
+    addCardSet: 'Adicionar conjunto de cartas',
+    renameCardSet: 'Renomear conjunto de cartas',
+    deleteCardSet: 'Excluir conjunto de cartas',
+    cardSetDeleted: 'Conjunto de cartas excluído',
   },
   exportDialog: {
     digitalGroup: 'Digital e pré-visualização',
